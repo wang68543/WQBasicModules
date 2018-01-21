@@ -21,9 +21,9 @@ pod 'WQBasicModules'
 ```
 
 ## Author
-
-tangtangmang@163.com, wang68543@163.com
+ wang68543@163.com
 
 ## License
 
 WQBasicModules is available under the MIT license. See the LICENSE file for more info.
+# WQBasicModules
