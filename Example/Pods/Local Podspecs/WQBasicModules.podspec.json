@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of WQBasicModules.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/tangtangmang@163.com/WQBasicModules",
+  "homepage": "https://github.com/wang68543/WQBasicModules",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,11 +12,44 @@
     "tangtangmang@163.com": "wang68543@163.com"
   },
   "source": {
-    "git": "https://github.com/tangtangmang@163.com/WQBasicModules.git",
+    "git": "https://github.com/wang68543/WQBasicModules.git",
     "tag": "0.1.0"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "WQBasicModules/Classes/**/*"
+  "source_files": "WQBasicModules/Classes/WQBasicModules.h",
+  "subspecs": [
+    {
+      "name": "WQExtensions",
+      "subspecs": [
+        {
+          "name": "WQUIKitExtensions",
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift"
+        },
+        {
+          "name": "WQFoundationExtensions",
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQFoundationExtensions/*.swift"
+        },
+        {
+          "name": "WQDateExtensions",
+          "dependencies": {
+            "WQBasicModules/WQExtensions/WQFoundationExtensions": [
+
+            ]
+          },
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQDateExtensions/*.swift"
+        },
+        {
+          "name": "WQStringExtensions",
+          "dependencies": {
+            "WQBasicModules/WQExtensions/WQFoundationExtensions": [
+
+            ]
+          },
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQStringExtensions/*.{swift,h,m}"
+        }
+      ]
+    }
+  ]
 }

@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of WQBasicModules.'
+  s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,24 +18,44 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+主要是讲之前的Objective-c版本的[WQBasicComponents](https://github.com/wang68543/WQBasicComponents.git) 转为Swift 版本
                        DESC
 
   s.homepage         = 'https://github.com/wang68543/WQBasicModules'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'tangtangmang@163.com' => 'wang68543@163.com' }
+  s.author           = { 'wang68543' => 'wang68543@163.com' }
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
-
-  s.source_files = 'WQBasicModules/Classes/**/*'
-  
-  # s.resource_bundles = {
-  #   'WQBasicModules' => ['WQBasicModules/Assets/*.png']
-  # }
-
+  	s.ios.deployment_target = '8.0'
+ 	s.source_files  = "WQBasicModules/Classes/WQBasicModules.h"
+ 
+    s.subspec 'WQExtensions' do |ss|
+        # ss.subspec 'WQUIKitExtensions' do |sss|
+        #     sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift'
+        # end
+        ss.subspec 'WQFoundationExtensions' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQFoundationExtensions/*.swift'
+        end
+        ss.subspec 'WQDateExtensions' do |sss|
+            sss.dependency 'WQBasicModules/WQExtensions/WQFoundationExtensions'
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQDateExtensions/*.swift'
+        end
+        ss.subspec 'WQStringExtensions' do |sss| 
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQStringExtensions/*.{swift,h,m}'
+        end
+    end
+       
+#     s.subspec 'WQHelpTool' do |ss|
+# #        ss.subspec 'WQSingle' do |sss|
+# #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
+# #        end
+#         ss.subspec 'WQTool' do |sss|
+#         	# sss.frameworks = 'CommonCrypto'
+#         	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQTool/*.{swift,h,m}'
+#         end
+#     end
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'

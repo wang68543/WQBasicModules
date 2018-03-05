@@ -11,7 +11,19 @@ PODS:
     - FBSnapshotTestCase (~> 2.0)
     - Nimble (~> 7.0)
   - Quick (1.2.0)
-  - WQBasicModules (0.1.0)
+  - WQBasicModules (0.1.0):
+    - WQBasicModules/WQExtensions (= 0.1.0)
+  - WQBasicModules/WQExtensions (0.1.0):
+    - WQBasicModules/WQExtensions/WQDateExtensions (= 0.1.0)
+    - WQBasicModules/WQExtensions/WQFoundationExtensions (= 0.1.0)
+    - WQBasicModules/WQExtensions/WQStringExtensions (= 0.1.0)
+    - WQBasicModules/WQExtensions/WQUIKitExtensions (= 0.1.0)
+  - WQBasicModules/WQExtensions/WQDateExtensions (0.1.0):
+    - WQBasicModules/WQExtensions/WQFoundationExtensions
+  - WQBasicModules/WQExtensions/WQFoundationExtensions (0.1.0)
+  - WQBasicModules/WQExtensions/WQStringExtensions (0.1.0):
+    - WQBasicModules/WQExtensions/WQFoundationExtensions
+  - WQBasicModules/WQExtensions/WQUIKitExtensions (0.1.0)
 
 DEPENDENCIES:
   - FBSnapshotTestCase (~> 2.1.4)
@@ -29,7 +41,7 @@ SPEC CHECKSUMS:
   Nimble: bfe1f814edabba69ff145cb1283e04ed636a67f2
   Nimble-Snapshots: f5459b5b091678dc942d03ec4741cacb58ba4a52
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
-  WQBasicModules: f7272f486f2b502b5ee5829b012a6c43ec9df6a6
+  WQBasicModules: 939f85a30f2463bec0fa669fbc162c0ca35119ef
 
 PODFILE CHECKSUM: 73ed5068ff56a2db656c9ceb014c9b3b92b85e47
 

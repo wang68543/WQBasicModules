@@ -1,17 +1,24 @@
-// https://github.com/Quick/Quick
+//
+//  WQStringExtensionSpec.swift
+//  WQBasicModules_Tests
+//
+//  Created by hejinyin on 2018/2/3.
+//  Copyright © 2018年 CocoaPods. All rights reserved.
+//
 
+import XCTest
 import Quick
 import Nimble
 import WQBasicModules
-
-class TableOfContentsSpec: QuickSpec {
+class WQStringExtensionSpec: QuickSpec {
+    
     override func spec() {
-//        describe("these will fail") {
-//
-//            it("can do maths") {
-//                expect(1) == 2
-//            }
-//
+        describe(".isPureInt") {
+            
+            it("test regular Expression is Int ") {
+                expect("1235".isPureInt) == true
+            }
+            
 //            it("can read") {
 //                expect("number") == "string"
 //            }
@@ -19,7 +26,7 @@ class TableOfContentsSpec: QuickSpec {
 //            it("will eventually fail") {
 //                expect("time").toEventually( equal("done") )
 //            }
-//            
+//
 //            context("these will pass") {
 //
 //                it("can do maths") {
@@ -45,6 +52,7 @@ class TableOfContentsSpec: QuickSpec {
 //                    }
 //                }
 //            }
-//        }
+        }
     }
+    
 }
