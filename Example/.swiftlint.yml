@@ -1,9 +1,20 @@
 disabled_rules: # 执行时排除掉的规则
   # - colon
   # - comma
+  # - legacy_constant 
+  # - redundant_string_enum_value 
+  # - return_arrow_whitespace
+  # - shorthand_operator 
+  # - nimble_operator
+  # - nesting
+  # - redundant_optional_initialization
+  # - leading_whitespace
+  # - vertical_parameter_alignment
+  - trailing_whitespace
+  - cyclomatic_complexity
   # - control_statement
-  - trailing_whitespace #换行
 # opt_in_rules: # 一些规则仅仅是可选的
+
   # - empty_count
   # - missing_docs
   # 可以通过执行如下指令来查找所有可用的规则:
@@ -18,36 +29,36 @@ excluded: # 执行 linting 时忽略的路径。 优先级比 `included` 更高�
 
 # 可配置的规则可以通过这个配置文件来自定义
 # 二进制规则可以设置他们的严格程度
-# force_cast: warning # 隐式
-# force_try:
-#   severity: warning # 显式
-# # 同时有警告和错误等级的规则，可以只设置它的警告等级
-# # 隐式
-# line_length: 
-# warning: 110
-# ignores_function_declarations: true
-# ignores_comments: true
-# # 可以通过一个数组同时进行隐式设置
-# type_body_length:
-#   - 300 # warning
-#   - 400 # error
-# # 或者也可以同时进行显式设置
-# file_length:
-#   warning: 500
-#   error: 1200
-# # 命名规则可以设置最小长度和最大程度的警告/错误
-# # 此外它们也可以设置排除在外的名字
-# type_name:
-#   min_length: 4 # 只是警告
-#   max_length: # 警告和错误
-#     warning: 40
-#     error: 50
-#   excluded: iPhone # 排除某个名字
-# identifier_name:
-#   min_length: # 只有最小长度
-#     error: 4 # 只有错误
-#   excluded: # 排除某些名字
-#     - id
-#     - URL
-#     - GlobalAPIKey
-# reporter: "xcode" # 报告类型 (xcode, json, csv, checkstyle, junit, html, emoji)
+force_cast: warning # 隐式
+force_try:
+  severity: warning # 显式
+# 同时有警告和错误等级的规则，可以只设置它的警告等级
+# 隐式
+line_length: 140 
+# warning: 
+ignores_function_declarations: true
+ignores_comments: true
+# 可以通过一个数组同时进行隐式设置
+type_body_length:
+  - 300 # warning
+  - 400 # error
+# 或者也可以同时进行显式设置
+file_length:
+  warning: 500
+  error: 1200
+# 命名规则可以设置最小长度和最大程度的警告/错误
+# 此外它们也可以设置排除在外的名字
+type_name:
+  min_length: 4 # 只是警告
+  max_length: # 警告和错误
+    warning: 40
+    error: 50
+  excluded: iPhone # 排除某个名字
+identifier_name:
+  min_length: # 只有最小长度
+    error: 4 # 只有错误
+  excluded: # 排除某些名字
+    - id
+    - URL
+    - GlobalAPIKey
+reporter: "xcode" # 报告类型 (xcode, json, csv, checkstyle, junit, html, emoji)

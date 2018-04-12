@@ -32,9 +32,9 @@ Pod::Spec.new do |s|
  	s.source_files  = "WQBasicModules/Classes/WQBasicModules.h"
  
     s.subspec 'WQExtensions' do |ss|
-        # ss.subspec 'WQUIKitExtensions' do |sss|
-        #     sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift'
-        # end
+        ss.subspec 'WQUIKitExtensions' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift'
+        end
         ss.subspec 'WQFoundationExtensions' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQFoundationExtensions/*.swift'
         end

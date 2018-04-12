@@ -9,7 +9,6 @@ import UIKit
 
 public class WQDateFormatter: DateFormatter {
     public static let shared = WQDateFormatter()
-    
 //    private static var sharedDateFormater: WQDateFormatter = {
 //
 //        return WQDateFormatter()

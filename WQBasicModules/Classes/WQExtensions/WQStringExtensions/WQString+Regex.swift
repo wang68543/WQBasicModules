@@ -3,10 +3,9 @@
 //  
 //
 //  Created by hejinyin on 2018/1/21.
-//
+//  swiftlint:disable line_length
 
 import Foundation
-
 
 ///  正则表达式要 双引号括起来 并且`\`要转换以 两个\\表示一个`\`
 /**
@@ -15,13 +14,15 @@ import Foundation
   * let pre5 = NSPredicate(format: "SELF MATCHES %@" , regex1)
   * let bool5 = pre5.evaluateWithObject("2")
   */
-public enum WQRegExpression:String{
+public enum WQRegExpression: String {
     
     case regexInt = "^[+-]?[0-9]+$"
     /// 后期考虑添加 附加值限定小数点位数等
     case regexFloat = "^[+-]?[0-9]+([.]{0,1}[0-9]+){0,1}$"
     
-//     (?!pattern) 负向预查，在任何不匹配 pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如'Windows (?!95|98|NT|2000)' 能匹配 "Windows 3.1" 中的 "Windows"，但不能匹配 "Windows 2000" 中的 "Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。
+//     (?!pattern) 负向预查，在任何不匹配 pattern 的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。
+//      例如'Windows (?!95|98|NT|2000)' 能匹配 "Windows 3.1" 中的 "Windows"，但不能匹配 "Windows 2000" 中的 "Windows"。
+//      预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。
     case regexCommonPwd = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"//这里表示 如果密码中不包含数字 就验证不通过;不包含字母也验证不通过 ^(?![0-9]+$)表示从头到尾不包含数字
     case regexIDCard = "^(^[1-9]\\\\d{7}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])\\\\d{3}$)|(^[1-9]\\\\d{5}[1-9]\\\\d{3}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])((\\\\d{4})|\\\\d{3}[Xx])$)$"
     
@@ -50,26 +51,22 @@ public enum WQRegExpression:String{
     case regexTelephone = "^0(10|2[0-5789]|\\\\d{3})\\\\d{7,8}$"
     
 }
-extension String{
+extension String {
     /// 验证字符串是否全部为数字
-    public var isPureInt:Bool {
-        get{
-            return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexInt.rawValue)\"")
-        }
+    public var isPureInt: Bool {
+        return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexInt.rawValue)\"")
     }
     
     /// 校验字符串是否由6~20个包含字母和数字的字符组成 (一般用于密码强度校验)
-    public var isLegalPassword:Bool {
-        get{
-           return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexCommonPwd.rawValue)\"")
-        }
+    public var isLegalPassword: Bool {
+        return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexCommonPwd.rawValue)\"")
     }
     
     /// 校验电话号码
     ///
     /// - Parameter phoneType: 需要校验的电话类型 默认校验中国的手机号
     /// - Returns: bool
-    public func isLegalPhone(_ phoneType: WQRegExpression = .regexPhoneChina) -> Bool{
+    public func isLegalPhone(_ phoneType: WQRegExpression = .regexPhoneChina) -> Bool {
         return evaluate(predicate: "SELF MATCHES \"\(phoneType.rawValue)\"")
     }
     
@@ -101,15 +98,20 @@ extension String{
         4. 余数只可能有0－1－2－3－4－5－6－7－8－9－10这11个数字。其分别对应的最后一位身份证的号码为1－0－X－9－8－7－6－5－4－3－2。(即余数0对应1，余数1对应0，余数2对应X...)
         5. 通过上面得知如果余数是3，就会在身份证的第18位数字上出现的是9。如果对应的数字是2，身份证的最后一位号码就是罗马数字x。
  */
-    public var isLegalIDCard:Bool {
-        get{
+    public var isLegalIDCard: Bool {
+        
             var isLegal = evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexIDCard.rawValue)\"")
-            if(isLegal){//校验和
+            if isLegal {//校验和
                 //格式正确在判断是否合法
                 //将前17位加权因子保存在数组里
                 let weightFactor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
                 //这是除以11后，可能产生的11位余数、验证码，也保存成数组
-                let IDCardLasts = [Character("1"), Character("0"), Character("x"), Character("9"), Character("8"), Character("7"), Character("6"), Character("5"), Character("4") , Character("3"), Character("2")]
+                let IDCardLasts = [
+                    Character("1"), Character("0"), Character("x"),
+                    Character("9"), Character("8"), Character("7"),
+                    Character("6"), Character("5"), Character("4"),
+                    Character("3"), Character("2")
+                ]
                 
                 var IDSum = 0
                 for index in 0 ..< 17 {
@@ -122,17 +124,15 @@ extension String{
                 let IDCardLast = self.lowercased().last!
                 
                 //确认校验和
-                if IDCardLast == IDCardLasts[IDCardMode]{
+                if IDCardLast == IDCardLasts[IDCardMode] {
                     isLegal = true
-                }else{
+                } else {
                     isLegal = false
                 }
             }
-            
-            return isLegal;
-        }
+            return isLegal
     }
-    public func evaluate(predicate preStr:String) -> Bool{
-        return NSPredicate.init(format:preStr).evaluate(with:self)
+    public func evaluate(predicate preStr: String) -> Bool {
+        return NSPredicate.init(format: preStr).evaluate(with: self)
     }
 }
