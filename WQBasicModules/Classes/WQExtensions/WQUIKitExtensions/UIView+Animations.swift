@@ -17,8 +17,7 @@ extension UIView {
 //        // 旋转角度
 //        case rotation(angle: CFTimeInterval, duration: CFTimeInterval)
 //    }
-   
-    
+       
     /// 基础动画
     public func startRepeatRotation(duration: CFTimeInterval = 2.0) {
         let keyPath = "transform.rotation"

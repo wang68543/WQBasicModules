@@ -19,7 +19,6 @@ public let oneWeekSeconds: TimeInterval = 7 * oneDaySeconds
 //    case timeZone = 200
 //}
 
-
 // MARK: - Components
 extension Date {
     public func year(_ calendar: Calendar = .current) -> Int {
@@ -53,8 +52,6 @@ extension Date {
 
 // MARK: - Calculate
 extension Date {
-    
-    
     /// calculate date 根据一年的第几周推算出这周的起始日期
     ///
     /// - Parameters:
@@ -62,7 +59,7 @@ extension Date {
     ///   - year: in year
     ///   - calendar: caculate calendar
     /// - Returns: the first day in week (Sun)
-    static public func date(ordinality week:Int , in year:Int ,calendar: Calendar = .current) -> Date? {
+    static public func date(ordinality week: Int, in year: Int, calendar: Calendar = .current) -> Date? {
         let  dateComponments = DateComponents(year: year, month: 1, day: 1, hour: 0, minute: 0, second: 0, nanosecond: 0)
         let yearStartDate = calendar.date(from: dateComponments)
         guard let startDate = yearStartDate else {
@@ -70,7 +67,7 @@ extension Date {
         }
         //1~7 从周日开始
         let component = calendar.component(.weekday, from: startDate)
-        let showDate = calendar.date(byAdding: .day, value: ( week - 1) * 7  - (component - 1) , to: startDate)
+        let showDate = calendar.date(byAdding: .day, value: (week - 1) * 7  - (component - 1), to: startDate)
         return showDate
     }
     
