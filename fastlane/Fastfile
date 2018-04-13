@@ -44,7 +44,7 @@ platform :ios do
    spec = "./#{targetName}.podspec"
    UI.message("路径#{spec}")
     #4. pod spec lint 
-  if pod_lib_lint(allow_warnings: true,verbose: false,sources:[spec])
+  if pod_lib_lint(allow_warnings: true,verbose: false) #,sources:[spec]
      UI.message("验证已经通过正在上传")
      pod_push(path: "#{targetName}.podspec",allow_warnings: true)
     else
