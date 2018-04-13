@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.1.0'
+  s.version          = '0.1.1'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
