@@ -5,54 +5,59 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.011068">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.011679">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: cocoapods" time="5.818513">
+      <testcase classname="fastlane.lanes" name="01: cocoapods" time="5.722049">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: git_tag_exists" time="0.017239">
+      <testcase classname="fastlane.lanes" name="02: git_tag_exists" time="0.022986">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: remove_tag" time="6.302553">
+      <testcase classname="fastlane.lanes" name="03: remove_tag" time="6.664016">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: git_add" time="0.038633">
+      <testcase classname="fastlane.lanes" name="04: git_add" time="0.046509">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: git_commit" time="0.050338">
+      <testcase classname="fastlane.lanes" name="05: git_commit" time="0.052449">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: push_to_git_remote" time="6.540417">
+      <testcase classname="fastlane.lanes" name="06: push_to_git_remote" time="6.168462">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="7: add_git_tag" time="0.026097">
+      <testcase classname="fastlane.lanes" name="07: add_git_tag" time="0.026192">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="8: push_git_tags" time="6.02296">
+      <testcase classname="fastlane.lanes" name="08: push_git_tags" time="6.142038">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="9: pod_lib_lint" time="1.152769">
+      <testcase classname="fastlane.lanes" name="09: pod_lib_lint" time="55.923042">
         
-          <failure message="/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:236:in `block in execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:231:in `chdir'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:231:in `execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/fast_file.rb:148:in `method_missing'&#10;Fastfile:47:in `block (2 levels) in parsing_binding'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane_manager.rb:57:in `cruise_lane'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:75:in `run!'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/cli_tools_distributor.rb:107:in `take_off'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/bin/fastlane:20:in `&lt;top (required)&gt;'&#10;/Users/WangQiang/.fastlane/bin/bundle/bin/fastlane:22:in `load'&#10;/Users/WangQiang/.fastlane/bin/bundle/bin/fastlane:22:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod lib lint --sources='./WQBasicModules.podspec' --allow-warnings' was 1 instead of 0.&#10;&#10;Cloning spec repo `./wqbasicmodules.podspec` from `./WQBasicModules.podspec`&#10;[!] Unable to add a source with url `./WQBasicModules.podspec` named `./wqbasicmodules.podspec`.&#10;You can try adding it manually in `~/.cocoapods/repos` or via `pod repo add`.&#10;" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="10: pod_push" time="113.326885">
+        
+          <failure message="/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:236:in `block in execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:231:in `chdir'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:231:in `execute_action'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/fast_file.rb:148:in `method_missing'&#10;Fastfile:49:in `block (2 levels) in parsing_binding'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/lane_manager.rb:57:in `cruise_lane'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:75:in `run!'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/commands_generator.rb:42:in `start'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/fastlane/lib/fastlane/cli_tools_distributor.rb:107:in `take_off'&#10;/Users/WangQiang/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.89.0/bin/fastlane:20:in `&lt;top (required)&gt;'&#10;/Users/WangQiang/.fastlane/bin/bundle/bin/fastlane:22:in `load'&#10;/Users/WangQiang/.fastlane/bin/bundle/bin/fastlane:22:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod trunk push 'WQBasicModules.podspec' --allow-warnings' was 1 instead of 0.&#10;Updating spec repo `master`&#10;Validating podspec&#10; -&gt; WQBasicModules -&gt; WQBasicModules (0.1.1)&#10;&#10;[!] There was an error pushing a new version to trunk: getaddrinfo: nodename nor servname provided, or not known&#10;" />
         
       </testcase>
     
