@@ -15,7 +15,7 @@ default_platform(:ios)
 # fastlane [lane] key:value key2:value2
 platform :ios do
   desc "自动Pod更新库"
-  lane :BasicModulesLib do |options|
+  lane :WQBasicModules do |options|
 
   	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
   	# targetName = options[:target]
