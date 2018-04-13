@@ -3,7 +3,7 @@ This application makes use of the following third party libraries:
 
 ## WQBasicModules
 
-Copyright (c) 2018 tangtangmang@163.com <wang68543@163.com>
+Copyright (c) 2018 wang68543@163.com <wang68543@163.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "WQBasicModules.h"
+#import "NSString+WQHash.h"
 
 FOUNDATION_EXPORT double WQBasicModulesVersionNumber;
 FOUNDATION_EXPORT const unsigned char WQBasicModulesVersionString[];
