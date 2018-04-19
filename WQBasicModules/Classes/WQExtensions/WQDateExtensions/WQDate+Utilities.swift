@@ -56,21 +56,32 @@ extension Date {
     ///
     /// - Parameters:
     ///   - week: ordinality of week in year
+    ///   - weekDay: day of the week (1~7 从周日开始)
     ///   - year: in year
     ///   - calendar: caculate calendar
     /// - Returns: the first day in week (Sun)
-    static public func date(ordinality week: Int, in year: Int, calendar: Calendar = .current) -> Date? {
+    static public func date(_ week: UInt, in year: Int, weekDay offset: UInt = 1, calendar: Calendar = .current) -> Date? {
+        guard week <= 53, offset >= 1, offset <= 7 else {
+            return nil
+        }
+        
         let  dateComponments = DateComponents(year: year, month: 1, day: 1, hour: 0, minute: 0, second: 0, nanosecond: 0)
         let yearStartDate = calendar.date(from: dateComponments)
         guard let startDate = yearStartDate else {
             return nil
         }
-        //1~7 从周日开始
         let component = calendar.component(.weekday, from: startDate)
-        let showDate = calendar.date(byAdding: .day, value: (week - 1) * 7  - (component - 1), to: startDate)
+        let showDate = calendar.date(byAdding: .day, value: (Int(week) - 1) * 7 - component + Int(offset), to: startDate)
         return showDate
     }
     
+    /// distance unit counts between two date
+    ///
+    /// - Parameters:
+    ///   - ohter: another unit
+    ///   - unit: calculation calendar  unit
+    ///   - calendar: calendar
+    /// - Returns: distance
     public func unitDistance(_ ohter: Date, at unit: Calendar.Component = .day, in calendar: Calendar = .current) -> TimeInterval {
          var distanceValue: TimeInterval = 0
         if #available(iOS 10.0, *) {
