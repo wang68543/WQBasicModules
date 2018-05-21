@@ -21,7 +21,7 @@ class NSDate_UtilitiesTests: XCTestCase {
     }
  
     func test_create_date_with_week_in_year()  {
-        let date = Date.date(ordinality: 1, in: 2018)!
+        let date = Date.date(of: 1, in: 2018)!
         let expect = Date(timeIntervalSince1970: 1514649600)
         XCTAssertEqual(date, expect)
     }

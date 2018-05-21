@@ -51,56 +51,69 @@ public extension Date {// MARK: - Calculate
     ///   - year: in year
     ///   - calendar: caculate calendar
     /// - Returns: the first day in week (Sun)
-    static func date(ordinality week: Int, in year: Int, calendar: Calendar = .current) -> Date? {
+    static func date(of week: Int, in year: Int, with calendar: Calendar = .current) -> Date? {
         let  dateComponments = DateComponents(year: year, month: 1, day: 1, hour: 0, minute: 0, second: 0, nanosecond: 0)
         let yearStartDate = calendar.date(from: dateComponments)
         guard let startDate = yearStartDate else {
             return nil
         }
         let component = calendar.component(.weekday, from: startDate)
-        let showDate = calendar.date(byAdding: .day, value: (week - 1) * 7 - (component - 1), to: startDate)
+        let showDate = calendar.date(byAdding: .day,
+                                        value: (week - 1) * 7 - (component - 1),
+                                           to: startDate)
         return showDate
     }
     
     /// distance unit counts between two date
     ///
     /// - Parameters:
-    ///   - ohter: another unit
+    ///   - endDate: another date
     ///   - unit: calculation calendar  unit
     ///   - calendar: calendar
     /// - Returns: distance
-    func unitDistance(_ ohter: Date, at unit: Calendar.Component = .day, in calendar: Calendar = .current) -> TimeInterval {
-        var distanceValue: TimeInterval = 0
-        if #available(iOS 10.0, *) {
-            distanceValue = calendar.dateInterval(of: unit, for: ohter)!.duration
-        } else {
-            switch unit {
-            case let unitType  where unitType.hashValue <= Calendar.Component.weekOfYear.hashValue:
-                var unitSeconds: TimeInterval
-                switch unitType {
-                case .second:
-                    unitSeconds = 1
-                case .minute:
-                    unitSeconds = oneMinuteSeconds
-                case .hour:
-                    unitSeconds = oneHourSeconds
-                case .day:
-                    unitSeconds = oneDaySeconds
-                case .weekOfYear:
-                    unitSeconds = oneWeekSeconds
-                default:
-                    unitSeconds = 1
-                }
-                distanceValue = timeIntervalSince(ohter) / unitSeconds
-            case .month:
-                distanceValue = TimeInterval(calendar.dateComponents([unit], from: self, to: ohter).month!)
-            case .year:
-                distanceValue = TimeInterval(calendar.dateComponents([unit], from: self, to: ohter).year!)
-            default:
-                break
-            }
+    func distance(_ endDate: Date,
+                      at unit: Calendar.Component = .day,
+                with calendar: Calendar = .current) -> Int {
+        var startComp = calendar.dateComponents(Date.commentFlags, from: self)
+        var endComp = calendar.dateComponents(Date.commentFlags, from: endDate)
+        switch unit {
+        case .era:
+            startComp.year = 0
+            endComp.year = 0
+            fallthrough
+        case .year:
+            startComp.month = 1
+            endComp.month = 1
+            fallthrough
+        case .month:
+            startComp.day = 1
+            endComp.day = 1
+            fallthrough
+        case .day:
+            startComp.hour = 0
+            endComp.hour = 0
+            fallthrough
+        case .hour:
+            startComp.minute = 0
+            endComp.minute = 0
+            fallthrough
+        case .minute:
+            startComp.second = 0
+            endComp.second = 0
+            fallthrough
+        case .second:
+            startComp.nanosecond = 0
+            endComp.nanosecond = 0
+            fallthrough
+        default:
+            break;
         }
-        return distanceValue
+        let deltComponments = calendar.dateComponents([unit], from: startComp, to: endComp)
+       
+        guard let value = deltComponments.value(for: unit) else {
+            return 0
+        }
+        return value
     }
     typealias DateUnitRange = (begin: Date, length: TimeInterval)
     /// Calculate begin date and interval in date unit of self
@@ -109,31 +122,25 @@ public extension Date {// MARK: - Calculate
     ///   - unit: date unit
     ///   - calendar: default current
     /// - Returns: Tuple contains begin date and interval
-    func range(_ unit: Calendar.Component, in calendar: Calendar = .current) -> DateUnitRange {
- 
-//        var component: Calendar.Component
-//        switch unit {
-//        case .second:
-//            component = .second
-//        case .minute:
-//            component = .minute
-//        case .hour:
-//            component = .hour
-//        case .day:
-//            component = .day
-//        case .month:
-//            component = .month
-//        case .year:
-//            component = .year
-//        case .week:
-//            //周日是第一天
-//            component = .weekOfYear
-//        case .timeZone:
-//            component = .timeZone
-//        }
-        var startDate: Date = Date()
+    func range(_ unit: Calendar.Component, with calendar: Calendar = .current) -> DateUnitRange {
+        var startDate: Date = self
         var interval: TimeInterval = 0
-        let success = calendar.dateInterval(of: unit, start: &startDate, interval: &interval, for: self)
+        var success = false
+        
+        if #available(iOS 10.0, *) {
+            if let dateInterval = calendar.dateInterval(of: unit, for: self) {
+                startDate = dateInterval.start
+                interval = dateInterval.duration
+                success = true
+            }else {
+                success = false
+            }
+        } else {
+            success = calendar.dateInterval(of: unit,
+                                            start: &startDate,
+                                            interval: &interval,
+                                            for: self)
+        }
         if !success {
             var components = calendar.dateComponents(Date.commentFlags, from: self)
             var endComponents = components
@@ -179,30 +186,63 @@ public extension Date {// MARK: - Calculate
     /// min seconds in date unit
     ///
     /// - Returns: min date in unit
-    func dateStart(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
-        return range(unit, in: calendar).begin
+    func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        return range(unit, with: calendar).begin
     }
     /// max seconds in date unit
     ///
     /// - Returns: max date in unit
-    func dateEnd(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
-        let dateUnit = range(unit, in: calendar)
+    func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let dateUnit = range(unit, with: calendar)
         return dateUnit.begin + TimeInterval(dateUnit.length - 1)
     }
     /// forward a date unit time
     ///
     /// - Returns: before time min date
-    func beforeDate(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
-        let beforeDate = dateStart(unit, in: calendar)
-        let interval = beforeDate.addingTimeInterval(-1).range(unit, in: calendar).length
+    func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let beforeDate = dateStart(unit, with: calendar)
+        let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
         return beforeDate - interval
     }
     /// behind a date unit time
     ///
     /// - Returns: after time min date
-    func nextDate(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
-        return dateEnd(unit, in: calendar) + 1
+    func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        return dateEnd(unit, with: calendar) + 1
     }
+    
+    /// smaller unit counts in larger unit
+    ///
+    /// - Parameters:
+    ///   - unit: smaller unit
+    func counts(_ unit: Calendar.Component, in larger: Calendar.Component = .nanosecond, with calendar: Calendar = .current) -> Int {
+        var bigUnit: Calendar.Component
+        if larger == .nanosecond {
+            switch unit {
+            case .second:
+                bigUnit = .minute
+            case .minute:
+                bigUnit = .hour
+            case .hour:
+                bigUnit = .day
+            case .day, .weekOfMonth: 
+                bigUnit = .month
+            case .month, .weekOfYear:
+                bigUnit = .year
+                
+            default:
+                fatalError("此类型的单位计算不支持")
+            }
+        } else{
+            bigUnit = larger
+        }
+        
+        guard let counts = calendar.range(of: unit, in: bigUnit, for: self) else {
+            return 0
+        }
+        return counts.upperBound - counts.lowerBound
+    }
+    
     func daysInMonth(_ year: Int, at month: Int) -> Int {
         var days: Int = 30
         if month == 2 {
@@ -242,7 +282,7 @@ public extension Date {// MARK: - Calculate
     ///   - unit: unit of measurement
     ///   - calendar:default current
     /// - Returns: calculated date
-    func dateByAdding(_ counts: Int, unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
+    func dateByAdding(_ counts: Int, unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         var components = DateComponents()
         switch unit {
         case .second:
@@ -267,59 +307,63 @@ public extension Date {// MARK: - Calculate
 }
 public extension Date {// MARK: - Compare
     
-    func isToday(in calendar: Calendar = .current) -> Bool {
+    func isToday(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInToday(self)
-//        return isSame(Date(),at: .day , in: calendar)
     }
-    func isYesterday(in calendar: Calendar = .current) -> Bool {
+    func isYesterday(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInYesterday(self)
     }
-    func isTomorrow(in calendar: Calendar = .current) -> Bool {
+    func isTomorrow(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInTomorrow(self)
     }
     
-    func isThisWeek(in calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
-//        return isSame(Date() ,at: .weekOfYear , in: calendar)
-    }
-    func isNextWeek(in calendar: Calendar = .current) -> Bool {
-         return calendar.isDate(self, equalTo: Date() + oneWeekSeconds, toGranularity: .weekOfYear)
-//        return isSame(Date() + oneWeekSeconds ,at: .weekOfYear , in: calendar)
-    }
-    func isLastWeek(in calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self, equalTo: Date() - oneWeekSeconds, toGranularity: .weekOfYear)
-//        return isSame(Date() - oneWeekSeconds ,at: .weekOfYear , in: calendar)
-    }
-    
-    func isThisMonth(in calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self, equalTo: Date(), toGranularity: .month)
-//        return isSame(Date() ,at: .month , in: calendar)
-    }
-    func isNextMonth(in calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self, equalTo: Date().dateByAdding(1, unit: .month, in: calendar), toGranularity: .month)
-//        return isSame(Date().dateByAdding(1, unit: .month, in: calendar) ,at: .month , in: calendar)
-    }
-    func isLastMonth(in calendar: Calendar = .current) -> Bool {
+    func isThisWeek(with calendar: Calendar = .current) -> Bool {
         return calendar.isDate(self,
-                               equalTo: Date().dateByAdding(-1, unit: .month, in: calendar),
-                               toGranularity: .month)
-//        return isSame(Date().dateByAdding(-1, unit: .month, in: calendar)  ,at: .month , in: calendar)
+                            equalTo: Date(),
+                      toGranularity: .weekOfYear)
+    }
+    func isNextWeek(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date() + oneWeekSeconds,
+                      toGranularity: .weekOfYear)
+    }
+    func isLastWeek(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date() - oneWeekSeconds,
+                      toGranularity: .weekOfYear)
+    }
+    func isThisMonth(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date(),
+                      toGranularity: .month)
+    }
+    func isNextMonth(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date().dateByAdding(1, unit: .month, with: calendar),
+                      toGranularity: .month)
+    }
+    func isLastMonth(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date().dateByAdding(-1, unit: .month, with: calendar),
+                      toGranularity: .month)
+    }
+    func isThisYear(with calendar: Calendar = .current) -> Bool {
+         return calendar.isDate(self,
+                             equalTo: Date(),
+                       toGranularity: .year)
+    }
+    func isNextYear(with calendar: Calendar = .current) -> Bool {
+         return calendar.isDate(self,
+                             equalTo: Date().dateByAdding(1, unit: .year, with: calendar),
+                       toGranularity: .month)
+    }
+    func isLastYear(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDate(self,
+                            equalTo: Date().dateByAdding(-1, unit: .year, with: calendar),
+                      toGranularity: .month)
     }
     
-    func isThisYear(in calendar: Calendar = .current) -> Bool {
-         return calendar.isDate(self, equalTo: Date(), toGranularity: .year)
-//        return isSame(Date() ,at: .year , in: calendar)
-    }
-    func isNextYear(in calendar: Calendar = .current) -> Bool {
-         return calendar.isDate(self, equalTo: Date().dateByAdding(1, unit: .year, in: calendar), toGranularity: .month)
-//        return isSame(Date().dateByAdding(1, unit: .year, in: calendar) ,at: .year , in: calendar)
-    }
-    func isLastYear(in calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self, equalTo: Date().dateByAdding(-1, unit: .year, in: calendar), toGranularity: .month)
-//        return isSame(Date().dateByAdding(-1, unit: .year, in: calendar)  ,at: .year , in: calendar)
-    }
-    
-    static let commentFlags: Set<Calendar.Component> = [
+   private static let commentFlags: Set<Calendar.Component> = [
         .second,
         .minute,
         .hour,
@@ -330,66 +374,5 @@ public extension Date {// MARK: - Compare
         .weekday,
         .timeZone
     ]
-
-    /// judge date is same in DateUnit
-    ///
-    /// - Parameters:
-    ///   - other: another date
-    ///   - unit: compare unit
-    ///   - calendar: what calendar compare
-    /// - Returns: results
-//    public func isSame(_ other:Date, at unit:Calendar.Component, in calendar:Calendar = .current) -> Bool{
-//        let components = calendar.dateComponents(Date.commentFlags, from: self)
-//        let compareComponents = calendar.dateComponents(Date.commentFlags, from: other)
-//        var isSame = true
-//        switch unit {
-//            case .second:
-//                if components.second! == compareComponents.second! {
-//                    fallthrough
-//                }else{
-//                    isSame = false
-//                }
-//            case .minute:
-//                if components.minute! == compareComponents.minute! {
-//                    fallthrough
-//                }else{
-//                    isSame = false
-//                }
-//            case .hour:
-//                if components.hour! == compareComponents.hour! {
-//                    fallthrough
-//                }else{
-//                    isSame = false
-//                }
-//            case .day:
-//                if components.day! == compareComponents.day! {
-//                    fallthrough
-//                }else{
-//                    isSame = false
-//                }
-//            case .month:
-//                if components.month! == compareComponents.month! {
-//                    fallthrough
-//                }else{
-//                    isSame = false
-//                }
-//            case .year:
-//                if components.year! != compareComponents.year! {
-//                     isSame = false
-//                }
-//            case .weekOfYear:
-//                if components.year! != compareComponents.year!||components.weekOfYear! != compareComponents.weekOfYear!{
-//                    isSame = false
-//                }
-//            case .timeZone:
-//                if (components.timeZone! != compareComponents.timeZone!) {
-//                    isSame = false
-//                }
-//            default:
-//                isSame = false
-//        }
-//        return isSame
-//
-//    }
   
 }

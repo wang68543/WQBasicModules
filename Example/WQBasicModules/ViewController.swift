@@ -15,8 +15,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         debugPrint(Bundle.main.infoDictionary?["CFBundleName"] ?? "没有选项")
         debugPrint("1133445566".isLegalPhone())
+        let date = Date()
+        let otherDate = "2017-04-21".toDate(format: .kAMMAdd)
+        debugPrint(date.distance(otherDate, at: .month))
+       debugPrint (otherDate.counts(.weekOfMonth))
+        
+        debugPrint("=====",date.range(.month))
+        
         let imageView = UIImageView()
-        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
+//        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
 //        debugPrint(Date().toString(.))
 //        self.view.addTransitionAnimate(timing: <#T##String#>, subtype: <#T##String#>, duration: <#T##CFTimeInterval#>)
