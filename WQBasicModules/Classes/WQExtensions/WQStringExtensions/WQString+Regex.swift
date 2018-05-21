@@ -51,14 +51,15 @@ public enum WQRegExpression: String {
     case regexTelephone = "^0(10|2[0-5789]|\\\\d{3})\\\\d{7,8}$"
     
 }
-extension String {
+
+public extension String {
     /// 验证字符串是否全部为数字
-    public var isPureInt: Bool {
+    var isPureInt: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexInt.rawValue)\"")
     }
     
     /// 校验字符串是否由6~20个包含字母和数字的字符组成 (一般用于密码强度校验)
-    public var isLegalPassword: Bool {
+    var isLegalPassword: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexCommonPwd.rawValue)\"")
     }
     
@@ -66,7 +67,7 @@ extension String {
     ///
     /// - Parameter phoneType: 需要校验的电话类型 默认校验中国的手机号
     /// - Returns: bool
-    public func isLegalPhone(_ phoneType: WQRegExpression = .regexPhoneChina) -> Bool {
+    func isLegalPhone(_ phoneType: WQRegExpression = .regexPhoneChina) -> Bool {
         return evaluate(predicate: "SELF MATCHES \"\(phoneType.rawValue)\"")
     }
     
@@ -98,7 +99,7 @@ extension String {
         4. 余数只可能有0－1－2－3－4－5－6－7－8－9－10这11个数字。其分别对应的最后一位身份证的号码为1－0－X－9－8－7－6－5－4－3－2。(即余数0对应1，余数1对应0，余数2对应X...)
         5. 通过上面得知如果余数是3，就会在身份证的第18位数字上出现的是9。如果对应的数字是2，身份证的最后一位号码就是罗马数字x。
  */
-    public var isLegalIDCard: Bool {
+     var isLegalIDCard: Bool {
         
             var isLegal = evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexIDCard.rawValue)\"")
             if isLegal {//校验和
@@ -132,7 +133,8 @@ extension String {
             }
             return isLegal
     }
-    public func evaluate(predicate preStr: String) -> Bool {
-        return NSPredicate.init(format: preStr).evaluate(with: self)
+    
+    func evaluate(predicate preStr: String) -> Bool {
+        return NSPredicate(format: preStr).evaluate(with: self)
     }
 }

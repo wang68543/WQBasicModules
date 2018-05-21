@@ -6,11 +6,10 @@
 //
 
 import Foundation
-// MARK: =========== encrypt ===========
-extension String {
+public extension String {
     /// md5加密 默认小写
-    public func md5(lower: Bool = true) -> String {
-         let str = self as NSString
+     func md5(lower: Bool = true) -> String {
+        let str = self as NSString
         var md5Str: String
         if lower {
             md5Str = str.md5Lowercase()

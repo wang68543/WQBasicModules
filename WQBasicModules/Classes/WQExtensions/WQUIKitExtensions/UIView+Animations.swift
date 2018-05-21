@@ -1,5 +1,5 @@
 //
-//  UIImageView+Animations.swift
+//  UIView+Animations.swift
 //  Pods
 //
 //  Created by hejinyin on 2018/3/19.
@@ -8,19 +8,12 @@
 import UIKit
 
 ///MARK: =========== 动画 ===========
-extension UIView {
-    static let basicAnimationKey = "wq.view.basic.animationKey"
-    static let transitionAnimationKey = "wq.view.transition.animationKey"
-    
-//    public enum  AnimationType {
-//        case repeatRotation()
-//        // 旋转角度
-//        case rotation(angle: CFTimeInterval, duration: CFTimeInterval)
-//    }
-   
-    
+public extension UIView {
+   private static let basicAnimationKey = "wq.view.basic.animationKey"
+   private static let transitionAnimationKey = "wq.view.transition.animationKey"
+ 
     /// 基础动画
-    public func startRepeatRotation(duration: CFTimeInterval = 2.0) {
+    func startRepeatRotation(duration: CFTimeInterval = 2.0) {
         let keyPath = "transform.rotation"
         var isRunning = false
         if let preAnimate = layer.animation(forKey: UIView.basicAnimationKey) as? CABasicAnimation {
@@ -31,7 +24,7 @@ extension UIView {
             }
         }
         if !isRunning {
-            let animate = CABasicAnimation.init(keyPath: keyPath)
+            let animate = CABasicAnimation(keyPath: keyPath)
             animate.toValue = 2 * Double.pi
             animate.repeatCount = MAXFLOAT
             animate.duration = duration
@@ -40,12 +33,12 @@ extension UIView {
         }
        
     }
-    public func stopRepeatRotation() {
+    func stopRepeatRotation() {
         layer.removeAnimation(forKey: UIView.basicAnimationKey)
     }
     
     /// 转场动画
-    public func addTransitionAnimate (
+    func addTransitionAnimate (
         timing: String = kCAMediaTimingFunctionEaseInEaseOut,
         subtype: String = kCATransitionFade,
         duration: CFTimeInterval = 0.2
@@ -57,12 +50,12 @@ extension UIView {
         if !isRunning {
             let transtion = CATransition()
             transtion.duration = duration
-            transtion.timingFunction = CAMediaTimingFunction.init(name: timing)
+            transtion.timingFunction = CAMediaTimingFunction(name: timing)
             transtion.subtype = subtype
             layer.add(transtion, forKey: UIView.transitionAnimationKey)
         }
     }
-    public func removeTransitionAnimate () {
+    func removeTransitionAnimate () {
         layer.removeAnimation(forKey: UIView.transitionAnimationKey)
     }
 }
