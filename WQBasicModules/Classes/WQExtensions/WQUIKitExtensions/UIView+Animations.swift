@@ -11,7 +11,6 @@ import UIKit
 public extension UIView {
    private static let basicAnimationKey = "wq.view.basic.animationKey"
    private static let transitionAnimationKey = "wq.view.transition.animationKey"
- 
     /// 基础动画
     func startRepeatRotation(duration: CFTimeInterval = 2.0) {
         let keyPath = "transform.rotation"

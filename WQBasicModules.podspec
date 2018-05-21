@@ -47,16 +47,16 @@ Pod::Spec.new do |s|
         end
     end
        
-#     s.subspec 'WQHelpTool' do |ss|
-# #        ss.subspec 'WQSingle' do |sss|
-# #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
-# #        end
-#         ss.subspec 'WQTool' do |sss|
-#         	# sss.frameworks = 'CommonCrypto'
-#         	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQTool/*.{swift,h,m}'
-#         end
-#     end
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+     s.subspec 'WQHelpTool' do |ss|
+ #        ss.subspec 'WQSingle' do |sss|
+ #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
+ #        end
+         ss.subspec 'WQJsonCodable' do |sss|
+         	# sss.frameworks = 'CommonCrypto'
+         	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
+         end
+     end
+ # s.public_header_files = 'Pod/Classes/**/*.h'
+ # s.frameworks = 'UIKit', 'MapKit'
   # s.dependency 'AFNetworking', '~> 2.3'
 end

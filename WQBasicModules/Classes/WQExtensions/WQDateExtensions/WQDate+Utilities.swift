@@ -43,11 +43,11 @@ public extension Date {// MARK: - Components
 }
 
 public extension Date {// MARK: - Calculate
-    
     /// calculate date 根据一年的第几周推算出这周的起始日期
     ///
     /// - Parameters:
     ///   - week: ordinality of week in year
+    ///   - weekDay: day of the week (1~7 从周日开始)
     ///   - year: in year
     ///   - calendar: caculate calendar
     /// - Returns: the first day in week (Sun)
@@ -57,14 +57,20 @@ public extension Date {// MARK: - Calculate
         guard let startDate = yearStartDate else {
             return nil
         }
-        //1~7 从周日开始
         let component = calendar.component(.weekday, from: startDate)
         let showDate = calendar.date(byAdding: .day, value: (week - 1) * 7 - (component - 1), to: startDate)
         return showDate
     }
     
+    /// distance unit counts between two date
+    ///
+    /// - Parameters:
+    ///   - ohter: another unit
+    ///   - unit: calculation calendar  unit
+    ///   - calendar: calendar
+    /// - Returns: distance
     func unitDistance(_ ohter: Date, at unit: Calendar.Component = .day, in calendar: Calendar = .current) -> TimeInterval {
-         var distanceValue: TimeInterval = 0
+        var distanceValue: TimeInterval = 0
         if #available(iOS 10.0, *) {
             distanceValue = calendar.dateInterval(of: unit, for: ohter)!.duration
         } else {
