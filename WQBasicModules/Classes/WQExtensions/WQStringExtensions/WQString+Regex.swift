@@ -111,8 +111,7 @@ public extension String {
                     Character("1"), Character("0"), Character("x"),
                     Character("9"), Character("8"), Character("7"),
                     Character("6"), Character("5"), Character("4"),
-                    Character("3"), Character("2")
-                ]
+                    Character("3"), Character("2")] 
                 
                 var IDSum = 0
                 for index in 0 ..< 17 {

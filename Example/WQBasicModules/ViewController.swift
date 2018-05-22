@@ -23,6 +23,8 @@ class ViewController: UIViewController {
         debugPrint("=====",date.range(.month))
         
         let imageView = UIImageView()
+         let strs = "1234567890".split(separator: Character("5"))
+        
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
 //        debugPrint(Date().toString(.))

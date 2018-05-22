@@ -41,8 +41,8 @@ public extension Date {// MARK: - Components
         return calendar.dateComponents([.timeZone], from: self).timeZone!
     }
 }
-
-public extension Date {// MARK: - Calculate
+// MARK: - Calculate
+public extension Date {
     /// calculate date 根据一年的第几周推算出这周的起始日期
     ///
     /// - Parameters:
@@ -58,10 +58,8 @@ public extension Date {// MARK: - Calculate
             return nil
         }
         let component = calendar.component(.weekday, from: startDate)
-        let showDate = calendar.date(byAdding: .day,
-                                        value: (week - 1) * 7 - (component - 1),
-                                           to: startDate)
-        return showDate
+        let interval = (week - 1) * 7 - (component - 1)
+        return calendar.date(byAdding: .day, value: interval, to: startDate)
     }
     
     /// distance unit counts between two date
@@ -72,10 +70,11 @@ public extension Date {// MARK: - Calculate
     ///   - calendar: calendar
     /// - Returns: distance
     func distance(_ endDate: Date,
-                      at unit: Calendar.Component = .day,
-                with calendar: Calendar = .current) -> Int {
+                  at unit: Calendar.Component = .day,
+                  with calendar: Calendar = .current) -> Int {
         var startComp = calendar.dateComponents(Date.commentFlags, from: self)
         var endComp = calendar.dateComponents(Date.commentFlags, from: endDate)
+        // swiftlint:disable fallthrough
         switch unit {
         case .era:
             startComp.year = 0
@@ -106,7 +105,7 @@ public extension Date {// MARK: - Calculate
             endComp.nanosecond = 0
             fallthrough
         default:
-            break;
+            break
         }
         let deltComponments = calendar.dateComponents([unit], from: startComp, to: endComp)
        
@@ -122,24 +121,19 @@ public extension Date {// MARK: - Calculate
     ///   - unit: date unit
     ///   - calendar: default current
     /// - Returns: Tuple contains begin date and interval
-    func range(_ unit: Calendar.Component, with calendar: Calendar = .current) -> DateUnitRange {
+    func range(_ unit: Calendar.Component,
+               with calendar: Calendar = .current) -> DateUnitRange {
         var startDate: Date = self
         var interval: TimeInterval = 0
         var success = false
-        
         if #available(iOS 10.0, *) {
             if let dateInterval = calendar.dateInterval(of: unit, for: self) {
                 startDate = dateInterval.start
                 interval = dateInterval.duration
                 success = true
-            }else {
-                success = false
             }
         } else {
-            success = calendar.dateInterval(of: unit,
-                                            start: &startDate,
-                                            interval: &interval,
-                                            for: self)
+            success = calendar.dateInterval(of: unit, start: &startDate, interval: &interval, for: self)
         }
         if !success {
             var components = calendar.dateComponents(Date.commentFlags, from: self)
@@ -147,26 +141,20 @@ public extension Date {// MARK: - Calculate
             // swiftlint:disable fallthrough
             switch unit {
             case .year:
-                components.month = 1
-                endComponents.month = 12
+                components.month = 1; endComponents.month = 12
                 fallthrough
             case .month:
-                components.day = 1
-                endComponents.day = daysInMonth(endComponents.year!, at: endComponents.month!)
+                let days = daysInMonth(endComponents.year!, at: endComponents.month!)
+                components.day = 1; endComponents.day = days
                 fallthrough
-            case .weekday:
-                fallthrough
-            case .day:
-                components.hour = 0
-                endComponents.hour = 23
+            case .day, .weekday:
+                components.hour = 0; endComponents.hour = 23
                 fallthrough
             case .hour:
-                components.minute = 0
-                endComponents.minute = 59
+                components.minute = 0; endComponents.minute = 59
                 fallthrough
             case .minute:
-                components.second = 0
-                endComponents.second = 59
+                components.second = 0; endComponents.second = 59
                 fallthrough
             default:
                 break
@@ -233,7 +221,7 @@ public extension Date {// MARK: - Calculate
             default:
                 fatalError("此类型的单位计算不支持")
             }
-        } else{
+        } else {
             bigUnit = larger
         }
         
@@ -318,49 +306,36 @@ public extension Date {// MARK: - Compare
     }
     
     func isThisWeek(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date(),
-                      toGranularity: .weekOfYear)
+        return calendar.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
     }
     func isNextWeek(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date() + oneWeekSeconds,
-                      toGranularity: .weekOfYear)
+        return calendar.isDate(self, equalTo: Date() + oneWeekSeconds, toGranularity: .weekOfYear)
     }
     func isLastWeek(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date() - oneWeekSeconds,
-                      toGranularity: .weekOfYear)
+        return calendar.isDate(self, equalTo: Date() - oneWeekSeconds, toGranularity: .weekOfYear)
     }
     func isThisMonth(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date(),
-                      toGranularity: .month)
+        return calendar.isDate(self, equalTo: Date(), toGranularity: .month)
     }
     func isNextMonth(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date().dateByAdding(1, unit: .month, with: calendar),
-                      toGranularity: .month)
+        let nextDate = Date().dateByAdding(1, unit: .month, with: calendar)
+        return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     func isLastMonth(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date().dateByAdding(-1, unit: .month, with: calendar),
-                      toGranularity: .month)
+        let nextDate = Date().dateByAdding(-1, unit: .month, with: calendar)
+        return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     func isThisYear(with calendar: Calendar = .current) -> Bool {
-         return calendar.isDate(self,
-                             equalTo: Date(),
-                       toGranularity: .year)
+         return calendar.isDate(self, equalTo: Date(), toGranularity: .year)
     }
     func isNextYear(with calendar: Calendar = .current) -> Bool {
-         return calendar.isDate(self,
-                             equalTo: Date().dateByAdding(1, unit: .year, with: calendar),
-                       toGranularity: .month)
+        let nextDate = Date().dateByAdding(1, unit: .year, with: calendar)
+        
+         return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     func isLastYear(with calendar: Calendar = .current) -> Bool {
-        return calendar.isDate(self,
-                            equalTo: Date().dateByAdding(-1, unit: .year, with: calendar),
-                      toGranularity: .month)
+        let nextDate = Date().dateByAdding(-1, unit: .year, with: calendar)
+        return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     
    private static let commentFlags: Set<Calendar.Component> = [
@@ -372,7 +347,6 @@ public extension Date {// MARK: - Compare
         .year,
         .weekOfYear,
         .weekday,
-        .timeZone
-    ]
+        .timeZone]
   
 }
