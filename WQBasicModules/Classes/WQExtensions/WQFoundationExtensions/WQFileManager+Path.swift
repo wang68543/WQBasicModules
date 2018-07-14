@@ -8,6 +8,7 @@
 import Foundation
 
 public extension FileManager {
+    
          static let urlDocument = url(for: .documentDirectory)
           static let urlLibrary = url(for: .libraryDirectory)
            static let urlCaches = url(for: .cachesDirectory)

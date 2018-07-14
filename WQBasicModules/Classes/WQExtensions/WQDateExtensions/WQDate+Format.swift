@@ -89,8 +89,8 @@ public enum DateFormatEnum: String {
     case HH
     case HH时
     
-    /// HH:ss
-    case HHBss
+    /// HH:mm
+    case HHBmm
     /// HH时mm分
     case HH时mm分
     

@@ -13,6 +13,7 @@ class ViewController: UIViewController {
  
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         debugPrint(Bundle.main.infoDictionary?["CFBundleName"] ?? "没有选项")
         debugPrint("1133445566".isLegalPhone())
         let date = Date()
