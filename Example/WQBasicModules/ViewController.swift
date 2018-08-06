@@ -14,6 +14,24 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        let btn = WQButton()
+        btn.titleAlignment = .bottom
+        btn.setImage(UIImage(named: "首页5"), for: .normal)
+        btn.setTitle("首页5", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        btn.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        btn.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        btn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+        btn.contentVerticalAlignment = .center
+        btn.contentHorizontalAlignment = .left
+        btn.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
+        btn.isAllowWrap = true
+        self.view.addSubview(btn)
+        btn.titleLabel?.backgroundColor = .red
+        btn.backgroundColor = .yellow
+//        debugPrint(btn.titleLabel?.font)
+        
         debugPrint(Bundle.main.infoDictionary?["CFBundleName"] ?? "没有选项")
         debugPrint("1133445566".isLegalPhone())
         let date = Date()

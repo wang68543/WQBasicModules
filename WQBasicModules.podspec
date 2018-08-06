@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
@@ -55,6 +55,9 @@ Pod::Spec.new do |s|
          	# sss.frameworks = 'CommonCrypto'
          	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
          end
+     end
+     s.subspec 'WQCustomUI' do |ss|
+         ss.source_files = 'WQBasicModules/Classes/WQCustomUI/*.swift'
      end
  # s.public_header_files = 'Pod/Classes/**/*.h'
  # s.frameworks = 'UIKit', 'MapKit'
