@@ -12,13 +12,12 @@
 		29DB330CF291C2350D6ACB75AB4A9DB0 /* WQBasicModules-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 71477B196394F9B6FD37E645928821C8 /* WQBasicModules-dummy.m */; };
 		2A63069AC390B559D71413FC360DFD88 /* WQProperty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67C670BF37F5B108E5E0D8AA8520B1B5 /* WQProperty.swift */; };
 		33E5DAC310CC5C878AAAE62BF00FA551 /* NSString+WQHash.m in Sources */ = {isa = PBXBuildFile; fileRef = F3937CBE589C83FCE3CFAB9C338DF05A /* NSString+WQHash.m */; };
-		4DAC60D815C44DDB030646EFBD26A621 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
+		350340095CBCA42F197A438A4406FDDA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		532753F55305338F081B08F21B54967C /* Pods-WQBasicModules_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A5BEA6E72FC0446ABA51E9861DC0BE /* Pods-WQBasicModules_Example-dummy.m */; };
 		5E2C6CCD506F0FDB4B196ABA660641FD /* WQString+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0955C3950BF3F5755F89879545F52BC /* WQString+Regex.swift */; };
-		7560098F64C86F9B393364AD18A3EEF2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
+		6E68B5A3E527AA6EFFD21DB51152B61D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		77C05532CF8A75718A706129277061A6 /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADAEE63DF651913E2C4AE777F1AEAB1 /* UIView+Animations.swift */; };
 		984848C5ABA7E772E27B20B532A294B0 /* Pods-WQBasicModules_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DFF0C0AD605B6DFB4C23A35080B0D8A /* Pods-WQBasicModules_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9ADBC9F2F99C99A37DEB228A0995F67F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */; };
 		A1DD773F3B9AAB7C76E9E946840F99FC /* WQDate+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35C57F240A5E9FBCBDFFFC122AE86EAD /* WQDate+Utilities.swift */; };
 		A6C5A18FA278000BA707C59F5BD7432B /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B77F0E9E8B7AA8559E36A03EC18DD14 /* UIImageView+Animations.swift */; };
 		B46870CD0888E80C166A99DB40E2FC53 /* WQButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB760D8F099698C1B3664A3FA094613D /* WQButton.swift */; };
@@ -31,6 +30,7 @@
 		DC7D67C13418B65968FD1BCC784A4D91 /* WQString+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD6999C319B0FE79120C363C0A4756C /* WQString+Security.swift */; };
 		DD8C9820E71CCC3516ACD2559F079E2F /* WQBasicModules.h in Headers */ = {isa = PBXBuildFile; fileRef = F63FBE9CAB43F3ED5CDF0C74816A8344 /* WQBasicModules.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4BDE2A483DAD472C624DE7256421D54 /* WQBasicModules-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 76DB42DD8CC97404A7653FF765ACAF7F /* WQBasicModules-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F7D78747792A94195DFD0F7F357DFD47 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		FF362F511C3D974E9050677152271350 /* WQDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D9756503E6021C4A689E0CB964FCB6D /* WQDateFormatter.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,9 +80,9 @@
 		53ADADF650E3461663524756AB79B9B5 /* WQBasicModules.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = WQBasicModules.modulemap; sourceTree = "<group>"; };
 		56CD5515BF59B47AC3245E69AEF034D4 /* Pods-WQBasicModules_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-WQBasicModules_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		59AAEDA5F92982260D11255A88EA3A97 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5B049B27BCB82E9DF097182215402D56 /* Pods_WQBasicModules_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_WQBasicModules_Tests.framework; path = "Pods-WQBasicModules_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61E151B5C68F29B55719D2AD59A90858 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		67C670BF37F5B108E5E0D8AA8520B1B5 /* WQProperty.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQProperty.swift; path = WQBasicModules/Classes/WQHelpTool/WQJsonCodable/WQProperty.swift; sourceTree = "<group>"; };
 		71477B196394F9B6FD37E645928821C8 /* WQBasicModules-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "WQBasicModules-dummy.m"; sourceTree = "<group>"; };
 		76DB42DD8CC97404A7653FF765ACAF7F /* WQBasicModules-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WQBasicModules-umbrella.h"; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9ADBC9F2F99C99A37DEB228A0995F67F /* Foundation.framework in Frameworks */,
+				350340095CBCA42F197A438A4406FDDA /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -124,7 +124,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4DAC60D815C44DDB030646EFBD26A621 /* Foundation.framework in Frameworks */,
+				F7D78747792A94195DFD0F7F357DFD47 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,7 +132,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7560098F64C86F9B393364AD18A3EEF2 /* Foundation.framework in Frameworks */,
+				6E68B5A3E527AA6EFFD21DB51152B61D /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,14 +213,6 @@
 				D1AE9D35DFA98E9225F7324EC230C560 /* WQJsonCodable */,
 			);
 			name = WQHelpTool;
-			sourceTree = "<group>";
-		};
-		5E0D919E635D23B70123790B8308F8EF /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-				5A16F4CFC63FAC439D7A04994F579A03 /* Foundation.framework */,
-			);
-			name = iOS;
 			sourceTree = "<group>";
 		};
 		5F8BCA2F31CEF2A9F6E2118D4F22538F /* Pod */ = {
@@ -305,7 +297,7 @@
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				5E0D919E635D23B70123790B8308F8EF /* iOS */,
+				D35AF013A5F0BAD4F32504907A52519E /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -341,6 +333,14 @@
 				67C670BF37F5B108E5E0D8AA8520B1B5 /* WQProperty.swift */,
 			);
 			name = WQJsonCodable;
+			sourceTree = "<group>";
+		};
+		D35AF013A5F0BAD4F32504907A52519E /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */,
+			);
+			name = iOS;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
