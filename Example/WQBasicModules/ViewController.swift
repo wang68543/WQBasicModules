@@ -10,26 +10,40 @@ import UIKit
 import Foundation
 import WQBasicModules
 class ViewController: UIViewController {
- 
+ private let picButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
+//        let picButton = UIButton(type: .system)
+//        picButton.titleAlignment = .right
+        //        self.picButton.imgSize = CGSize(width: 30, height: 24)
+        //        self.picButton.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0)
+        picButton.setTitleColor(.black, for: .normal)
+        picButton.setImage(UIImage(named: "post-ic03"), for: .normal)
+        picButton.setTitle("图片", for: .normal)
+        picButton.backgroundColor = .yellow
+        picButton.titleLabel?.backgroundColor = .green
+        picButton.titleLabel?.font = UIFont(name: "PingFangSC-Medium", size: 13)
+        picButton.center = CGPoint(x: 100, y: 100)
+        self.view.addSubview(picButton)
         
         
-        let btn = WQButton()
-        btn.titleAlignment = .bottom
-        btn.setImage(UIImage(named: "首页5"), for: .normal)
-        btn.setTitle("首页5", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
-        btn.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
-        btn.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
-        btn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
-        btn.contentVerticalAlignment = .center
-        btn.contentHorizontalAlignment = .left
-        btn.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
-        btn.isAllowWrap = true
-        self.view.addSubview(btn)
-        btn.titleLabel?.backgroundColor = .red
-        btn.backgroundColor = .yellow
+//        let btn =  WQButton()
+////        btn.center = CGPoint(x: 100, y: 100)
+////        btn.titleAlignment = .bottom
+//        btn.setImage(UIImage(named: "首页5"), for: .normal)
+//        btn.setTitle("首页5", for: .normal)
+//        btn.setTitleColor(.black, for: .normal)
+//        btn.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+//        btn.titleEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+//        btn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10)
+//        btn.contentVerticalAlignment = .center
+//        btn.contentHorizontalAlignment = .left
+//        btn.frame = CGRect(x: 100, y: 100, width: 200, height: 200)
+//        btn.isAllowWrap = true
+        
+//        self.view.addSubview(btn)
+//        btn.titleLabel?.backgroundColor = .red
+//        btn.backgroundColor = .yellow
 //        debugPrint(btn.titleLabel?.font)
         
         debugPrint(Bundle.main.infoDictionary?["CFBundleName"] ?? "没有选项")

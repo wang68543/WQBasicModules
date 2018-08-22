@@ -6,10 +6,11 @@
 //
 
 import UIKit
-public enum WQButtonTitleAlignment {
+public enum WQTitleAlignment {
     case left, right, bottom, top
 }
 public final class WQButton: UIButton {
+    
     //以下计算都是基于当前button有尺寸之后的调整
    public var imgSize: CGSize = .zero
    public var isAllowWrap: Bool = false {
@@ -17,23 +18,14 @@ public final class WQButton: UIButton {
             self.titleLabel?.numberOfLines = isAllowWrap ? 0 : 1
         }
     }
-   
-   public var titleAlignment: WQButtonTitleAlignment = .left
     
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        config()
-    }
-    required public init?(coder aDecoder: NSCoder) {
-       super.init(coder: aDecoder)
-       config()
-    }
+    public var titleAlignment: WQTitleAlignment = .left
     
     private var _labelFont: UIFont = UIFont.systemFont(ofSize: 18)
     
     private var _titleFontObservable: NSKeyValueObservation?
     
-    private func config() {
+    private func addKVO() {
         let keyPath = \WQButton.titleLabel?.font
         _titleFontObservable =
         self.observe(keyPath) { [weak self] _, change in
@@ -43,15 +35,45 @@ public final class WQButton: UIButton {
                 }
         }
     }
-    deinit {
+    public override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        if newSuperview != nil {
+            if let font = self.titleLabel?.font {
+                _labelFont = font
+            }
+            addKVO()
+        } else {
+            removeKVO()
+        }
+    }
+    private func removeKVO() {
         _titleFontObservable?.invalidate()
         _titleFontObservable = nil
     }
-    
-   private var currentImageSize: CGSize {
-        guard frame.size != .zero else {
-            return .zero
+    deinit {
+        removeKVO()
+    }
+
+    public override var intrinsicContentSize: CGSize {
+        var contentSize: CGSize = .zero
+        let imageSize = self.currentImageSize
+        let titleSize = self.currentTitleSize
+        let imageEdgeW = self.imageEdgeInsets.left + self.imageEdgeInsets.right
+        let imageEdgeH = self.imageEdgeInsets.top + self.imageEdgeInsets.bottom
+        let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
+        let titleEdgeH = self.titleEdgeInsets.bottom + self.titleEdgeInsets.top
+        switch titleAlignment {
+        case .left, .right:
+            contentSize.width = imageEdgeW + titleEdgeW + imageSize.width + titleSize.width
+            contentSize.height = max(imageSize.height + imageEdgeH, titleSize.height + titleEdgeH)
+        case .bottom, .top:
+            contentSize.height = imageEdgeH + titleEdgeH + imageSize.height + titleSize.height
+            contentSize.width = max(imageSize.width + imageEdgeW, titleSize.width + titleEdgeW)
         }
+        return CGSize(width: contentSize.width + self.contentEdgeInsets.left + self.contentEdgeInsets.right,
+                      height: contentSize.height + self.contentEdgeInsets.top + self.contentEdgeInsets.bottom)
+    }
+   private var currentImageSize: CGSize {
         if imgSize != .zero {
             return fitImageSize(imgSize)
         } else if let image = self.currentImage {
@@ -62,6 +84,9 @@ public final class WQButton: UIButton {
     
     private
      func fitImageSize(_ size: CGSize) -> CGSize {
+        guard frame.size != .zero else {
+            return size
+        }
         let insetsBound = UIEdgeInsetsInsetRect(frame, self.contentEdgeInsets)
         var fitSize = size
         if size.width > insetsBound.width {
@@ -78,14 +103,16 @@ public final class WQButton: UIButton {
     }
     
     private var currentTitleSize: CGSize {
-        guard frame.size != .zero else {
-            return .zero
+        var titleMaxW: CGFloat = CGFloat.greatestFiniteMagnitude
+        var titleMaxH: CGFloat = 20
+        if frame.size != .zero {
+            let insetsBound = UIEdgeInsetsInsetRect(frame, self.contentEdgeInsets)
+            titleMaxW = insetsBound.width - self.titleEdgeInsets.left
+                - self.titleEdgeInsets.right
+            titleMaxH = insetsBound.height - self.titleEdgeInsets.top
+                - self.titleEdgeInsets.bottom
         }
-        let insetsBound = UIEdgeInsetsInsetRect(frame, self.contentEdgeInsets)
-        var titleMaxW = insetsBound.width - self.titleEdgeInsets.left
-            - self.titleEdgeInsets.right
-        var titleMaxH = insetsBound.height - self.titleEdgeInsets.top
-            - self.titleEdgeInsets.bottom
+     
         let imageSize = self.currentImageSize
         if  imageSize != .zero {
             if titleAlignment == .left || titleAlignment == .right {
@@ -94,14 +121,12 @@ public final class WQButton: UIButton {
                 titleMaxH -= (self.imageEdgeInsets.top + self.imageEdgeInsets.bottom + imageSize.height)
             }
         }
-      
         let titleMaxSize = CGSize(width: titleMaxW, height: titleMaxH)
         if let attributeString = self.currentAttributedTitle {
-            let size = attributeString
-                .boundingRect(with: titleMaxSize,
-                              options: .usesLineFragmentOrigin,
-                              context: nil).size
-            return size
+            return  attributeString
+                   .boundingRect(with: titleMaxSize,
+                                 options: .usesLineFragmentOrigin,
+                                 context: nil).size
         } else if let title = self.currentTitle {
             let size = (title as NSString)
                 .boundingRect(with: titleMaxSize,
@@ -116,10 +141,10 @@ public final class WQButton: UIButton {
     
     public override
     func contentRect(forBounds bounds: CGRect) -> CGRect {
+        guard bounds.size != .zero else { return .zero }
         let rect = UIEdgeInsetsInsetRect(bounds, self.contentEdgeInsets)
         var contentW: CGFloat; var contentH: CGFloat
-        let titleSize = self.currentTitleSize
-        let imageSize = self.currentImageSize
+        let titleSize = self.currentTitleSize; let imageSize = self.currentImageSize
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
         let titleEdgeH = self.titleEdgeInsets.top + self.titleEdgeInsets.bottom
         let imageEdgeW = self.imageEdgeInsets.left + self.imageEdgeInsets.right
@@ -243,8 +268,9 @@ public final class WQButton: UIButton {
   
 }
 public extension WQButton {
-    convenience init(_ title: String, image: UIImage, state: UIControlState = .normal) {
+    convenience init(_ title: String, image: UIImage, alignment: WQTitleAlignment = .right, state: UIControlState = .normal) {
         self.init()
+        self.titleAlignment = alignment
         self.setTitle(title, for: state)
         self.setImage(image, for: state)
     }

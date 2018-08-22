@@ -9,7 +9,7 @@ import UIKit
 public enum WQStarValueType {
     case valueHalf, valueWhole, valueRandom
 }
-public class WQStarControl: UIControl {
+open class WQStarControl: UIControl {
     /// 0.0 ~ 1.0
     private var progressValue: CGFloat = 0.0 {
         didSet {
@@ -18,7 +18,7 @@ public class WQStarControl: UIControl {
             }
         }
     }
-    var minInterSpacing: CGFloat = 5
+    public var minInterSpacing: CGFloat = 5
     /// 0 ~ 100
     public var value: Int {
             set {
@@ -66,7 +66,7 @@ public class WQStarControl: UIControl {
     
     private var starRects: [CGRect] = []
     
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
         if self.starSize == .zero {
@@ -117,7 +117,7 @@ public class WQStarControl: UIControl {
             }
         }
     }
-    override public func draw(_ rect: CGRect) {
+    override open func draw(_ rect: CGRect) {
         super.draw(rect)
         guard let context = UIGraphicsGetCurrentContext() else {
             return
@@ -136,7 +136,7 @@ public class WQStarControl: UIControl {
         }
         self.starRects = rects
     }
-    public override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+    open override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.beginTracking(touch, with: event)
         if !self.isFirstResponder {
             self.becomeFirstResponder()
@@ -144,12 +144,12 @@ public class WQStarControl: UIControl {
         handleTouch(touch)
         return true
     }
-    public override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+    open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.continueTracking(touch, with: event)
         handleTouch(touch)
         return true
     }
-    public override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+    open override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
         super.endTracking(touch, with: event)
         if self.isFirstResponder {
             self.resignFirstResponder()
@@ -159,7 +159,7 @@ public class WQStarControl: UIControl {
         }
     }
     
-    public override var canBecomeFirstResponder: Bool {
+    open override var canBecomeFirstResponder: Bool {
         return true
     }
 }
