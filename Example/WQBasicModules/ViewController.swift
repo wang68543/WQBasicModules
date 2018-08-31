@@ -59,13 +59,16 @@ class ViewController: UIViewController {
          let strs = "1234567890".split(separator: Character("5"))
         let star = WQStarControl()
 //        star.isEnabled = false
-//        star.normalImage = UIImage(named: "003")
-//        star.halfHighlightedImage = UIImage(named: "002")
-//        star.highlightedImage = UIImage(named: "001")
+        
+        star.value = 90
+        star.normalImage = UIImage(named: "003")
+        star.halfHighlightedImage = UIImage(named: "002")
+        star.highlightedImage = UIImage(named: "001")
         star.starSize = CGSize(width: 36, height: 33)
         star.backgroundColor = .white
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
+       
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
 //        debugPrint(Date().toString(.))

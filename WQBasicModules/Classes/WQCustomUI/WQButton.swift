@@ -21,39 +21,32 @@ public final class WQButton: UIButton {
     
     public var titleAlignment: WQTitleAlignment = .left
     
-    private var _labelFont: UIFont = UIFont.systemFont(ofSize: 18)
+    private var _titleFont: UIFont = UIFont.systemFont(ofSize: 18)
     
-    private var _titleFontObservable: NSKeyValueObservation?
-    
-    private func addKVO() {
-        let keyPath = \WQButton.titleLabel?.font
-        _titleFontObservable =
-        self.observe(keyPath) { [weak self] _, change in
-                if let newValue = change.newValue,
-                    let font = newValue {
-                    self?._labelFont = font
-                }
-        }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        addKVO()
     }
-    public override func willMove(toSuperview newSuperview: UIView?) {
-        super.willMove(toSuperview: newSuperview)
-        if newSuperview != nil {
-            if let font = self.titleLabel?.font {
-                _labelFont = font
-            }
-            addKVO()
-        } else {
-            removeKVO()
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        addKVO()
+    }
+    private func addKVO() {
+        self.addObserver(self, forKeyPath: "titleLabel.font", options: [.new], context: nil)
+    }
+    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let newValue = change?[NSKeyValueChangeKey.newKey] as? UIFont {
+            _titleFont = newValue
         }
     }
     private func removeKVO() {
-        _titleFontObservable?.invalidate()
-        _titleFontObservable = nil
+        removeObserver(self, forKeyPath: "titleLabel.font")
     }
     deinit {
         removeKVO()
     }
 
+    //AutoLayout时候 默认尺寸
     public override var intrinsicContentSize: CGSize {
         var contentSize: CGSize = .zero
         let imageSize = self.currentImageSize
@@ -131,7 +124,7 @@ public final class WQButton: UIButton {
             let size = (title as NSString)
                 .boundingRect(with: titleMaxSize,
                               options: .usesLineFragmentOrigin,
-                              attributes: [.font: _labelFont],
+                              attributes: [.font: _titleFont],
                               context: nil ).size
             return size
         } else {
@@ -268,31 +261,35 @@ public final class WQButton: UIButton {
   
 }
 public extension WQButton {
-    convenience init(_ title: String, image: UIImage, alignment: WQTitleAlignment = .right, state: UIControlState = .normal) {
+    convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left , state: UIControlState = .normal) {
         self.init()
         self.titleAlignment = alignment
         self.setTitle(title, for: state)
         self.setImage(image, for: state)
     }
-    func setImageCircularBorder(_ width: CGFloat, color: CGColor) {
+    func wq_setImageMasks(_ radius: CGFloat)  {
+        self.imageView?.layer.cornerRadius = radius;
+        self.imageView?.layer.masksToBounds = true
+    }
+    func wq_setImageCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let imgView = self.imageView else {
             return
         }
-        self.setImageBorder(width, color: color, radius: imgView.frame.height * 0.5)
+        self.wq_setImageBorder(width, color: color, radius: imgView.frame.height * 0.5)
     }
-    func setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
+    func wq_setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         self.imageView?.layer.borderWidth = width
         self.imageView?.layer.cornerRadius = radius
         self.imageView?.layer.borderColor = color
         self.imageView?.layer.masksToBounds = true
     }
-    func setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
+    func wq_setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let label = self.titleLabel else {
             return
         }
-        self.setTitleBorder(width, color: color, radius: label.frame.height * 0.5)
+        self.wq_setTitleBorder(width, color: color, radius: label.frame.height * 0.5)
     }
-    func setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
+    func wq_setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         self.titleLabel?.layer.borderWidth = width
         self.titleLabel?.layer.cornerRadius = radius
         self.titleLabel?.layer.borderColor = color

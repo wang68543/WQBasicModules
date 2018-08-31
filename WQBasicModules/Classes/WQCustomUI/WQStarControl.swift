@@ -18,11 +18,12 @@ open class WQStarControl: UIControl {
             }
         }
     }
-    public var minInterSpacing: CGFloat = 5
+    public var minimumValue: Int = 0
+    public var maximumValue: Int = 100
     /// 0 ~ 100
     public var value: Int {
             set {
-                let starProgress = CGFloat(min(max(0, newValue), 100)) / 100.0
+                let starProgress = CGFloat(min(max(minimumValue, newValue), maximumValue)) / CGFloat(maximumValue - minimumValue)
                 self.progressValue = starProgress
             }
             get {
@@ -41,18 +42,20 @@ open class WQStarControl: UIControl {
                         break
                     }
                 }
-                return Int(100 / CGFloat(starCount) * (progress + includeStar))
+                return Int(CGFloat(maximumValue - minimumValue) / CGFloat(starCount) * (progress + includeStar)) + minimumValue
             }
     }
     
+    public var minInterSpacing: CGFloat = 5
+    
     public var valueType: WQStarValueType = .valueHalf
-    public var contentEdgeInsets: UIEdgeInsets = .zero
+    public var contentEdgeInsets: UIEdgeInsets = .zero  
     public var drawStarRotate: CGFloat = 0.0
     public var starSize: CGSize  = .zero
  
     public var hideUnHighlited = false
     ///默认形状(五角形)
-    public var shapeCoreners: Int = 5
+    public var shapeCoreners: Int = 4
     public var starCount: Int = 5
     
     public var normalImage: UIImage?
@@ -64,7 +67,7 @@ open class WQStarControl: UIControl {
     public var borderWidth: CGFloat = 1.0
     public var borderColor: UIColor = .red
     
-    private var starRects: [CGRect] = []
+//    private var starRects: [CGRect] = []
     
     open override func layoutSubviews() {
         super.layoutSubviews()
@@ -108,8 +111,10 @@ open class WQStarControl: UIControl {
                 return
         }
         if normalImage != nil && highlightedImage != nil {
-            if halfHighlightedImage != nil && valueType == .valueRandom {
-                 valueType = .valueHalf
+            if halfHighlightedImage != nil {
+                if valueType == .valueRandom {
+                    valueType = .valueHalf
+                }
             } else {
                 if valueType != .valueWhole {
                     valueType = .valueWhole
@@ -127,14 +132,14 @@ open class WQStarControl: UIControl {
         context.fill(rect)
         
         let top = self.contentEdgeInsets.top
-        var rects: [CGRect] = []
+//        var rects: [CGRect] = []
         for idx in 0 ..< starCount {
             let starPoint = CGPoint(x: self.contentEdgeInsets.left + (minInterSpacing + starSize.width) * CGFloat(idx), y: top)
             let starRect = CGRect(origin: starPoint, size: starSize)
-            rects.append(starRect)
+//            rects.append(starRect)
             drawItem(starRect, context: context)
         }
-        self.starRects = rects
+//        self.starRects = rects
     }
     open override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.beginTracking(touch, with: event)
@@ -186,6 +191,7 @@ private extension WQStarControl {
         let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
         var progress: CGFloat
         let progressX = contentRect.width * self.progressValue + self.contentEdgeInsets.left
+        
         if progressX >= rect.maxX {
             progress = 1.0
         } else if progressX <= rect.minX {
@@ -290,12 +296,14 @@ private extension WQStarControl {
             drawImage = normalImage
         } else if progress == 1.0 {
             drawImage = highlightedImage
-        } else {
+        } else if progress == 0.5 {
             if let halfImage = halfHighlightedImage {
                 drawImage = halfImage
             } else {
                 drawImage = highlightedImage
             }
+        } else {
+            drawImage = highlightedImage
         }
         UIGraphicsPushContext(context)
         drawImage?.draw(in: rect)
