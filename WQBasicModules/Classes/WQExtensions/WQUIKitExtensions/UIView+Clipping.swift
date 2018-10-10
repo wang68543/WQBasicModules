@@ -7,16 +7,12 @@
 
 import UIKit
 public extension UIView {
-    func maskCorners(_ radius: CGFloat) {
-        layer.cornerRadius = radius
-        layer.masksToBounds = true
-    } 
     /// 设置view的圆角
     ///
     /// - Parameters:
     ///   - radius: 圆角半径
     ///   - corners: 圆角位置
-    func maskCorners(_ radius: CGFloat, corners: UIRectCorner) {
+    func maskCorners(_ radius: CGFloat, corners: UIRectCorner = .allCorners) {
         if corners.contains(.allCorners) {
             layer.cornerRadius = radius
             layer.masksToBounds = true
@@ -24,19 +20,12 @@ public extension UIView {
             guard self.bounds.size != .zero else {
                 fatalError("设置不规则圆角必须先有尺寸")
             }
-            let bounds = self.bounds
-            let cornerSize = CGSize(width: radius, height: radius)
-            
-            let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
-            let shapeLayer = CAShapeLayer()
-            shapeLayer.frame = bounds
-            shapeLayer.path = bezierPath.cgPath
-            layer.mask = shapeLayer
+           makeRectangleCorners(CGSize(width: radius, height: radius), react: self.bounds, corners: corners)
         }
     }
     
     /// 设置方形边框
-    func makeRectangleCorners(_ cornerSize: CGSize, corners: UIRectCorner = .allCorners) {
+    func makeRectangleCorners(_ cornerSize: CGSize, react: CGRect, corners: UIRectCorner = .allCorners) {
         let bounds = self.bounds
         let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
         let shapeLayer = CAShapeLayer()

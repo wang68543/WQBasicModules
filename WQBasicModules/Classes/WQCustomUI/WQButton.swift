@@ -34,11 +34,17 @@ public final class WQButton: UIButton {
     private func addKVO() {
         self.addObserver(self, forKeyPath: "titleLabel.font", options: [.new], context: nil)
     }
-    public override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    //  swiftlint:disable block_based_kvo
+    public override
+    func observeValue(forKeyPath keyPath: String?,
+                      of object: Any?,
+                      change: [NSKeyValueChangeKey: Any]?,
+                      context: UnsafeMutableRawPointer?) {
         if let newValue = change?[NSKeyValueChangeKey.newKey] as? UIFont {
             _titleFont = newValue
         }
     }
+     // swiftlint:enable block_based_kvo
     private func removeKVO() {
         removeObserver(self, forKeyPath: "titleLabel.font")
     }
@@ -261,14 +267,14 @@ public final class WQButton: UIButton {
   
 }
 public extension WQButton {
-    convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left , state: UIControlState = .normal) {
+    convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left, state: UIControlState = .normal) {
         self.init()
         self.titleAlignment = alignment
         self.setTitle(title, for: state)
         self.setImage(image, for: state)
     }
-    func wq_setImageMasks(_ radius: CGFloat)  {
-        self.imageView?.layer.cornerRadius = radius;
+    func wq_setImageMasks(_ radius: CGFloat) {
+        self.imageView?.layer.cornerRadius = radius
         self.imageView?.layer.masksToBounds = true
     }
     func wq_setImageCircularBorder(_ width: CGFloat, color: CGColor) {

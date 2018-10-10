@@ -68,7 +68,6 @@ open class WQStarControl: UIControl {
     public var borderColor: UIColor = .red
     
 //    private var starRects: [CGRect] = []
-    
     open override func layoutSubviews() {
         super.layoutSubviews()
         let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
@@ -107,8 +106,7 @@ open class WQStarControl: UIControl {
         }
         guard self.starSize.height <= contentRect.height,
             self.starSize.width <= contentRect.width else {
-                debugPrint("星星的尺寸必须小于控件的尺寸")
-                return
+                debugPrint("星星的尺寸必须小于控件的尺寸");return 
         }
         if normalImage != nil && highlightedImage != nil {
             if halfHighlightedImage != nil {

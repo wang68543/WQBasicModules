@@ -51,6 +51,10 @@ Pod::Spec.new do |s|
  #        ss.subspec 'WQSingle' do |sss|
  #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
  #        end
+         ss.subspec 'WQCache' do |sss|
+             # sss.frameworks = 'CommonCrypto'
+             sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQCache/*.swift'
+         end
          ss.subspec 'WQJsonCodable' do |sss|
          	# sss.frameworks = 'CommonCrypto'
          	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
