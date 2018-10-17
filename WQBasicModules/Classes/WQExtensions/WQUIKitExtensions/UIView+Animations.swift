@@ -42,23 +42,50 @@ public extension UIView {
     
     /// 转场动画
     func addTransitionAnimate (
-        timing: String = kCAMediaTimingFunctionEaseInEaseOut,
-        subtype: String = kCATransitionFade,
+        timing: CAMediaTimingFunction =  CAMediaTimingFunction(name: .easeInEaseOut),
+        type: CATransitionType = .fade,
         duration: CFTimeInterval = 0.2
         ) {
         var isRunning = false
-        if let preAnimate = layer.animation(forKey: AnimationKey.transition) as? CATransition, preAnimate.subtype == subtype {
+        if let preAnimate = layer.animation(forKey: AnimationKey.transition) as? CATransition, preAnimate.type == type {
             isRunning = true
         }
         if !isRunning {
             let transtion = CATransition()
             transtion.duration = duration
-            transtion.timingFunction = CAMediaTimingFunction(name: timing)
-            transtion.subtype = subtype
+            transtion.timingFunction = timing
+            transtion.type = type
             layer.add(transtion, forKey: AnimationKey.transition)
         }
     }
     func removeTransitionAnimate () {
         layer.removeAnimation(forKey: AnimationKey.transition)
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCAMediaTimingFunctionName(_ input: CAMediaTimingFunctionName) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromCATransitionType(_ input: CATransitionType) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromOptionalCATransitionSubtype(_ input: CATransitionSubtype?) -> String? {
+	guard let input = input else { return nil }
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToCAMediaTimingFunctionName(_ input: String) -> CAMediaTimingFunctionName {
+	return CAMediaTimingFunctionName(rawValue: input)
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalCATransitionSubtype(_ input: String?) -> CATransitionSubtype? {
+	guard let input = input else { return nil }
+	return CATransitionSubtype(rawValue: input)
 }

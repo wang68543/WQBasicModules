@@ -10,9 +10,12 @@ import UIKit
 public extension UIImageView {
     func fadeImage(_ fade: UIImage?) {
         if let fadeImage = fade {
-            addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
+            addTransitionAnimate(timing: CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut),
+                                 type: CATransitionType.fade,
+                                 duration: 0.2) 
             self.image = fadeImage
         }
     }
     
 }
+

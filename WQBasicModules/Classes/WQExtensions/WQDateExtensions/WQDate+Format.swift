@@ -142,8 +142,11 @@ public extension Date { // MARK: 日期格式化
     ///
     /// - Parameter dateFormat: enum dateFormatString
     /// - Returns: date string
-    func toString(_ dateFormat: DateFormatEnum, in calendar: Calendar = .current) -> String {
-        WQDateFormatter.shared.dateFormat = dateFormat.formatString
+    func toString(_ format: DateFormatEnum, in calendar: Calendar = .current) -> String {
+        return toString(format.formatString, in: calendar)
+    }
+    func toString(_ format: String, in calendar: Calendar = .current) -> String {
+        WQDateFormatter.shared.dateFormat = format
         WQDateFormatter.shared.calendar = calendar
         return WQDateFormatter.shared.string(from: self)
     }
@@ -155,11 +158,52 @@ public extension String { // MARK: 字符串转日期
     /// - Parameter dateFormat: enum dateFormatString
     /// - Returns: if error return now date
     func toDate(format dateFormat: DateFormatEnum, in calendar: Calendar = .current) -> Date {
-        WQDateFormatter.shared.dateFormat = dateFormat.formatString
+       return toDate(dateFormat.formatString, in: calendar)
+    }
+    func toDate(_ format: String, in calendar: Calendar = .current) -> Date {
+        WQDateFormatter.shared.dateFormat = format
         WQDateFormatter.shared.calendar = calendar
         guard let date = WQDateFormatter.shared.date(from: self) else {
             return Date()
         }
         return date
+    }
+}
+public extension Double {
+    
+    /// 中间符号连接形式
+    func toDuration(connect hour_minute: String, minute_second: String? = nil) -> String {
+        let compments = Int(self).toDurationCompments
+        var fmtString: String = String(compments[0] * 24 + compments[1])
+        fmtString += hour_minute
+        if minute_second != nil {
+           fmtString += String(compments[2])
+           fmtString += minute_second! + String(compments[3])
+        } else {
+           fmtString += String(compments[2] + Int(Double(compments[3]) / 60.0 ))
+        }
+        return fmtString
+    }
+    ///
+    /// 数字自定义转成时长格式
+    ///
+    /// - Parameter format: dd天HH小时mm分钟sss秒
+    /// - Returns: 格式化之后的时长
+    func toDuration(_ format: String) -> String {
+       let date = Date(timeIntervalSince1970: self)
+        return date.toString(format)
+    }
+}
+private extension Int {
+    var toDurationCompments: [Int] {
+        var value = self
+        let day = value / 86400
+        value -= day * 86400
+        let hour = value / 3600
+        value -= hour * 3600
+        let minute = value / 60
+        value -= minute * 60
+        let seconds = value
+        return [day,hour,minute,seconds]
     }
 }

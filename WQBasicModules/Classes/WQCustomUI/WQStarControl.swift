@@ -27,7 +27,7 @@ open class WQStarControl: UIControl {
                 self.progressValue = starProgress
             }
             get {
-                let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
+                let contentRect = self.frame.inset(by: self.contentEdgeInsets)
                 let progressX = contentRect.width * self.progressValue
                 let includeStar = floor(progressX / (starSize.width + minInterSpacing))
                 var progress = (progressX - (starSize.width + minInterSpacing) * includeStar) / starSize.width
@@ -70,7 +70,7 @@ open class WQStarControl: UIControl {
 //    private var starRects: [CGRect] = []
     open override func layoutSubviews() {
         super.layoutSubviews()
-        let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
+        let contentRect = self.frame.inset(by: self.contentEdgeInsets)
         if self.starSize == .zero {
             if let normalImage = normalImage,
                 highlightedImage != nil {
@@ -176,7 +176,7 @@ private extension WQStarControl {
         } else if point.x >= self.frame.width - self.contentEdgeInsets.right {
             progress = 1.0
         } else {
-            let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
+            let contentRect = self.frame.inset(by: self.contentEdgeInsets)
             progress = (point.x - self.contentEdgeInsets.left) / contentRect.width
         }
         let oldValue = self.value
@@ -186,7 +186,7 @@ private extension WQStarControl {
         }
     }
     func drawItem(_ rect: CGRect, context: CGContext) {
-        let contentRect = UIEdgeInsetsInsetRect(self.frame, self.contentEdgeInsets)
+        let contentRect = self.frame.inset(by: self.contentEdgeInsets)
         var progress: CGFloat
         let progressX = contentRect.width * self.progressValue + self.contentEdgeInsets.left
         
