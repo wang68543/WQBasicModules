@@ -23,7 +23,7 @@ public final class WQCache {
     }
     
     @discardableResult
-    func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
+    public func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
         guard let obj = object else {
             return false
         }
@@ -38,7 +38,7 @@ public final class WQCache {
         }
        return isSuccess
     }
-    func object<T: Decodable>(_ key: String) -> T? {
+    public func object<T: Decodable>(_ key: String) -> T? {
         if let data = self.load(for: key) {
             var obj: T?
             do {
@@ -52,12 +52,12 @@ public final class WQCache {
             return nil
         }
     }
-    func remove(_ key: String) {
+    public func remove(_ key: String) {
         self.delete(for: key)
     }
 
 }
-extension WQCache {
+public extension WQCache {
     convenience init(name: String, for directory: FileManager.SearchPathDirectory = .cachesDirectory) {
         let path = FileManager.url(for: directory).appendingPathComponent(name)
         self.init(path)
@@ -74,22 +74,22 @@ extension WQCache {
         return self.urlPath.appendingPathComponent(key)
     }
 }
-extension WQCache {
-    private func save(_ data: Data, for key: String) {
+private extension WQCache {
+    func save(_ data: Data, for key: String) {
         do {
             try data.write(to: path(for: key))
         } catch let error {
             debugPrint(error.localizedDescription)
         }
     }
-    private func load(for key: String) -> Data? {
+    func load(for key: String) -> Data? {
         do {
            return try Data(contentsOf: path(for: key))
         } catch {
             return nil
         } 
     }
-    private func delete(for key: String) {
+   func delete(for key: String) {
         do {
             try FileManager.default.removeItem(at: path(for: key))
         } catch let error {
