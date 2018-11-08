@@ -74,7 +74,7 @@ public extension WQCache {
         return self.urlPath.appendingPathComponent(key)
     }
 }
-private extension WQCache {
+public extension WQCache {
     func save(_ data: Data, for key: String) {
         do {
             try data.write(to: path(for: key))

@@ -31,19 +31,24 @@ Pod::Spec.new do |s|
   	s.ios.deployment_target = '8.0'
  	s.source_files  = "WQBasicModules/Classes/WQBasicModules.h"
  
+  	s.subspec 'WQAnimation' do |ss|
+        ss.subspec 'Layer' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
+        end
+    end
     s.subspec 'WQExtensions' do |ss|
-        ss.subspec 'WQUIKitExtensions' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift'
+        ss.subspec 'WQUIKit' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift'
         end
-        ss.subspec 'WQFoundationExtensions' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQFoundationExtensions/*.swift'
+        ss.subspec 'WQFoundation' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQFoundation/*.{swift,h,m}'
         end
-        ss.subspec 'WQDateExtensions' do |sss|
-            sss.dependency 'WQBasicModules/WQExtensions/WQFoundationExtensions'
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQDateExtensions/*.swift'
+        ss.subspec 'WQDate' do |sss|
+            sss.dependency 'WQBasicModules/WQExtensions/WQFoundation'
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQDate/*.swift'
         end
-        ss.subspec 'WQStringExtensions' do |sss| 
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQStringExtensions/*.{swift,h,m}'
+        ss.subspec 'WQString' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQString/*.{swift,h,m}'
         end
     end
        
@@ -60,8 +65,15 @@ Pod::Spec.new do |s|
          	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
          end
      end
-     s.subspec 'WQCustomUI' do |ss|
-         ss.source_files = 'WQBasicModules/Classes/WQCustomUI/*.swift'
+     s.subspec 'WQUI' do |ss|
+         ss.subspec 'Custom' do |sss|
+             # sss.frameworks = 'CommonCrypto'
+             sss.source_files = 'WQBasicModules/Classes/WQUI/Custom/*.swift'
+         end
+         ss.subspec 'Function' do |sss|
+             # sss.frameworks = 'CommonCrypto'
+             sss.source_files = 'WQBasicModules/Classes/WQUI/Function/*.swift'
+         end 
      end
  # s.public_header_files = 'Pod/Classes/**/*.h'
  # s.frameworks = 'UIKit', 'MapKit'

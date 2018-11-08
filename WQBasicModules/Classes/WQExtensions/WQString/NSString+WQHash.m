@@ -88,6 +88,7 @@
     }
     return result;
 }
+ 
 /**小写 md5 加密 */
 -(NSString *)md5LowercaseString{
     const char *data = self.UTF8String;

@@ -1,24 +1,32 @@
 PODS:
   - WQBasicModules (0.1.81):
-    - WQBasicModules/WQCustomUI (= 0.1.81)
+    - WQBasicModules/WQAnimation (= 0.1.81)
     - WQBasicModules/WQExtensions (= 0.1.81)
     - WQBasicModules/WQHelpTool (= 0.1.81)
-  - WQBasicModules/WQCustomUI (0.1.81)
+    - WQBasicModules/WQUI (= 0.1.81)
+  - WQBasicModules/WQAnimation (0.1.81):
+    - WQBasicModules/WQAnimation/Layer (= 0.1.81)
+  - WQBasicModules/WQAnimation/Layer (0.1.81)
   - WQBasicModules/WQExtensions (0.1.81):
-    - WQBasicModules/WQExtensions/WQDateExtensions (= 0.1.81)
-    - WQBasicModules/WQExtensions/WQFoundationExtensions (= 0.1.81)
-    - WQBasicModules/WQExtensions/WQStringExtensions (= 0.1.81)
-    - WQBasicModules/WQExtensions/WQUIKitExtensions (= 0.1.81)
-  - WQBasicModules/WQExtensions/WQDateExtensions (0.1.81):
-    - WQBasicModules/WQExtensions/WQFoundationExtensions
-  - WQBasicModules/WQExtensions/WQFoundationExtensions (0.1.81)
-  - WQBasicModules/WQExtensions/WQStringExtensions (0.1.81)
-  - WQBasicModules/WQExtensions/WQUIKitExtensions (0.1.81)
+    - WQBasicModules/WQExtensions/WQDate (= 0.1.81)
+    - WQBasicModules/WQExtensions/WQFoundation (= 0.1.81)
+    - WQBasicModules/WQExtensions/WQString (= 0.1.81)
+    - WQBasicModules/WQExtensions/WQUIKit (= 0.1.81)
+  - WQBasicModules/WQExtensions/WQDate (0.1.81):
+    - WQBasicModules/WQExtensions/WQFoundation
+  - WQBasicModules/WQExtensions/WQFoundation (0.1.81)
+  - WQBasicModules/WQExtensions/WQString (0.1.81)
+  - WQBasicModules/WQExtensions/WQUIKit (0.1.81)
   - WQBasicModules/WQHelpTool (0.1.81):
     - WQBasicModules/WQHelpTool/WQCache (= 0.1.81)
     - WQBasicModules/WQHelpTool/WQJsonCodable (= 0.1.81)
   - WQBasicModules/WQHelpTool/WQCache (0.1.81)
   - WQBasicModules/WQHelpTool/WQJsonCodable (0.1.81)
+  - WQBasicModules/WQUI (0.1.81):
+    - WQBasicModules/WQUI/Custom (= 0.1.81)
+    - WQBasicModules/WQUI/Function (= 0.1.81)
+  - WQBasicModules/WQUI/Custom (0.1.81)
+  - WQBasicModules/WQUI/Function (0.1.81)
 
 DEPENDENCIES:
   - WQBasicModules (from `../`)
@@ -28,8 +36,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 3856d2c521cd190614bfa7c1ed714d6e6e3a13ea
+  WQBasicModules: ee326482cc9a1854508e241a9a91c1a451ee723f
 
 PODFILE CHECKSUM: b41eaa918da1e8dcdebc03e4d8a9c6d2b5cdaa32
 
-COCOAPODS: 1.5.0
+COCOAPODS: 1.6.0.beta.2

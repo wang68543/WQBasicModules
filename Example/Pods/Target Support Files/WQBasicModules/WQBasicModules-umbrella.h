@@ -11,6 +11,7 @@
 #endif
 
 #import "WQBasicModules.h"
+#import "NSData+Utilies.h"
 #import "NSString+WQHash.h"
 
 FOUNDATION_EXPORT double WQBasicModulesVersionNumber;

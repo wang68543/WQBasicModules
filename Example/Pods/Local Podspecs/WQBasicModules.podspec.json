@@ -21,28 +21,37 @@
   "source_files": "WQBasicModules/Classes/WQBasicModules.h",
   "subspecs": [
     {
+      "name": "WQAnimation",
+      "subspecs": [
+        {
+          "name": "Layer",
+          "source_files": "WQBasicModules/Classes/WQAnimation/Layer/*.swift"
+        }
+      ]
+    },
+    {
       "name": "WQExtensions",
       "subspecs": [
         {
-          "name": "WQUIKitExtensions",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQUIKitExtensions/*.swift"
+          "name": "WQUIKit",
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift"
         },
         {
-          "name": "WQFoundationExtensions",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQFoundationExtensions/*.swift"
+          "name": "WQFoundation",
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQFoundation/*.{swift,h,m}"
         },
         {
-          "name": "WQDateExtensions",
+          "name": "WQDate",
           "dependencies": {
-            "WQBasicModules/WQExtensions/WQFoundationExtensions": [
+            "WQBasicModules/WQExtensions/WQFoundation": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQDateExtensions/*.swift"
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQDate/*.swift"
         },
         {
-          "name": "WQStringExtensions",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQStringExtensions/*.{swift,h,m}"
+          "name": "WQString",
+          "source_files": "WQBasicModules/Classes/WQExtensions/WQString/*.{swift,h,m}"
         }
       ]
     },
@@ -60,8 +69,17 @@
       ]
     },
     {
-      "name": "WQCustomUI",
-      "source_files": "WQBasicModules/Classes/WQCustomUI/*.swift"
+      "name": "WQUI",
+      "subspecs": [
+        {
+          "name": "Custom",
+          "source_files": "WQBasicModules/Classes/WQUI/Custom/*.swift"
+        },
+        {
+          "name": "Function",
+          "source_files": "WQBasicModules/Classes/WQUI/Function/*.swift"
+        }
+      ]
     }
   ]
 }
