@@ -90,7 +90,7 @@ public struct WQProperty {
         var properties: [WQProperty] = []
         let current = Mirror(reflecting: instance)
         
-        if let _ = current.displayStyle {
+        if   current.displayStyle != nil {
             //displayStyle
 //            switch displayStyle {
 //            case .`class`:

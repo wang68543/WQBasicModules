@@ -194,16 +194,17 @@ public extension Double {
         return date.toString(format)
     }
 }
+
 private extension Int {
     var toDurationCompments: [Int] {
         var value = self
-        let day = value / 86400
-        value -= day * 86400
+        let day = value / 86_400
+        value -= day * 86_400
         let hour = value / 3600
         value -= hour * 3600
         let minute = value / 60
         value -= minute * 60
         let seconds = value
-        return [day,hour,minute,seconds]
+        return [day, hour, minute, seconds]
     }
 }

@@ -4,6 +4,7 @@
 //
 //  Created by hejinyin on 2018/3/19.
 //  此处搬运自 https://github.com/hyperoslo/Hue/tree/master/Source/iOS
+//  swiftlint:disable identifier_name
 
 import UIKit
 // MARK: - Color Builders
@@ -38,16 +39,16 @@ public extension UIColor {
         }
         
         self.init(
-            red:   CGFloat((Int(hex, radix: 16)! >> 16) & 0xFF) / 255.0,
+            red: CGFloat((Int(hex, radix: 16)! >> 16) & 0xFF) / 255.0,
             green: CGFloat((Int(hex, radix: 16)! >> 8) & 0xFF) / 255.0,
-            blue:  CGFloat((Int(hex, radix: 16)!) & 0xFF) / 255.0, alpha: 1.0)
+            blue: CGFloat((Int(hex, radix: 16)!) & 0xFF) / 255.0, alpha: 1.0)
     }
     
     /// Adjust color based on saturation
     ///
     /// - Parameter minSaturation: The minimun saturation value
     /// - Returns: The adjusted color
-    public func color(minSaturation: CGFloat) -> UIColor {
+    func color(minSaturation: CGFloat) -> UIColor {
         var (hue, saturation, brightness, alpha): (CGFloat, CGFloat, CGFloat, CGFloat) = (0.0, 0.0, 0.0, 0.0)
         getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
         
@@ -60,7 +61,7 @@ public extension UIColor {
     ///
     /// - Parameter value: The alpha value
     /// - Returns: The alpha adjusted color
-    public func alpha(_ value: CGFloat) -> UIColor {
+    func alpha(_ value: CGFloat) -> UIColor {
         return withAlphaComponent(value)
     }
 }
@@ -138,9 +139,8 @@ public extension UIColor {
 }
 
 // MARK: - Gradient
-public extension Array where Element : UIColor {
-    
-    public func gradient(_ transform: ((_ gradient: inout CAGradientLayer) -> CAGradientLayer)? = nil) -> CAGradientLayer {
+public extension Array where Element: UIColor {
+    func gradient(_ transform: ((_ gradient: inout CAGradientLayer) -> CAGradientLayer)? = nil) -> CAGradientLayer {
         var gradient = CAGradientLayer()
         gradient.colors = self.map { $0.cgColor }
         
@@ -157,25 +157,25 @@ public extension UIColor {
     
     var redComponent: CGFloat {
         var red: CGFloat = 0
-        getRed(&red, green: nil , blue: nil, alpha: nil)
+        getRed(&red, green: nil, blue: nil, alpha: nil)
         return red
     }
     
     var greenComponent: CGFloat {
         var green: CGFloat = 0
-        getRed(nil, green: &green , blue: nil, alpha: nil)
+        getRed(nil, green: &green, blue: nil, alpha: nil)
         return green
     }
     
     var blueComponent: CGFloat {
         var blue: CGFloat = 0
-        getRed(nil, green: nil , blue: &blue, alpha: nil)
+        getRed(nil, green: nil, blue: &blue, alpha: nil)
         return blue
     }
     
     var alphaComponent: CGFloat {
         var alpha: CGFloat = 0
-        getRed(nil, green: nil , blue: nil, alpha: &alpha)
+        getRed(nil, green: nil, blue: nil, alpha: &alpha)
         return alpha
     }
     
@@ -198,13 +198,12 @@ public extension UIColor {
     }
 }
 
-
 // MARK: - Blending
 public extension UIColor {
     
     /**adds hue, saturation, and brightness to the HSB components of this color (self)*/
-    public func add(hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) -> UIColor {
-        var (oldHue, oldSat, oldBright, oldAlpha) : (CGFloat, CGFloat, CGFloat, CGFloat) = (0,0,0,0)
+    func add(hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat) -> UIColor {
+        var (oldHue, oldSat, oldBright, oldAlpha): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
         getHue(&oldHue, saturation: &oldSat, brightness: &oldBright, alpha: &oldAlpha)
         
         // make sure new values doesn't overflow
@@ -220,8 +219,8 @@ public extension UIColor {
     }
     
     /**adds red, green, and blue to the RGB components of this color (self)*/
-    public func add(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) -> UIColor {
-        var (oldRed, oldGreen, oldBlue, oldAlpha) : (CGFloat, CGFloat, CGFloat, CGFloat) = (0,0,0,0)
+    func add(red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) -> UIColor {
+        var (oldRed, oldGreen, oldBlue, oldAlpha): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
         getRed(&oldRed, green: &oldGreen, blue: &oldBlue, alpha: &oldAlpha)
         // make sure new values doesn't overflow
         let newRed: CGFloat = max(min(oldRed + red, 1.0), 0)
@@ -231,24 +230,23 @@ public extension UIColor {
         return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
     }
     
-    
-    public func add(hsb color: UIColor) -> UIColor {
-        var (h,s,b,a) : (CGFloat, CGFloat, CGFloat, CGFloat) = (0,0,0,0)
+    func add(hsb color: UIColor) -> UIColor {
+        var (h, s, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
         color.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
         return self.add(hue: h, saturation: s, brightness: b, alpha: 0)
     }
-    public func add(rgb color: UIColor) -> UIColor {
+    func add(rgb color: UIColor) -> UIColor {
         return self.add(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: 0)
     }
     
-    public func add(hsba color: UIColor) -> UIColor {
-        var (h,s,b,a) : (CGFloat, CGFloat, CGFloat, CGFloat) = (0,0,0,0)
+    func add(hsba color: UIColor) -> UIColor {
+        var (h, s, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (0, 0, 0, 0)
         color.getHue(&h, saturation: &s, brightness: &b, alpha: &a)
         return self.add(hue: h, saturation: s, brightness: b, alpha: a)
     }
     
     /**adds the rgb components of two colors*/
-    public func add(rgba color: UIColor) -> UIColor {
+    func add(rgba color: UIColor) -> UIColor {
         return self.add(red: color.redComponent, green: color.greenComponent, blue: color.blueComponent, alpha: color.alphaComponent)
     }
 }

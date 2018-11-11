@@ -25,7 +25,7 @@ class ViewController: UIViewController {
         picButton.titleLabel?.font = UIFont(name: "PingFangSC-Medium", size: 13)
         picButton.center = CGPoint(x: 100, y: 100)
         self.view.addSubview(picButton)
-        
+
         
 //        let btn =  WQButton()
 ////        btn.center = CGPoint(x: 100, y: 100)
@@ -55,8 +55,8 @@ class ViewController: UIViewController {
         
         debugPrint("=====",date.range(.month))
         
-        let imageView = UIImageView()
-         let strs = "1234567890".split(separator: Character("5"))
+//        let imageView = UIImageView() 
+//         let strs = "1234567890".split(separator: Character("5"))
         let star = WQStarControl()
 //        star.isEnabled = false
         

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public extension Data {
     var md5: String {
         return  (self as NSData).md5()
