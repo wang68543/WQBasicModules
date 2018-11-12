@@ -55,6 +55,21 @@ class ViewController: UIViewController {
         
         debugPrint("=====",date.range(.month))
         
+        let button = SecondViewController.DownButton()
+        button.setTitle("测试倒计时", for: .normal)
+        button.setTitleColor(UIColor.red, for: .normal)
+        button.backgroundColor = UIColor.yellow
+        button.countDown(10, execute: { (sender, count, state) in
+            debugPrint("\(count)")
+            button.setTitle("测试倒计时\(count)", for: state)
+            button.setTitleColor(UIColor.blue, for: state)
+            button.backgroundColor = UIColor.white
+        }) { (sender, flag) -> Bool in
+            //是否恢复原状态
+            return true
+        }
+        button.frame = CGRect(x: 100, y: 100, width: 100, height: 50);
+        self.view.addSubview(button)
 //        let imageView = UIImageView() 
 //         let strs = "1234567890".split(separator: Character("5"))
         let star = WQStarControl()

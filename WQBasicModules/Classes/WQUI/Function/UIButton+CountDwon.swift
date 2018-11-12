@@ -14,7 +14,7 @@ public extension UIButton {
     /// - Parameters:
     ///   - UIButton: 当前对象
     ///   - UInt: 剩余数量
-    public typealias IntervalExecute = (UIButton, Double, UIControl.State) -> Void
+    public typealias IntervalExecute = (UIButton, UInt, UIControl.State) -> Void
     
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
@@ -37,7 +37,14 @@ public extension UIButton {
         }
     }
     
-    public func countDown(_ count: Double,
+    /// 倒计时按钮
+    ///
+    /// - Parameters:
+    ///   - count: 开始倒计时的数量
+    ///   - interval: 重复的间隔,单位时间秒数
+    ///   - execute: 间隔回调
+    ///   - completion: 终止或者总数小于0就倒计时终止
+    public func countDown(_ count: UInt,
                           interval: Double = 1,
                           execute: @escaping IntervalExecute,
                           completion: @escaping CountDownCompletion) {
@@ -46,23 +53,25 @@ public extension UIButton {
             stopCountDown(false)
         } else {
             self.totalCount = count
-            self.interval = interval
             self.execute = execute
+            self.interval = interval
+            self.saveCurrentStatues()
             startTimer(interval)
         }
     }
     private func startTimer(_ interval: Double) {
-        let source: DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.global())
+        let source: DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
         source.schedule(wallDeadline: DispatchWallTime.now(), repeating: interval)
         source.setEventHandler { [weak self] in
             if let weakSelf = self {
                 var total = weakSelf.totalCount
-                total -= weakSelf.interval
+                total -= 1
                 if total <= 0 {
                     weakSelf.stopCountDown(true)
                 } else {
                     let state = weakSelf.status?.state ?? .normal
                     weakSelf.execute?(weakSelf, total, state)
+                    weakSelf.totalCount = total
                 }
             }
         }
@@ -84,18 +93,18 @@ public extension UIButton {
 private extension UIButton {
     var source: DispatchSourceTimer? {
         set {
-            objc_setAssociatedObject(self, CountDownKeys.timerSource, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, CountDownKeys.timerSource, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
         get {
             return objc_getAssociatedObject(self, CountDownKeys.timerSource) as? DispatchSourceTimer
         }
     }
-   var totalCount: Double {
+   var totalCount: UInt {
         set {
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return (objc_getAssociatedObject(self, CountDownKeys.totalCount) as? Double) ?? 0
+            return  (objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1
         }
     }
     var interval: Double {
@@ -103,7 +112,7 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.interval, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return (objc_getAssociatedObject(self, CountDownKeys.interval) as? Double) ?? 1
+            return (objc_getAssociatedObject(self, CountDownKeys.interval) as? Double) ?? 0
         }
     }
     var countDownCompletion: CountDownCompletion? {
@@ -127,13 +136,13 @@ private extension UIButton {
 // MARK: - -- Before CountDown Status
 fileprivate extension UIButton {
     struct CountDownKeys {
-        static let timerSource = "wq.button.countDown.timerSource"
-        static let totalCount = "wq.button.countDown.totalCount"
-        static let interval = "wq.button.countDown.interval"
-        static let completion = "wq.button.countDown.completion"
-        static let execute = "wq.button.countDown.execute"
-        static let isCanCancel = "wq.button.countDown.isCanCancel"
-        static let beforeStatus = "wq.button.countDown.beforeStatus"
+        static let timerSource = UnsafeRawPointer(bitPattern: "wq.button.countDown.timerSource".hashValue)!
+        static let totalCount = UnsafeRawPointer(bitPattern: "wq.button.countDown.totalCount".hashValue)!
+        static let interval = UnsafeRawPointer(bitPattern: "wq.button.countDown.interval".hashValue)!
+        static let completion = UnsafeRawPointer(bitPattern: "wq.button.countDown.completion".hashValue)!
+        static let execute = UnsafeRawPointer(bitPattern: "wq.button.countDown.execute".hashValue)!
+        static let isCanCancel = UnsafeRawPointer(bitPattern: "wq.button.countDown.isCanCancel".hashValue)!
+        static let beforeStatus = UnsafeRawPointer(bitPattern: "wq.button.countDown.beforeStatus".hashValue)!
     }
     
     final class StoredStatus {
@@ -221,7 +230,7 @@ fileprivate extension UIButton {
         self.execute = nil
         self.countDownCompletion = nil
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(self, CountDownKeys.interval, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(self, CountDownKeys.interval, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
 }

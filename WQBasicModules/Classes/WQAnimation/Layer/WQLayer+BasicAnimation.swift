@@ -10,7 +10,7 @@ public extension CALayer {
     struct AnimationKeys {
         static let rotation = "wq.layer.anmations.rotation"
         static let transition = "wq.layer.anmations.transition"
-        static let isAnimating = "wq.layer.anmations.isAnimating"
+        static let isAnimating = UnsafeRawPointer(bitPattern: "wq.layer.anmations.isAnimating".hashValue)!
     }
     
     public private(set) var isAnimating: Bool {

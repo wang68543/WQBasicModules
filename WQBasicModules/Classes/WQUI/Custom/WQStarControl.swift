@@ -67,7 +67,6 @@ open class WQStarControl: UIControl {
     public var borderWidth: CGFloat = 1.0
     public var borderColor: UIColor = .red
     
-//    private var starRects: [CGRect] = []
     open override func layoutSubviews() {
         super.layoutSubviews()
         let contentRect = self.frame.inset(by: self.contentEdgeInsets)
@@ -129,15 +128,12 @@ open class WQStarControl: UIControl {
         context.setFillColor(self.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
         context.fill(rect)
         
-        let top = self.contentEdgeInsets.top
-//        var rects: [CGRect] = []
+        let top = self.contentEdgeInsets.top 
         for idx in 0 ..< starCount {
             let starPoint = CGPoint(x: self.contentEdgeInsets.left + (minInterSpacing + starSize.width) * CGFloat(idx), y: top)
             let starRect = CGRect(origin: starPoint, size: starSize)
-//            rects.append(starRect)
             drawItem(starRect, context: context)
         }
-//        self.starRects = rects
     }
     open override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.beginTracking(touch, with: event)
