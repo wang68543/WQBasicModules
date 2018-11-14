@@ -73,7 +73,11 @@ Pod::Spec.new do |s|
          ss.subspec 'Function' do |sss|
              # sss.frameworks = 'CommonCrypto'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Function/*.swift'
-         end 
+         end
+         ss.subspec 'Help' do |sss|
+             # sss.frameworks = 'CommonCrypto'
+             sss.source_files = 'WQBasicModules/Classes/WQUI/Help/*.swift'
+         end
      end
  # s.public_header_files = 'Pod/Classes/**/*.h'
  # s.frameworks = 'UIKit', 'MapKit'

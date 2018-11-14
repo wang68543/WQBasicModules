@@ -37,7 +37,7 @@ public extension CALayer {
         self.interal_add(animate, forKey: AnimationKeys.rotation)
         return animate
     }
-    
+     
     func stopRotation() {
         self.interal_remove(forKey: AnimationKeys.rotation)
     }

@@ -59,6 +59,8 @@ class ViewController: UIViewController {
         button.setTitle("测试倒计时", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
         button.backgroundColor = UIColor.yellow
+        WQCache.default["test"] = "123"
+        
         button.countDown(10, execute: { (sender, count, state) in
             debugPrint("\(count)")
             button.setTitle("测试倒计时\(count)", for: state)

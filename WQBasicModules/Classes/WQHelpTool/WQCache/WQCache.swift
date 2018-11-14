@@ -7,15 +7,27 @@
 
 import UIKit
 public final class WQCache {
-    public static let `default` = WQCache(name: "wq.defaultCache.disk.com", for: .cachesDirectory)
     
+    //  "wq.defaultCache.disk.com"
+    public static let `default` = WQCache(name: "defaultCache", for: .cachesDirectory)
     public let urlPath: URL
+    public let fileManager: FileManager
     
-    init(_ url: URL) {
-        urlPath = url
-        if !FileManager.default.fileExists(atPath: url.path) {
+    /// 根据路径创建存储实例
+    ///
+    /// - Parameters:
+    ///   - url: 存储文件夹(需是app路径下面的二级目录)
+    ///   - fileManager: 文件管理器
+    init(_ url: URL, fileManager: FileManager = FileManager.default) {
+        var path = url
+        path.deleteLastPathComponent()
+        path = path.appendingPathComponent("wq.disk.cache.com", isDirectory: true)
+            .appendingPathComponent(url.lastPathComponent)
+        urlPath = path
+        self.fileManager = fileManager
+        if !fileManager.fileExists(atPath: path.path) {
             do {
-                try  FileManager.default.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
+                try  fileManager.createDirectory(at: url, withIntermediateDirectories: true, attributes: nil)
             } catch let error {
                 debugPrint("创建文件夹失败", error.localizedDescription)
             }
@@ -25,6 +37,7 @@ public final class WQCache {
     @discardableResult
     public func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
         guard let obj = object else {
+            self.delete(for: key)//为空的时候移除
             return false
         }
         var isSuccess: Bool = true
@@ -57,9 +70,36 @@ public final class WQCache {
     }
 
 }
+
+// MARK: - -- Disk
+public extension WQCache {
+    var totalSize: Int {
+        var size: Int = 0
+        do {
+           let attr = try fileManager.attributesOfItem(atPath: urlPath.path)
+            size = (attr[.size] as? Int) ?? 0
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+        return size
+    }
+    
+    func clear() {
+        do {
+            try fileManager
+                .contentsOfDirectory(at: self.urlPath,
+                                     includingPropertiesForKeys: nil,
+                                     options: .skipsSubdirectoryDescendants)
+        } catch let error {
+            debugPrint(error.localizedDescription)
+        }
+       
+    }
+}
+// MARK: - --Accessory
 public extension WQCache {
     convenience init(name: String, for directory: FileManager.SearchPathDirectory = .cachesDirectory) {
-        let path = FileManager.url(for: directory).appendingPathComponent(name)
+        let path = FileManager.url(for: directory).appendingPathComponent(name, isDirectory: true)
         self.init(path)
     }
     subscript<T: Codable>(key: String) -> T? {
@@ -91,7 +131,7 @@ public extension WQCache {
     }
    func delete(for key: String) {
         do {
-            try FileManager.default.removeItem(at: path(for: key))
+            try fileManager.removeItem(at: path(for: key))
         } catch let error {
             debugPrint(error.localizedDescription)
         }
