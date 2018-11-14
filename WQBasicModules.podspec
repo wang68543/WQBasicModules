@@ -57,26 +57,24 @@ Pod::Spec.new do |s|
  #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
  #        end
          ss.subspec 'WQCache' do |sss|
-             # sss.frameworks = 'CommonCrypto'
              sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQCache/*.swift'
          end
          ss.subspec 'WQJsonCodable' do |sss|
-         	# sss.frameworks = 'CommonCrypto'
          	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
          end
      end
      s.subspec 'WQUI' do |ss|
          ss.subspec 'Custom' do |sss|
-             # sss.frameworks = 'CommonCrypto'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Custom/*.swift'
          end
          ss.subspec 'Function' do |sss|
-             # sss.frameworks = 'CommonCrypto'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Function/*.swift'
          end
          ss.subspec 'Help' do |sss|
-             # sss.frameworks = 'CommonCrypto'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Help/*.swift'
+         end
+         ss.subspec 'FlowLayout' do |sss| 
+             sss.source_files = 'WQBasicModules/Classes/WQUI/FlowLayout/*.swift'
          end
      end
  # s.public_header_files = 'Pod/Classes/**/*.h'
