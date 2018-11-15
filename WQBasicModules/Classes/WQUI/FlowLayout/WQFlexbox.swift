@@ -8,7 +8,7 @@
 import UIKit
 // MARK: - ==========整个View的属性===============
  ///属性决定主轴的方向（即项目的排列方向）
-public enum WQFlexDirection: Int {
+@objc public enum WQFlexDirection: Int {
     
     /// （默认值）：主轴为水平方向，起点在左端。
     case row
@@ -22,9 +22,15 @@ public enum WQFlexDirection: Int {
     /// 主轴为垂直方向，起点在下沿。
     case columnReverse
 }
-
+public extension WQFlexDirection {
+    
+    /// 是否是水平方向
+    var isHorizontal: Bool {
+        return self == .row || self == .rowReverse
+    }
+}
 /// 属性定义了项目在主轴上的对齐方式。
-public enum WQJustifyContent: Int {
+@objc public enum WQJustifyContent: Int {
     
     /// （默认值）：左对齐
     case flexStart
@@ -42,7 +48,7 @@ public enum WQJustifyContent: Int {
     case spaceAround
 }
 //定义项目在交叉轴上如何对齐。
-public enum WQAlignItems: Int {
+@objc public enum WQAlignItems: Int {
     
     /// 交叉轴的起点对齐。
     case flexStart
@@ -61,7 +67,7 @@ public enum WQAlignItems: Int {
 }
 
 //定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用。
-public enum WQAlignContent: Int {
+@objc public enum WQAlignContent: Int {
     /// 交叉轴的起点对齐。
     case flexStart
     
@@ -82,7 +88,7 @@ public enum WQAlignContent: Int {
 }
 // MARK: - ==========整个View的属性END===============
 // MARK: - ==========Cell属性==========
-public enum WQAlignSelf: Int {
+@objc public enum WQAlignSelf: Int {
     case auto //继承自父View的属性
     /// 交叉轴的起点对齐。
     case flexStart
@@ -101,26 +107,36 @@ public enum WQAlignSelf: Int {
 }
 // MARK: - ==========Cell属性END==========
 
-public protocol WQFlexboxLayout: NSObjectProtocol {
+@objc public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
     
     /// 返回每个Section的高度;当只有一个section的时候 高度默认为collectionView的height
-    /// 主要用于当前如果direction是竖排排列的话 section内部布局
-     func flexbox(_ flexbox: WQFlexbox, heightForSectionAt section: Int) -> CGFloat
-     func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
-}
-extension WQFlexboxLayout {
-    func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf {
-        return .center
-    }
-    func flexbox(_ flexbox: WQFlexbox, heightForSectionAt section: Int) -> CGFloat {
-        fatalError("当cell垂直布局的时候,此协议方法必须代理对象实现")
-        return 0
-    }
-}
-public class WQFlexbox: UICollectionViewFlowLayout {
-    weak var delegate: WQFlexboxLayout?
-    
+    /// 主要用于当前如果direction是竖排排列的话 section内部布局 (不包含header、footeru以及sectionInsets)
+    @objc optional func flexbox(_ flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize
+//    @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
     /// Cells排列方向
+    @objc optional func flexbox(_ flexbox: WQFlexbox, directionForSectionAt section: Int) -> WQFlexDirection
+    @objc optional func flexbox(_ flexbox: WQFlexbox, justifyContentForSectionAt section: Int, inLine lineNum: Int, linesCount: Int) -> WQJustifyContent
+     @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemsForSectionAt section: Int, inLine lineNum: Int, with indexPath: IndexPath) -> WQAlignItems
+     @objc optional func flexbox(_ flexbox: WQFlexbox, alignContentForSectionAt section: Int) -> WQAlignContent
+}
+//extension WQFlexboxDelegateLayout {
+//    func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf {
+//        return .center
+//    }
+//    //返回0的时候 依次向下排
+//    func flexbox(_ flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize {
+//        return .zero
+//    }
+//    func flexbox(_ flexbox: WQFlexbox, directionForSectionAt section: Int) -> WQFlexDirection {
+//        return .row
+//    }
+//}
+
+/// 布局主要是针对每个Section里面的Cell 其他的正常布局
+public class WQFlexbox: UICollectionViewFlowLayout {
+    private weak var delegate: WQFlexboxDelegateLayout? {
+        return self.collectionView?.delegate as? WQFlexboxDelegateLayout
+    }
     var direction: WQFlexDirection = .row
     
     /// 项目在主轴上的对齐方式
@@ -155,60 +171,102 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         let sections = collectionView.numberOfSections
         
         var items: [UICollectionViewLayoutAttributes] = []
-        //TODO: - -- 计算所有项目的尺寸
-//        for section in 0 ..< sections {
-//            let items = collectionView.numberOfItems(inSection: section)
-//            var sectionSizes: [CGSize] = []
-//            for item in 0 ..< items {
-//                let indexPath = IndexPath(item: item, section: section)
-//                sectionSizes.append()
-//            }
-//            sizes.append(sectionSizes)
-//        }
+    
         // 每个分区内部
-        var maxValue: CGFloat = 0
-        var startValue: CGFloat = 0
         
         var flowSectionY: CGFloat = 0
         var flowSectionX: CGFloat = 0
         
-        switch self.direction {
-        case .column:
-            flowSectionY = collectionView.contentInset.top
-            flowSectionX = collectionView.contentInset.left
-            for section in 0 ..< sections {
-                let headerSize = self.referenceSizeForHeaderInSection(section)
-                flowSectionX += self.sectionInset.left + headerSize.width
-                flowSectionY += self.sectionInset.top  + headerSize.height
-                
-                let items = collectionView.numberOfItems(inSection: section)
-                var lineAttrs: [UICollectionViewLayoutAttributes] = []
-                for item in 0 ..< items {
-                    let indexPath = IndexPath(item: item, section: section)
-                    let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                    attr.frame = CGRect(origin: .zero, size: self.sizeForItem(at: indexPath))
-                    
+        flowSectionY = collectionView.contentInset.top
+        flowSectionX = collectionView.contentInset.left
+        var allAttrs: [[[UICollectionViewLayoutAttributes]]] = []
+        for section in 0 ..< sections {
+            let headerSize = self.referenceSizeForHeaderInSection(section)
+            let lineSpace = self.minimumLineSpacingForSection(at: section)
+            let interitemSpace = self.minimumInteritemSpacingForSection(at: section)
+            let sectionSize = self.sizeForSection(at: section)
+            let direction = self.directionForSection(at: section)
+            let isHorizontal = direction.isHorizontal
+            let insets = self.insetForSection(at: section)
+            flowSectionX += insets.left + headerSize.width
+            flowSectionY += insets.top + headerSize.height
+            var sectionAttrs: [[UICollectionViewLayoutAttributes]] = []
+            var lineAttrs: [UICollectionViewLayoutAttributes] = []
+            let itemsCount = collectionView.numberOfItems(inSection: section)
+            var maxValue: CGFloat = 0
+            let limitValue: CGFloat = isHorizontal ? sectionSize.width : sectionSize.height
+            for item in 0 ..< itemsCount {
+                let indexPath = IndexPath(item: item, section: section)
+                let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                let itemSize = self.sizeForItem(at: indexPath)
+                attr.frame = CGRect(origin: .zero, size: itemSize)
+                if isHorizontal {
+                    maxValue += itemSize.width + interitemSpace
+                } else {
+                    maxValue += itemSize.height + lineSpace
+                }
+                if maxValue < limitValue {
+                    lineAttrs.append(attr)
+                } else {
+                    sectionAttrs.append(lineAttrs)
+                    lineAttrs = []
                 }
             }
-        case .columnReverse:
-          
-        case .row, .rowReverse:
-            for section in 0 ..< sections {
-                let items = collectionView.numberOfItems(inSection: section)
-                var lineAttrs: [UICollectionViewLayoutAttributes] = []
-                for item in 0 ..< items {
-                    let indexPath = IndexPath(item: item, section: section)
-                    let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                    attr.frame = CGRect(origin: .zero, size: self.sizeForItem(at: indexPath))
-                    
+            sectionAttrs.append(lineAttrs)
+            allAttrs.append(sectionAttrs)
+            switch direction {
+            case .row:
+                for index in 0 ..< sectionAttrs.count {
+                    let lineAttrs = sectionAttrs[index]
+                    let rowMaxH = lineAttrs.max(by: ({ $0.frame.height > $1.frame.height }))!.frame.height
+                    let justtify = self.justifyContentForSection(at: section, inLine: index, total: lineAttrs.count)
+                    var startX: CGFloat
+                    var rowSectionW: CGFloat
+                    switch justtify {
+                    case .flexStart:
+                        rowSectionW = interitemSpace
+                        startX = insets.left + collectionView.contentInset.left
+                    case .center:
+                        rowSectionW = interitemSpace
+                    case .flexEnd:
+                        rowSectionW = interitemSpace
+                    case .spaceAround:
+                        break;
+                    case .spaceBetween:
+                        startX = insets.left + collectionView.contentInset.left
+                    }
+                    for idx in 0 ..< lineAttrs.count {
+                        var ptX, ptY: CGFloat
+                        let attr = lineAttrs[idx]
+                        let alignItems = self.alignItemsForSection(at: section, inLine: index, with: attr.indexPath)
+                        switch alignItems {
+                        case .flexStart:
+                        case .center:
+                        case .flexEnd:
+                        case .baseline:
+                        case .stretch:
+                        }
+                        
+                    }
                 }
+            case .rowReverse:
+            case .column:
+            case .columnReverse:
             }
+            
+            flowSectionY += sectionSize.height
+            let footerSize = self.referenceSizeForFooterInSection(section)
+            flowSectionY += footerSize.height + insets.bottom
         }
       
         attrs.removeAll()
         attrs.append(contentsOf: items)
         
     }
+//    public func numberOfLines(inSection section: Int) -> Int {
+//
+//    }
+//    public func
 //    override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 //
 //    }
@@ -217,60 +275,82 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     }
 }
 
-// MARK: - -- Data Source
+// MARK: - -- FlexboxLayout Datat Source
+private extension WQFlexbox {
+    func sizeForSection(at section: Int) -> CGSize {
+        guard let collectionView = self.collectionView else {
+            return .zero
+        }
+        var sectionSize: CGSize = .zero
+        if collectionView.numberOfSections > 1 {
+            sectionSize = delegate?.flexbox?(self, sizeForSectionAt: section) ?? .zero
+        }
+        if sectionSize == .zero {
+            if collectionView.contentSize.height * collectionView.contentSize.width < collectionView.frame.width * collectionView.frame.height {
+                sectionSize = collectionView.frame.size
+            } else {
+                sectionSize = collectionView.contentSize
+            }
+        }
+        return sectionSize
+    }
+    
+    func directionForSection(at section: Int) -> WQFlexDirection {
+        return delegate?.flexbox?(self, directionForSectionAt: section) ?? self.direction
+    }
+    
+    func justifyContentForSection(at section: Int, inLine: Int , total: Int) -> WQJustifyContent {
+        return delegate?.flexbox?(self, justifyContentForSectionAt: section, inLine: inLine, linesCount: total) ?? self.justify_content
+    }
+    
+    func alignItemsForSection(at section: Int, inLine: Int ,with indexPath: IndexPath) -> WQAlignItems {
+        return delegate?.flexbox?(self, alignItemsForSectionAt: section, inLine: inLine, with: indexPath) ?? self.align_items
+    }
+    func alignContentForSection(at section: Int) -> WQAlignContent {
+        return delegate?.flexbox?(self, alignContentForSectionAt: section) ?? self.align_content
+    }
+}
+// MARK: - -- FlowLayout Data Source
 private extension WQFlexbox {
     
     func sizeForItem(at indexPath: IndexPath) -> CGSize {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout{
-            return proxy.collectionView?(collectionView, layout: self, sizeForItemAt: indexPath) ?? self.itemSize
+        //, let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, sizeForItemAt: indexPath) ?? self.itemSize
         }
         return self.itemSize
     }
-    
-    func heightForSection(at section: Int) -> CGFloat {
-        if let sections = self.collectionView?.numberOfSections,
-            sections > 0 {
-          return delegate?.flexbox(self, heightForSectionAt: section) ?? 0
-        }
-        return self.collectionView?.contentSize.height ?? 0
-    }
     func insetForSection(at section: Int) -> UIEdgeInsets {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout {
-            return proxy.collectionView?(collectionView, layout: self, insetForSectionAt: section) ?? self.sectionInset
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, insetForSectionAt: section) ?? self.sectionInset
         }
         return self.sectionInset
     }
     
     func minimumLineSpacingForSection(at section: Int) -> CGFloat {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout {
-            return proxy.collectionView?(collectionView, layout: self, minimumLineSpacingForSectionAt: section) ?? self.minimumLineSpacing
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, minimumLineSpacingForSectionAt: section) ?? self.minimumLineSpacing
         }
         return self.minimumLineSpacing
     }
     
     func minimumInteritemSpacingForSection(at section: Int) -> CGFloat {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout {
-            return proxy.collectionView?(collectionView, layout: self, minimumInteritemSpacingForSectionAt: section) ?? self.minimumInteritemSpacing
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, minimumInteritemSpacingForSectionAt: section) ?? self.minimumInteritemSpacing
         }
         return self.minimumInteritemSpacing
     }
     
     func referenceSizeForHeaderInSection(_ section: Int) -> CGSize {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout {
-            return proxy.collectionView?(collectionView, layout: self, referenceSizeForHeaderInSection: section) ?? self.headerReferenceSize
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, referenceSizeForHeaderInSection: section) ?? self.headerReferenceSize
         }
         return self.headerReferenceSize
     }
     
     func referenceSizeForFooterInSection(_ section: Int) -> CGSize {
-        if let collectionView = self.collectionView,
-            let proxy = collectionView.delegate as? UICollectionViewDelegateFlowLayout {
-            return proxy.collectionView?(collectionView, layout: self, referenceSizeForFooterInSection: section) ?? self.footerReferenceSize
+        if let collectionView = self.collectionView {
+            return delegate?.collectionView?(collectionView, layout: self, referenceSizeForFooterInSection: section) ?? self.footerReferenceSize
         }
         return self.footerReferenceSize
     }
