@@ -80,20 +80,22 @@ public extension WQCache {
             size = (attr[.size] as? Int) ?? 0
         } catch let error {
             debugPrint(error.localizedDescription)
+//            return 0
         }
         return size
     }
     
-    func clear() {
+    func clear() -> Error? {
         do {
-            try fileManager
+             try fileManager
                 .contentsOfDirectory(at: self.urlPath,
                                      includingPropertiesForKeys: nil,
                                      options: .skipsSubdirectoryDescendants)
         } catch let error {
             debugPrint(error.localizedDescription)
+            return error
         }
-       
+       return nil
     }
 }
 // MARK: - --Accessory
@@ -115,12 +117,15 @@ public extension WQCache {
     }
 }
 public extension WQCache {
-    func save(_ data: Data, for key: String) {
+    @discardableResult
+    func save(_ data: Data, for key: String) -> Error? {
         do {
-            try data.write(to: path(for: key))
+            try data.write(to: path(for: key), options: .atomic)
         } catch let error {
             debugPrint(error.localizedDescription)
+            return error
         }
+        return nil
     }
     func load(for key: String) -> Data? {
         do {
@@ -129,11 +134,14 @@ public extension WQCache {
             return nil
         } 
     }
-   func delete(for key: String) {
+   @discardableResult
+   func delete(for key: String) -> Error? {
         do {
             try fileManager.removeItem(at: path(for: key))
         } catch let error {
             debugPrint(error.localizedDescription)
+            return error
         }
+        return nil
     }
 }

@@ -111,7 +111,7 @@ public extension WQFlexDirection {
 @objc public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
     
     /// 返回每个Section的高度;当只有一个section的时候 高度默认为collectionView的height
-    /// section尺寸 (包含header、footer(上下布局)不包含sectionInsets)
+    /// section尺寸 (包含header、footer(上下布局) 包含sectionInsets)
     @objc optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize
 //    @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
     /// Cells排列方向
@@ -140,13 +140,13 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     }
     public var direction: WQFlexDirection = .row
     
-    /// 项目在主轴上的对齐方式
+    /// 整个line主轴方向在section中的排列方式
     public var justify_content: WQJustifyContent = .flexStart
     
-    /// 项目在交叉轴上如何对齐
+    /// 若line中有item有尺寸不相等的以尺寸最大的item进行相对布局(当direction为水平方向时参照最大的height 否则参照最大的width)
     public var align_items: WQAlignItems = .center
     
-    /// 属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用
+    /// 动态调整每个section中lines之间的间距,以及first line section 顶部或右侧间距
     public var align_content: WQAlignContent = .flexStart
     
     /// 主轴方向的排列cell的个数 默认0 根据最小间距属性来动态计算每行的个数
@@ -156,10 +156,17 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         return contentSize
     }
     private var attrs: [UICollectionViewLayoutAttributes] = []
-    
+    private var supplementary: [UICollectionViewLayoutAttributes] = []
     /// 不包含contentInset
     private var contentSize: CGSize = .zero
     
+    public override func invalidateLayout() {
+        super.invalidateLayout()
+    }
+    
+    public override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        return false
+    }
     override public func prepare() {
         super.prepare()
         
@@ -167,12 +174,12 @@ public class WQFlexbox: UICollectionViewFlowLayout {
             debugPrint("请配合CollectionView使用")
             return
         }
-//        let frame = collectionView.frame
+        //        let frame = collectionView.frame
         guard collectionView.frame.size != .zero else {
             debugPrint("尺寸不能为0")
             return
         }
-//        let eachLineCount = lineItemsCount
+        //        let eachLineCount = lineItemsCount
         
         let sections = collectionView.numberOfSections
         var flowSectionY: CGFloat = 0
@@ -182,8 +189,12 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         flowSectionX = collectionView.contentInset.left
         //所有section的所有行
         var allAttrs: [[[UICollectionViewLayoutAttributes]]] = []
-//        var
         var supplementaryAttrs: [[UICollectionViewLayoutAttributes]] = []
+        
+        // 记录所有section的最大宽高 用于计算ContentSize
+        var allSectionMaxHeight: CGFloat = 0
+        var allSectionMaxWidth: CGFloat = 0
+        
         for section in 0 ..< sections {
             // 获取每个section的布局风格
             let headerSize = self.referenceSizeForHeaderInSection(section)
@@ -194,114 +205,103 @@ public class WQFlexbox: UICollectionViewFlowLayout {
             let sectionAlignContent = self.alignContentForSection(at: section)
             let insets = self.insetForSection(at: section)
             let sectionSize = self.sizeForSection(at: section)
-            let isHorizontal = lineDirection.isHorizontal
+//            let isHorizontal = lineDirection.isHorizontal
             
             let contentW: CGFloat = sectionSize.width - insets.left - insets.right
             let contentH: CGFloat = sectionSize.height - insets.bottom - insets.top
             
-        
+            
             //获取section的左上角坐标
             flowSectionX += insets.left
             flowSectionY += insets.top
             var headerFooterAttr: [UICollectionViewLayoutAttributes] = []
             if headerSize != .zero {
                 let headerAttr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: IndexPath(item: 0, section: section))
-                headerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY, width: contentW, height: headerSize.width)
+                headerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY, width: contentW, height: headerSize.height)
                 headerFooterAttr.append(headerAttr)
-                flowSectionX += headerSize.width
-                flowSectionY += headerSize.height
             }
             var sectionAttrs: [[UICollectionViewLayoutAttributes]] = []
             var lineAttrs: [UICollectionViewLayoutAttributes] = []
             let itemsCount = collectionView.numberOfItems(inSection: section)
             
-            /// 分Lines 处理每行最多能放多少个
-            var maxValue: CGFloat = 0
-            let limitValue: CGFloat = (self.scrollDirection == .horizontal) ? contentH: contentW
-            for item in 0 ..< itemsCount {
-                let indexPath = IndexPath(item: item, section: section)
-                let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-                let itemSize = self.sizeForItem(at: indexPath)
-                attr.frame = CGRect(origin: .zero, size: itemSize)
-                if isHorizontal {
-                    maxValue += itemSize.width + interitemSpace
-                } else {
-                    maxValue += itemSize.height + lineSpace
-                }
-                if maxValue > limitValue {
-                    maxValue = 0
-                    sectionAttrs.append(lineAttrs)
-                    lineAttrs = []
-                }
-                lineAttrs.append(attr) 
-            }
-            if !lineAttrs.isEmpty {
-              sectionAttrs.append(lineAttrs)
-            }
-              //每行的最大高度或宽度
-            var linesMaxValue: [CGFloat] = []
-            var linesTotalValue: [CGFloat] = []
-            var sumMaxValue: CGFloat = 0
-            // 每行items的总高度或者总宽度
-            for index in 0 ..< sectionAttrs.count {
-                let lineAttrs = sectionAttrs[index]
-                var maxValue: CGFloat = 0
-                var totalValue: CGFloat = 0
-                for idx in 0 ..< lineAttrs.count {
-                    let attr = lineAttrs[idx]
-                    if isHorizontal {
-                        if maxValue < attr.frame.width {
-                            maxValue = attr.frame.width
-                        }
-                        totalValue += attr.frame.width
-                    } else {
-                        if maxValue < attr.frame.height {
-                            maxValue = attr.frame.height
-                        }
-                        totalValue += attr.frame.height
-                    }
-                }
-                linesMaxValue.append(maxValue)
-                linesTotalValue.append(totalValue)
-                sumMaxValue += maxValue
-            }
-            //留待它用
-            allAttrs.append(sectionAttrs)
-            // 记录section内容的最大宽高 用于计算ContentSize
-            var maxHeight: CGFloat = 0
-            let maxWidth: CGFloat = contentW
             //处理一个区的
             switch lineDirection {
             case .row:
+                /// 分Lines 处理每行最多能放多少个
+                flowSectionY += headerSize.height
+                var lineMaxX: CGFloat = 0
+                let limitValue: CGFloat = contentW
+                let itemSpace = interitemSpace
+                for item in 0 ..< itemsCount {
+                    let indexPath = IndexPath(item: item, section: section)
+                    let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+                    let itemSize = self.sizeForItem(at: indexPath)
+                    attr.frame = CGRect(origin: .zero, size: itemSize)
+                    lineMaxX += itemSize.width
+                    if lineMaxX > limitValue {
+                        lineMaxX = itemSize.width
+                        sectionAttrs.append(lineAttrs)
+                        lineAttrs = []
+                    }
+                    lineMaxX += itemSpace
+                    lineAttrs.append(attr)
+                }
+                sectionAttrs.append(lineAttrs)
+                
+                //每行的最大高度或宽度
+                var linesMaxHeightValue: [CGFloat] = []
+                var linesTotalWidthValue: [CGFloat] = []
+                var linesTotalHeight: CGFloat = 0
+                // 每行items的总高度或者总宽度
+                for index in 0 ..< sectionAttrs.count {
+                    let lineAttrs = sectionAttrs[index]
+                    var lineMaxHeight: CGFloat = 0
+                    var totalValue: CGFloat = 0
+                    for idx in 0 ..< lineAttrs.count {
+                        let attr = lineAttrs[idx]
+                        if lineMaxHeight < attr.frame.height {
+                            lineMaxHeight = attr.frame.height
+                        }
+                        totalValue += attr.frame.width
+                    }
+                    linesMaxHeightValue.append(lineMaxHeight)
+                    linesTotalWidthValue.append(totalValue)
+                    linesTotalHeight += lineMaxHeight
+                }
+                //留待它用
+                allAttrs.append(sectionAttrs)
+                // 记录section内容的最大宽高 用于计算ContentSize
+                var maxHeight: CGFloat = 0
+                let maxWidth: CGFloat = contentW
+                
                 let linesCount = sectionAttrs.count
                 let linesNum = CGFloat(linesCount)
                 var topY = flowSectionY
                 var sectionLineSpace: CGFloat
                 var sectionBottomH: CGFloat = 0
                 var marginTop: CGFloat = 0
-                topY += insets.top
                 let sel: Selector = #selector(WQFlexboxDelegateLayout.flexbox(_:flexbox:sizeForSectionAt:))
                 if let deleg = self.delegate,
                     deleg.responds(to: sel) {
                     switch sectionAlignContent {
                     case .flexStart:
                         sectionLineSpace = lineSpace
-                        sectionBottomH = contentH - sumMaxValue - linesNum * sectionLineSpace
+                        sectionBottomH = contentH - linesTotalHeight - linesNum * sectionLineSpace
                     case .center:
                         sectionLineSpace = lineSpace
-                        marginTop = (contentH - sumMaxValue - sectionLineSpace * (linesNum - 1)) * 0.5
+                        marginTop = (contentH - linesTotalHeight - sectionLineSpace * (linesNum - 1)) * 0.5
                         sectionBottomH = marginTop
                     case .flexEnd:
                         sectionLineSpace = lineSpace
-                        marginTop = contentH - sumMaxValue - sectionLineSpace * (linesNum - 1)
+                        marginTop = contentH - linesTotalHeight - sectionLineSpace * (linesNum - 1)
                     case .spaceAround:
-                        sectionLineSpace = (contentH - sumMaxValue) / (linesNum * 2)
+                        sectionLineSpace = (contentH - linesTotalHeight) / (linesNum * 2)
                         marginTop = sectionLineSpace * 0.5
                     case .spaceBetween:
-                        sectionLineSpace = (contentH - sumMaxValue) / (linesNum - 1)
+                        sectionLineSpace = (contentH - linesTotalHeight) / (linesNum - 1)
                     }
                 } else {
-                     sectionLineSpace = lineSpace
+                    sectionLineSpace = lineSpace
                 }
                 topY += marginTop
                 maxHeight += marginTop
@@ -310,8 +310,8 @@ public class WQFlexbox: UICollectionViewFlowLayout {
                     let lineAttrs = sectionAttrs[index]
                     let lineItemsCount = CGFloat(lineAttrs.count)
                     
-                    let rowMaxH = linesMaxValue[index]
-                    let totalW = linesTotalValue[index]
+                    let rowMaxH = linesMaxHeightValue[index]
+                    let totalW = linesTotalWidthValue[index]
                     let justtify = self.justifyContentForSection(at: section, inLine: index, total: linesCount)
                     // 确定每个line的起始X位置
                     var startX: CGFloat = flowSectionX
@@ -319,20 +319,18 @@ public class WQFlexbox: UICollectionViewFlowLayout {
                     switch justtify {
                     case .flexStart:
                         rowSectionW = interitemSpace
-                        startX += insets.left
                     case .center:
                         rowSectionW = interitemSpace
-                        startX += insets.left + (contentW - totalW - rowSectionW * (lineItemsCount - 1)) * 0.5
+                        startX +=  (contentW - totalW - rowSectionW * (lineItemsCount - 1)) * 0.5
                     case .flexEnd:
                         rowSectionW = interitemSpace
-                        startX += insets.left + (contentW - totalW - rowSectionW * (lineItemsCount - 1))
+                        startX += (contentW - totalW - rowSectionW * (lineItemsCount - 1))
                     case .spaceAround:
                         rowSectionW = (contentW - totalW) / (lineItemsCount * 2)
-                        startX = insets.left +  rowSectionW * 0.5
+                        startX = rowSectionW * 0.5
                         break;
                     case .spaceBetween:
                         rowSectionW = (contentW - totalW) / (lineItemsCount - 1)
-                        startX += insets.left
                     }
                     // 确定每个item的位置并修正尺寸
                     for idx in 0 ..< lineAttrs.count {
@@ -349,15 +347,15 @@ public class WQFlexbox: UICollectionViewFlowLayout {
                             ptY = topY + (rowMaxH - attrFrame.height) * 0.5
                         case .flexEnd:
                             ptY = topY + (rowMaxH - attrFrame.height)
-//                        case .baseline:
+                        //                        case .baseline:
                         case .stretch:
                             ptY = topY
                             attrHeight = rowMaxH
                         }
                         startX += attrFrame.width + rowSectionW
                         attrFrame = CGRect(x: ptX, y: ptY, width: attrFrame.width, height: attrHeight)
-                        debugPrint(attrFrame)
                         attr.frame = attrFrame
+                        debugPrint(attrFrame)
                     }
                     topY += rowMaxH + sectionLineSpace
                     maxHeight += rowMaxH + sectionLineSpace
@@ -365,40 +363,326 @@ public class WQFlexbox: UICollectionViewFlowLayout {
                 maxHeight -= sectionLineSpace
                 //加上剩余的距离
                 maxHeight += sectionBottomH
+                
+                if footerSize != .zero {
+                    let footerAttr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: IndexPath(item: 0, section: section))
+                    footerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY + maxHeight, width: contentW, height: footerSize.height)
+                    headerFooterAttr.append(footerAttr)
+                }
+                if self.scrollDirection == .horizontal {//水平方向
+                    flowSectionX += maxWidth
+                    flowSectionX += insets.right
+                    flowSectionY = collectionView.contentInset.top
+                } else {
+                    flowSectionY += maxHeight
+                    flowSectionY += footerSize.height + insets.bottom
+                    flowSectionX = collectionView.contentInset.left
+                }
+                
+                if allSectionMaxWidth < maxWidth {
+                    allSectionMaxWidth = maxWidth
+                }
+                if allSectionMaxHeight < maxHeight {
+                    allSectionMaxHeight = maxHeight
+                }
             default:
                 break;
-//            case .rowReverse:
-//            case .column:
-//            case .columnReverse:
+                //            case .rowReverse:
+                //            case .column:
+                //            case .columnReverse:
             }
-            if footerSize != .zero {
-                let footerAttr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: IndexPath(item: 0, section: section))
-                footerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY + maxHeight, width: contentW, height: footerSize.height)
-                headerFooterAttr.append(footerAttr)
-            }
-            if self.scrollDirection == .horizontal {
-                flowSectionX += maxWidth
-                flowSectionX += insets.right
-                flowSectionY = collectionView.contentInset.top
             
-            } else {
-                flowSectionY += maxHeight
-                flowSectionY += footerSize.height + insets.bottom
-                flowSectionX = collectionView.contentInset.left
-            }
+            
             supplementaryAttrs.append(headerFooterAttr)
-         
+            
+            
+            
         }
-        debugPrint("=====",flowSectionY)
-       self.contentSize = CGSize(width: flowSectionX - collectionView.contentInset.left, height: flowSectionY - collectionView.contentInset.top)
+        if self.scrollDirection == .horizontal { //水平方向
+            self.contentSize = CGSize(width: flowSectionX - collectionView.contentInset.left + allSectionMaxWidth , height: flowSectionY - collectionView.contentInset.top + allSectionMaxHeight)
+        } else {//垂直方向滚动
+            self.contentSize = CGSize(width: flowSectionX - collectionView.contentInset.left + allSectionMaxWidth , height: flowSectionY - collectionView.contentInset.top)
+        }
+        debugPrint("=====",self.contentSize)
         let items = allAttrs.flatMap({ $0.flatMap({$0}) })
-        attrs.removeAll()
-        attrs.append(contentsOf: items)
-//        attrs.append(contentsOf: supplementaryAttrs.flatMap({$0}))
+        attrs = items
+        supplementary = supplementaryAttrs.flatMap({$0})
+        //        attrs.append(contentsOf: supplementaryAttrs.flatMap({$0}))
         
     }
+    
+//    override public func prepare() {
+//        super.prepare()
+//
+//        guard let collectionView = self.collectionView else {
+//            debugPrint("请配合CollectionView使用")
+//            return
+//        }
+////        let frame = collectionView.frame
+//        guard collectionView.frame.size != .zero else {
+//            debugPrint("尺寸不能为0")
+//            return
+//        }
+////        let eachLineCount = lineItemsCount
+//
+//        let sections = collectionView.numberOfSections
+//        var flowSectionY: CGFloat = 0
+//        var flowSectionX: CGFloat = 0
+//
+//        flowSectionY = collectionView.contentInset.top
+//        flowSectionX = collectionView.contentInset.left
+//        //所有section的所有行
+//        var allAttrs: [[[UICollectionViewLayoutAttributes]]] = []
+//        var supplementaryAttrs: [[UICollectionViewLayoutAttributes]] = []
+//
+//        // 记录所有section的最大宽高 用于计算ContentSize
+//        var allSectionMaxHeight: CGFloat = 0
+//        var allSectionMaxWidth: CGFloat = 0
+//
+//        for section in 0 ..< sections {
+//            // 获取每个section的布局风格
+//            let headerSize = self.referenceSizeForHeaderInSection(section)
+//            let footerSize = self.referenceSizeForFooterInSection(section)
+//            let lineSpace = self.minimumLineSpacingForSection(at: section)
+//            let interitemSpace = self.minimumInteritemSpacingForSection(at: section)
+//            let lineDirection = self.directionForSection(at: section)
+//            let sectionAlignContent = self.alignContentForSection(at: section)
+//            let insets = self.insetForSection(at: section)
+//            let sectionSize = self.sizeForSection(at: section)
+//            let isHorizontal = lineDirection.isHorizontal
+//
+//            let contentW: CGFloat = sectionSize.width - insets.left - insets.right
+//            let contentH: CGFloat = sectionSize.height - insets.bottom - insets.top
+//
+//
+//            //获取section的左上角坐标
+//            flowSectionX += insets.left
+//            flowSectionY += insets.top
+//            var headerFooterAttr: [UICollectionViewLayoutAttributes] = []
+//            if headerSize != .zero {
+//                let headerAttr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: IndexPath(item: 0, section: section))
+//                headerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY, width: contentW, height: headerSize.width)
+//                headerFooterAttr.append(headerAttr)
+//                flowSectionX += headerSize.width
+//                flowSectionY += headerSize.height
+//            }
+//            var sectionAttrs: [[UICollectionViewLayoutAttributes]] = []
+//            var lineAttrs: [UICollectionViewLayoutAttributes] = []
+//            let itemsCount = collectionView.numberOfItems(inSection: section)
+//
+//            //处理一个区的
+//            switch lineDirection {
+//            case .row:
+//                /// 分Lines 处理每行最多能放多少个
+//                var maxValue: CGFloat = 0
+////                let limitValue: CGFloat = (self.scrollDirection == .horizontal) ? contentH: contentW
+//                let limitValue: CGFloat = contentW
+//                let itemSpace = isHorizontal ? interitemSpace : lineSpace
+//                for item in 0 ..< itemsCount {
+//                    let indexPath = IndexPath(item: item, section: section)
+//                    let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+//                    let itemSize = self.sizeForItem(at: indexPath)
+//                    attr.frame = CGRect(origin: .zero, size: itemSize)
+//                    if isHorizontal {
+//                        maxValue += itemSize.width
+//                    } else {
+//                        maxValue += itemSize.height
+//                    }
+//                    if maxValue > limitValue {
+//                        maxValue = isHorizontal ? itemSize.width : itemSize.height
+//                        sectionAttrs.append(lineAttrs)
+//                        lineAttrs = []
+//                    }
+//                    maxValue += itemSpace
+//                    lineAttrs.append(attr)
+//                }
+//                if !lineAttrs.isEmpty {
+//                    sectionAttrs.append(lineAttrs)
+//                }
+//
+//                //每行的最大高度或宽度
+//                var linesMaxValue: [CGFloat] = []
+//                var linesTotalValue: [CGFloat] = []
+//                var sumMaxValue: CGFloat = 0
+//                // 每行items的总高度或者总宽度
+//                for index in 0 ..< sectionAttrs.count {
+//                    let lineAttrs = sectionAttrs[index]
+//                    var maxValue: CGFloat = 0
+//                    var totalValue: CGFloat = 0
+//                    for idx in 0 ..< lineAttrs.count {
+//                        let attr = lineAttrs[idx]
+//                        if isHorizontal {
+//                            if maxValue < attr.frame.width {
+//                                maxValue = attr.frame.width
+//                            }
+//                            totalValue += attr.frame.width
+//                        } else {
+//                            if maxValue < attr.frame.height {
+//                                maxValue = attr.frame.height
+//                            }
+//                            totalValue += attr.frame.height
+//                        }
+//                    }
+//                    linesMaxValue.append(maxValue)
+//                    linesTotalValue.append(totalValue)
+//                    sumMaxValue += maxValue
+//                }
+//                //留待它用
+//                allAttrs.append(sectionAttrs)
+//                // 记录section内容的最大宽高 用于计算ContentSize
+//                var maxHeight: CGFloat = 0
+//                let maxWidth: CGFloat = contentW
+//
+//                let linesCount = sectionAttrs.count
+//                let linesNum = CGFloat(linesCount)
+//                var topY = flowSectionY
+//                var sectionLineSpace: CGFloat
+//                var sectionBottomH: CGFloat = 0
+//                var marginTop: CGFloat = 0
+//                topY += insets.top
+//                let sel: Selector = #selector(WQFlexboxDelegateLayout.flexbox(_:flexbox:sizeForSectionAt:))
+//                if let deleg = self.delegate,
+//                    deleg.responds(to: sel) {
+//                    switch sectionAlignContent {
+//                    case .flexStart:
+//                        sectionLineSpace = lineSpace
+//                        sectionBottomH = contentH - sumMaxValue - linesNum * sectionLineSpace
+//                    case .center:
+//                        sectionLineSpace = lineSpace
+//                        marginTop = (contentH - sumMaxValue - sectionLineSpace * (linesNum - 1)) * 0.5
+//                        sectionBottomH = marginTop
+//                    case .flexEnd:
+//                        sectionLineSpace = lineSpace
+//                        marginTop = contentH - sumMaxValue - sectionLineSpace * (linesNum - 1)
+//                    case .spaceAround:
+//                        sectionLineSpace = (contentH - sumMaxValue) / (linesNum * 2)
+//                        marginTop = sectionLineSpace * 0.5
+//                    case .spaceBetween:
+//                        sectionLineSpace = (contentH - sumMaxValue) / (linesNum - 1)
+//                    }
+//                } else {
+//                     sectionLineSpace = lineSpace
+//                }
+//                topY += marginTop
+//                maxHeight += marginTop
+//                //按照Line为单位处理
+//                for index in 0 ..< linesCount {
+//                    let lineAttrs = sectionAttrs[index]
+//                    let lineItemsCount = CGFloat(lineAttrs.count)
+//
+//                    let rowMaxH = linesMaxValue[index]
+//                    let totalW = linesTotalValue[index]
+//                    let justtify = self.justifyContentForSection(at: section, inLine: index, total: linesCount)
+//                    // 确定每个line的起始X位置
+//                    var startX: CGFloat = flowSectionX
+//                    var rowSectionW: CGFloat
+//                    switch justtify {
+//                    case .flexStart:
+//                        rowSectionW = interitemSpace
+//                        startX += insets.left
+//                    case .center:
+//                        rowSectionW = interitemSpace
+//                        startX += insets.left + (contentW - totalW - rowSectionW * (lineItemsCount - 1)) * 0.5
+//                    case .flexEnd:
+//                        rowSectionW = interitemSpace
+//                        startX += insets.left + (contentW - totalW - rowSectionW * (lineItemsCount - 1))
+//                    case .spaceAround:
+//                        rowSectionW = (contentW - totalW) / (lineItemsCount * 2)
+//                        startX = insets.left +  rowSectionW * 0.5
+//                        break;
+//                    case .spaceBetween:
+//                        rowSectionW = (contentW - totalW) / (lineItemsCount - 1)
+//                        startX += insets.left
+//                    }
+//                    // 确定每个item的位置并修正尺寸
+//                    for idx in 0 ..< lineAttrs.count {
+//                        var ptX, ptY: CGFloat
+//                        let attr = lineAttrs[idx]
+//                        var attrFrame = attr.frame
+//                        let alignItems = self.alignItemsForSection(at: section, inLine: index, with: attr.indexPath)
+//                        ptX = startX
+//                        var attrHeight: CGFloat = attrFrame.height
+//                        switch alignItems {
+//                        case .flexStart:
+//                            ptY = topY
+//                        case .center:
+//                            ptY = topY + (rowMaxH - attrFrame.height) * 0.5
+//                        case .flexEnd:
+//                            ptY = topY + (rowMaxH - attrFrame.height)
+////                        case .baseline:
+//                        case .stretch:
+//                            ptY = topY
+//                            attrHeight = rowMaxH
+//                        }
+//                        startX += attrFrame.width + rowSectionW
+//                        attrFrame = CGRect(x: ptX, y: ptY, width: attrFrame.width, height: attrHeight)
+//                        attr.frame = attrFrame
+//                        debugPrint(attrFrame)
+//                    }
+//                    topY += rowMaxH + sectionLineSpace
+//                    maxHeight += rowMaxH + sectionLineSpace
+//                }
+//                maxHeight -= sectionLineSpace
+//                //加上剩余的距离
+//                maxHeight += sectionBottomH
+//
+//                if footerSize != .zero {
+//                    let footerAttr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, with: IndexPath(item: 0, section: section))
+//                    footerAttr.frame = CGRect(x: flowSectionX, y: flowSectionY + maxHeight, width: contentW, height: footerSize.height)
+//                    headerFooterAttr.append(footerAttr)
+//                }
+//                if self.scrollDirection == .horizontal {
+//                    flowSectionX += maxWidth
+//                    flowSectionX += insets.right
+//                    flowSectionY = collectionView.contentInset.top
+//                } else {
+//                    flowSectionY += maxHeight
+//                    flowSectionY += footerSize.height + insets.bottom
+//                    flowSectionX = collectionView.contentInset.left
+//                }
+//
+//                if allSectionMaxWidth < maxWidth {
+//                    allSectionMaxWidth = maxWidth
+//                }
+//                if allSectionMaxHeight < maxHeight {
+//                    allSectionMaxHeight = maxHeight
+//                }
+//            default:
+//                break;
+////            case .rowReverse:
+////            case .column:
+////            case .columnReverse:
+//            }
+//
+//
+//            supplementaryAttrs.append(headerFooterAttr)
+//
+//
+//
+//        }
+//        if self.scrollDirection == .horizontal { //水平方向
+//              self.contentSize = CGSize(width: flowSectionX - collectionView.contentInset.left + allSectionMaxWidth , height: flowSectionY - collectionView.contentInset.top + allSectionMaxHeight)
+//        } else {//垂直方向滚动
+//              self.contentSize = CGSize(width: flowSectionX - collectionView.contentInset.left + allSectionMaxWidth , height: flowSectionY - collectionView.contentInset.top)
+//        }
+//       debugPrint("=====",self.contentSize)
+//        let items = allAttrs.flatMap({ $0.flatMap({$0}) })
+//        attrs = items
+//        supplementary = supplementaryAttrs.flatMap({$0})
+////        attrs.append(contentsOf: supplementaryAttrs.flatMap({$0}))
+//
+//    }
+    
+    public override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attr = attrs.first(where: { $0.indexPath == indexPath })
+        return attr
+    }
+    public override func layoutAttributesForSupplementaryView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        let attr = supplementary.first(where: { $0.indexPath == indexPath && $0.representedElementKind == elementKind})
+        return attr
+    }
     override public func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        return attrs
+        return attrs + supplementary
     }
 }
 

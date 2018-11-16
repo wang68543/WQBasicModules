@@ -26,6 +26,7 @@ class ViewController: UIViewController {
         picButton.center = CGPoint(x: 100, y: 100)
         self.view.addSubview(picButton)
 
+       
         
 //        let btn =  WQButton()
 ////        btn.center = CGPoint(x: 100, y: 100)
@@ -86,13 +87,28 @@ class ViewController: UIViewController {
         star.backgroundColor = .white
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
-       
+       tests()
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
 //        debugPrint(Date().toString(.))
 //        self.view.addTransitionAnimate(timing: <#T##String#>, subtype: <#T##String#>, duration: <#T##CFTimeInterval#>)
     }
-
+    
+    func tests()  -> Bool {
+        let data = Data()
+        do {
+            try data.write(to: FileManager.urlCaches)
+            var b = 10
+            b += 20
+            debugPrint("**********",b)
+        } catch let error {
+            debugPrint(error)
+        }
+        var i = 10
+        i += 20
+        debugPrint("======",i)
+        return false
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

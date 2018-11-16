@@ -29,6 +29,10 @@ class SecondViewController: UIViewController {
             textLabel.frame = self.contentView.bounds
         }
     }
+    class HeaderFooterView: UICollectionReusableView {
+        static let reuseIdentifier: String = "HeaderFooterView"
+        
+    }
     class DownButton: UIButton {
         
         
@@ -39,28 +43,41 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let button = DownButton()
-        button.countDown(60, execute: { (sender, count, state) in
-            debugPrint("\(count)")
-        }) { (sender, flag) -> Bool in
-            
-            return true
-        }
-        button.frame = CGRect(x: 20, y: 60, width: 100, height: 50);
-        self.view.addSubview(button)
+//        let button = DownButton()
+//        button.countDown(60, execute: { (sender, count, state) in
+//            debugPrint("\(count)")
+//        }) { (sender, flag) -> Bool in
+//            
+//            return true
+//        }
+//        button.frame = CGRect(x: 20, y: 60, width: 100, height: 50);
+//        self.view.addSubview(button)
         let layout = WQFlexbox()
-        layout.justify_content = .flexEnd
-        layout.align_content = .spaceBetween
+        layout.scrollDirection = .vertical
+        layout.direction = .row
+        layout.justify_content = .center
+        layout.align_content = .flexStart
+        
+        layout.align_items = .stretch
+        
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 100, width: 300, height: 500), collectionViewLayout: layout)
-//        collectionView.contentInset = UIEdgeInsets(top: 80, left: 20, bottom: 60, right: 40)
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 40, right: 40)
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(Cell.self, forCellWithReuseIdentifier: Cell.reuseIdentifier)
+        collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
+        collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
         collectionView.backgroundColor = UIColor.green
         self.view.addSubview(collectionView)
     }
     
-
+/**
+     (10.0, 0.0, 50.0, 50.0)
+     (70.0, 0.0, 50.0, 50.0)
+     (130.0, 0.0, 50.0, 50.0)
+     (190.0, 0.0, 50.0, 50.0)
+     (250.0, 0.0, 50.0, 50.0)
+     */
     /*
     // MARK: - Navigation
 
@@ -74,27 +91,58 @@ class SecondViewController: UIViewController {
 }
 extension SecondViewController: WQFlexboxDelegateLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 50, height: 50)
-    }
- 
-    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, justifyContentForSectionAt section: Int, inLine lineIndex: Int, linesCount: Int) -> WQJustifyContent {
-        if lineIndex == linesCount - 1 {
-            return .flexStart
+        if indexPath.item % 3 == 0 {
+            return CGSize(width: 30, height: 80)
         } else {
-            return .flexEnd
+          return CGSize(width: 50, height: 50)
         }
+        
     }
-    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 1200)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: 200, height: 100)
     }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: 200, height: 200)
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 0)
+    }
+//    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, justifyContentForSectionAt section: Int, inLine lineIndex: Int, linesCount: Int) -> WQJustifyContent {
+//        if lineIndex == linesCount - 1 {
+//            return .flexStart
+//        } else {
+//            return .flexEnd
+//        }
+//    }
+//    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize {
+//        return CGSize(width: collectionView.frame.width, height: 1400)
+//    }
 }
 extension SecondViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 50
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier, for: indexPath) as! Cell
         cell.textLabel.text = "\(indexPath.item)"
+        if indexPath.section == 1 {
+            cell.backgroundColor = UIColor.yellow
+        } else {
+            cell.backgroundColor = UIColor.blue
+        }
         return cell
+    }
+  
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+       let view =  collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderFooterView.reuseIdentifier, for: indexPath) as! HeaderFooterView
+        if kind == UICollectionView.elementKindSectionHeader {
+            view.backgroundColor = UIColor.white
+        } else {
+            view.backgroundColor = UIColor.black
+        }
+        return view
     }
 }
