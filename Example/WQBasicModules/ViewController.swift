@@ -10,6 +10,12 @@ import UIKit
 import Foundation
 import WQBasicModules
 class ViewController: UIViewController {
+   public class TestModel: Codable {
+        let value: String
+        init(_ value: String) {
+            self.value = value
+        }
+    }
  private let picButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +66,15 @@ class ViewController: UIViewController {
         button.setTitle("测试倒计时", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
         button.backgroundColor = UIColor.yellow
-        WQCache.default["test"] = "123"
+//        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
+        let test = TestModel("12345")
+        WQCache.default["test"] = test
+        
+        let value: ViewController.TestModel? = WQCache.default.object ("233")
+ 
+        
+//        cache["testFile"] =
 //        let pragra = NSParagraphStyle
         button.countDown(10, execute: { (sender, count, state) in
             debugPrint("\(count)")
@@ -95,18 +108,18 @@ class ViewController: UIViewController {
     }
     
     func tests()  -> Bool {
-        let data = Data()
-        do {
-            try data.write(to: FileManager.urlCaches)
-            var b = 10
-            b += 20
-            debugPrint("**********",b)
-        } catch let error {
-            debugPrint(error)
-        }
-        var i = 10
-        i += 20
-        debugPrint("======",i)
+//        let data = Data()
+//        do {
+//            try data.write(to: FileManager.urlCaches)
+//            var b = 10
+//            b += 20
+//            debugPrint("**********",b)
+//        } catch let error {
+//            debugPrint(error)
+//        }
+//        var i = 10
+//        i += 20
+//        debugPrint("======",i)
         return false
     }
     override func didReceiveMemoryWarning() {

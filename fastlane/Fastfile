@@ -15,7 +15,7 @@ default_platform(:ios)
 # fastlane [lane] key:value key2:value2
 platform :ios do
   desc "自动Pod更新库"
-  lane :WQBasicModules do |options|
+  lane :PodPush do |options|
 
   	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
   	# targetName = options[:target]
@@ -23,7 +23,9 @@ platform :ios do
 
     # add actions here: https://docs.fastlane.tools/actions
    #1. pod install 
-   		cocoapods(clean: true,podfile: "./Example/Podfile")
+   		cocoapods(use_bundle_exec: false,
+                clean: true,
+                podfile: "./Example/Podfile")
 
    if git_tag_exists(tag: tagName)
     UI.message("版本号已经存在 #{tagName} ,即将删除")
