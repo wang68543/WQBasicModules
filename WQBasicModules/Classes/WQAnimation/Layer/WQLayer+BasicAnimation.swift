@@ -23,7 +23,7 @@ public extension CALayer {
     }
     
     @discardableResult
-    func rotation(_ from: Double = 0,
+    public func rotation(_ from: Double = 0,
                   to angle: Double = Double.pi * 2,
                   duration: Double,
                   isRepeat: Bool) -> CABasicAnimation {
@@ -38,12 +38,12 @@ public extension CALayer {
         return animate
     }
      
-    func stopRotation() {
+    public func stopRotation() {
         self.interal_remove(forKey: AnimationKeys.rotation)
     }
     
     @discardableResult
-    func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
+    public func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
                     type: CATransitionType = .fade,
                     duration: CFTimeInterval = 0.2) -> CATransition {
         let transtion = CATransition()
@@ -54,7 +54,7 @@ public extension CALayer {
         return transtion
     }
     
-    func stopTransition() {
+    public func stopTransition() {
         self.interal_remove(forKey: AnimationKeys.transition)
     }
     
