@@ -5,7 +5,7 @@
 //  Created by WangQiang on 2018/11/4.
 //
 
-import Foundation
+import UIKit
 public extension CALayer {
     struct AnimationKeys {
         static let rotation = "wq.layer.anmations.rotation"
