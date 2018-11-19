@@ -7,6 +7,7 @@
 
 import UIKit
 public final class WQCache {
+    public static let didReceiveCacheMemoryWarning = NSNotification.Name("didReceiveCacheMemoryWarning")
     //  "wq.defaultCache.disk.com"
     public static let `default` = WQCache(name: "defaultCache", for: .cachesDirectory)
     
@@ -118,9 +119,6 @@ public extension WQCache {
     }
 }
 public extension WQCache {
-    
-    /// 手机存储磁盘空间不够了
-    static let didReceiveCacheMemoryWarning = NSNotification.Name("didReceiveCacheMemoryWarning")
     
     @discardableResult
     func save(_ data: Data, for key: String) -> Error? {
