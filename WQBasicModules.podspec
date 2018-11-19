@@ -35,6 +35,9 @@ Pod::Spec.new do |s|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
         end
+        ss.subspec 'Views' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Views/*.swift'
+        end
     end
     s.subspec 'WQExtensions' do |ss|
         ss.subspec 'WQUIKit' do |sss|
