@@ -44,8 +44,8 @@ public extension CALayer {
     
     @discardableResult
     public func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
-                    type: CATransitionType = .fade,
-                    duration: CFTimeInterval = 0.2) -> CATransition {
+                           type: CATransitionType = .fade,
+                           duration: CFTimeInterval = 0.2) -> CATransition {
         let transtion = CATransition()
         transtion.duration = duration
         transtion.timingFunction = timing
