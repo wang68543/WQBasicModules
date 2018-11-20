@@ -18,6 +18,8 @@ open class WQStarControl: UIControl {
             }
         }
     }
+    //是否连续产生事件
+    public var isContinuous: Bool = true
     public var minimumValue: Int = 0
     public var maximumValue: Int = 100
     /// 0 ~ 100
@@ -154,7 +156,7 @@ open class WQStarControl: UIControl {
             self.resignFirstResponder()
         }
         if let touch = touch {
-            handleTouch(touch)
+            handleTouch(touch, isEnd: true)
         }
     }
     
@@ -164,7 +166,7 @@ open class WQStarControl: UIControl {
 }
 /// 画单个
 private extension WQStarControl {
-    func handleTouch(_ touch: UITouch) {
+    func handleTouch(_ touch: UITouch, isEnd: Bool = false) {
         let point = touch.location(in: self)
         var progress: CGFloat
         if point.x <= self.contentEdgeInsets.left {
@@ -175,11 +177,18 @@ private extension WQStarControl {
             let contentRect = self.frame.inset(by: self.contentEdgeInsets)
             progress = (point.x - self.contentEdgeInsets.left) / contentRect.width
         }
-        let oldValue = self.value
+//        let oldValue = self.value
         self.progressValue = progress
-        if self.value != oldValue {
-            self.sendActions(for: .valueChanged)
+        if isContinuous {
+           self.sendActions(for: .valueChanged)
+        } else {
+            if isEnd {
+                self.sendActions(for: .valueChanged)
+            }
         }
+//        if self.value != oldValue {
+        
+//        }
     }
     func drawItem(_ rect: CGRect, context: CGContext) {
         let contentRect = self.frame.inset(by: self.contentEdgeInsets)

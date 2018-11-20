@@ -15,8 +15,7 @@ default_platform(:ios)
 # fastlane [lane] key:value key2:value2
 platform :ios do
   desc "自动Pod更新库"
-  lane :PodPush do |options|
-
+  lane :trunk do |options|
   	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
   	# targetName = options[:target]
     targetName = "WQBasicModules"
@@ -33,7 +32,7 @@ platform :ios do
     end
    #2. git add .
    		git_add(path: ".")
-   		git_commit(path: ".", message: "更新日期工具")
+   		git_commit(path: ".", message: "pod trunk 版本 #{tagName}")
    		push_to_git_remote # simple version. pushes "master" branch to "origin" remote
 
    
@@ -46,7 +45,7 @@ platform :ios do
    spec = "./#{targetName}.podspec"
    UI.message("路径#{spec}")
     #4. pod spec lint 
-  if pod_lib_lint(use_bundle_exec: false, allow_warnings: true, verbose: true) #,sources:[spec]
+  if pod_lib_lint(use_bundle_exec: false, allow_warnings: true, verbose: false) #,sources:[spec]
      UI.message("验证已经通过正在上传")
      pod_push(use_bundle_exec: false,
               path: "#{targetName}.podspec",

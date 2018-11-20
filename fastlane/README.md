@@ -16,9 +16,9 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
-### ios PodPush
+### ios trunk
 ```
-fastlane ios PodPush
+fastlane ios trunk
 ```
 自动Pod更新库
 
