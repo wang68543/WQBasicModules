@@ -35,6 +35,10 @@ public final class WQCache {
         }
     }
     
+    public func fileExists(_ key: String) -> Bool {
+        return fileManager.fileExists(atPath: self.path(for: key).path)
+    }
+    
     @discardableResult
     public func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
         guard let obj = object else {
@@ -52,6 +56,7 @@ public final class WQCache {
         }
        return isSuccess
     }
+    
     public func object<T: Decodable>(_ key: String) -> T? {
         if let data = self.load(for: key) {
             var obj: T?
@@ -69,6 +74,7 @@ public final class WQCache {
     public func remove(_ key: String) {
         self.delete(for: key)
     }
+    
 }
 
 // MARK: - -- Disk
