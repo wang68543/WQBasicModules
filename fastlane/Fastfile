@@ -16,13 +16,28 @@ default_platform(:ios)
 platform :ios do
   desc "自动Pod更新库"
   lane :trunk do |options|
-  	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
+  	#自增tag 
+  	carry = true
+  	# tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
+  	tagName =  last_git_tag.split('.', 3).reverse.map { |e| 
+  			tag = e.to_i
+  			if carry
+  				tag += 1
+  				carry = false 
+  			end
+  			if tag >= 10
+  				carry = true
+  				tag = 0
+  			end
+  		 tag 
+  	  }.reverse.join('.') 
+  	  UI.message("#{tagName}")
   	# targetName = options[:target]
     targetName = "WQBasicModules"
 
     # add actions here: https://docs.fastlane.tools/actions
    #1. pod install 
-   		cocoapods(use_bundle_exec: false,
+   	cocoapods(use_bundle_exec: false,
                 clean: true,
                 podfile: "./Example/Podfile")
 
