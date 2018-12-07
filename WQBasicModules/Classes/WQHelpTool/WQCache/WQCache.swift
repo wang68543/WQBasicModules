@@ -14,6 +14,8 @@ public final class WQCache {
     public let urlPath: URL
     public let fileManager: FileManager
     
+    private var lock: pthread_rwlock_t
+    private let ioQueue: DispatchQueue
     /// 根据路径创建存储实例
     ///
     /// - Parameters:
@@ -33,12 +35,41 @@ public final class WQCache {
                 debugPrint("创建文件夹失败", error.localizedDescription)
             }
         }
+        lock = pthread_rwlock_t()
+        ioQueue = DispatchQueue(label: "rwOptions")
+        
     }
     
     public func fileExists(_ key: String) -> Bool {
         return fileManager.fileExists(atPath: self.path(for: key).path)
     }
     
+    /// 异步存储数据
+    ///
+    /// - Parameters:
+    ///   - completion: 存储完成回调
+    public func asyncSet<T: Encodable>(_ object: T?, for key: String, completion:((Error?) -> Void)? = nil) {
+        ioQueue.async {
+            var error: Error?
+            defer {
+                if let complete = completion {
+                    complete(error)
+                }
+            }
+            guard let obj = object else {
+                self.delete(for: key)//为空的时候移除
+                error = CocoaError.error(CocoaError.fileWriteInvalidValue, userInfo: nil, url: self.path(for: key))
+                return
+            }
+            do {
+                let encoder = JSONEncoder()
+                let data = try encoder.encode(obj)
+                self.save(data, for: key)
+            } catch let err {
+                error = err
+            }
+        }
+    }
     @discardableResult
     public func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
         guard let obj = object else {
@@ -75,6 +106,9 @@ public final class WQCache {
         self.delete(for: key)
     }
     
+    deinit {
+        pthread_rwlock_destroy(&lock)
+    }
 }
 
 // MARK: - -- Disk
@@ -91,6 +125,10 @@ public extension WQCache {
     }
     
     func clear() -> Error? {
+        pthread_rwlock_wrlock(&lock)
+        defer {
+            pthread_rwlock_unlock(&lock)
+        }
         do {
            let urls = try fileManager
                 .contentsOfDirectory(at: self.urlPath,
@@ -105,6 +143,8 @@ public extension WQCache {
         }
        return nil
     }
+    
+   
 }
 // MARK: - --Accessory
 public extension WQCache {
@@ -114,7 +154,7 @@ public extension WQCache {
     }
     subscript<T: Codable>(key: String) -> T? {
         set {
-            self.set(newValue, for: key)
+            self.asyncSet(newValue, for: key)
         }
         get {
             return self.object(key)
@@ -133,6 +173,10 @@ public extension WQCache {
     }
     
     func save(_ data: Data, for path: URL, options: Data.WritingOptions) -> Error? {
+        pthread_rwlock_wrlock(&lock)
+        defer {
+             pthread_rwlock_unlock(&lock)
+        }
         do {
             try data.write(to: path, options: options)
         } catch CocoaError.fileWriteOutOfSpace {
@@ -146,6 +190,10 @@ public extension WQCache {
     }
     
     func load(for key: String) -> Data? {
+        pthread_rwlock_rdlock(&lock)
+        defer {
+            pthread_rwlock_unlock(&lock)
+        }
         do {
            return try Data(contentsOf: path(for: key))
         } catch {
@@ -155,6 +203,10 @@ public extension WQCache {
     
    @discardableResult
    func delete(for key: String) -> Error? {
+        pthread_rwlock_wrlock(&lock)
+        defer {
+            pthread_rwlock_unlock(&lock)
+        }
         do {
             try fileManager.removeItem(at: path(for: key))
         } catch let error {
@@ -163,4 +215,8 @@ public extension WQCache {
         }
         return nil
     }
+}
+
+public extension CocoaError {
+   public static let fileWriteInvalidValue = CocoaError.Code(rawValue: -20000)
 }
