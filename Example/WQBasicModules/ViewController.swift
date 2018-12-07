@@ -76,15 +76,15 @@ class ViewController: UIViewController {
         
 //        cache["testFile"] =
 //        let pragra = NSParagraphStyle
-        button.countDown(10, execute: { (sender, count, state) in
-            debugPrint("\(count)")
-            button.setTitle("测试倒计时\(count)", for: state)
-            button.setTitleColor(UIColor.blue, for: state)
-            button.backgroundColor = UIColor.white
-        }) { (sender, flag) -> Bool in
-            //是否恢复原状态
-            return true
-        }
+//        button.countDown(10, execute: { (sender, count, state) in
+//            debugPrint("\(count)")
+//            button.setTitle("测试倒计时\(count)", for: state)
+//            button.setTitleColor(UIColor.blue, for: state)
+//            button.backgroundColor = UIColor.white
+//        }) { (sender, flag) -> Bool in
+//            //是否恢复原状态
+//            return true
+//        }
         button.frame = CGRect(x: 100, y: 100, width: 100, height: 50);
         self.view.addSubview(button)
         let imageView = UIImageView()

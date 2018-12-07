@@ -43,15 +43,19 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let button = DownButton()
+        let button = DownButton()
+        button.countDown(60, formater: NumberFormatter(countDownFormat: "还剩", suf: "s"), color: UIColor.red) { (sender, flag) -> Bool in
+            
+            return true
+        }
 //        button.countDown(60, execute: { (sender, count, state) in
 //            debugPrint("\(count)")
 //        }) { (sender, flag) -> Bool in
-//            
+//
 //            return true
 //        }
-//        button.frame = CGRect(x: 20, y: 60, width: 100, height: 50);
-//        self.view.addSubview(button)
+        button.frame = CGRect(x: 20, y: 100, width: 100, height: 50);
+        self.view.addSubview(button)
         let layout = WQFlexbox()
         layout.scrollDirection = .vertical
         layout.direction = .column
@@ -68,7 +72,7 @@ class SecondViewController: UIViewController {
         collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
         collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
         collectionView.backgroundColor = UIColor.green
-        self.view.addSubview(collectionView)
+//        self.view.addSubview(collectionView)
     }
     
 /**

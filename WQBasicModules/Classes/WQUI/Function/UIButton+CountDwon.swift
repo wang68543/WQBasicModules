@@ -7,9 +7,18 @@
 
 import UIKit
 
+// MARK: - --支持简单的倒计时定义
+public extension NumberFormatter {
+    convenience init(countDownFormat pre: String?, suf: String?, formatWidth: Int = 2) {
+        self.init()
+        self.positivePrefix = pre
+        self.positiveSuffix = suf
+        self.formatWidth = 2
+    }
+}
 // MARK: - -- Count Down
 public extension UIButton {
-   
+    
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
     ///   - UIButton: 当前对象
@@ -37,6 +46,24 @@ public extension UIButton {
         }
     }
     
+    /// 倒计时
+    ///
+    /// - Parameters:
+    ///   - formater: 倒计时的时候格式化标题
+    ///   - color: 倒计时时候的标题颜色 (为空的时候使用.normal标题色)
+    ///   - completion: 倒计时完成回调
+    public func countDown(_ count: UInt,
+                          formater: NumberFormatter,
+                          color: UIColor? = nil,
+                          completion: CountDownCompletion? = nil) {
+        let titleColor = color ?? self.titleColor(for: .normal)
+        let excute: IntervalExecute = { sender, secs, state in
+            let title = formater.string(from: NSNumber(value: secs))
+            sender.setTitle(title, for: state)
+            sender.setTitleColor(titleColor, for: state)
+        }
+        self.countDown(count, interval: 1, execute: excute, completion: completion)
+    }
     /// 倒计时按钮
     ///
     /// - Parameters:
@@ -47,7 +74,7 @@ public extension UIButton {
     public func countDown(_ count: UInt,
                           interval: Double = 1,
                           execute: @escaping IntervalExecute,
-                          completion: @escaping CountDownCompletion) {
+                          completion: CountDownCompletion? = nil) {
         self.countDownCompletion = completion
         if self.source != nil {
             stopCountDown(false)
@@ -63,27 +90,29 @@ public extension UIButton {
         let source: DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
         source.schedule(wallDeadline: DispatchWallTime.now(), repeating: interval)
         source.setEventHandler { [weak self] in
-            if let weakSelf = self {
-                var total = weakSelf.totalCount
-                total -= 1
-                if total <= 0 {
-                    weakSelf.stopCountDown(true)
-                } else {
-                    let state = weakSelf.status?.state ?? .normal
-                    weakSelf.execute?(weakSelf, total, state)
-                    weakSelf.totalCount = total
-                }
+            guard let weakSelf = self else {
+                return
+            }
+            var total = weakSelf.totalCount
+            total -= 1
+            if total <= 0 {
+                weakSelf.stopCountDown(true)
+            } else {
+                let state = weakSelf.status?.state ?? .normal
+                weakSelf.execute?(weakSelf, total, state)
+                weakSelf.totalCount = total
             }
         }
         self.source = source
         source.resume()
     }
     private func stopCountDown(_ flag: Bool) {
+        var shouldRecovery = true
         if let completion = self.countDownCompletion {
-            let recovery = completion(self, flag)
-            if recovery {
-                 recoveryBeforeStatues()
-            }
+            shouldRecovery = completion(self, flag)
+        }
+        if shouldRecovery {
+            recoveryBeforeStatues()
         }
         clearAssociatedObjects()
     }
