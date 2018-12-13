@@ -6,22 +6,43 @@
 //
 
 import UIKit
-public enum WQTransitionEdge {
-    case none
-    case left
-    case top
-    case right
-    case bottom
-    case middle  
+public protocol WQPresentationable: NSObjectProtocol {
+    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation
 }
 open class WQPresentationController: UIViewController {
+    public enum TransitionType {
+        case left
+        case top
+        case right
+        case bottom
+        case center
+    }
+    /// 锚点定位动画
+    public enum PositionBounceType {
+        case bounceCenter // 从0开始从中间弹开
+        case bounceVerticalMiddle //横向摊开
+        case bounceHorizontalMiddle //纵向摊开
+        case bounceVerticalAuto // 基于position 自动计算剩余空间 哪边够显示哪边 默认向右
+        case bounceHorizontalAuto // 基于position 默认向下
+        case bounceUp //向上弹
+        case bounceLeft // 左
+        case bounceRight // 右
+        case bounceDown // 向下弹
+        
+    }
     public let containerView: UIView
     
     /// 容器的尺寸
-    public let initialFrame: CGRect
+//    public let initialFrame: CGRect
     open var showFrame: CGRect
     open var hideFrame: CGRect
-    open var edgeInsets: UIEdgeInsets = .zero
+    public let edgeInsets: UIEdgeInsets
+    
+    /// 当使用构造函数的时候需要初始化尺寸
+//    private var isShouldInitialFrames: Bool = false
+//    private var transitionInitial: TransitionType = .none
+//    private var transitionShow: TransitionType = .none
+//    private var transitionDismiss: TransitionType = .none
     
     /// 大背景的颜色
     open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.5)
@@ -57,20 +78,32 @@ open class WQPresentationController: UIViewController {
     private var tapGesture: UITapGestureRecognizer?
     private var panGesture: UIPanGestureRecognizer?
     
-    public init(_ subView: UIView, frame initial: CGRect, show: CGRect, dismiss: CGRect) {
+    /// 默认的尺寸是 按照屏幕大小来显示
+    private var viewPresentedFrame: CGRect
+    public private(set) var childViews: [UIView] = []
+    public init(_ subView: UIView,
+                frame show: CGRect,
+                dismiss: CGRect,
+                initial: CGRect,
+                presentedFrame: CGRect = UIScreen.main.bounds,
+                contentEdges: UIEdgeInsets = .zero) {
         containerView = UIView()
-        initialFrame = initial
         showFrame = show
         hideFrame = dismiss
+        self.viewPresentedFrame = presentedFrame
+        self.edgeInsets = contentEdges
         super.init(nibName: nil, bundle: nil)
+        containerView.frame = initial
         self.addContainerSubview(subView)
     }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("not supported nib")
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(containerView)
+        
     }
     private func addContainerSubview(_ subView: UIView) {
         containerView.addSubview(subView)
@@ -83,18 +116,160 @@ open class WQPresentationController: UIViewController {
         let vConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[subView]-bottom-|", options: .directionMask, metrics: metrics, views: views)
         self.containerView.addConstraints(hConstraints)
         self.containerView.addConstraints(vConstraints)
+        childViews.append(subView)
     }
-    open override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-        
+    open func show(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if let topVC = self.topViewController {
+            if topVC.presentedViewController != nil { //已经弹出过控制器
+                
+            } else {
+                topVC.present(self, animated: flag, completion: completion)
+            }
+        }
+    }
+    public var topViewController: UIViewController? {
+        var viewController: UIViewController?
+        for window in UIApplication.shared.windows.reversed() {
+            if let rootVC = window.rootViewController,
+                let topVC = self.findTopViewController(in: rootVC) {
+                viewController = topVC
+                break
+            }
+        }
+        return viewController
+    }
+    
+    public func findTopViewController(in viewController: UIViewController) -> UIViewController? {
+        if let tabBarController = viewController as? UITabBarController {
+            if let selectedController = tabBarController.selectedViewController {
+                return self.findTopViewController(in:selectedController)
+            } else {
+                return tabBarController
+            }
+        } else if let navgationController = viewController as? UINavigationController {
+            if let navTopController = navgationController.topViewController {
+                return self.findTopViewController(in: navTopController)
+            } else {
+                return navgationController
+            }
+        } else {
+            return viewController
+        }
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         
     }
 
 }
-// MARK: - animations
+
+// MARK: - -- Convenience init
 extension WQPresentationController {
-    func subViewAnimate(_ from: CGRect, to: CGRect) -> CAAnimation {
+    
+    
+    /// 根据TransitionType计算尺寸
+    ///
+    /// - Parameters:
+    ///   - size: 中间View的尺寸
+    ///   - type: TransitionType
+    ///   - presentedFrame: 控制器的frame
+    ///   - isInside: 计算的frame是否是在View内 (除了显示的时候在View内部 其余都在外部)
+    /// - Returns: 计算好的frame
+    private class func frame(_ size: CGSize, type: TransitionType, presentedFrame: CGRect, isInside: Bool = true) -> CGRect {
+    
+        var origin: CGPoint
+        switch type {
+        case .top:
+            origin = CGPoint(x: (presentedFrame.width - size.width) * 0.5, y: isInside ? 0 : -size.height)
+        case .left:
+            origin = CGPoint(x: isInside ? 0 : -size.width, y: (presentedFrame.height - size.height) * 0.5)
+        case .bottom:
+            origin = CGPoint(x: (presentedFrame.width - size.width) * 0.5, y: isInside ? presentedFrame.height - size.height : presentedFrame.height)
+        case .right:
+            origin = CGPoint(x: isInside ? presentedFrame.width - size.width : presentedFrame.width, y: (presentedFrame.height - size.height) * 0.5)
+        case .center:
+            origin = CGPoint(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5)
+        }
+        return CGRect(origin: origin, size: size)
+    }
+  
+   /// 根据TransitionType计算containerView 三个状态的尺寸
+   ///
+   /// - Parameters:
+   ///   - subView: 显示的View
+   ///   - size: contianerView size
+   ///   - initial: 初始的方位
+   ///   - show: 显示的w方位
+   ///   - dismiss: 消失的方位
+   ///   - presentedFrame: 控制器的尺寸
+   public convenience init(transitionType subView: UIView, size: CGSize, initial: TransitionType, show: TransitionType, dismiss: TransitionType, presentedFrame: CGRect = UIScreen.main.bounds) {
+        let initialFrame: CGRect = WQPresentationController.frame(size, type: initial, presentedFrame: presentedFrame, isInside: false)
+        let showFrame: CGRect = WQPresentationController.frame(size, type: show, presentedFrame: presentedFrame, isInside: false)
+        let dismissFrame: CGRect = WQPresentationController.frame(size, type: dismiss, presentedFrame: presentedFrame, isInside: false)
+        self.init(subView, frame: showFrame, dismiss: dismissFrame, initial: initialFrame, presentedFrame: presentedFrame, contentEdges: .zero)
+    }
+    /// 从哪里显示出来的就从哪里消失
+    ///
+    /// - Parameters:
+    ///   - initial: 初始方位
+    ///   - show: 显示的方位
+    public convenience init(transitionReverse subView: UIView, size: CGSize, initial: TransitionType, show: TransitionType) {
+        self.init(transitionType: subView, size: size, initial: initial, show: show, dismiss: initial)
+    }
+    
+    /// 根据position和size来显示View
+    ///
+    /// - Parameters:
+    ///   - subView: 显示的View
+    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
+    ///   - size: contianerView的size
+    ///   - bounceType: contianerView展开类型
+    ///   - presentedFrame: 控制器的尺寸
+    public convenience init(position subView: UIView, to point: CGPoint, size: CGSize, bounceType: PositionBounceType = .bounceHorizontalMiddle, presentedFrame: CGRect = UIScreen.main.bounds) {
+        let anchorPoint = subView.layer.anchorPoint
+        let positionPt = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+        let showFrame = CGRect(origin: positionPt, size: size)
+        var initialFrame: CGRect
+        switch bounceType {
+        case .bounceVerticalAuto:
+            if size.width + positionPt.x > presentedFrame.width { //向左
+                initialFrame = CGRect(x: point.x + anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: 0, height: size.height)
+            } else {
+                initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: 0, height: size.height)
+            }
+        case .bounceHorizontalAuto:
+            if size.height + positionPt.y > presentedFrame.height {
+                initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y + anchorPoint.y * size.height, width: size.width, height: 0)
+            } else {
+                initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: size.width, height: 0)
+            }
+        case .bounceCenter:
+            initialFrame = CGRect(origin: positionPt, size: .zero)
+        case .bounceHorizontalMiddle:
+            initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y, width: size.width, height: 0)
+        case .bounceVerticalMiddle:
+            initialFrame = CGRect(x: point.x, y: point.y - anchorPoint.y * size.height, width: 0, height: size.height)
+        case .bounceUp:
+            initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y + anchorPoint.y * size.height, width: size.width, height: 0)
+        case .bounceDown:
+            initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: size.width, height: 0)
+        case .bounceLeft:
+            initialFrame = CGRect(x: point.x + anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: 0, height: size.height)
+        case .bounceRight:
+            initialFrame = CGRect(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height, width: 0, height: size.height)
+            
+        }
+        self.init(subView, frame: showFrame, dismiss: initialFrame, initial: initialFrame, presentedFrame: presentedFrame)
+    }
+    //
+    public convenience init(anchor subView: UIView, anchorView: UIView, size: CGSize, bounceType: PositionBounceType = .bounceHorizontalMiddle) {
+        if let keyWindow =
+        let rect = anchorView.convert(anchorView.frame, to: UIApplication.shared.keyWindow)
+        
+    }
+}
+// MARK: - -- Animations
+public extension WQPresentationController {
+    func subViewAnimate(_ from: CGRect, to: CGRect, isShow: Bool = true) -> CAAnimation {
         let keyPath = "frame"
         let animation = CABasicAnimation(keyPath: keyPath)
         animation.fromValue = from
@@ -112,7 +287,7 @@ extension WQPresentationController {
     }
 }
 
-// MARK: - gesture handle
+// MARK: - -- Gesture Handle
 extension WQPresentationController {
     @objc func handlePanGesture(_ sender: UIPanGestureRecognizer)  {
         
@@ -149,6 +324,8 @@ extension WQPresentationController {
         self.view.removeGestureRecognizer(panGR)
     }
 }
+
+// MARK: - -- UIViewControllerAnimatedTransitioning
 extension WQPresentationController : UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.animateDuration
@@ -171,11 +348,10 @@ extension WQPresentationController : UIViewControllerAnimatedTransitioning {
         var backgroundAnimation: CAAnimation
         if isPresented {//初始化
             if let toView = toVCView {
-                self.containerView.frame = initialFrame
                 toView.frame = vcFinalFrame
                 transitionView.addSubview(toView)
             }
-            subAnimate =  self.subViewAnimate(initialFrame, to: showFrame)
+            subAnimate =  self.subViewAnimate(self.containerView.frame, to: showFrame)
             backgroundAnimation = self.backgroundAnimate(initialBackgroundViewColor, to: showBackgroundViewColor)
         } else {
             subAnimate =  self.subViewAnimate(showFrame, to: hideFrame)
@@ -190,6 +366,8 @@ extension WQPresentationController : UIViewControllerAnimatedTransitioning {
     
     
 }
+
+// MARK: - -- CAAnimation Delegate
 extension WQPresentationController : CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         anmationsCount -= 1
@@ -201,6 +379,8 @@ extension WQPresentationController : CAAnimationDelegate {
         self.transitionContext = nil
     }
 }
+
+// MARK: - -- UIGestureRecognizerDelegate
 extension WQPresentationController : UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let tapGR = gestureRecognizer as? UITapGestureRecognizer{
@@ -212,6 +392,8 @@ extension WQPresentationController : UIGestureRecognizerDelegate {
         return true
     }
 }
+
+// MARK: - -- UIViewControllerTransitioningDelegate
 extension WQPresentationController : UIViewControllerTransitioningDelegate {
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
@@ -227,3 +409,9 @@ extension WQPresentationController : UIViewControllerTransitioningDelegate {
     }
 }
 
+// MARK: - -- Default WQPresentationable impelement
+private extension WQPresentationable {
+    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation {
+        return controller.subViewAnimate(from, to: to, isShow: isShow)
+    }
+}
