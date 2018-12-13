@@ -8,7 +8,7 @@
 import Foundation
 public extension String {
     /// md5加密 默认小写
-    public func md5(lower: Bool = true) -> String {
+    func md5(lower: Bool = true) -> String {
         let str = self as NSString
         var md5Str: String
         if lower {
@@ -19,7 +19,7 @@ public extension String {
         return md5Str
     }
     
-   public func oc_sha1() -> String {
+   func oc_sha1() -> String {
         let str = self as NSString 
         return str.sha1()
     }

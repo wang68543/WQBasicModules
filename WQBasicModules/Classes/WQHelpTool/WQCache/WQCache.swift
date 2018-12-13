@@ -48,12 +48,14 @@ public final class WQCache {
     ///
     /// - Parameters:
     ///   - completion: 存储完成回调
-    public func asyncSet<T: Encodable>(_ object: T?, for key: String, completion:((Error?) -> Void)? = nil) {
+    public func asyncSet<T: Encodable>(_ object: T?, for key: String, completion: ((Error?) -> Void)? = nil) {
         ioQueue.async {
             var error: Error?
             defer {
                 if let complete = completion {
-                    complete(error)
+                    DispatchQueue.main.async {
+                      complete(error)
+                    } 
                 }
             }
             guard let obj = object else {
@@ -144,7 +146,6 @@ public extension WQCache {
        return nil
     }
     
-   
 }
 // MARK: - --Accessory
 public extension WQCache {
@@ -218,5 +219,5 @@ public extension WQCache {
 }
 
 public extension CocoaError {
-   public static let fileWriteInvalidValue = CocoaError.Code(rawValue: -20000)
+    static let fileWriteInvalidValue = CocoaError.Code(rawValue: -20_000)
 }

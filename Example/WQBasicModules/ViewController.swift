@@ -72,8 +72,7 @@ class ViewController: UIViewController {
         WQCache.default["test"] = test
         
         let value: ViewController.TestModel? = WQCache.default.object ("233")
- 
-        
+       
 //        cache["testFile"] =
 //        let pragra = NSParagraphStyle
 //        button.countDown(10, execute: { (sender, count, state) in
@@ -102,6 +101,7 @@ class ViewController: UIViewController {
         star.backgroundColor = .white
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
+    
        tests()
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
@@ -130,4 +130,10 @@ class ViewController: UIViewController {
     }
     
    
+    @IBAction func webViewAction(_ sender: UIButton) {
+//        self.navigationController?.navigationBar.isTranslucent = false
+        let web = WQWebController()
+        self.navigationController?.pushViewController(web, animated: true)
+    }
+    
 }

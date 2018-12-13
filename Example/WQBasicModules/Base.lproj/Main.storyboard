@@ -29,6 +29,14 @@
                                     <segue destination="3cO-YZ-jKu" kind="show" id="has-LT-ogH"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-Vw-0sM">
+                                <rect key="frame" x="18" y="469" width="61" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="webView"/>
+                                <connections>
+                                    <action selector="webViewAction:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="fdZ-GV-M4x"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>

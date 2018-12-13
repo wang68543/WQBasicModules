@@ -24,9 +24,9 @@ public extension CALayer {
     
     @discardableResult
     public func rotation(_ from: Double = 0,
-                  to angle: Double = Double.pi * 2,
-                  duration: Double,
-                  isRepeat: Bool) -> CABasicAnimation {
+                         to angle: Double = Double.pi * 2,
+                         duration: Double,
+                         isRepeat: Bool) -> CABasicAnimation {
         let keyPath = "transform.rotation"
         let animate = CABasicAnimation(keyPath: keyPath)
         animate.fromValue = Double(0)
