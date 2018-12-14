@@ -7,9 +7,19 @@
 
 import UIKit
 public protocol WQPresentationable: NSObjectProtocol {
-    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation
+//    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation
+    func presentation(shouldAnimatedSubViewFrame controller: WQPresentationController, toValue: CGRect, isShow: Bool)
+    func presentation(shouldAnimatedView controller: WQPresentationController, isShow: Bool, completion:((Bool) -> Void))
+    func presentation(shouldIneractionDissmiss controller: WQPresentationController)
 }
 open class WQPresentationController: UIViewController {
+    public enum InteractionDirection {
+        case none
+        case left
+        case right
+        case up
+        case down
+    }
     public enum TransitionType {
         case none
         case left
@@ -31,19 +41,33 @@ open class WQPresentationController: UIViewController {
         case bounceDown // 向下弹
         
     }
-    public let containerView: UIView
     
+    weak var delegate: WQPresentationable?
+    public let containerView: UIView
+
     /// 容器的尺寸
-//    public let initialFrame: CGRect
     open var showFrame: CGRect
     open var hideFrame: CGRect
-    public let edgeInsets: UIEdgeInsets
+    
+    public var interactionDissmissDirection: InteractionDirection = .none
+    public private(set) var isInteracting: Bool = false
+    public private(set) var drivenInteracitve: UIPercentDrivenInteractiveTransition?
+    public var edgeInsets: UIEdgeInsets {
+        didSet {
+            guard !childViews.isEmpty else {
+                return
+            }
+            self.containerView.removeConstraints(self.containerView.constraints)
+            self.addConstraints(for: childViews.last!)
+        }
+    }
     
     /// 当使用构造函数的时候需要初始化尺寸
 //    private var isShouldInitialFrames: Bool = false
     private var transitionInitial: TransitionType = .none
     private var transitionShow: TransitionType = .none
     private var transitionDismiss: TransitionType = .none
+    
     
     /// 大背景的颜色
     open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.5)
@@ -64,6 +88,7 @@ open class WQPresentationController: UIViewController {
     open var isEnableSlideDismiss: Bool = false {
         didSet {
             if isEnableSlideDismiss {
+                
                 self.addPanGesture()
             } else {
                 self.removePanGesture()
@@ -71,10 +96,6 @@ open class WQPresentationController: UIViewController {
         }
     }
     private var transitionContext: UIViewControllerContextTransitioning?
-    
-    private let subAnimationKey = "containerViewTransitionKey"
-    private let backgroundAnimatioKey = "backgroundTransitionKey"
-    private var anmationsCount: Int = 0
     
     private var tapGesture: UITapGestureRecognizer?
     private var panGesture: UIPanGestureRecognizer?
@@ -89,12 +110,14 @@ open class WQPresentationController: UIViewController {
                 presentedFrame: CGRect = UIScreen.main.bounds,
                 contentEdges: UIEdgeInsets = .zero) {
         containerView = UIView()
+        containerView.backgroundColor = UIColor.white
         showFrame = show
         hideFrame = dismiss
         self.viewPresentedFrame = presentedFrame
         self.edgeInsets = contentEdges
         super.init(nibName: nil, bundle: nil)
         containerView.frame = initial
+        self.view.addSubview(containerView)
         self.addContainerSubview(subView)
     }
     
@@ -103,21 +126,24 @@ open class WQPresentationController: UIViewController {
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(containerView)
         
     }
     private func addContainerSubview(_ subView: UIView) {
         containerView.addSubview(subView)
+        childViews.append(subView)
+        addConstraints(for: subView)
+    }
+    private func addConstraints(for subView: UIView) {
+        subView.translatesAutoresizingMaskIntoConstraints = false
         let metrics = ["top": self.edgeInsets.top,
-                     "left": self.edgeInsets.left,
-                     "bottom": self.edgeInsets.bottom,
-                     "right": self.edgeInsets.right]
+                       "left": self.edgeInsets.left,
+                       "bottom": self.edgeInsets.bottom,
+                       "right": self.edgeInsets.right]
         let views = ["subView": subView]
         let hConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-left-[subView]-right-|", options: .directionMask, metrics: metrics, views: views)
         let vConstraints = NSLayoutConstraint.constraints(withVisualFormat: "V:|-top-[subView]-bottom-|", options: .directionMask, metrics: metrics, views: views)
         self.containerView.addConstraints(hConstraints)
         self.containerView.addConstraints(vConstraints)
-        childViews.append(subView)
     }
     open func show(animated flag: Bool, completion: (() -> Void)? = nil) {
         if let topVC = self.topViewController {
@@ -132,7 +158,12 @@ open class WQPresentationController: UIViewController {
     }
     public var topViewController: UIViewController? {
         var viewController: UIViewController?
-        for window in UIApplication.shared.windows.reversed() {
+        let windows = UIApplication.shared.windows.reversed()
+        for window in  windows {
+            let windowCls = type(of: window).description()
+            if windowCls == "UIRemoteKeyboardWindow" || windowCls == "UITextEffectsWindow" {
+                continue
+            }
             if let rootVC = window.rootViewController,
                 let topVC = self.findTopViewController(in: rootVC) {
                 viewController = topVC
@@ -159,10 +190,6 @@ open class WQPresentationController: UIViewController {
             return viewController
         }
     }
-    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        
-    }
-
 }
 
 // MARK: - -- Convenience init
@@ -214,6 +241,21 @@ public extension WQPresentationController {
         let dismissFrame: CGRect = WQPresentationController.frame(size, type: dismiss, presentedFrame: presentedFrame, isInside: false)
     
         self.init(subView, frame: showFrame, dismiss: dismissFrame, initial: initialFrame, presentedFrame: presentedFrame, contentEdges: .zero)
+        var dismissDirection: InteractionDirection
+        switch dismiss {
+        case .center, .top:
+            dismissDirection = .up
+        case .left:
+            dismissDirection = .left
+        case .right:
+            dismissDirection = .right
+        case .bottom:
+            dismissDirection = .down
+        case .none:
+            dismissDirection = .none
+        }
+        /// 这里只是配置默认的消失交互方向 但是不开启 需要手动开启
+        interactionDissmissDirection = dismissDirection
         transitionInitial = initial
         transitionShow = show
         transitionDismiss = dismiss
@@ -325,30 +367,122 @@ public extension WQPresentationController {
 }
 // MARK: - -- Animations
 public extension WQPresentationController {
-    func subViewAnimate(_ from: CGRect, to: CGRect, isShow: Bool = true) -> CAAnimation {
-        let keyPath = "frame"
-        let animation = CABasicAnimation(keyPath: keyPath)
-        animation.fromValue = from
-        animation.toValue = to
-        animation.duration = self.animateDuration
-        return animation
+    public func subViewAnimate(_ toValue: CGRect, isShow: Bool = true) {
+        if let delegate = self.delegate {
+            delegate.presentation(shouldAnimatedSubViewFrame: self, toValue: toValue, isShow: isShow)
+        } else {
+            defaultSubViewAnimate(toValue, isShow: isShow)
+        }
     }
-    func backgroundAnimate(_ from: UIColor, to: UIColor) -> CAAnimation {
-        let keyPath = "backgroundColor"
-        let animation = CABasicAnimation(keyPath: keyPath)
-        animation.fromValue = from
-        animation.toValue = to
-        animation.duration = self.animateDuration
-        return animation
+    public func backgroundAnimate(_ toValue: UIColor, isShow: Bool = true, completion: @escaping ((Bool) -> (Void))) {
+        if let delegate = self.delegate {
+            delegate.presentation(shouldAnimatedView: self, isShow: isShow, completion: completion)
+        } else {
+            defaultBackgroundAnimate(toValue, isShow: isShow, completion: completion)
+        }
+    }
+   private func defaultSubViewAnimate(_ toValue: CGRect, isShow: Bool = true) {
+    UIView.animate(withDuration: self.animateDuration,
+                   delay: 0.0,
+                   options: [.curveEaseIn, .layoutSubviews, .beginFromCurrentState],
+                   animations: {
+                    self.containerView.frame = toValue
+                    })
+    }
+   private func defaultBackgroundAnimate(_ toValue: UIColor, isShow: Bool = true, completion: @escaping ((Bool) -> (Void)))  {
+        UIView.animate(withDuration: self.animateDuration, animations: {
+            self.view.backgroundColor = toValue
+        }) { flag in
+            completion(flag)
+        }
     }
 }
 
 // MARK: - -- Gesture Handle
 extension WQPresentationController {
-    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer)  {
-        
+    public var completionedProgress: CGFloat {
+        return 0.5
     }
-    
+    public var completionedVelocity: CGFloat {
+        return 100
+    }
+    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer)  {
+        switch sender.state {
+        case .began:
+            sender.setTranslation(.zero, in: self.view)
+            self.drivenInteractionStart()
+        case .changed:
+            var percentage: CGFloat
+            let size = hideFrame.size
+            let translate = sender.translation(in: self.view)
+            switch self.interactionDissmissDirection {
+            case .down, .up:
+                percentage = translate.y / size.height
+            case .left, .right:
+                percentage = translate.x / size.width
+            default:
+                percentage = 0.0
+            }
+            self.drivenInteractionUpdate(percentage)
+        case .ended, .cancelled:
+            let velocity = sender.velocity(in: self.view)
+            let translate = sender.translation(in: self.view)
+            let size = hideFrame.size
+            var speed: CGFloat = 1
+            var isFinished: Bool = false
+            switch self.interactionDissmissDirection {
+            case .down:
+                let progress = translate.y / size.height
+                if velocity.y < 0 && (abs(velocity.y) > completionedVelocity || progress > completionedProgress){
+                    isFinished = true
+                    speed = abs(velocity.y)
+                }
+            case .up:
+                let progress = translate.y / size.height
+                if velocity.y > 0 && (velocity.y > completionedVelocity || progress > completionedProgress){
+                    isFinished = true
+                    speed = velocity.y
+                }
+            case .left:
+                let progress = translate.x / size.width
+                if velocity.x > 0 && (velocity.x > completionedVelocity || progress > completionedProgress){
+                    isFinished = true
+                    speed = velocity.x
+                }
+            case .right:
+                let progress = translate.x / size.width
+                if velocity.x < 0 && (abs(velocity.x) > completionedVelocity || progress > completionedProgress){
+                    isFinished = true
+                    speed = abs(velocity.x)
+                }
+            default:
+                break
+            }
+            if isFinished {
+                self.drivenInteractionCompletion(speed)
+            } else {
+                self.drivenInteractionCancel()
+            }
+        default:
+            break
+        }
+    }
+    public func drivenInteractionStart() {
+        self.isInteracting = true
+        self.drivenInteracitve = UIPercentDrivenInteractiveTransition()
+    }
+    public func drivenInteractionCompletion(_ completionSpeed: CGFloat = 1.0){
+        self.drivenInteracitve?.completionSpeed = completionSpeed
+        self.drivenInteracitve?.finish()
+        self.isInteracting = false
+    }
+    public func drivenInteractionCancel(){
+        self.drivenInteracitve?.cancel()
+        self.isInteracting = false
+    }
+    public func drivenInteractionUpdate(_ progress: CGFloat){
+        self.drivenInteracitve?.update(progress)
+    }
     @objc func handleTapGesture(_ sender: UITapGestureRecognizer)  {
         
     }
@@ -363,6 +497,7 @@ extension WQPresentationController {
     func addPanGesture() {
         self.removePanGesture()
         let panGR = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
+        panGR.maximumNumberOfTouches = 1
         self.view.addGestureRecognizer(panGR)
         self.panGesture = panGR
     }
@@ -378,7 +513,7 @@ extension WQPresentationController {
             return
         }
         self.view.removeGestureRecognizer(panGR)
-    }
+    } 
 }
 
 // MARK: - -- UIViewControllerAnimatedTransitioning
@@ -392,57 +527,57 @@ extension WQPresentationController: UIViewControllerAnimatedTransitioning {
             let toVC = transitionContext.viewController(forKey: .to) else {
                 return
         }
-//        let vcInitialFrame = transitionContext.initialFrame(for: fromVC)
         let vcFinalFrame = transitionContext.finalFrame(for: toVC)
         let toVCView = transitionContext.view(forKey: .to)
-//        let fromVCView = transitionContext.view(forKey: .from)
         let isPresented = toVC.presentingViewController === fromVC
         self.transitionContext = transitionContext
         let transitionView = transitionContext.containerView
-      
-        var subAnimate: CAAnimation
-        var backgroundAnimation: CAAnimation
+        let animateCompletion: ((Bool) -> Void) = { flag -> Void in
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            self.transitionContext = nil
+        }
         if isPresented {//初始化
             if let toView = toVCView {
                 toView.frame = vcFinalFrame
+                toView.backgroundColor = self.initialBackgroundViewColor
                 transitionView.addSubview(toView)
             }
-            subAnimate =  self.subViewAnimate(self.containerView.frame, to: showFrame)
-            backgroundAnimation = self.backgroundAnimate(initialBackgroundViewColor, to: showBackgroundViewColor)
+            self.subViewAnimate(showFrame, isShow: true)
+            self.backgroundAnimate(showBackgroundViewColor, isShow: true, completion: animateCompletion)
         } else {
-            subAnimate =  self.subViewAnimate(showFrame, to: hideFrame)
-            backgroundAnimation = self.backgroundAnimate(showBackgroundViewColor, to: initialBackgroundViewColor)
+            self.subViewAnimate(hideFrame, isShow: false)
+            self.backgroundAnimate(initialBackgroundViewColor, isShow: false, completion: animateCompletion)
         }
-        anmationsCount = 2
-        subAnimate.delegate = self
-        self.containerView.layer.add(subAnimate, forKey: subAnimationKey)
-        backgroundAnimation.delegate = self
-        toVCView?.layer.add(backgroundAnimation, forKey: backgroundAnimatioKey)
     }
-    
 }
 
-// MARK: - -- CAAnimation Delegate
-extension WQPresentationController: CAAnimationDelegate {
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        anmationsCount -= 1
-        guard let context = self.transitionContext,
-          anmationsCount <= 0 else {
-            return
-        }
-        context.completeTransition(!context.transitionWasCancelled)
-        self.transitionContext = nil
-    }
-}
 
 // MARK: - -- UIGestureRecognizerDelegate
 extension WQPresentationController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let tapGR = gestureRecognizer as? UITapGestureRecognizer{
+        if let tapGR = gestureRecognizer as? UITapGestureRecognizer,
+            tapGR === self.tapGesture {
             let location = tapGR.location(in: self.view)
             if self.containerView.frame.contains(location) {
                 return false
             }
+        } else if let panGR = gestureRecognizer as? UIPanGestureRecognizer,
+            panGR === self.panGesture {
+            let velocity = panGR.velocity(in: self.view)
+            var isEnableGesture: Bool = false
+            switch self.interactionDissmissDirection {
+            case .up:
+                isEnableGesture = velocity.y > 0 && abs(velocity.y) > abs(velocity.x)
+            case .down:
+                isEnableGesture = velocity.y < 0 && abs(velocity.y) > abs(velocity.x)
+            case .left:
+                isEnableGesture = velocity.x > 0 && abs(velocity.y) < abs(velocity.x)
+            case .right:
+                isEnableGesture = velocity.x < 0 && abs(velocity.y) < abs(velocity.x)
+            default:
+                break;
+            }
+            return isEnableGesture
         }
         return true
     }
@@ -457,7 +592,7 @@ extension WQPresentationController: UIViewControllerTransitioningDelegate {
         return self
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return nil
+        return self.isInteracting ? self.drivenInteracitve : nil
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return nil
@@ -466,7 +601,7 @@ extension WQPresentationController: UIViewControllerTransitioningDelegate {
 
 // MARK: - -- Default WQPresentationable impelement
 private extension WQPresentationable {
-    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation {
-        return controller.subViewAnimate(from, to: to, isShow: isShow)
-    }
+//    func presentation(_ controller: WQPresentationController, shouldAnimattionSubView from: CGRect, to: CGRect, isShow: Bool) -> CAAnimation {
+//        return controller.subViewAnimate(from, to: to, isShow: isShow)
+//    }
 }

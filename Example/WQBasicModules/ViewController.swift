@@ -105,6 +105,13 @@ class ViewController: UIViewController {
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
     
+//        let tf = UITextField()
+//        tf.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
+//        self.view.addSubview(tf)
+//        tf.becomeFirstResponder()
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+//            debugPrint(UIApplication.shared.windows)
+//        }
        tests()
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
@@ -136,7 +143,42 @@ class ViewController: UIViewController {
     @IBAction func webViewAction(_ sender: UIButton) {
 //        self.navigationController?.navigationBar.isTranslucent = false
         let presentionView = WQPresentionView()
-        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
+        
+        presentionView.backgroundColor = UIColor.red
+//        presentionView.layer.frame = CGRect(x: 100, y: 400, width: 100, height: 100)
+//        let keyPath = "backgroundColor"
+//        let animation = CABasicAnimation(keyPath: keyPath)
+//        animation.fromValue = UIColor.clear.cgColor
+//        animation.toValue = UIColor.black.cgColor
+//        animation.duration = 0.25
+//        animation.fillMode = .forwards
+//        animation.isRemovedOnCompletion = false
+//        self.view.addSubview(presentionView)
+//        presentionView.layer.add(animation, forKey: "animate")
+        
+//        let keyPath1 = "position"
+//        let animation1 = CABasicAnimation(keyPath: keyPath1)
+//        animation1.fromValue =  CGPoint(x: 0, y: 400)
+//        animation1.toValue = CGPoint(x: 330, y: 400)
+//        animation1.fillMode = .forwards
+//        animation1.duration = 0.5
+//        animation1.isRemovedOnCompletion = false
+//        presentionView.layer.add(animation1, forKey: "animate1")
+//        let keyPath2 = "bounds"
+//        let animation2 = CABasicAnimation(keyPath: keyPath2)
+//        animation2.fromValue = CGRect(x: 0, y: 400, width: 100, height: 100)
+//        animation2.toValue = CGRect(x: UIScreen.main.bounds.width - 200, y: 400, width: 200, height: 200)
+//        animation2.fillMode = .forwards
+//        animation2.duration = 5
+//        animation2.isRemovedOnCompletion = false
+//        presentionView.layer.add(animation2, forKey: "animate2")
+        
+        
+//        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
+        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 100, y: 100), size: CGSize(width: 100, height: 100), bounceType: WQPresentationController.PositionBounceType.bounceCenter )
+        presention.animateDuration = 0.5
+        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        presention.containerView.backgroundColor = UIColor.green
         presention.show(animated: true)
         
 //        let web = WQWebController()
