@@ -186,7 +186,7 @@ open class WQWebController: UIViewController {
     func closeAction() {
         if self.presentingViewController != nil {
             self.dismiss(animated: true)
-        } else if self.navigationController != nil{
+        } else if self.navigationController != nil {
             self.navigationController?.popViewController(animated: true)
         } else {
             self.willMove(toParent: nil)

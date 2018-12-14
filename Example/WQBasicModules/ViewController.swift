@@ -16,6 +16,9 @@ class ViewController: UIViewController {
             self.value = value
         }
     }
+    class WQPresentionView: UIView {
+        
+    }
  private let picButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,8 +135,12 @@ class ViewController: UIViewController {
    
     @IBAction func webViewAction(_ sender: UIButton) {
 //        self.navigationController?.navigationBar.isTranslucent = false
-        let web = WQWebController()
-        self.navigationController?.pushViewController(web, animated: true)
+        let presentionView = WQPresentionView()
+        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
+        presention.show(animated: true)
+        
+//        let web = WQWebController()
+//        self.navigationController?.pushViewController(web, animated: true)
     }
     
 }
