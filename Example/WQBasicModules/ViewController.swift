@@ -104,7 +104,9 @@ class ViewController: UIViewController {
         star.backgroundColor = .white
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
-    
+        if "122334qq.com".isEmail {
+            debugPrint("是邮箱地址")
+        }
 //        let tf = UITextField()
 //        tf.frame = CGRect(x: 100, y: 100, width: 100, height: 100)
 //        self.view.addSubview(tf)
@@ -175,10 +177,13 @@ class ViewController: UIViewController {
         
         
 //        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
-        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 100, y: 100), size: CGSize(width: 100, height: 100), bounceType: WQPresentationController.PositionBounceType.bounceCenter )
+//        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 200, y: 200), size: CGSize(width: 400, height: 400), bounceType: WQPresentationController.PositionBounce.bounceCenter )
+        let presention = WQPresentCenterController(presentionView, size: CGSize(width: 400, height: 400))
         presention.animateDuration = 0.5
-        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+//        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         presention.containerView.backgroundColor = UIColor.green
+        presention.interactionDissmissDirection = .down
+        presention.isEnableSlideDismiss = true
         presention.show(animated: true)
         
 //        let web = WQWebController()

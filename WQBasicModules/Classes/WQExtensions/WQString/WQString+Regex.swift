@@ -50,6 +50,8 @@ public enum WQRegExpression: String {
       */
     case regexTelephone = "^0(10|2[0-5789]|\\\\d{3})\\\\d{7,8}$"
     
+    case regexEmail = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+    
 }
 
 public extension String {
@@ -57,7 +59,10 @@ public extension String {
     var isPureInt: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexInt.rawValue)\"")
     }
-    
+     
+    var isEmail: Bool {
+        return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexEmail.rawValue)\"")
+    }
     /// 校验字符串是否由6~20个包含字母和数字的字符组成 (一般用于密码强度校验)
     var isLegalPassword: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegExpression.regexCommonPwd.rawValue)\"")

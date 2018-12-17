@@ -39,6 +39,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/WQAnimation/Layer'
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Views/*.swift'
         end
+        ss.subspec 'Transitioning' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Transitioning/*.swift'
+        end
     end
     s.subspec 'WQExtensions' do |ss|
         ss.subspec 'WQUIKit' do |sss|
