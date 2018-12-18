@@ -330,14 +330,17 @@ extension WQPresentationController: UIGestureRecognizerDelegate {
 
 // MARK: - -- UIViewControllerTransitioningDelegate
 extension WQPresentationController: UIViewControllerTransitioningDelegate {
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+   public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.transitioningAnimator
     }
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.transitioningAnimator
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.drivenInteracitve
+        guard let interactive = self.drivenInteracitve else {
+            return nil
+        }
+        return interactive.isInteracting ? interactive : nil
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return nil

@@ -71,8 +71,16 @@ class ViewController: UIViewController {
         button.backgroundColor = UIColor.yellow
 //        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
-        let test = TestModel("12345")
-        WQCache.default["test"] = test
+        let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
+        for idx  in 0 ..< 50 {
+//            queuen.async {
+                let test = TestModel("12345")
+                WQCache.default["test"] = test
+            let model:TestModel? = WQCache.default["test"]
+                debugPrint("==",model)
+//            }
+        }
+       debugPrint("************")
         
         let value: ViewController.TestModel? = WQCache.default.object ("233")
        

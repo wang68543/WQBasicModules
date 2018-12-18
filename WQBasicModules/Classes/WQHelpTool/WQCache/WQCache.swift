@@ -69,7 +69,7 @@ public final class WQCache {
                 self.save(data, for: key)
             } catch let err {
                 error = err
-            }
+            } 
         }
     }
     @discardableResult

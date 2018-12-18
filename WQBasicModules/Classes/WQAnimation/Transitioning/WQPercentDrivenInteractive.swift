@@ -100,32 +100,16 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
         default:
             break
         }
-//        switch self.direction {
-//        case .down:
-//            let progress = translate.y / size.height
-//            if velocity.y > 0 && (velocity.y > shouldCompletedVelocity || progress > shouldCompletedProgress) {
-//                isFinished = true
-//            }
-//        case .upwards:
-//            let progress = translate.y / size.height
-//            if velocity.y < 0 && (abs(velocity.y) > shouldCompletedVelocity || progress > shouldCompletedProgress) {
-//                isFinished = true
-//            }
-//        case .left:
-//            let progress = translate.x / size.width
-//            if velocity.x < 0 && (abs(velocity.x) > shouldCompletedVelocity || progress > shouldCompletedProgress) {
-//                isFinished = true
-//            }
-//        case .right:
-//            let progress = translate.x / size.width
-//            if velocity.x > 0 && (velocity.x > shouldCompletedVelocity || progress > shouldCompletedProgress) {
-//                isFinished = true
-//            }
-//        default:
-//            break
-//        }
         return isFinished
     }
+//    open override var completionSpeed: CGFloat {
+//        set {
+//            super.completionSpeed = completionSpeed
+//        }
+//        get {
+//            return 1 - self.percentComplete
+//        }
+//    }
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         let view = self.gestureView
@@ -154,13 +138,7 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
             let size = self.progressSize
             let isFinished: Bool = self.shouldCompletionInteraction(velocity, translate: translate, progressSize: size)
             if isFinished {
-                var speed: CGFloat = 1
-                if direction == .down || direction == .upwards {
-                    speed = abs(velocity.y)
-                } else {
-                    speed = abs(velocity.x)
-                }
-                self.completionSpeed = speed
+                self.completionSpeed = 1 - self.percentComplete
                 self.finish()
             } else {
                 self.cancel()
