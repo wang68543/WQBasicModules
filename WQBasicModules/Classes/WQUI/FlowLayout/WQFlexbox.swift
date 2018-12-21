@@ -67,6 +67,7 @@ public class WQFlexbox: UICollectionViewFlowLayout {
             var linesFrame = self.attributeLines(section, lines: sectionAttrs, direction: lineDirection)
             linesFrame.insets = insets
             linesFrame.rect = CGRect(origin: CGPoint(x: flowSectionX, y: flowSectionY), size: sectionSize)
+            
             linesFrame.headerSize = headerSize
             linesFrame.footerSize = footerSize
             allAttrs.append(sectionAttrs)
@@ -270,7 +271,10 @@ private extension WQFlexbox {
         let alignContent = self.alignContentForSection(at: section)
         let sel: Selector = #selector(WQFlexboxDelegateLayout.flexbox(_:flexbox:sizeForSectionAt:))
         var isFixing: Bool = false
-        if !direction.isHorizontal {
+        if let sections = self.collectionView?.numberOfSections,
+            sections == 1 { // 多个分区的时候需要指定每个分区的大小 只有一个分区的时候默认为 collectionView 的 size
+            isFixing = true
+        } else if !direction.isHorizontal {
             isFixing = true
         } else if let deleg = self.delegate,
             deleg.responds(to: sel) {
@@ -280,7 +284,7 @@ private extension WQFlexbox {
             switch alignContent {
             case .flexStart:
                 lineSpace = space
-                leaveMargin = sectionLength - linesFrame.sumMaxValue - linesCount * lineSpace
+                leaveMargin = sectionLength - linesFrame.sumMaxValue - (linesCount - 1) * lineSpace
             case .center:
                 lineSpace = space
                 margin = (sectionLength - linesFrame.sumMaxValue - lineSpace * (linesCount - 1)) * 0.5

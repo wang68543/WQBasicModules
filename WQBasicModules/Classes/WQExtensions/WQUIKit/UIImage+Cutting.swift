@@ -65,3 +65,56 @@ public extension UIImage {
        return reDraw(CGRect(origin: .zero, size: CGSize(width: drawW, height: drawH)))
     }
 }
+public extension Array where Element: UIImage {
+    
+    /// 图片拼接
+    ///
+    /// - Parameters:
+    ///   - drawSize: 拼接之后图片的尺寸
+    ///   - defaultColor: 剩余尺寸的背景颜色
+    /// - Returns: image
+    /// 图片拼接
+    func splice(rounded drawSize: CGSize, cornerRadius: CGFloat = 0, defaultColor: CGColor? = nil) -> UIImage? {
+        if cornerRadius > 0 {
+            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: drawSize), cornerRadius: cornerRadius)
+            return self.splice(drawSize, defaultColor: defaultColor, clipPath: path.cgPath)
+        } else {
+          return self.splice(drawSize, defaultColor: defaultColor)
+        }
+    }
+    ///
+    /// - Parameters:
+    ///   - drawSize: 绘制尺寸
+    ///   - defaultColor: 空白部分的颜色
+    ///   - clipPath: 绘制之后的裁剪尺寸
+    /// - Returns: image
+    func splice(_ drawSize: CGSize, defaultColor: CGColor? = nil, clipPath: CGPath? = nil) -> UIImage? {
+        let scale = UIScreen.main.scale
+        UIGraphicsBeginImageContextWithOptions(drawSize, true, scale)
+        var offsetH: CGFloat = 0
+        if let color = defaultColor,
+            let context = UIGraphicsGetCurrentContext() {
+            context.setFillColor(color)
+            context.addRect(CGRect(origin: .zero, size: drawSize))
+            context.drawPath(using: .fill)
+        }
+        if let path = clipPath,
+            let context = UIGraphicsGetCurrentContext() { //裁剪
+            context.addPath(path)
+            context.clip()
+            self.forEach { img  in
+                img.draw(in: CGRect(origin: CGPoint(x: 0, y: offsetH), size: img.size))
+                offsetH += img.size.height
+            }
+            context.drawPath(using: .stroke)
+        } else {// 无圆角拼接
+            self.forEach { img  in
+                img.draw(in: CGRect(origin: CGPoint(x: 0, y: offsetH), size: img.size))
+                offsetH += img.size.height
+            }
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+}

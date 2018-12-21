@@ -56,6 +56,10 @@ open class WQPresentationController: UIViewController {
     /// 是否支持滑动消失
     open var isEnableSlideDismiss: Bool = false {
         didSet {
+            guard self.isModal else {
+                self.drivenInteracitve = nil
+                return
+            }
             if isEnableSlideDismiss {
                 self.drivenInteracitve = WQPercentDrivenInteractive(interactionDissmissDirection, size: self.transitioningAnimator.showFrame.size, gestureView: self.view)
                 self.drivenInteracitve?.starShowConfig = { [weak self] type in
@@ -77,14 +81,16 @@ open class WQPresentationController: UIViewController {
     /// 默认的尺寸是 按照屏幕大小来显示
     private var viewPresentedFrame: CGRect
     public private(set) var childViews: [UIView] = []
-
+    /// 是否是Modal出来的
+    private var isModal: Bool = true
+    
     public init(_ subView: UIView,
                 frame show: CGRect,
                 dismiss: CGRect,
                 initial: CGRect,
                 presentedFrame: CGRect = UIScreen.main.bounds) {
         containerView = UIView()
-        containerView.backgroundColor = UIColor.white
+        containerView.backgroundColor = UIColor.clear
         let animator = WQTransitioningAnimator(containerView, show: show, hide: dismiss)
         transitioningAnimator = animator
         initialBackgroundViewColor = animator.initialBackgroundViewColor
@@ -120,7 +126,7 @@ open class WQPresentationController: UIViewController {
         let dismissFrame = dismiss.frame(size, presentedFrame: presentedFrame, isInside: false)
         
         containerView = UIView()
-        containerView.backgroundColor = UIColor.white
+        containerView.backgroundColor = UIColor.clear
         let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: dismissFrame)
         transitioningAnimator = animator
         initialBackgroundViewColor = animator.initialBackgroundViewColor
@@ -152,7 +158,7 @@ open class WQPresentationController: UIViewController {
         let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
         
         containerView = UIView()
-        containerView.backgroundColor = UIColor.white
+        containerView.backgroundColor = UIColor.clear
         let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: initialFrame)
         transitioningAnimator = animator
         initialBackgroundViewColor = animator.initialBackgroundViewColor
@@ -174,7 +180,7 @@ open class WQPresentationController: UIViewController {
         let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
         
         containerView = UIView()
-        containerView.backgroundColor = UIColor.white
+        containerView.backgroundColor = UIColor.clear
         let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: initialFrame)
         transitioningAnimator = animator
         initialBackgroundViewColor = animator.initialBackgroundViewColor
@@ -199,23 +205,49 @@ open class WQPresentationController: UIViewController {
     }
     private func addConstraints(for subView: UIView) {
         subView.frame = containerView.frame
-        subView.autoresizingMask = [.flexibleRightMargin, .flexibleLeftMargin, .flexibleTopMargin, .flexibleBottomMargin]
+        subView.translatesAutoresizingMaskIntoConstraints = false
+        let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
+        let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
+        let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
+        let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
+        containerView.addConstraints([left,right,bottom,top])
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? self.topViewController
         if let topVC = presnetVC {
             if topVC.presentedViewController != nil { //已经弹出过控制器
+                var showInVC: UIViewController = topVC
+                if let tabBarVC = topVC.tabBarController {
+                    showInVC = tabBarVC
+                } else if let navVC = topVC.navigationController {
+                     showInVC = navVC
+                }
                 
+                showInVC.addChild(self)
+               showInVC.view.addSubview(self.view)
+                self.transitioningAnimator.backgroundAnimate(self.view, toValue: showBackgroundViewColor) {[weak self] flag in
+                    guard let weakSelf = self else {
+                        return
+                    }
+                    weakSelf.didMove(toParent: showInVC)
+                }
+                self.transitioningAnimator.subViewAnimate(self.containerView, toValue: self.transitioningAnimator.showFrame)
+                isModal = false
+                isEnableSlideDismiss = false
             } else {
                 topVC.modalPresentationStyle = .custom
                 topVC.transitioningDelegate = self
                 self.modalPresentationStyle = .custom
                 self.transitioningDelegate = self
                 topVC.present(self, animated: flag, completion: completion)
+                if !flag {
+                    self.view.backgroundColor = self.transitioningAnimator.showBackgroundViewColor
+                    self.containerView.frame = self.transitioningAnimator.showFrame
+                }
             }
         }
     }
-    
+
     public var topViewController: UIViewController? {
         var viewController: UIViewController?
         let windows = UIApplication.shared.windows.reversed()
@@ -248,6 +280,20 @@ open class WQPresentationController: UIViewController {
             }
         } else {
             return viewController
+        }
+    }
+    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if !isModal {
+            self.willMove(toParent: nil)
+            self.transitioningAnimator.backgroundAnimate(self.view, toValue: initialBackgroundViewColor) {[weak self] flag in
+                guard let weakSelf = self else {
+                    return
+                }
+                 weakSelf.removeFromParent()
+            }
+            self.transitioningAnimator.subViewAnimate(self.containerView, toValue: self.transitioningAnimator.hideFrame)
+        } else {
+           super.dismiss(animated: flag, completion: completion)
         }
     }
 }
@@ -311,6 +357,23 @@ extension WQPresentationController {
     }
 }
 
+// MARK: - keyboard
+public extension WQPresentationController {
+    public func addKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+    }
+    public func removeKeyboardObserver() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidChangeFrameNotification, object: nil) 
+    }
+    @objc func keyboardWillChangeFrame(_ note: Notification) {
+        
+    }
+    @objc func keyboardDidChangeFrame(_ note: Notification) {
+        
+    }
+}
 // MARK: - -- UIGestureRecognizerDelegate
 extension WQPresentationController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

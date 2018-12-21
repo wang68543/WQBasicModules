@@ -151,7 +151,11 @@ class ViewController: UIViewController {
     
    
     @IBAction func webViewAction(_ sender: UIButton) {
-//        self.navigationController?.navigationBar.isTranslucent = false
+        let snap = SnapShotTableController()
+        snap.view.backgroundColor = UIColor.white
+        self.navigationController?.pushViewController(snap, animated: true)
+        return
+        //        self.navigationController?.navigationBar.isTranslucent = false
         let presentionView = WQPresentionView()
         
         presentionView.backgroundColor = UIColor.red
@@ -186,6 +190,7 @@ class ViewController: UIViewController {
         
 //        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
 //        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 200, y: 200), size: CGSize(width: 400, height: 400), bounceType: WQPresentationController.PositionBounce.bounceCenter )
+        UIResponder.keyboardWillChangeFrameNotification
         let presention = WQPresentCenterController(presentionView, size: CGSize(width: 400, height: 400))
         presention.animateDuration = 0.5
 //        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
