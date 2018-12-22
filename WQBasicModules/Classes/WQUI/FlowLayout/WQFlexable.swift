@@ -139,7 +139,7 @@ public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
 internal struct LinesFrameAttribute {
     
     let direction: WQFlexDirection
-    /// 当前分区的左上角 主要记录用于后续计算
+    /// 当前分区的左上角 主要记录用于后续计算 (包含insets和header、footer的高度)
     var rect: CGRect = .zero
     
     var insets: UIEdgeInsets = .zero
@@ -150,13 +150,13 @@ internal struct LinesFrameAttribute {
     
     /// 分区号
     let section: Int
-    /// 每个line中item的最大边框集合
+    /// 每个line中item的最大边框集合 (例:当direction水平的时候这里表示每个line中item的最大高度集合)
     let maxValues: [CGFloat]
     
-    /// 每个line常规边框的总和
+    /// 每个line常规边框的总和 (例:当direction水平的时候这里表示每个line中每个item宽度和的集合)
     let totalValues: [CGFloat]
     
-    /// 所有line的最大边框的和
+    /// 所有line的最大边框的和 (例:当direction水平的时候这里表示每个line中line中item的最大高度和)
     let sumMaxValue: CGFloat
     
     /// section中lines数量

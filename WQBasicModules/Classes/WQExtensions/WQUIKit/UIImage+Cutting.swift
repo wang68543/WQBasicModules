@@ -66,32 +66,16 @@ public extension UIImage {
     }
 }
 public extension Array where Element: UIImage {
-    
-    /// 图片拼接
-    ///
-    /// - Parameters:
-    ///   - drawSize: 拼接之后图片的尺寸
-    ///   - defaultColor: 剩余尺寸的背景颜色
-    /// - Returns: image
-    /// 图片拼接
-    func splice(rounded drawSize: CGSize, cornerRadius: CGFloat = 0, defaultColor: CGColor? = nil) -> UIImage? {
-        if cornerRadius > 0 {
-            let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: drawSize), cornerRadius: cornerRadius)
-            return self.splice(drawSize, defaultColor: defaultColor, clipPath: path.cgPath)
-        } else {
-          return self.splice(drawSize, defaultColor: defaultColor)
-        }
-    }
     ///
     /// - Parameters:
     ///   - drawSize: 绘制尺寸
     ///   - defaultColor: 空白部分的颜色
     ///   - clipPath: 绘制之后的裁剪尺寸
+    ///   - direction: 图片排列方向 0先从上到下 从左到右  1先从左到右 从上到下 (默认0)
     /// - Returns: image
-    func splice(_ drawSize: CGSize, defaultColor: CGColor? = nil, clipPath: CGPath? = nil) -> UIImage? {
+    func splice(_ drawSize: CGSize, defaultColor: CGColor? = nil, clipPath: CGPath? = nil, direction: Int = 0) -> UIImage? {
         let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(drawSize, true, scale)
-        var offsetH: CGFloat = 0
         if let color = defaultColor,
             let context = UIGraphicsGetCurrentContext() {
             context.setFillColor(color)
@@ -102,19 +86,40 @@ public extension Array where Element: UIImage {
             let context = UIGraphicsGetCurrentContext() { //裁剪
             context.addPath(path)
             context.clip()
-            self.forEach { img  in
-                img.draw(in: CGRect(origin: CGPoint(x: 0, y: offsetH), size: img.size))
-                offsetH += img.size.height
-            }
+            self.drawImages(drawSize, direction: direction)
             context.drawPath(using: .stroke)
         } else {// 无圆角拼接
-            self.forEach { img  in
-                img.draw(in: CGRect(origin: CGPoint(x: 0, y: offsetH), size: img.size))
-                offsetH += img.size.height
-            }
+            self.drawImages(drawSize, direction: direction)
         }
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+    /// 按照方向拼接图片
+    private func drawImages(_ contentSize: CGSize, direction: Int) {
+        var offsetY: CGFloat = 0
+        var offsetX: CGFloat = 0
+        if direction == 0 { //0先从上到下 从左到右
+            self.forEach { img  in
+                let frame = CGRect(origin: CGPoint(x: offsetX, y: offsetY), size: img.size)
+                img.draw(in: frame)
+                offsetY += img.size.height
+                if offsetY >= contentSize.height {
+                    offsetY = 0
+                    offsetX += img.size.width
+                }
+            }
+        } else { // 1先从左到右 从上到下
+            self.forEach { img  in
+                let frame = CGRect(origin: CGPoint(x: offsetX, y: offsetY), size: img.size)
+                img.draw(in: frame)
+                offsetX += img.size.width
+                if offsetX >= contentSize.width {
+                    offsetX = 0
+                    offsetY += img.size.height
+                }
+            }
+        }
+       
     }
 }

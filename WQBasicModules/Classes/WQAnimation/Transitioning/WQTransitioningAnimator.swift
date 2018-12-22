@@ -23,7 +23,7 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
     open var hideFrame: CGRect
     open var duration: TimeInterval = 0.25
     open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.5)
-    open var initialBackgroundViewColor: UIColor = UIColor.clear
+    open var initialBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.2)
     
     weak var delegate: WQTransitioningAnimatorable?
     

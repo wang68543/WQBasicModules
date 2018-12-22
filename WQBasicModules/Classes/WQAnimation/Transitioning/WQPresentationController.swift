@@ -105,6 +105,8 @@ open class WQPresentationController: UIViewController {
         self.view.addSubview(containerView)
         self.addContainerSubview(subView)
         transitioningAnimator.delegate = self
+        containerView.setNeedsDisplay()
+        containerView.layoutIfNeeded()
     }
     /// 根据TransitionType计算containerView 三个状态的尺寸
     ///
@@ -210,7 +212,7 @@ open class WQPresentationController: UIViewController {
         let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
         let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
         let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
-        containerView.addConstraints([left,right,bottom,top])
+        containerView.addConstraints([left, right, bottom, top])
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? self.topViewController
@@ -359,18 +361,20 @@ extension WQPresentationController {
 
 // MARK: - keyboard
 public extension WQPresentationController {
-    public func addKeyboardObserver() {
+     func addKeyboardObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
     }
-    public func removeKeyboardObserver() {
+    func removeKeyboardObserver() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardDidChangeFrameNotification, object: nil) 
     }
-    @objc func keyboardWillChangeFrame(_ note: Notification) {
+    @objc
+    func keyboardWillChangeFrame(_ note: Notification) {
         
     }
-    @objc func keyboardDidChangeFrame(_ note: Notification) {
+    @objc
+    func keyboardDidChangeFrame(_ note: Notification) {
         
     }
 }
@@ -383,8 +387,7 @@ extension WQPresentationController: UIGestureRecognizerDelegate {
             if self.containerView.frame.contains(location) {
                 return false
             }
-        }
-        if let interactive = self.drivenInteracitve {
+        } else if let interactive = self.drivenInteracitve {
             return interactive.shouldBeginInteractive(gestureRecognizer)
         }
         return true

@@ -48,102 +48,159 @@ public extension UIView {
         return image
     }
 }
+
 public extension UIScrollView {
     struct AssociatedKeys {
         static let isSnapping = UnsafeRawPointer(bitPattern: "wq.view.clip.isSnapping".hashValue)!
     }
     
     var isSnapping: Bool {
-        return (objc_getAssociatedObject(self, AssociatedKeys.isSnapping) as? Bool) ?? false
+        return (objc_getAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping) as? Bool) ?? false
     }
-    /// 用于tableView的截图
-    private func sectionHeightForTableView(_ tableView: UITableView, rect: CGRect) -> CGFloat {
-        var sectionHeight: CGFloat = 0
-        let indexPaths = tableView.indexPathsForRows(in: rect)
-        if let indexPath = indexPaths?.min(by: { $0.section < $1.section }) {
-            if let height = tableView.delegate?.tableView?(tableView, heightForHeaderInSection: indexPath.section) {
-                sectionHeight = height
-            } else if tableView.sectionHeaderHeight != 0 {
-                sectionHeight = tableView.sectionHeaderHeight
-            } else if tableView.estimatedSectionHeaderHeight != 0 {
-                sectionHeight = tableView.estimatedSectionHeaderHeight
-                // 暂时不知道咋处理
-            }
-        }
-        return sectionHeight
-    }
-    
-    /// scrollView 根据bounds的size 截成多张图片 (主线程)
-    ///
-    /// - Returns: images
-    func snapshots() -> [UIImage] {
-        objc_setAssociatedObject(self, UITableView.AssociatedKeys.isSnapping, true, .OBJC_ASSOCIATION_ASSIGN)
-        var images: [UIImage] = []
-        let preOffset = self.contentOffset; let contentSize = self.contentSize
-        let tableViewW = self.bounds.width; let tableViewH = self.bounds.height
-        let cornerRadius: CGFloat = self.layer.cornerRadius; self.layer.cornerRadius = 0
-        let scale = UIScreen.main.scale
-        let contentH = contentSize.height * scale
-        let snapH = tableViewH * scale; let snapW = self.frame.width * scale
+    fileprivate func snapshotScroll(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
+        let contentSize = self.contentSize
+        let viewSize = self.frame.size
         var offsetY: CGFloat = 0
-        var isPlain = false
-        if let tableView = self as? UITableView,
-            tableView.style == .plain {
-            isPlain = true
-        }
+        var offsetX: CGFloat = 0
         // 依次滚动tableView截取整个contentSize的内容 并裁剪出当前屏幕的内容
-        while offsetY < contentSize.height {
-            var sectionHeight: CGFloat = 0
-            if offsetY > 0 && isPlain,
-                let tableView = self as? UITableView {
-                let visableRect = CGRect(x: 0, y: offsetY, width: tableViewW, height: tableViewH)
-                sectionHeight = self.sectionHeightForTableView(tableView, rect: visableRect)
-                offsetY -= sectionHeight //如果有头的
-            }
-            self.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
-            // 截取包含当前屏幕整个内容
-            let snapImage = self.snapshot(contentSize)
-            if let img = snapImage {
-                let scaleSectionH = sectionHeight * scale
-                let rectY = offsetY * scale + scaleSectionH
-                let minRectH = contentH - rectY
-                let rectH = min(snapH - scaleSectionH, minRectH)
-                let rect = CGRect(x: 0, y: rectY, width: snapW, height: rectH)
-                //截取当前屏幕
-                if let cgImg = img.cgImage?.cropping(to: rect) {
-                    let clipImg = UIImage(cgImage: cgImg, scale: scale, orientation: .up)
-                    images.append(clipImg)
-                }
-            }
-            offsetY += tableViewH
+        UIGraphicsBeginImageContextWithOptions(drawSize, false, UIScreen.main.scale)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return nil
         }
-        self.setContentOffset(preOffset, animated: false)
-        self.layer.cornerRadius = cornerRadius
-        objc_setAssociatedObject(self, UITableView.AssociatedKeys.isSnapping, nil, .OBJC_ASSOCIATION_ASSIGN)
-        return images
+        if let path = clipPath {
+            context.addPath(path)
+            context.clip()
+        }
+        while offsetY < contentSize.height && offsetX < contentSize.width {
+            context.saveGState()
+            autoreleasepool(invoking: {
+                self.setContentOffset(CGPoint(x: offsetX, y: offsetY), animated: false)
+                let rect = CGRect(x: offsetX, y: offsetY, width: viewSize.width, height: viewSize.height)
+                //将当前View在屏幕中显示的内容画到rect区域
+                self.drawHierarchy(in: rect, afterScreenUpdates: true)
+                offsetX += rect.width
+                if offsetX >= contentSize.width && offsetY <= contentSize.height {
+                    offsetX = 0
+                    offsetY += rect.height
+                }
+            })
+        }
+        if clipPath != nil {
+            context.drawPath(using: .stroke)
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+    /// 无感知截屏 (在scrollView上面覆盖一个View隐藏截屏时候的操作)
+    func snapping(_ minSize: CGSize) -> UIImage? {
+        guard let faterView = self.superview,
+            let superSnap = faterView.snapshotView(afterScreenUpdates: true) else {
+                fatalError("must has superView")
+        }
+        faterView.addSubview(superSnap)
+        let long = self.longSnapshot(minSize)
+        superSnap.removeFromSuperview()
+        return long
     }
     /// tableView截图
     ///
     /// - Parameter minSize: 截图的最小尺寸
     /// - Returns: image
-    func longSnapshot(_ minSize: CGSize = .zero) -> UIImage? {
-        guard let faterView = self.superview,
-            let superSnap = faterView.snapshot() else {
-                fatalError("must has superView")
+    func longSnapshot(_ size: CGSize? = nil) -> UIImage? {
+        objc_setAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping, true, .OBJC_ASSOCIATION_ASSIGN)
+        let preOffset = self.contentOffset
+        let cornerRadius: CGFloat = self.layer.cornerRadius
+        self.layer.cornerRadius = 0
+        var drawSize: CGSize
+        if let size = size {
+            drawSize = size
+        } else {
+            drawSize = contentSize
         }
-        let coverImage = UIImageView(image: superSnap)
-        coverImage.isUserInteractionEnabled = true //拦截事件
-        faterView.addSubview(coverImage)
-        let images: [UIImage] = self.snapshots()
-        let cornerRadius: CGFloat = self.layer.cornerRadius 
-        let drawSize = contentSize.height < minSize.height ? minSize : contentSize
         var clipPath: UIBezierPath?
         if cornerRadius > 0 {
             clipPath = UIBezierPath(roundedRect: CGRect(origin: .zero, size: drawSize), cornerRadius: cornerRadius)
         }
-        let backColor = self.backgroundColor?.cgColor ?? UIColor.white.cgColor
-        let longImage = images.splice(drawSize, defaultColor: backColor, clipPath: clipPath?.cgPath)
-        coverImage.removeFromSuperview()
+        var longImage: UIImage?
+        if let tableView = self as? UITableView {
+            longImage = tableView.snapshotTable(drawSize, clipPath: clipPath?.cgPath)
+        } else {
+            longImage = self.snapshotScroll(drawSize, clipPath: clipPath?.cgPath)
+        }
+        self.setContentOffset(preOffset, animated: false)
+        self.layer.cornerRadius = cornerRadius
+        objc_setAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping, nil, .OBJC_ASSOCIATION_ASSIGN)
         return longImage
+    }
+}
+fileprivate extension UITableView {
+    
+    func snapshotTable(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
+        if self.style == .plain {
+            let scale = UIScreen.main.scale
+            let contentSize = self.contentSize
+            UIGraphicsBeginImageContextWithOptions(drawSize, false, scale)
+            guard let context = UIGraphicsGetCurrentContext() else {
+                UIGraphicsEndImageContext()
+                return nil
+            }
+            if let path = clipPath {
+                context.addPath(path)
+                context.clip()
+            }
+            let tableViewW = self.bounds.width
+            let tableViewH = self.bounds.height
+            var offsetY: CGFloat = 0
+            // 依次滚动tableView截取整个contentSize的内容 并裁剪出当前屏幕的内容
+            while offsetY < contentSize.height {
+                var sectionHeight: CGFloat = 0
+                if offsetY > 0 {
+                    let visableRect = CGRect(x: 0, y: offsetY, width: tableViewW, height: tableViewH)
+                    sectionHeight = suspendedHeaderHeight(for: visableRect)
+                    offsetY -= sectionHeight //如果有头的
+                }
+                self.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
+                context.saveGState()
+                //释放绘图对象
+                autoreleasepool(invoking: {
+                    let contentH = tableViewH - sectionHeight
+                    UIGraphicsBeginImageContextWithOptions(CGSize(width: tableViewW, height: contentH), false, scale)
+                    let rect = CGRect(x: 0, y: -sectionHeight, width: tableViewW, height: tableViewH)
+                    self.drawHierarchy(in: rect, afterScreenUpdates: true)
+                    let image = UIGraphicsGetImageFromCurrentImageContext()
+                   UIGraphicsEndImageContext()
+                    if let img = image {
+                        img.draw(in: CGRect(x: 0, y: offsetY + sectionHeight, width: tableViewW, height: contentH))
+                    }
+                    offsetY += tableViewH
+                })
+            }
+            if clipPath != nil {
+                context.drawPath(using: .fillStroke)
+            }
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        } else {
+            return self.snapshotTable(drawSize, clipPath: clipPath)
+        }
+    }
+    /// 当前rect(已滚动到当前区域)区域悬停的头部的高度
+    func suspendedHeaderHeight(for rect: CGRect) -> CGFloat {
+        var sectionHeight: CGFloat = 0
+        let indexPaths = self.indexPathsForRows(in: rect)
+        if let indexPath = indexPaths?.min(by: { $0.section < $1.section }) {
+            if let height = delegate?.tableView?(self, heightForHeaderInSection: indexPath.section) {
+                sectionHeight = height
+            } else if self.sectionHeaderHeight != 0 {
+                sectionHeight = self.sectionHeaderHeight
+            } else if self.estimatedSectionHeaderHeight != 0 {
+                sectionHeight = self.estimatedSectionHeaderHeight
+                // 暂时不知道咋处理
+            }
+        }
+        return sectionHeight
     }
 }
