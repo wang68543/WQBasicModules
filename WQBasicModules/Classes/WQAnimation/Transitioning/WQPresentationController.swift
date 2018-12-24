@@ -286,15 +286,23 @@ open class WQPresentationController: UIViewController {
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         if !isModal {
-            self.willMove(toParent: nil)
-            self.transitioningAnimator.backgroundAnimate(self.view, toValue: initialBackgroundViewColor) {[weak self] flag in
-                guard let weakSelf = self else {
-                    return
+            if flag {
+                completion?()
+                self.willMove(toParent: nil)
+                self.view.removeFromSuperview()
+                self.removeFromParent()
+            } else {
+                self.transitioningAnimator.subViewAnimate(self.containerView, toValue: self.transitioningAnimator.hideFrame)
+                self.transitioningAnimator.backgroundAnimate(self.view, toValue: initialBackgroundViewColor) {[weak self] flag in
+                    guard let weakSelf = self else {
+                        return
+                    }
+                    weakSelf.willMove(toParent: nil)
+                    weakSelf.view.removeFromSuperview()
+                    weakSelf.removeFromParent()
                 }
-                weakSelf.view.removeFromSuperview()
-                 weakSelf.removeFromParent()
             }
-            self.transitioningAnimator.subViewAnimate(self.containerView, toValue: self.transitioningAnimator.hideFrame)
+            
         } else {
            super.dismiss(animated: flag, completion: completion)
         }
