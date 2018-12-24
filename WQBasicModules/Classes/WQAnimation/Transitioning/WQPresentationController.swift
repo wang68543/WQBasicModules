@@ -291,6 +291,7 @@ open class WQPresentationController: UIViewController {
                 guard let weakSelf = self else {
                     return
                 }
+                weakSelf.view.removeFromSuperview()
                  weakSelf.removeFromParent()
             }
             self.transitioningAnimator.subViewAnimate(self.containerView, toValue: self.transitioningAnimator.hideFrame)
