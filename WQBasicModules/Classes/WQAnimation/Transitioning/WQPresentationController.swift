@@ -162,90 +162,7 @@ open class WQPresentationController: UIViewController {
         self.childViews.append(subView)
         self.addContainerSubview(subView)
     }
-    /// 根据TransitionType计算containerView 三个状态的尺寸
-    ///
-    /// - Parameters:
-    ///   - subView: 显示的View
-    ///   - size: contianerView size
-    ///   - initial: 初始的方位
-    ///   - show: 显示的w方位
-    ///   - dismiss: 消失的方位
-    ///   - presentedFrame: 控制器的尺寸
-    public init(transitionType subView: UIView,
-                size: CGSize,
-                initial: WQPresentionStyle.Position,
-                show: WQPresentionStyle.Position,
-                dismiss: WQPresentionStyle.Position,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
-        let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
-        let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
-        let dismissFrame = dismiss.frame(size, presentedFrame: presentedFrame, isInside: false)
-        
-        containerView = UIView()
-        containerView.backgroundColor = UIColor.clear
-        let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: dismissFrame)
-        transitioningAnimator = animator
-        initialBackgroundViewColor = animator.initialBackgroundViewColor
-        showBackgroundViewColor = animator.showBackgroundViewColor
-        animateDuration = animator.duration
-        self.viewPresentedFrame = presentedFrame
-        super.init(nibName: nil, bundle: nil)
-        self.defaultInitial(subView, initalFrame: initialFrame)
-        /// 这里只是配置默认的消失交互方向 但是不开启 需要手动开启
-        interactionDissmissDirection = dismiss.mapInteractionDirection()
-    }
-    
-    /// 根据position和size来显示View
-    ///
-    /// - Parameters:
-    ///   - subView: 显示的View
-    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
-    ///   - size: contianerView的size
-    ///   - bounceType: contianerView展开类型
-    ///   - presentedFrame: 控制器的尺寸
-    public init(position subView: UIView,
-                to point: CGPoint,
-                size: CGSize,
-                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
-        let anchorPoint = subView.layer.anchorPoint
-        let positionPt = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
-        let showFrame = CGRect(origin: positionPt, size: size)
-        let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
-        
-        containerView = UIView()
-        containerView.backgroundColor = UIColor.clear
-        let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: initialFrame)
-        transitioningAnimator = animator
-        initialBackgroundViewColor = animator.initialBackgroundViewColor
-        showBackgroundViewColor = animator.showBackgroundViewColor
-        animateDuration = animator.duration
-        self.viewPresentedFrame = initialFrame
-        super.init(nibName: nil, bundle: nil)
-        self.defaultInitial(subView, initalFrame: initialFrame)
-    }
-    
-    public init(position subView: UIView,
-                show: WQPresentionStyle.Position,
-                size: CGSize,
-                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
-        let anchorPoint = subView.layer.anchorPoint
-        let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
-        let point = CGPoint(x: showFrame.minX + showFrame.width * anchorPoint.x, y: showFrame.minY + showFrame.height * anchorPoint.y) 
-        let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
-        
-        containerView = UIView()
-        containerView.backgroundColor = UIColor.clear
-        let animator = WQTransitioningAnimator(containerView, show: showFrame, hide: initialFrame)
-        transitioningAnimator = animator
-        initialBackgroundViewColor = animator.initialBackgroundViewColor
-        showBackgroundViewColor = animator.showBackgroundViewColor
-        animateDuration = animator.duration
-        self.viewPresentedFrame = initialFrame
-        super.init(nibName: nil, bundle: nil)
-        self.defaultInitial(subView, initalFrame: initialFrame)
-    }
+   
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("not supported nib")
@@ -376,6 +293,60 @@ open class WQPresentationController: UIViewController {
 
 // MARK: - -- Convenience init
 public extension WQPresentationController {
+    /// 根据TransitionType计算containerView 三个状态的尺寸
+    ///
+    /// - Parameters:
+    ///   - subView: 显示的View
+    ///   - size: contianerView size
+    ///   - initial: 初始的方位
+    ///   - show: 显示的w方位
+    ///   - dismiss: 消失的方位
+    ///   - presentedFrame: 控制器的尺寸
+    convenience init(transitionType subView: UIView,
+                size: CGSize,
+                initial: WQPresentionStyle.Position,
+                show: WQPresentionStyle.Position,
+                dismiss: WQPresentionStyle.Position,
+                presentedFrame: CGRect = UIScreen.main.bounds) {
+        let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
+        let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
+        let dismissFrame = dismiss.frame(size, presentedFrame: presentedFrame, isInside: false)
+        self.init(subView, frame: showFrame, dismiss: dismissFrame, initial: initialFrame, presentedFrame: presentedFrame)
+        /// 这里只是配置默认的消失交互方向 但是不开启 需要手动开启
+        interactionDissmissDirection = dismiss.mapInteractionDirection()
+    }
+    
+    /// 根据position和size来显示View
+    ///
+    /// - Parameters:
+    ///   - subView: 显示的View
+    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
+    ///   - size: contianerView的size
+    ///   - bounceType: contianerView展开类型
+    ///   - presentedFrame: 控制器的尺寸
+    convenience init(position subView: UIView,
+                to point: CGPoint,
+                size: CGSize,
+                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
+                presentedFrame: CGRect = UIScreen.main.bounds) {
+        let anchorPoint = subView.layer.anchorPoint
+        let positionPt = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+        let showFrame = CGRect(origin: positionPt, size: size)
+        let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
+        self.init(subView, frame: showFrame, dismiss: initialFrame, initial: initialFrame, presentedFrame: presentedFrame)
+    }
+    
+    convenience init(position subView: UIView,
+                show: WQPresentionStyle.Position,
+                size: CGSize,
+                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
+                presentedFrame: CGRect = UIScreen.main.bounds) {
+        let anchorPoint = subView.layer.anchorPoint
+        let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
+        let point = CGPoint(x: showFrame.minX + showFrame.width * anchorPoint.x, y: showFrame.minY + showFrame.height * anchorPoint.y)
+        let initialFrame: CGRect = bounceType.estimateInitialFrame(point, anchorPoint: anchorPoint, size: size, presentedFrame: presentedFrame)
+        self.init(subView, frame: showFrame, dismiss: initialFrame, initial: initialFrame, presentedFrame: presentedFrame)
+    }
     /// 从哪里显示出来的就从哪里消失
     ///
     /// - Parameters:
