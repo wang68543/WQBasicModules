@@ -151,14 +151,18 @@ class ViewController: UIViewController {
     
    
     @IBAction func webViewAction(_ sender: UIButton) {
-        let snap = SnapShotTableController()
-        snap.view.backgroundColor = UIColor.white
-        self.navigationController?.pushViewController(snap, animated: true)
-        return
+//        let snap = SnapShotTableController()
+//        snap.view.backgroundColor = UIColor.white
+//        self.navigationController?.pushViewController(snap, animated: true)
+//        return
         //        self.navigationController?.navigationBar.isTranslucent = false
         let presentionView = WQPresentionView()
-        
+        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
         presentionView.backgroundColor = UIColor.red
+        presentionView.wm.show(from: .bottom, show: .center, hide: .bottom, inController: self)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            presentionView.wm.dismiss(true)
+        }
 //        presentionView.layer.frame = CGRect(x: 100, y: 400, width: 100, height: 100)
 //        let keyPath = "backgroundColor"
 //        let animation = CABasicAnimation(keyPath: keyPath)
@@ -190,14 +194,15 @@ class ViewController: UIViewController {
         
 //        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
 //        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 200, y: 200), size: CGSize(width: 400, height: 400), bounceType: WQPresentationController.PositionBounce.bounceCenter )
-        UIResponder.keyboardWillChangeFrameNotification
-        let presention = WQPresentCenterController(presentionView, size: CGSize(width: 400, height: 400))
-        presention.animateDuration = 0.5
-//        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        presention.containerView.backgroundColor = UIColor.green
-        presention.interactionDissmissDirection = .down
-        presention.isEnableSlideDismiss = true
-        presention.show(animated: true)
+//        UIResponder.keyboardWillChangeFrameNotification
+//        let presention = WQPresentCenterController(presentionView, size: CGSize(width: 400, height: 400))
+//        presention.animateDuration = 0.5
+////        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+//        presention.containerView.backgroundColor = UIColor.green
+////        presention.interactionDissmissDirection = .down
+////        presention.isEnableSlideDismiss = true
+//        presention.isEnableTabBackgroundDismiss = true
+//        presention.show(animated: true)
         
 //        let web = WQWebController()
 //        self.navigationController?.pushViewController(web, animated: true)

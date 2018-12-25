@@ -9,7 +9,6 @@ import UIKit
 
 open class WQPresentCenterController: WQPresentationController {
     public init(_ subView: UIView, size: CGSize, presentedFrame: CGRect = UIScreen.main.bounds) {
-//        super.init(transitionType: subView, size: size, initial: .bottom, show: .center, dismiss: .top)
         super.init(position: subView, show: .center, size: size, bounceType: .horizontalMiddle, presentedFrame: presentedFrame)
     }
     

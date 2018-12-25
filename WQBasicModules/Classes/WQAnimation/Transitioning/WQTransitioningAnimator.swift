@@ -8,22 +8,22 @@
 import UIKit
 
 protocol WQTransitioningAnimatorable: NSObjectProtocol {
-    func transitionAnimator(shouldAnimated animator: WQTransitioningAnimator,
-                            animateView: UIView,
-                            toValue: CGRect, isShow: Bool)
-    func transitionAnimator(shouldAnimated animator: WQTransitioningAnimator,
-                            backgroundView: UIView,
-                            isShow: Bool,
-                            completion: @escaping ((Bool) -> Void))
+    func transition(shouldAnimated animator: WQTransitioningAnimator,
+                    dimmingView: UIView,
+                    animatedView: UIView,
+                    isShow: Bool,
+                    completion: @escaping WQAnimateCompletion)
 }
+public typealias WQAnimateCompletion = ((Bool) -> Void)
 open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+   
     open var viewPresentedFrame: CGRect = UIScreen.main.bounds
     open var animatedView: UIView
     open var showFrame: CGRect
     open var hideFrame: CGRect
-    open var duration: TimeInterval = 0.25
-    open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.5)
-    open var initialBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.2)
+    open var duration: TimeInterval = 0.35
+    open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.6)
+    open var initialBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.3)
     
     weak var delegate: WQTransitioningAnimatorable?
     
@@ -51,75 +51,50 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
             toView.frame = vcFinalFrame
             transitionView.addSubview(toView)
         }
-        
-        let animateCompletion: ((Bool) -> Void) = { flag -> Void in
+        let animateCompletion: WQAnimateCompletion = { flag -> Void in
             let success = !transitionContext.transitionWasCancelled
-            if (isPresented && !success) || (!isPresented && success) {
-                toVCView?.removeFromSuperview()
-            }
+//            if (isPresented && !success) || (!isPresented && success)  {
+//                toVCView?.removeFromSuperview()
+//            }
             transitionContext.completeTransition(success)
-            //            self.transitionContext = nil
         }
         if isPresented {//初始化
-            self.subViewAnimate(self.animatedView, toValue: showFrame, isShow: true)
-            if let toView = toVCView {
-                toView.backgroundColor = self.initialBackgroundViewColor
-                self.backgroundAnimate(toView, toValue: showBackgroundViewColor, isShow: true, completion: animateCompletion)
-            }
-        } else {
-            self.subViewAnimate(self.animatedView, toValue: hideFrame, isShow: true)
-            self.backgroundAnimate(fromVC.view, toValue: initialBackgroundViewColor, isShow: false, completion: animateCompletion)
+            toVC.view.backgroundColor = self.initialBackgroundViewColor
         }
+        if let dimingView = isPresented ? toVC.view : fromVC.view {
+           self.defaultAnimated(dimingView, animatedView: self.animatedView, isShow: isPresented, completion: animateCompletion)
+        }
+        
     }
 }
 public extension WQTransitioningAnimator {
-     func subViewAnimate(_ subView: UIView, toValue: CGRect, isShow: Bool = true) {
-            if let delegate = self.delegate {
-                delegate.transitionAnimator(shouldAnimated: self, animateView: subView, toValue: toValue, isShow: isShow)
-            } else {
-                defaultSubViewAnimate(subView, toValue: toValue, isShow: isShow)
-        }
-    }
-    func backgroundAnimate(_ dimmingView: UIView, toValue: UIColor, isShow: Bool = true, completion: @escaping ((Bool) -> Void)) {
-        if let delegate = self.delegate {
-            delegate.transitionAnimator(shouldAnimated: self, backgroundView: dimmingView, isShow: isShow, completion: completion)
+    func defaultAnimated(_ dimingView: UIView, animatedView: UIView, isShow: Bool, completion: @escaping WQAnimateCompletion) {
+        var options: UIView.AnimationOptions = [.layoutSubviews, .beginFromCurrentState]//
+        if isShow {
+            options.insert(.curveEaseIn)
         } else {
-        defaultBackgroundAnimate(dimmingView, isShow: isShow, completion: completion)
+            options.insert(.curveEaseInOut)
         }
-    }
-    func defaultSubViewAnimate(_ subView: UIView, toValue: CGRect, isShow: Bool = true) {
+        let animateBlock = {
+             animatedView.frame = isShow ? self.showFrame : self.hideFrame
+             dimingView.backgroundColor = isShow ? self.initialBackgroundViewColor : self.showBackgroundViewColor
+         }
         UIView.animate(withDuration: self.duration,
-                       delay: 0.0,
-                       options: [.curveEaseIn, .layoutSubviews, .beginFromCurrentState],
-                       animations: {
-                        subView.frame = toValue
-        })
-    }
-    func defaultBackgroundAnimate(_ dimmingView: UIView, isShow: Bool = true, completion: @escaping ((Bool) -> Void)) {
-        UIView.animate(withDuration: self.duration,
-                       animations: {
-                        if isShow {
-                            dimmingView.backgroundColor = self.showBackgroundViewColor
-                        } else {
-                            dimmingView.backgroundColor = self.initialBackgroundViewColor
-                        }
-                        },
-                       completion: { flag in
-                        completion(flag)
-                    })
+                       delay: 0,
+                       options: options,
+                       animations: animateBlock,
+                       completion: completion)
     }
 }
 extension WQTransitioningAnimatorable {
-    func transitionAnimator(shouldAnimated animator: WQTransitioningAnimator,
-                            animateView: UIView,
-                            toValue: CGRect,
-                            isShow: Bool) {
-        animator.defaultSubViewAnimate(animateView, toValue: toValue, isShow: isShow)
-    }
-    func transitionAnimator(shouldAnimated animator: WQTransitioningAnimator,
-                            backgroundView: UIView,
-                            isShow: Bool,
-                            completion: @escaping ((Bool) -> Void)) {
-        animator.defaultBackgroundAnimate(backgroundView, isShow: isShow, completion: completion)
-    }
+    func transition(shouldAnimated animator: WQTransitioningAnimator,
+                    dimmingView: UIView,
+                    animatedView: UIView,
+                    isShow: Bool,
+                    completion: @escaping WQAnimateCompletion) {
+        animator.defaultAnimated(dimmingView,
+                                 animatedView: animatedView,
+                                 isShow: isShow,
+                                 completion: completion)
+    } 
 }

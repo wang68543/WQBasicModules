@@ -57,6 +57,7 @@ public extension UIScrollView {
     var isSnapping: Bool {
         return (objc_getAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping) as? Bool) ?? false
     }
+    
     fileprivate func snapshotScroll(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
         let contentSize = self.contentSize
         let viewSize = self.frame.size
