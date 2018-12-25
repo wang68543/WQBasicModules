@@ -163,7 +163,6 @@ open class WQPresentationController: UIViewController {
         self.addContainerSubview(subView)
     }
    
-    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("not supported nib")
     }
@@ -172,6 +171,7 @@ open class WQPresentationController: UIViewController {
       
     }
     private func addContainerSubview(_ subView: UIView) {
+        subView.wm.setPresenter(self)
         self.view.addSubview(containerView)
         containerView.addSubview(subView)
         addConstraints(for: subView)
