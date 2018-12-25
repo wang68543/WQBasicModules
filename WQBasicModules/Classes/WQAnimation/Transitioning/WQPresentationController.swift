@@ -164,6 +164,7 @@ open class WQPresentationController: UIViewController {
     }
    
     required public init?(coder aDecoder: NSCoder) {
+        
         fatalError("not supported nib")
     }
     override open func viewDidLoad() {
@@ -302,12 +303,13 @@ public extension WQPresentationController {
     ///   - show: 显示的w方位
     ///   - dismiss: 消失的方位
     ///   - presentedFrame: 控制器的尺寸
-    convenience init(transitionType subView: UIView,
-                size: CGSize,
-                initial: WQPresentionStyle.Position,
-                show: WQPresentionStyle.Position,
-                dismiss: WQPresentionStyle.Position,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
+    convenience
+    init(transitionType subView: UIView,
+         size: CGSize,
+         initial: WQPresentionStyle.Position,
+         show: WQPresentionStyle.Position,
+         dismiss: WQPresentionStyle.Position,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
         let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
         let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
         let dismissFrame = dismiss.frame(size, presentedFrame: presentedFrame, isInside: false)
@@ -324,11 +326,12 @@ public extension WQPresentationController {
     ///   - size: contianerView的size
     ///   - bounceType: contianerView展开类型
     ///   - presentedFrame: 控制器的尺寸
-    convenience init(position subView: UIView,
-                to point: CGPoint,
-                size: CGSize,
-                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
+    convenience
+    init(position subView: UIView,
+         to point: CGPoint,
+         size: CGSize,
+         bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
         let anchorPoint = subView.layer.anchorPoint
         let positionPt = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
         let showFrame = CGRect(origin: positionPt, size: size)
@@ -336,11 +339,12 @@ public extension WQPresentationController {
         self.init(subView, frame: showFrame, dismiss: initialFrame, initial: initialFrame, presentedFrame: presentedFrame)
     }
     
-    convenience init(position subView: UIView,
-                show: WQPresentionStyle.Position,
-                size: CGSize,
-                bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
-                presentedFrame: CGRect = UIScreen.main.bounds) {
+    convenience
+    init(position subView: UIView,
+         show: WQPresentionStyle.Position,
+         size: CGSize,
+         bounceType: WQPresentionStyle.Bounce = .horizontalMiddle,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
         let anchorPoint = subView.layer.anchorPoint
         let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
         let point = CGPoint(x: showFrame.minX + showFrame.width * anchorPoint.x, y: showFrame.minY + showFrame.height * anchorPoint.y)
@@ -352,14 +356,19 @@ public extension WQPresentationController {
     /// - Parameters:
     ///   - initial: 初始方位
     ///   - show: 显示的方位
-    convenience init(transitionReverse subView: UIView, size: CGSize, initial: WQPresentionStyle.Position, show: WQPresentionStyle.Position) {
+    convenience
+    init(transitionReverse subView: UIView,
+         size: CGSize,
+         initial: WQPresentionStyle.Position,
+         show: WQPresentionStyle.Position) {
         self.init(transitionType: subView, size: size, initial: initial, show: show, dismiss: initial)
     }
     //
-   convenience init(anchor subView: UIView,
-                    anchorView: UIView,
-                    size: CGSize,
-                    bounceType: WQPresentionStyle.Bounce = .horizontalMiddle) {
+   convenience
+    init(anchor subView: UIView,
+         anchorView: UIView,
+         size: CGSize,
+         bounceType: WQPresentionStyle.Bounce = .horizontalMiddle) {
         guard !UIApplication.shared.windows.isEmpty else {
             fatalError("必须有窗口才行")
         }

@@ -37,7 +37,13 @@ public extension String {
             let width = Int(extent.width * scale)
             let height = Int(extent.height * scale)
             let colorSpace = CGColorSpaceCreateDeviceGray()
-            let bitmapRef = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: colorSpace, bitmapInfo: CGImageAlphaInfo.none.rawValue)
+            let bitmapRef = CGContext(data: nil,
+                                      width: width,
+                                      height: height,
+                                      bitsPerComponent: 8,
+                                      bytesPerRow: 0,
+                                      space: colorSpace,
+                                      bitmapInfo: CGImageAlphaInfo.none.rawValue)
             let context = CIContext(options: nil)
             let bitmapImage = context.createCGImage(ciImage, from: extent)
             bitmapRef?.interpolationQuality = .none
