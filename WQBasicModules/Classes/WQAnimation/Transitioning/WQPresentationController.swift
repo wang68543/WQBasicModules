@@ -394,8 +394,7 @@ public extension WQPresentationController {
 extension WQPresentationController {
     @objc
     func handleTapGesture(_ sender: UITapGestureRecognizer) {
-        hideFromParent(animated: true, completion: nil)
-//        self.dismiss(animated: true)
+        self.dismiss(animated: true)
     }
     
     func addTapGesture() {
