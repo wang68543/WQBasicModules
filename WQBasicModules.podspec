@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.2.1'
+  s.version          = '0.2.0'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
@@ -29,8 +29,11 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   	s.ios.deployment_target = '8.0'
- 	s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h','WQBasicModules/Classes/WQModules.swift'
+ 	s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
  
+    s.subspec 'WQExtensionModule' do |ss|
+        ss.source_files = 'WQBasicModules/Classes/WQExtensionModule/*.swift'
+    end
   	s.subspec 'WQAnimation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
@@ -39,7 +42,8 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/WQAnimation/Layer'
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Views/*.swift'
         end
-        ss.subspec 'Transitioning' do |sss|
+        ss.subspec 'Transitioning' do |sss| 
+            sss.dependency 'WQBasicModules/WQExtensionModule'
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Transitioning/*.swift'
         end
     end

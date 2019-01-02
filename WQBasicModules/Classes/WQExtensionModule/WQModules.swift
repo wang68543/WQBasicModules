@@ -11,10 +11,7 @@ public final class WQModules<Base> {
     
     public init(_ base: Base) {
         self.base = base
-    }
-    deinit {
-        debugPrint("基类销毁了")
-    }
+    } 
 }
 public protocol WQModulesCompatible {
     associatedtype WQModulesType

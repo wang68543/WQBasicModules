@@ -1,6 +1,6 @@
 {
   "name": "WQBasicModules",
-  "version": "0.2.1",
+  "version": "0.2.0",
   "summary": "Swift 常用的一些分类以及工具集合",
   "description": "主要是讲之前的Objective-c版本的[WQBasicComponents](https://github.com/wang68543/WQBasicComponents.git) 转为Swift 版本",
   "homepage": "https://github.com/wang68543/WQBasicModules",
@@ -13,16 +13,17 @@
   },
   "source": {
     "git": "https://github.com/wang68543/WQBasicModules.git",
-    "tag": "0.2.1"
+    "tag": "0.2.0"
   },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": [
-    "WQBasicModules/Classes/WQBasicModules.h",
-    "WQBasicModules/Classes/WQModules.swift"
-  ],
+  "source_files": "WQBasicModules/Classes/WQBasicModules.h",
   "subspecs": [
+    {
+      "name": "WQExtensionModule",
+      "source_files": "WQBasicModules/Classes/WQExtensionModule/*.swift"
+    },
     {
       "name": "WQAnimation",
       "subspecs": [
@@ -41,6 +42,11 @@
         },
         {
           "name": "Transitioning",
+          "dependencies": {
+            "WQBasicModules/WQExtensionModule": [
+
+            ]
+          },
           "source_files": "WQBasicModules/Classes/WQAnimation/Transitioning/*.swift"
         }
       ]
