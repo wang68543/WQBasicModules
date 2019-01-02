@@ -18,19 +18,19 @@ platform :ios do
   lane :trunk do |options|
   	#自增tag 
   	carry = true
-  	# tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
-  	tagName =  last_git_tag.split('.', 3).reverse.map { |e| 
-  			tag = e.to_i
-  			if carry
-  				tag += 1
-  				carry = false 
-  			end
-  			if tag >= 10
-  				carry = true
-  				tag = 0
-  			end
-  		 tag 
-  	  }.reverse.join('.') 
+  	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
+  	# tagName =  last_git_tag.split('.', 3).reverse.map { |e| 
+  	# 		tag = e.to_i
+  	# 		if carry
+  	# 			tag += 1
+  	# 			carry = false 
+  	# 		end
+  	# 		if tag >= 10
+  	# 			carry = true
+  	# 			tag = 0
+  	# 		end
+  	# 	 tag 
+  	#   }.reverse.join('.') 
   	  UI.message("#{tagName}")
   	# targetName = options[:target]
     targetName = "WQBasicModules"
