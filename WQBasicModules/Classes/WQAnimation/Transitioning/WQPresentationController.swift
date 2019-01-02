@@ -6,46 +6,31 @@
 //
 // swiftlint:disable line_length
 import UIKit
-public final class WQModules<Base> {
-    public let base: Base
-    
-    public init(_ base: Base) {
-        self.base = base
-    }
-}
-public protocol WQModulesCompatible {
-    associatedtype WQModulesType
-    // swiftlint:disable identifier_name
-    var wm: WQModulesType { get }
-}
-public extension WQModulesCompatible {
-    // swiftlint:disable identifier_name
-    var wm: WQModules<Self> {
-        return WQModules(self)
-    }
-}
-extension UIView: WQModulesCompatible { }
 
 private var presenterKey: Void?
 
 extension WQModules where Base: UIView {
-   public var presenter: UIViewController? {
+    public var presenter: UIViewController? {
         return objc_getAssociatedObject(self.base, &presenterKey) as? UIViewController
     }
     
     fileprivate func setPresenter(_ viewController: UIViewController? ) {
-        objc_setAssociatedObject(self.base, &presenterKey, viewController, .OBJC_ASSOCIATION_ASSIGN)
+        objc_setAssociatedObject(self.base, &presenterKey, viewController, .OBJC_ASSOCIATION_ASSIGN)//只用于便捷获取
     }
-    /// 需要提前配置一些动画参数
-    func preperAnimator(from: WQPresentionStyle.Position,
-                        show: WQPresentionStyle.Position,
-                        hide: WQPresentionStyle.Position) -> WQTransitioningAnimator {
+    /// 内部没有强引用PresentationController 需要外部持有
+    public func presentation(from: WQPresentionStyle.Position,
+                             show: WQPresentionStyle.Position,
+                             hide: WQPresentionStyle.Position) -> WQPresentationController {
+        if self.base.frame.size == .zero {
+            self.base.layoutIfNeeded()
+        }
+        assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
         let presention = WQPresentationController(transitionType: self.base, size: self.base.frame.size, initial: from, show: show, dismiss: hide)
-        self.setPresenter(presention)
-        return presention.transitioningAnimator
+        return presention
     }
-    /// 动画参数配置完成之后展示
-    func present(in viewController: UIViewController?, completion: (() -> Void)? = nil) {
+    /// 动画参数配置完成之后展示 内部没有强引用 需要外部强引用了presention 否则没效果
+    public func present(in viewController: UIViewController?, completion: (() -> Void)? = nil) {
+        //使用下划线保存的返回变量 会在返回的时候就销毁了
         if let presention = self.presenter as? WQPresentationController {
             presention.show(animated: true, in: viewController, completion: completion)
         }
@@ -53,15 +38,16 @@ extension WQModules where Base: UIView {
     /// 采用默认的动画风格展示
     public func show(from: WQPresentionStyle.Position,
                      show: WQPresentionStyle.Position,
-                     hide: WQPresentionStyle.Position,
-                     inController: UIViewController? = nil) {
-        _ = self.preperAnimator(from: from, show: show, hide: hide)
-        self.present(in: inController)
+                     dismiss: WQPresentionStyle.Position,
+                     inController: UIViewController? = nil,
+                     completion: (() -> Void)? = nil) {
+        let presention = self.presentation(from: from, show: show, hide: dismiss)
+        presention.show(animated: true, in: inController, completion: completion)
     }
-    public func show(reverse from: WQPresentionStyle.Position,
-                     to: WQPresentionStyle.Position,
+    public func show(reverse show: WQPresentionStyle.Position,
+                     from: WQPresentionStyle.Position,
                      inController: UIViewController? = nil) {
-        self.show(from: from, show: to, hide: from, inController: inController)
+        self.show(from: from, show: show, dismiss: from, inController: inController)
     }
     public func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
         self.presenter?.dismiss(animated: true, completion: completion)
@@ -83,23 +69,7 @@ open class WQPresentationController: UIViewController {
             ineractive.direction = interactionDissmissDirection
         }
     }
-    /// 大背景的颜色
-    open var showBackgroundViewColor: UIColor {
-        didSet {
-            self.transitioningAnimator.showBackgroundViewColor = showBackgroundViewColor
-        }
-    }
-    open var initialBackgroundViewColor: UIColor {
-        didSet {
-            self.transitioningAnimator.initialBackgroundViewColor = initialBackgroundViewColor
-        }
-    }
-    ///动画时长
-    public var animateDuration: TimeInterval {
-        didSet {
-            self.transitioningAnimator.duration = animateDuration
-        }
-    }
+    
     /// 是否支持点击背景消失
     open var isEnableTabBackgroundDismiss: Bool = false {
         didSet {
@@ -133,13 +103,22 @@ open class WQPresentationController: UIViewController {
             }
         }
     }
+    open var isEnableKeyboardObserver: Bool = false {
+        didSet {
+            if isEnableKeyboardObserver {
+                self.addKeyboardObserver()
+            } else {
+                self.removeKeyboardObserver()
+            }
+        }
+    }
     private var tapGesture: UITapGestureRecognizer?
     
-    /// 默认的尺寸是 按照屏幕大小来显示
-    private var viewPresentedFrame: CGRect
     public private(set) var childViews: [UIView] = []
     /// 是否是Modal出来的
     private var isModal: Bool = true
+    
+    private var contentViewInputs: [UITextInput] = []
     
     public init(_ subView: UIView,
                 frame show: CGRect,
@@ -147,46 +126,28 @@ open class WQPresentationController: UIViewController {
                 initial: CGRect,
                 presentedFrame: CGRect = UIScreen.main.bounds) {
         containerView = UIView()
-        containerView.backgroundColor = UIColor.clear
         let animator = WQTransitioningAnimator(containerView, show: show, hide: dismiss)
         transitioningAnimator = animator
-        initialBackgroundViewColor = animator.initialBackgroundViewColor
-        showBackgroundViewColor = animator.showBackgroundViewColor
-        animateDuration = animator.duration
-        self.viewPresentedFrame = presentedFrame
+        animator.viewPresentedFrame = presentedFrame
         super.init(nibName: nil, bundle: nil)
        self.defaultInitial(subView, initalFrame: initial)
     }
     private func defaultInitial(_ subView: UIView, initalFrame: CGRect) {
+        containerView.backgroundColor = UIColor.clear
         containerView.frame = initalFrame
         self.childViews.append(subView)
+        subView.frame = containerView.bounds
         self.addContainerSubview(subView)
     }
-   
+    @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {
-        
         fatalError("not supported nib")
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
-      
-    }
-    private func addContainerSubview(_ subView: UIView) {
-        subView.wm.setPresenter(self)
-        self.view.addSubview(containerView)
-        containerView.addSubview(subView)
-        addConstraints(for: subView)
-        containerView.setNeedsDisplay()
+        //延迟加载View
+         self.view.addSubview(containerView)
         containerView.layoutIfNeeded()
-    }
-    private func addConstraints(for subView: UIView) {
-//        subView.frame = containerView.frame
-        subView.translatesAutoresizingMaskIntoConstraints = false
-        let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
-        let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
-        let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
-        let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
-        containerView.addConstraints([left, right, bottom, top])
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? self.topViewController
@@ -197,18 +158,24 @@ open class WQPresentationController: UIViewController {
                     showInVC = tabBarVC
                 } else if let navVC = topVC.navigationController {
                      showInVC = navVC
-                }
-                
+                }  
                showInVC.addChild(self)
                showInVC.view.addSubview(self.view)
-                self.didMove(toParent: showInVC)
-                self.transitioningAnimator
-                    .defaultAnimated(self.view,
-                                     animatedView: self.containerView,
-                                     isShow: true,
-                                     completion: { flag in
-                                     completion?()
-                    }) 
+                self.view.frame = self.transitioningAnimator.viewPresentedFrame
+                if flag {
+                    self.transitioningAnimator
+                        .defaultAnimated(self.view,
+                                         animatedView: self.containerView,
+                                         isShow: true,
+                                         completion: { flag in
+                                            self.didMove(toParent: showInVC)
+                                            completion?()
+                        })
+                } else {
+                    self.didMove(toParent: showInVC)
+                    completion?()
+                }
+               
                 isModal = false
                 isEnableSlideDismiss = false
             } else {
@@ -224,7 +191,66 @@ open class WQPresentationController: UIViewController {
             }
         }
     }
-
+    private func hideFromParent(animated flag: Bool, completion: (() -> Void)? ) {
+         self.willMove(toParent: nil)
+        if !flag {
+            self.view.removeFromSuperview()
+            self.removeFromParent()
+            completion?()
+        } else {
+            self.transitioningAnimator
+                .defaultAnimated(self.view,
+                                 animatedView: self.containerView,
+                                 isShow: false,
+                                 completion: { [weak self] flag in
+                                    if let weakSelf = self {
+                                        weakSelf.view.removeFromSuperview()
+                                        weakSelf.removeFromParent()
+                                    }
+                                     completion?()
+                })
+        }
+    }
+    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+        if !isModal {
+            hideFromParent(animated: flag, completion: completion)
+        } else {
+           super.dismiss(animated: flag, completion: completion)
+        }
+    }
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isEnableKeyboardObserver {
+           self.addKeyboardObserver()
+        }
+    }
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if isEnableKeyboardObserver {
+            self.removeKeyboardObserver()
+        }
+    }
+    deinit {
+        //手动置空关联值 防止坏内存引用
+        childViews.forEach { $0.wm.setPresenter(nil) }
+        debugPrint("控制器销毁了")
+    }
+}
+// MARK: - -- Help
+private extension WQPresentationController {
+    private func addContainerSubview(_ subView: UIView) {
+        subView.wm.setPresenter(self)
+        containerView.addSubview(subView)
+        addConstraints(for: subView)
+    }
+    private func addConstraints(for subView: UIView) {
+        subView.translatesAutoresizingMaskIntoConstraints = false
+        let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
+        let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
+        let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
+        let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
+        containerView.addConstraints([left, right, bottom, top])
+    }
     public var topViewController: UIViewController? {
         var viewController: UIViewController?
         let windows = UIApplication.shared.windows.reversed()
@@ -259,39 +285,7 @@ open class WQPresentationController: UIViewController {
             return viewController
         }
     }
-    private func hideFromParent(animated flag: Bool, completion: (() -> Void)? ) {
-        if !flag {
-            completion?()
-            self.willMove(toParent: nil)
-            self.view.removeFromSuperview()
-            self.removeFromParent()
-        } else {
-            self.transitioningAnimator
-                .defaultAnimated(self.view,
-                                 animatedView: self.containerView,
-                                 isShow: false,
-                                 completion: { [weak self] flag in
-                                    if let weakSelf = self {
-                                        completion?()
-                                        weakSelf.willMove(toParent: nil)
-                                        weakSelf.view.removeFromSuperview()
-                                        weakSelf.removeFromParent()
-                                    }
-                })
-        }
-    }
-    open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if !isModal {
-            hideFromParent(animated: flag, completion: completion)
-        } else {
-           super.dismiss(animated: flag, completion: completion)
-        }
-    }
-    deinit {
-        debugPrint("控制器销毁了")
-    }
 }
-
 // MARK: - -- Convenience init
 public extension WQPresentationController {
     /// 根据TransitionType计算containerView 三个状态的尺寸
@@ -389,7 +383,6 @@ public extension WQPresentationController {
     }
     
 }
-
 // MARK: - -- Gesture Handle
 extension WQPresentationController {
     @objc
@@ -414,7 +407,20 @@ extension WQPresentationController {
 
 // MARK: - keyboard
 public extension WQPresentationController {
-     func addKeyboardObserver() {
+     private func searchTextInputs(_ inView: UIView) -> [UITextInput] {
+        var inputViews: [UITextInput] = []
+        if let textInput = inView as? UITextInput {
+            inputViews.append(textInput)
+        } else {
+            if !inView.subviews.isEmpty {
+                inView.subviews.forEach { view in
+                    inputViews.append(contentsOf: self.searchTextInputs(view))
+                }
+            }
+        }
+        return inputViews
+    }
+    func addKeyboardObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
     }
@@ -424,11 +430,40 @@ public extension WQPresentationController {
     }
     @objc
     func keyboardWillChangeFrame(_ note: Notification) {
-        
+       keyboardChangeAnimation(note: note)
     }
     @objc
     func keyboardDidChangeFrame(_ note: Notification) {
-        
+        keyboardChangeAnimation(note: note)
+    }
+    private func keyboardChangeAnimation(note: Notification) {
+        if contentViewInputs.isEmpty {
+            contentViewInputs = self.searchTextInputs(self.containerView)
+        }
+        guard let textInput = contentViewInputs.first(where: { textInput -> Bool in
+            if let inputView = textInput as? UIResponder {
+                return inputView.isFirstResponder
+            }
+            return false
+        }),
+            let inputView = textInput as? UIView,
+            let inputSuperView = inputView.superview else {
+                UIView.animate(withDuration: self.transitioningAnimator.duration) {
+                    self.containerView.frame = self.transitioningAnimator.showFrame
+                }
+                return
+        }
+        guard let keyboardF = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+            let duration = note.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ,
+            let options = note.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions,
+            let keyWindow = UIApplication.shared.keyWindow else {
+                return
+        }
+        let contentF = inputSuperView.convert(inputView.frame, to: keyWindow)
+        let intersectFrame = contentF.intersection(keyboardF)
+        UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
+            self.containerView.layer.position = CGPoint(x: self.containerView.layer.position.x, y: self.containerView.layer.position.y - intersectFrame.height - 10)
+        })
     }
 }
 // MARK: - -- UIGestureRecognizerDelegate
@@ -446,7 +481,6 @@ extension WQPresentationController: UIGestureRecognizerDelegate {
         return true
     }
 }
-
 // MARK: - -- UIViewControllerTransitioningDelegate
 extension WQPresentationController: UIViewControllerTransitioningDelegate {
    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {

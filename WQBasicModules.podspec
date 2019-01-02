@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.2.0'
+  s.version          = '0.2.1'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   	s.ios.deployment_target = '8.0'
- 	s.source_files  = "WQBasicModules/Classes/WQBasicModules.h"
+ 	s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h','WQBasicModules/Classes/WQModules.swift'
  
   	s.subspec 'WQAnimation' do |ss|
         ss.subspec 'Layer' do |sss|

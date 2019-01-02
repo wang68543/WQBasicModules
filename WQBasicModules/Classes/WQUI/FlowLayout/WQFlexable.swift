@@ -124,7 +124,7 @@ public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
     /// section尺寸 (包含header、footer(上下布局) 包含sectionInsets)
     @objc
     optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize
-    //    @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
+//        @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
     /// Cells排列方向
     @objc
     optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, directionForSectionAt section: Int) -> WQFlexDirection

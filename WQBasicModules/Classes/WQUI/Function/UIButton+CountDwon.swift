@@ -52,7 +52,7 @@ public extension UIButton {
     ///   - formater: 倒计时的时候格式化标题
     ///   - color: 倒计时时候的标题颜色 (为空的时候使用.normal标题色)
     ///   - completion: 倒计时完成回调
-    public func countDown(_ count: UInt,
+    public func countDown(total: UInt,
                           formater: NumberFormatter,
                           color: UIColor? = nil,
                           completion: CountDownCompletion? = nil) {
@@ -62,7 +62,7 @@ public extension UIButton {
             sender.setTitle(title, for: state)
             sender.setTitleColor(titleColor, for: state)
         }
-        self.countDown(count, interval: 1, execute: excute, completion: completion)
+        self.countDown(total, interval: 1, execute: excute, completion: completion)
     }
     /// 倒计时按钮
     ///
@@ -74,7 +74,7 @@ public extension UIButton {
     public func countDown(_ count: UInt,
                           interval: Double = 1,
                           execute: @escaping IntervalExecute,
-                          completion: CountDownCompletion? = nil) {
+                          completion: CountDownCompletion?) { //末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
         self.countDownCompletion = completion
         if self.source != nil {
             stopCountDown(false)
@@ -183,6 +183,9 @@ fileprivate extension UIButton {
         var titleColor: UIColor?
         var titleShadowColor: UIColor?
         var attributedTitle: NSAttributedString?
+        var borderWidth: CGFloat = 0
+        var borderColor: CGColor?
+        var cornerRadius: CGFloat = 0
     }
     
     private var status: StoredStatus? {
@@ -215,6 +218,9 @@ fileprivate extension UIButton {
         status.titleColor = self.currentTitleColor
         status.titleShadowColor = self.currentTitleShadowColor
         status.backgroundColor = self.backgroundColor
+        status.borderWidth = self.layer.borderWidth
+        status.borderColor = self.layer.borderColor
+        status.cornerRadius = self.layer.cornerRadius
         self.status = status
     }
     
@@ -234,7 +240,9 @@ fileprivate extension UIButton {
         self.setTitleColor(status.titleColor, for: state)
         self.setTitleShadowColor(status.titleShadowColor, for: state)
         self.backgroundColor = status.backgroundColor
-        
+        self.layer.borderWidth = status.borderWidth
+        self.layer.borderColor = status.borderColor
+        self.layer.cornerRadius = status.cornerRadius
         if !self.isCanCancel {
             self.isEnabled = true
         } else {

@@ -16,12 +16,17 @@ class ViewController: UIViewController {
             self.value = value
         }
     }
+     private let picButton = UIButton()
+    
+    let str: String = "123123123"
+   
     class WQPresentionView: UIView {
-        
+      
     }
- private let picButton = UIButton()
     override func viewDidLoad() {
         super.viewDidLoad()
+//        let str = "123123123"
+        
 //        let picButton = UIButton(type: .system)
 //        picButton.titleAlignment = .right
         //        self.picButton.imgSize = CGSize(width: 30, height: 24)
@@ -34,9 +39,13 @@ class ViewController: UIViewController {
         picButton.titleLabel?.font = UIFont(name: "PingFangSC-Medium", size: 13)
         picButton.center = CGPoint(x: 100, y: 100)
         self.view.addSubview(picButton)
-
-       
+ 
+     
         
+        
+        picButton.countDown(60, execute: { (sender, seconds, state) in
+            
+        }, completion: nil)
 //        let btn =  WQButton()
 ////        btn.center = CGPoint(x: 100, y: 100)
 ////        btn.titleAlignment = .bottom
@@ -158,9 +167,11 @@ class ViewController: UIViewController {
         //        self.navigationController?.navigationBar.isTranslucent = false
         let presentionView = WQPresentionView()
         presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
+        debugPrint(self.children)
         presentionView.backgroundColor = UIColor.red
-        presentionView.wm.show(from: .bottom, show: .center, hide: .bottom, inController: self)
+        presentionView.wm.show(reverse: .center, from: .bottom)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            debugPrint(self.children)
             presentionView.wm.dismiss(true)
         }
 //        presentionView.layer.frame = CGRect(x: 100, y: 400, width: 100, height: 100)

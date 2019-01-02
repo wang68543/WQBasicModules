@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol WQTransitioningAnimatorable: NSObjectProtocol {
+public protocol WQTransitioningAnimatorable: NSObjectProtocol {
     func transition(shouldAnimated animator: WQTransitioningAnimator,
                     dimmingView: UIView,
                     animatedView: UIView,
@@ -25,7 +25,7 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
     open var showBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.6)
     open var initialBackgroundViewColor: UIColor = UIColor.black.withAlphaComponent(0.3)
     
-    weak var delegate: WQTransitioningAnimatorable?
+    public weak var delegate: WQTransitioningAnimatorable?
     
     public init(_ animatedView: UIView, show: CGRect, hide: CGRect) {
         self.animatedView = animatedView
@@ -77,7 +77,7 @@ public extension WQTransitioningAnimator {
         }
         let animateBlock = {
              animatedView.frame = isShow ? self.showFrame : self.hideFrame
-             dimingView.backgroundColor = isShow ? self.initialBackgroundViewColor : self.showBackgroundViewColor
+             dimingView.backgroundColor = isShow ? self.showBackgroundViewColor : self.initialBackgroundViewColor
          }
         UIView.animate(withDuration: self.duration,
                        delay: 0,
