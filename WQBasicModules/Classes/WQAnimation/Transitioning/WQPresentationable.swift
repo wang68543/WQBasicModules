@@ -10,8 +10,8 @@ import UIKit
 private var presenterKey: Void?
 
 extension WQModules where Base: UIView {
-    public var presenter: UIViewController? {
-        return objc_getAssociatedObject(self.base, &presenterKey) as? UIViewController
+    public var presentation: WQPresentationable? {
+        return objc_getAssociatedObject(self.base, &presenterKey) as? WQPresentationable
     }
     
     fileprivate func setPresenter(_ viewController: UIViewController? ) {
@@ -20,20 +20,26 @@ extension WQModules where Base: UIView {
     /// 内部没有强引用PresentationController 需要外部持有
     public func presentation(from: WQPresentionStyle.Position,
                              show: WQPresentionStyle.Position,
-                             hide: WQPresentionStyle.Position) -> WQPresentationController {
+                             hide: WQPresentionStyle.Position) -> WQPresentationable {
         if self.base.frame.size == .zero {
             self.base.layoutIfNeeded()
         }
         assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
-        let presention = WQPresentationController(transitionType: self.base, size: self.base.frame.size, initial: from, show: show, dismiss: hide)
+        let presention = WQPresentationable(transitionType: self.base, size: self.base.frame.size, initial: from, show: show, dismiss: hide)
         return presention
     }
     /// 动画参数配置完成之后展示 内部没有强引用 需要外部强引用了presention 否则没效果
     public func present(in viewController: UIViewController?, completion: (() -> Void)? = nil) {
         //使用下划线保存的返回变量 会在返回的时候就销毁了
-        if let presention = self.presenter as? WQPresentationController {
+        if let presention = self.presentation {
             presention.show(animated: true, in: viewController, completion: completion)
         }
+    }
+    public func show(items: WQAnimatedConfigItems,
+                     inController: UIViewController? = nil,
+                     completion: (() -> Void)? = nil) {
+        let presention = WQPresentationable(subView: self.base, items: items)
+        presention.show(animated: true, in: inController, completion: completion)
     }
     /// 采用默认的动画风格展示
     public func show(from: WQPresentionStyle.Position,
@@ -50,15 +56,13 @@ extension WQModules where Base: UIView {
         self.show(from: from, show: show, dismiss: from, inController: inController)
     }
     public func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
-        self.presenter?.dismiss(animated: true, completion: completion)
+        self.presentation?.dismiss(animated: true, completion: completion)
     }
 }
 
-open class WQPresentationController: UIViewController {
- 
+open class WQPresentationable: UIViewController {
     public let containerView: UIView
-
-    public let transitioningAnimator: WQTransitioningAnimator
+    public private(set) var animator: WQTransitioningAnimator!
     /// 容器的尺寸
     public private(set) var drivenInteracitve: WQPercentDrivenInteractive?
     public var interactionDissmissDirection: WQPercentDrivenInteractive.Direction = .none {
@@ -69,7 +73,6 @@ open class WQPresentationController: UIViewController {
             ineractive.direction = interactionDissmissDirection
         }
     }
-    
     /// 是否支持点击背景消失
     open var isEnableTabBackgroundDismiss: Bool = false {
         didSet {
@@ -88,8 +91,10 @@ open class WQPresentationController: UIViewController {
                 return
             }
             if isEnableSlideDismiss {
-                self.drivenInteracitve = WQPercentDrivenInteractive(interactionDissmissDirection, size: self.transitioningAnimator.showFrame.size, gestureView: self.view)
-                self.drivenInteracitve?.starShowConfig = { [weak self] type in
+                let driven =  WQPercentDrivenInteractive(interactionDissmissDirection)
+                self.view.addGestureRecognizer(driven.panGesture)
+//                self.drivenInteracitve = WQPercentDrivenInteractive(interactionDissmissDirection, size: self.animator.showFrame.size, gestureView: self.view)
+                driven.starShowConfig = { [weak self] type in
                     switch type {
                     case .dismiss:
                         self?.dismiss(animated: true)
@@ -97,7 +102,8 @@ open class WQPresentationController: UIViewController {
                         break
                     }
                 }
-                self.drivenInteracitve?.panGesture.delegate = self
+                driven.panGesture.delegate = self
+                self.drivenInteracitve = driven
             } else {
                 self.drivenInteracitve = nil
             }
@@ -113,31 +119,38 @@ open class WQPresentationController: UIViewController {
         }
     }
     private var tapGesture: UITapGestureRecognizer?
-    
     public private(set) var childViews: [UIView] = []
     /// 是否是Modal出来的
     private var isModal: Bool = true
-    
     private var contentViewInputs: [UITextInput] = []
     
+    public init(subView: UIView, items: WQAnimatedConfigItems) {
+        containerView = UIView()
+        super.init(nibName: nil, bundle: nil)
+        self.defaultInit(subView, items: items)
+    }
+    private func defaultInit(_ subView: UIView, items: WQAnimatedConfigItems) {
+        animator = WQTransitioningAnimator(self, items: items)
+        containerView.backgroundColor = UIColor.clear
+        self.childViews.append(subView)
+        self.addContainerSubview(subView)
+    }
     public init(_ subView: UIView,
                 frame show: CGRect,
                 dismiss: CGRect,
                 initial: CGRect,
                 presentedFrame: CGRect = UIScreen.main.bounds) {
         containerView = UIView()
-        let animator = WQTransitioningAnimator(containerView, show: show, hide: dismiss)
-        transitioningAnimator = animator
-        animator.viewPresentedFrame = presentedFrame
         super.init(nibName: nil, bundle: nil)
-       self.defaultInitial(subView, initalFrame: initial)
-    }
-    private func defaultInitial(_ subView: UIView, initalFrame: CGRect) {
-        containerView.backgroundColor = UIColor.clear
-        containerView.frame = initalFrame
-        self.childViews.append(subView)
-        subView.frame = containerView.bounds
-        self.addContainerSubview(subView)
+        var items: WQAnimatedConfigItems = []
+        let viewFrame = WQAnimatedItem<CGRect>.defaultViewShowFrame(presentedFrame, initial: presentedFrame)
+         items.append(viewFrame)
+        let containerFrameKey = \WQPresentationable.containerView.frame
+        let containerFrame = WQAnimatedItem(containerFrameKey, initial: initial, show: show, dismiss: dismiss)
+        items.append(containerFrame)
+        let viewBackgoundColor = WQAnimatedItem<UIColor?>.defaultViewBackground()
+        items.append(viewBackgoundColor)
+        self.defaultInit(subView, items: items)
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {
@@ -146,8 +159,9 @@ open class WQPresentationController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
+         self.animator.items.initial(nil, presenting: self)
          self.view.addSubview(containerView)
-        containerView.layoutIfNeeded()
+         containerView.layoutIfNeeded()
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? self.topViewController
@@ -161,17 +175,17 @@ open class WQPresentationController: UIViewController {
                 }  
                showInVC.addChild(self)
                showInVC.view.addSubview(self.view)
-                self.view.frame = self.transitioningAnimator.viewPresentedFrame
                 if flag {
-                    self.transitioningAnimator
-                        .defaultAnimated(self.view,
-                                         animatedView: self.containerView,
-                                         isShow: true,
-                                         completion: { flag in
-                                            self.didMove(toParent: showInVC)
-                                            completion?()
-                        })
+                    self.animator.animated(presented: showInVC, presenting: self, isShow: true) { [weak self] flag in
+                            guard let weakSelf = self else {
+                                 completion?()
+                                return
+                            }
+                            weakSelf.didMove(toParent: showInVC)
+                            completion?()
+                    }
                 } else {
+                    self.animator.items.config(showInVC, presenting: self, isShow: true)
                     self.didMove(toParent: showInVC)
                     completion?()
                 }
@@ -184,10 +198,6 @@ open class WQPresentationController: UIViewController {
                 self.modalPresentationStyle = .custom
                 self.transitioningDelegate = self
                 topVC.present(self, animated: flag, completion: completion)
-                if !flag {
-                    self.view.backgroundColor = self.transitioningAnimator.showBackgroundViewColor
-                    self.containerView.frame = self.transitioningAnimator.showFrame
-                }
             }
         }
     }
@@ -198,17 +208,23 @@ open class WQPresentationController: UIViewController {
             self.removeFromParent()
             completion?()
         } else {
-            self.transitioningAnimator
-                .defaultAnimated(self.view,
-                                 animatedView: self.containerView,
-                                 isShow: false,
-                                 completion: { [weak self] flag in
-                                    if let weakSelf = self {
-                                        weakSelf.view.removeFromSuperview()
-                                        weakSelf.removeFromParent()
-                                    }
-                                     completion?()
-                })
+            if flag {
+                self.animator.animated(presented: self.parent, presenting: self, isShow: false) { [weak self] flag in
+                        guard let weakSelf = self else {
+                             completion?()
+                            return
+                        }
+                        weakSelf.view.removeFromSuperview()
+                        weakSelf.removeFromParent()
+                        completion?()
+                }
+            } else {
+                self.animator.items.config(self.parent, presenting: self, isShow: false)
+                self.view.removeFromSuperview()
+                self.removeFromParent()
+                completion?()
+            }
+            
         }
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -237,7 +253,7 @@ open class WQPresentationController: UIViewController {
     }
 }
 // MARK: - -- Help
-private extension WQPresentationController {
+private extension WQPresentationable {
     private func addContainerSubview(_ subView: UIView) {
         subView.wm.setPresenter(self)
         containerView.addSubview(subView)
@@ -251,7 +267,8 @@ private extension WQPresentationController {
         let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
         containerView.addConstraints([left, right, bottom, top])
     }
-    public var topViewController: UIViewController? {
+    
+    private var topViewController: UIViewController? {
         var viewController: UIViewController?
         let windows = UIApplication.shared.windows.reversed()
         for window in  windows {
@@ -268,7 +285,7 @@ private extension WQPresentationController {
         return viewController
     }
     
-    public func findTopViewController(in viewController: UIViewController) -> UIViewController? {
+    private func findTopViewController(in viewController: UIViewController) -> UIViewController? {
         if let tabBarController = viewController as? UITabBarController {
             if let selectedController = tabBarController.selectedViewController {
                 return self.findTopViewController(in: selectedController)
@@ -287,7 +304,7 @@ private extension WQPresentationController {
     }
 }
 // MARK: - -- Convenience init
-public extension WQPresentationController {
+public extension WQPresentationable {
     /// 根据TransitionType计算containerView 三个状态的尺寸
     ///
     /// - Parameters:
@@ -384,7 +401,7 @@ public extension WQPresentationController {
     
 }
 // MARK: - -- Gesture Handle
-extension WQPresentationController {
+extension WQPresentationable {
     @objc
     func handleTapGesture(_ sender: UITapGestureRecognizer) {
         self.dismiss(animated: true)
@@ -406,7 +423,7 @@ extension WQPresentationController {
 }
 
 // MARK: - keyboard
-public extension WQPresentationController {
+public extension WQPresentationable {
      private func searchTextInputs(_ inView: UIView) -> [UITextInput] {
         var inputViews: [UITextInput] = []
         if let textInput = inView as? UITextInput {
@@ -448,9 +465,6 @@ public extension WQPresentationController {
         }),
             let inputView = textInput as? UIView,
             let inputSuperView = inputView.superview else {
-                UIView.animate(withDuration: self.transitioningAnimator.duration) {
-                    self.containerView.frame = self.transitioningAnimator.showFrame
-                }
                 return
         }
         guard let keyboardF = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
@@ -467,7 +481,7 @@ public extension WQPresentationController {
     }
 }
 // MARK: - -- UIGestureRecognizerDelegate
-extension WQPresentationController: UIGestureRecognizerDelegate {
+extension WQPresentationable: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let tapGR = gestureRecognizer as? UITapGestureRecognizer,
             tapGR === self.tapGesture {
@@ -482,12 +496,12 @@ extension WQPresentationController: UIGestureRecognizerDelegate {
     }
 }
 // MARK: - -- UIViewControllerTransitioningDelegate
-extension WQPresentationController: UIViewControllerTransitioningDelegate {
+extension WQPresentationable: UIViewControllerTransitioningDelegate {
    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self.transitioningAnimator
+        return self.animator
     }
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self.transitioningAnimator
+        return self.animator
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         guard let interactive = self.drivenInteracitve else {

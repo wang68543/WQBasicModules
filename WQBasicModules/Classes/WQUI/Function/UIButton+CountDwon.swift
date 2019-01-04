@@ -23,7 +23,7 @@ public extension UIButton {
     /// - Parameters:
     ///   - UIButton: 当前对象
     ///   - UInt: 剩余数量
-    public typealias IntervalExecute = (UIButton, UInt, UIControl.State) -> Void
+    public typealias IntervalExecute = (UIButton, UInt) -> Void
     
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
@@ -31,6 +31,20 @@ public extension UIButton {
     ///   - Bool: 是否是正常结束
     /// - Returns: 背景颜色、标题是否恢复到倒计时之前的状态
     public typealias CountDownCompletion = (UIButton, Bool) -> Bool
+    /// 当前的状态
+    public var currentControlState: UIControl.State {
+        var state: UIControl.State
+        if !self.isEnabled {
+            state = .disabled
+        } else if self.isHighlighted {
+            state = .highlighted
+        } else if self.isSelected {
+            state = .selected
+        } else {
+            state = .normal
+        }
+        return state
+    }
     
     /// 倒计时是否可以中途中断 Default `false`
     public var isCanCancel: Bool {
@@ -45,7 +59,6 @@ public extension UIButton {
             }
         }
     }
-    
     /// 倒计时
     ///
     /// - Parameters:
@@ -57,12 +70,13 @@ public extension UIButton {
                           color: UIColor? = nil,
                           completion: CountDownCompletion? = nil) {
         let titleColor = color ?? self.titleColor(for: .normal)
-        let excute: IntervalExecute = { sender, secs, state in
+        let currentState = self.currentControlState
+        let excute: IntervalExecute = { sender, secs in
             let title = formater.string(from: NSNumber(value: secs))
-            sender.setTitle(title, for: state)
-            sender.setTitleColor(titleColor, for: state)
-        }
+            sender.setTitle(title, for: currentState)
+        } 
         self.countDown(total, interval: 1, execute: excute, completion: completion)
+        self.setTitleColor(titleColor, for: currentState)
     }
     /// 倒计时按钮
     ///
@@ -98,8 +112,8 @@ public extension UIButton {
             if total <= 0 {
                 weakSelf.stopCountDown(true)
             } else {
-                let state = weakSelf.status?.state ?? .normal
-                weakSelf.execute?(weakSelf, total, state)
+//                let state = weakSelf.status?.state ?? .normal
+                weakSelf.execute?(weakSelf, total )
                 weakSelf.totalCount = total
             }
         }
@@ -200,17 +214,9 @@ fileprivate extension UIButton {
     func saveCurrentStatues() {
         let status = StoredStatus()
         if !self.isCanCancel {
-            self.isEnabled = false
-            status.state = .disabled
-        } else {
-            if self.isSelected {
-                status.state = .selected
-            } else if self.isHighlighted {
-                status.state = .highlighted
-            } else {
-                status.state = .normal
-            }
+            self.isUserInteractionEnabled = false
         }
+        status.state = self.currentControlState
         status.backgroundImage = self.currentBackgroundImage
         status.attributedTitle = self.currentAttributedTitle
         status.title = self.currentTitle
@@ -228,7 +234,7 @@ fileprivate extension UIButton {
     func recoveryBeforeStatues() {
         guard let status = self.status  else {
             if !self.isCanCancel {
-                self.isEnabled = true
+                self.isUserInteractionEnabled = true
             }
             return
         }

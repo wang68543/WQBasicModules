@@ -25,25 +25,20 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
     public typealias WQShowConfig = ((InteractionType) -> Void)
     open var direction: Direction
     /// 交互的时候 用于计算动画完成百分比的
-    open var progressSize: CGSize
+//    open var progressSize: CGSize
     public var interactionType: InteractionType = .dismiss
     public var starShowConfig: WQShowConfig? 
     public private(set) var isInteracting: Bool = false
-    public let panGesture: UIPanGestureRecognizer
+    public let panGesture = UIPanGestureRecognizer()
     public private(set) var transitionContext: UIViewControllerContextTransitioning?
-    public let gestureView: UIView
     
     public var shouldCompletedProgress: CGFloat = 0.5
     public var shouldCompletedVelocity: CGFloat = 100
     
-    public init(_ direction: Direction, size: CGSize, gestureView: UIView) {
+    public init(_ direction: Direction) {
         self.direction = direction
-        self.progressSize = size
-        self.panGesture = UIPanGestureRecognizer()
         self.panGesture.maximumNumberOfTouches = 1
-        self.gestureView = gestureView
         super.init()
-        gestureView.addGestureRecognizer(panGesture)
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
     open override func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
@@ -54,10 +49,11 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
     open func shouldBeginInteractive(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard !self.isInteracting,
             let panGR = gestureRecognizer as? UIPanGestureRecognizer,
-            panGR === self.panGesture  else {
+            panGR === self.panGesture,
+           let senderView = panGesture.view else {
             return false
         }
-        let velocity = panGR.velocity(in: self.gestureView)
+        let velocity = panGR.velocity(in: senderView)
         var isEnableGesture: Bool = false
         switch self.direction {
         case .upwards:
@@ -112,7 +108,10 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
 //    }
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        let view = self.gestureView
+        guard let view = sender.view else {
+            return
+        }
+        let size = view.frame.size
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
@@ -120,7 +119,7 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
             self.starShowConfig?(self.interactionType)
         case .changed:
             var percentage: CGFloat
-            let size = self.progressSize
+            
             let translate = sender.translation(in: view)
             switch self.direction {
             case .down, .upwards:
@@ -134,8 +133,7 @@ open class WQPercentDrivenInteractive: UIPercentDrivenInteractiveTransition {
             self.update(percentage)
         case .ended, .cancelled, .failed:
             let velocity = sender.velocity(in: view)
-            let translate = sender.translation(in: view)
-            let size = self.progressSize
+            let translate = sender.translation(in: view) 
             let isFinished: Bool = self.shouldCompletionInteraction(velocity, translate: translate, progressSize: size)
             if isFinished {
                 self.completionSpeed = 1 - self.percentComplete

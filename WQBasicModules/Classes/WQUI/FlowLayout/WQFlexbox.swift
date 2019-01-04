@@ -341,7 +341,6 @@ private extension WQFlexbox {
         }
       return LinesMarginAttribute(margin: margin, remainingMargin: leaveMargin, space: lineSpace, section: section)
     }
-  
     
     /// 每个区域 的
     func attributeLineItems(lineIndex: Int,
@@ -391,7 +390,6 @@ private extension WQFlexbox {
         let headerSize = linesFrame.headerSize
         let footerSize = linesFrame.footerSize
         let path = IndexPath(item: 0, section: section)
-        path.item
         var header: UICollectionViewLayoutAttributes?
         if headerSize != .zero {
             header = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, with: path)

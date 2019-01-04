@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		000FFDC0D7949616E35B0C4F60938633 /* WQPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationController.swift */; };
+		000FFDC0D7949616E35B0C4F60938633 /* WQPresentationable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationable.swift */; };
 		08A3538A5F0FFD319CFE95F2B9E0F3AA /* WQString+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = F64D74E283D03E04ECE4F6D036CEA4F9 /* WQString+Security.swift */; };
 		08E279B20337CCE79CD09DD85A726EF3 /* WQBasicModules.h in Headers */ = {isa = PBXBuildFile; fileRef = 74DA0705F45C1A49B48E2EA36189D769 /* WQBasicModules.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0DEDF3E541E89610DD577A334433BDAD /* WQBasicModules-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E08049DA68D9A0AB7E50BF8A9921E0E /* WQBasicModules-dummy.m */; };
@@ -79,7 +79,7 @@
 		0070C7228079DF25DAA1527FBD856D58 /* Pods-WQBasicModules_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-WQBasicModules_Example-resources.sh"; sourceTree = "<group>"; };
 		097F7F2B39E61085E70276DC54255389 /* Pods-WQBasicModules_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-WQBasicModules_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		0E08049DA68D9A0AB7E50BF8A9921E0E /* WQBasicModules-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "WQBasicModules-dummy.m"; sourceTree = "<group>"; };
-		164C808E5CEDD60981E3C2F552D6E71A /* WQBasicModules.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = WQBasicModules.framework; path = WQBasicModules.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		164C808E5CEDD60981E3C2F552D6E71A /* WQBasicModules.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WQBasicModules.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1879203821DBFC6A125D36596C696800 /* WQPercentDrivenInteractive.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQPercentDrivenInteractive.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQPercentDrivenInteractive.swift; sourceTree = "<group>"; };
 		199993919C8ED64204E2157597A11708 /* WQDate+Format.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WQDate+Format.swift"; path = "WQBasicModules/Classes/WQExtensions/WQDate/WQDate+Format.swift"; sourceTree = "<group>"; };
 		240BEECEA6398A3275B4D47F3D029D6C /* Pods-WQBasicModules_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-WQBasicModules_Tests-umbrella.h"; sourceTree = "<group>"; };
@@ -87,7 +87,7 @@
 		266B7F70268F1E14B35B32524F8DC70F /* WQBasicModules-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WQBasicModules-umbrella.h"; sourceTree = "<group>"; };
 		274733BD307F41D629B280396E0EA9EB /* NSData+Utilies.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+Utilies.h"; path = "WQBasicModules/Classes/WQExtensions/WQFoundation/NSData+Utilies.h"; sourceTree = "<group>"; };
 		2BE1BF66D2F552172A2935AA854113F0 /* WQPresentionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQPresentionStyle.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQPresentionStyle.swift; sourceTree = "<group>"; };
-		2BE7F1D43548188FF6F6C1DC408C1478 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		2BE7F1D43548188FF6F6C1DC408C1478 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2DFF0C0AD605B6DFB4C23A35080B0D8A /* Pods-WQBasicModules_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-WQBasicModules_Example-umbrella.h"; sourceTree = "<group>"; };
 		35901E4630732FBC3AB1176FF30CE208 /* Pods-WQBasicModules_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-WQBasicModules_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		35FD46C925CCEB678393672480645B0B /* WQTextView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTextView.swift; path = WQBasicModules/Classes/WQUI/Help/WQTextView.swift; sourceTree = "<group>"; };
@@ -99,13 +99,13 @@
 		4C14F2DF4831B68BE712D482479EAABB /* WQWebController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQWebController.swift; path = WQBasicModules/Classes/WQUI/Help/WQWebController.swift; sourceTree = "<group>"; };
 		4F9E24926A449D2FEECF8051900489A7 /* UIImage+Cutting.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Cutting.swift"; path = "WQBasicModules/Classes/WQExtensions/WQUIKit/UIImage+Cutting.swift"; sourceTree = "<group>"; };
 		56CD5515BF59B47AC3245E69AEF034D4 /* Pods-WQBasicModules_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-WQBasicModules_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		5B049B27BCB82E9DF097182215402D56 /* Pods_WQBasicModules_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_WQBasicModules_Tests.framework; path = "Pods-WQBasicModules_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B049B27BCB82E9DF097182215402D56 /* Pods_WQBasicModules_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WQBasicModules_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C948CF054030E4A448EE7318D634AE2 /* WQDate+Utilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WQDate+Utilities.swift"; path = "WQBasicModules/Classes/WQExtensions/WQDate/WQDate+Utilities.swift"; sourceTree = "<group>"; };
 		5F575313A4E3FB0BD2D0AFBCF5AD9419 /* WQStarControl.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQStarControl.swift; path = WQBasicModules/Classes/WQUI/Custom/WQStarControl.swift; sourceTree = "<group>"; };
 		60CCF13C510A11F6E153306DDF8B4581 /* NSString+WQHash.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSString+WQHash.m"; path = "WQBasicModules/Classes/WQExtensions/WQString/NSString+WQHash.m"; sourceTree = "<group>"; };
 		619A2C7A6EEF822C12228B8736F6D977 /* UIButton+CountDwon.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIButton+CountDwon.swift"; path = "WQBasicModules/Classes/WQUI/Function/UIButton+CountDwon.swift"; sourceTree = "<group>"; };
 		646FB93C67696FD351550A90E7FDC34B /* Data+Utilies.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Data+Utilies.swift"; path = "WQBasicModules/Classes/WQExtensions/WQFoundation/Data+Utilies.swift"; sourceTree = "<group>"; };
-		6634C775E5A9812E3825CB48EFEA1FC5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		6634C775E5A9812E3825CB48EFEA1FC5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		6E7C166B75FD63E13B1FDBF75E9D5E72 /* WQUIBundle.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = WQUIBundle.bundle; path = WQBasicModules/Classes/WQUI/Help/WQUIBundle.bundle; sourceTree = "<group>"; };
 		74A457B9BFDBA42DCE94591AB14FD96C /* WQBasicModules-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "WQBasicModules-prefix.pch"; sourceTree = "<group>"; };
 		74DA0705F45C1A49B48E2EA36189D769 /* WQBasicModules.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WQBasicModules.h; path = WQBasicModules/Classes/WQBasicModules.h; sourceTree = "<group>"; };
@@ -117,15 +117,15 @@
 		8A7D54917741573BCD66B4B1BE74525E /* NSData+Utilies.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+Utilies.m"; path = "WQBasicModules/Classes/WQExtensions/WQFoundation/NSData+Utilies.m"; sourceTree = "<group>"; };
 		8AEC9F4474F83C0A7BED36A44F453678 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8B34EAB616530900E7438DE1FC905561 /* WQTransitioningAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitioningAnimator.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQTransitioningAnimator.swift; sourceTree = "<group>"; };
-		8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQPresentationController.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQPresentationController.swift; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQPresentationable.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQPresentationable.swift; sourceTree = "<group>"; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		98EFBDF24702FFEB2A4903E2571A32CB /* Pods-WQBasicModules_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-WQBasicModules_Tests-resources.sh"; sourceTree = "<group>"; };
 		9C17FF7DE22DA3BF017C7918F6D60F36 /* Pods-WQBasicModules_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-WQBasicModules_Tests.modulemap"; sourceTree = "<group>"; };
 		9E1A68EA7634DE9D5C8953E6AC51C897 /* WQDateFormatter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQDateFormatter.swift; path = WQBasicModules/Classes/WQExtensions/WQFoundation/WQDateFormatter.swift; sourceTree = "<group>"; };
 		A08FC9CA57E6EFFE0863805809670336 /* Pods-WQBasicModules_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-WQBasicModules_Example.modulemap"; sourceTree = "<group>"; };
 		A82A76BA735F2AFC9DED15C9F13DFE7F /* WQLayer+BasicAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WQLayer+BasicAnimation.swift"; path = "WQBasicModules/Classes/WQAnimation/Layer/WQLayer+BasicAnimation.swift"; sourceTree = "<group>"; };
 		B24BD61A4D29F5F2F03097CCE51B66D9 /* WQBasicModules.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WQBasicModules.xcconfig; sourceTree = "<group>"; };
-		B4C417C484E4B2A9D0AC491FB9AE94A6 /* WQBasicModules.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; path = WQBasicModules.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		B4C417C484E4B2A9D0AC491FB9AE94A6 /* WQBasicModules.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; path = WQBasicModules.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B715D69714B82670196B1AD20D3F0BEC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B8C36C1257095E3D33E87BEFC814515F /* WQTransitionDriver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitionDriver.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQTransitionDriver.swift; sourceTree = "<group>"; };
 		BB12A67541B335DFB5982C4FBAD052E8 /* WQModules.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQModules.swift; path = WQBasicModules/Classes/WQExtensionModule/WQModules.swift; sourceTree = "<group>"; };
@@ -135,7 +135,7 @@
 		E5B8FDF7025D64838854304AFA9FE571 /* Pods-WQBasicModules_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-WQBasicModules_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		E7354469A491537195E98E40ADD842CF /* UIView+Clipping.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIView+Clipping.swift"; path = "WQBasicModules/Classes/WQExtensions/WQUIKit/UIView+Clipping.swift"; sourceTree = "<group>"; };
 		E8B108662009350FD75FB722AC7B67DE /* NSString+WQHash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSString+WQHash.h"; path = "WQBasicModules/Classes/WQExtensions/WQString/NSString+WQHash.h"; sourceTree = "<group>"; };
-		EC5D35BD05FDCBB7388A84608E1A23B1 /* Pods_WQBasicModules_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_WQBasicModules_Example.framework; path = "Pods-WQBasicModules_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC5D35BD05FDCBB7388A84608E1A23B1 /* Pods_WQBasicModules_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WQBasicModules_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECA1FA15CB97EED4F9A511E636483D0A /* WQFileManager+Path.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WQFileManager+Path.swift"; path = "WQBasicModules/Classes/WQHelpTool/WQCache/WQFileManager+Path.swift"; sourceTree = "<group>"; };
 		EF335DAA80EA1D3C31A1B0C7F79D36EF /* Pods-WQBasicModules_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-WQBasicModules_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		F43A2BBBE4E0B7803D3CDB4671535097 /* WQButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQButton.swift; path = WQBasicModules/Classes/WQUI/Custom/WQButton.swift; sourceTree = "<group>"; };
@@ -212,7 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				1879203821DBFC6A125D36596C696800 /* WQPercentDrivenInteractive.swift */,
-				8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationController.swift */,
+				8F5D73D3B1B502B1B9CFDA535429ED87 /* WQPresentationable.swift */,
 				2BE1BF66D2F552172A2935AA854113F0 /* WQPresentionStyle.swift */,
 				B8C36C1257095E3D33E87BEFC814515F /* WQTransitionDriver.swift */,
 				8B34EAB616530900E7438DE1FC905561 /* WQTransitioningAnimator.swift */,
@@ -658,7 +658,7 @@
 				4056BF31A8DB40439779F5B98992D994 /* WQLayer+BasicAnimation.swift in Sources */,
 				EDA32914C5947D1EA8C94381EE2E08B4 /* WQModules.swift in Sources */,
 				6F7614DD1D8563C8F34ECE4B289A1D35 /* WQPercentDrivenInteractive.swift in Sources */,
-				000FFDC0D7949616E35B0C4F60938633 /* WQPresentationController.swift in Sources */,
+				000FFDC0D7949616E35B0C4F60938633 /* WQPresentationable.swift in Sources */,
 				3B9C11EBA1A1290BA3C212E79A0D089E /* WQPresentionStyle.swift in Sources */,
 				603F00A88025D17B06769BB4857CAD68 /* WQProperty.swift in Sources */,
 				6DB0738E44207C498CB14E143455E8A4 /* WQStarControl.swift in Sources */,
@@ -826,8 +826,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};

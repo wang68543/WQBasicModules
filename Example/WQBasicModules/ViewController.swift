@@ -41,11 +41,9 @@ class ViewController: UIViewController {
         self.view.addSubview(picButton)
  
      
+//        picButton.bounds = CGRect(x: 0, y: 0, width: 100, height: 40);
         
-        
-        picButton.countDown(60, execute: { (sender, seconds, state) in
-            
-        }, completion: nil)
+       
 //        let btn =  WQButton()
 ////        btn.center = CGPoint(x: 100, y: 100)
 ////        btn.titleAlignment = .bottom
@@ -78,6 +76,7 @@ class ViewController: UIViewController {
         button.setTitle("测试倒计时", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
         button.backgroundColor = UIColor.yellow
+        button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)  
 //        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
         let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
@@ -158,65 +157,38 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-   
+
     @IBAction func webViewAction(_ sender: UIButton) {
-//        let snap = SnapShotTableController()
-//        snap.view.backgroundColor = UIColor.white
-//        self.navigationController?.pushViewController(snap, animated: true)
-//        return
-        //        self.navigationController?.navigationBar.isTranslucent = false
+ 
         let presentionView = WQPresentionView()
-        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
-        debugPrint(self.children)
+        let keyPath = \WQPresentationable.containerView.frame
+        let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
+        let color = WQAnimatedItem.defaultViewBackground()
+        presentionView.wm.show(items: [item,color,TestPresent()])
+//        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
         presentionView.backgroundColor = UIColor.red
-        presentionView.wm.show(reverse: .center, from: .bottom)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            debugPrint(self.children)
-            presentionView.wm.dismiss(true)
-        }
-//        presentionView.layer.frame = CGRect(x: 100, y: 400, width: 100, height: 100)
-//        let keyPath = "backgroundColor"
-//        let animation = CABasicAnimation(keyPath: keyPath)
-//        animation.fromValue = UIColor.clear.cgColor
-//        animation.toValue = UIColor.black.cgColor
-//        animation.duration = 0.25
-//        animation.fillMode = .forwards
-//        animation.isRemovedOnCompletion = false
-//        self.view.addSubview(presentionView)
-//        presentionView.layer.add(animation, forKey: "animate")
-        
-//        let keyPath1 = "position"
-//        let animation1 = CABasicAnimation(keyPath: keyPath1)
-//        animation1.fromValue =  CGPoint(x: 0, y: 400)
-//        animation1.toValue = CGPoint(x: 330, y: 400)
-//        animation1.fillMode = .forwards
-//        animation1.duration = 0.5
-//        animation1.isRemovedOnCompletion = false
-//        presentionView.layer.add(animation1, forKey: "animate1")
-//        let keyPath2 = "bounds"
-//        let animation2 = CABasicAnimation(keyPath: keyPath2)
-//        animation2.fromValue = CGRect(x: 0, y: 400, width: 100, height: 100)
-//        animation2.toValue = CGRect(x: UIScreen.main.bounds.width - 200, y: 400, width: 200, height: 200)
-//        animation2.fillMode = .forwards
-//        animation2.duration = 5
-//        animation2.isRemovedOnCompletion = false
-//        presentionView.layer.add(animation2, forKey: "animate2")
-        
-        
-//        let presention = WQPresentationController.init(transitionReverse: presentionView, size: CGSize(width: 200, height: 200), initial: .bottom, show: .center)
-//        let presention = WQPresentationController.init(position: presentionView, to: CGPoint(x: 200, y: 200), size: CGSize(width: 400, height: 400), bounceType: WQPresentationController.PositionBounce.bounceCenter )
-//        UIResponder.keyboardWillChangeFrameNotification
-//        let presention = WQPresentCenterController(presentionView, size: CGSize(width: 400, height: 400))
-//        presention.animateDuration = 0.5
-////        presention.edgeInsets = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-//        presention.containerView.backgroundColor = UIColor.green
-////        presention.interactionDissmissDirection = .down
-////        presention.isEnableSlideDismiss = true
-//        presention.isEnableTabBackgroundDismiss = true
-//        presention.show(animated: true)
-        
-//        let web = WQWebController()
-//        self.navigationController?.pushViewController(web, animated: true)
+//        presentionView.wm.show(reverse: .center, from: .bottom)
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+//            debugPrint(self.children)
+//            presentionView.wm.dismiss(true)
+//        }
+        presentionView.wm.presentation?.interactionDissmissDirection = .down
+        presentionView.wm.presentation?.isEnableSlideDismiss = true
+//        let presnetion = WQPresentationable(UIView(), frame: .zero, dismiss: .zero, initial: .zero)
+//        let keypath = \WQPresentationable.containerView.frame
+//        let item = WQTransitioningAnimatedItem(keypath, initial: CGRect(x: 0, y: 0, width: 100, height: 100), show: UIScreen.main.bounds, dismiss: CGRect.zero)
+//
+//        presnetion[keyPath: item.keyPath] = item.initial
+//        presnetion.view.backgroundColor = UIColor.red
+//        self.view.addSubview(presnetion.view)
     }
     
+}
+class TestPresent: WQAnimatedConfigAble {
+    func config(_ presented: UIViewController?, presenting: UIViewController?, state: WQTransitionState) {
+        guard state != .initial else {
+            return
+        }
+        presenting?.view.backgroundColor = state == .show ? UIColor.white : UIColor.green
+    }
 }
