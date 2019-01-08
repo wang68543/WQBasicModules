@@ -24,17 +24,15 @@ public enum WQTransitionState {
 }
 
 public protocol WQAnimatedConfigAble {
-    
     /// 用于配置动画
     ///
     /// - Parameters:
-    ///   - presented: show其它的Controller的Controller
+    ///   - presented: show其它的Controller的Controller(是NavgationController或者UITabBarController)
     ///   - presenting: 被show出来的Controller
     ///   - state: 动画状态
     func config(_ presented: UIViewController?, presenting: UIViewController?, state: WQTransitionState)
 }
 public final class WQAnimatedItem<Element>: WQAnimatedConfigAble {
-    
     public typealias Value = Element
     public typealias Root = ReferenceWritableKeyPath<WQPresentationable, Value>
     public let keyPath: Root
@@ -61,11 +59,10 @@ public final class WQAnimatedItem<Element>: WQAnimatedConfigAble {
             presenter[keyPath: self.keyPath] = self.dismiss
         }
     }
-    
 }
 public extension WQAnimatedItem where Element == UIColor? {
     class func defaultViewBackground(_ show: UIColor = UIColor.black.withAlphaComponent(0.6),
-                                     initial: UIColor = UIColor.black.withAlphaComponent(0.3)) -> WQAnimatedItem {
+                                     initial: UIColor = UIColor.clear) -> WQAnimatedItem {
         let keyPath = \WQPresentationable.view.backgroundColor
         return WQAnimatedItem(keyPath, initial: initial, show: show)
     }
@@ -75,6 +72,36 @@ public extension WQAnimatedItem where Element == CGRect {
                                     initial: CGRect = UIScreen.main.bounds) -> WQAnimatedItem {
         let keyPath = \WQPresentationable.view.frame
         return WQAnimatedItem(keyPath, initial: initial, show: show)
+    }
+    convenience init(container size: CGSize,
+                     initial: WQPresentionStyle.Position,
+                     show: WQPresentionStyle.Position,
+                     dismiss: WQPresentionStyle.Position? = nil,
+                     presentedFrame: CGRect = UIScreen.main.bounds) {
+        let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
+        let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
+        let dismissFrame = dismiss?.frame(size, presentedFrame: presentedFrame, isInside: false)
+        self.init(containerFrame: initialFrame, show: showFrame, dismiss: dismissFrame)
+    }
+    convenience init(container position: CGPoint,
+                     anchor point: CGPoint,
+                     size: CGSize,
+                     bounceStyle: WQPresentionStyle.Bounce,
+                     presentedFrame: CGRect = UIScreen.main.bounds) {
+        let showFrame = CGRect(origin: position, size: size)
+        let initialFrame = bounceStyle.estimateInitialFrame(position, anchorPoint: point, size: size, presentedFrame: presentedFrame)
+        self.init(containerFrame: initialFrame, show: showFrame)
+    }
+    convenience init(container size: CGSize,
+                     postionStyle: WQPresentionStyle.Position,
+                     bounceStyle: WQPresentionStyle.Bounce,
+                     presentedFrame: CGRect = UIScreen.main.bounds) {
+        let postion = postionStyle.positionPoint(size, anchorPoint: CGPoint(x: 0.5, y: 0.5), viewFrame: presentedFrame)
+        self.init(container: postion, anchor: CGPoint(x: 0.5, y: 0.5), size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+    }
+    convenience init(containerFrame initial: CGRect, show: CGRect, dismiss: CGRect? = nil) {
+        let keyPath = \WQPresentationable.containerView.frame
+        self.init(keyPath, initial: initial, show: show, dismiss: dismiss ?? initial)
     }
 }
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
@@ -90,20 +117,24 @@ public extension Array where Element == WQAnimatedConfigAble {
             item.config(presented, presenting: presenting, state: state)
         }
     }
+    
+    /// 创建一个包含 View frame 跟 view 默认Color 动画
+    init(default item: WQAnimatedConfigAble, viewFrame: CGRect) {
+        self.init()
+        self.append(item)
+        self.append(WQAnimatedItem.defaultViewBackground())
+        self.append(WQAnimatedItem.defaultViewShowFrame(viewFrame, initial: viewFrame))
+    }
 }
 public typealias WQAnimateCompletion = ((Bool) -> Void)
 open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransitioning {
- 
     open var duration: TimeInterval = 0.25
     public var items: WQAnimatedConfigItems
     public weak var delegate: WQTransitioningAnimatorable?
     
-    public init(_ presenter: WQPresentationable, items: WQAnimatedConfigItems) {
+    public init(items: WQAnimatedConfigItems) {
         self.items = items
         super.init()
-//        if let index =  items.first(where: { $0 == \WQPresentationable.view.frame }) {
-//
-//        }
     }
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
@@ -135,7 +166,6 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
         } else {
             animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
         }
-        
     }
 }
 public extension WQTransitioningAnimator {
@@ -170,6 +200,67 @@ public extension WQTransitioningAnimator {
                        options: options,
                        animations: animateBlock,
                        completion: completion)
+    }
+}
+
+// MARK: - -- convenice init
+public extension WQTransitioningAnimator {
+    convenience
+    init(container initial: CGRect,
+         show: CGRect,
+         dismiss: CGRect? = nil,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
+        let item = WQAnimatedItem(containerFrame: initial, show: show, dismiss: dismiss)
+        let items = Array(default: item, viewFrame: presentedFrame)
+        self.init(items: items)
+    }
+    
+    /// 根据TransitionType计算containerView 三个状态的尺寸
+    ///
+    /// - Parameters:
+    ///   - subView: 显示的View
+    ///   - size: contianerView size
+    ///   - initial: 初始的方位
+    ///   - show: 显示的w方位
+    ///   - dismiss: 消失的方位
+    ///   - presentedFrame: 控制器的尺寸
+    convenience
+    init(size: CGSize,
+         initial: WQPresentionStyle.Position,
+         show: WQPresentionStyle.Position,
+         dismiss: WQPresentionStyle.Position? = nil,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
+        let item = WQAnimatedItem(container: size, initial: initial, show: show, dismiss: dismiss, presentedFrame: presentedFrame)
+        let items = Array(default: item, viewFrame: presentedFrame)
+        self.init(items: items)
+    }
+    /// 根据position和size来显示View
+    ///
+    /// - Parameters:
+    ///   - subView: 显示的View
+    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
+    ///   - size: contianerView的size
+    ///   - bounceType: contianerView展开类型
+    ///   - presentedFrame: 控制器的尺寸
+    convenience
+    init(anchor point: CGPoint,
+         position: CGPoint,
+         size: CGSize,
+         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
+        let item = WQAnimatedItem(container: position, anchor: point, size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+        self.init(items: Array(default: item, viewFrame: presentedFrame))
+    }
+    
+    convenience
+    init(position subView: UIView,
+         show: WQPresentionStyle.Position,
+         size: CGSize,
+         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
+         presentedFrame: CGRect = UIScreen.main.bounds) {
+        let anchorPoint = subView.layer.anchorPoint
+        let item = WQAnimatedItem(container: size, postionStyle: show, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+        self.init(items: Array(default: item, viewFrame: presentedFrame))
     }
 }
 extension WQTransitioningAnimatorable {

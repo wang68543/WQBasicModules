@@ -58,8 +58,8 @@ public extension WQPresentionStyle.Position {
         return CGRect(origin: origin, size: size)
     }
     
-    func mapInteractionDirection() -> WQPercentDrivenInteractive.Direction {
-        var direction: WQPercentDrivenInteractive.Direction
+    func mapInteractionDirection() -> WQDrivenTransition.Direction {
+        var direction: WQDrivenTransition.Direction
         switch self {
         case .center, .top:
             direction = .upwards
@@ -70,9 +70,30 @@ public extension WQPresentionStyle.Position {
         case .bottom:
             direction = .down
         case .none:
-            direction = .none
+            direction = .down
         }
         return direction
+    }
+    /// 内部
+    func positionPoint(_ size: CGSize, anchorPoint: CGPoint, viewFrame: CGRect) -> CGPoint {
+        var position: CGPoint
+        let viewW = viewFrame.width
+        let viewH = viewFrame.height
+        switch self {
+        case .none:
+            position = .zero
+        case .top:
+            position = CGPoint(x: viewW * 0.5, y: size.height * anchorPoint.y)
+        case .left:
+            position = CGPoint(x: size.width * anchorPoint.x, y: viewH * 0.5)
+        case .bottom:
+            position = CGPoint(x: viewW * 0.5, y: viewH - size.height * (1.0 - anchorPoint.y))
+        case .right:
+            position = CGPoint(x: viewW - size.width * (1.0 - anchorPoint.x), y: viewH * 0.5)
+        case .center:
+            position = CGPoint(x: viewW * 0.5, y: viewH * 0.5)
+        }
+        return position
     }
 }
 public extension WQPresentionStyle.Bounce {

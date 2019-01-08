@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 public final class WQCache {
     public static let didReceiveCacheMemoryWarning = NSNotification.Name("didReceiveCacheMemoryWarning")
     //  "wq.defaultCache.disk.com"
@@ -48,7 +49,9 @@ public final class WQCache {
     ///
     /// - Parameters:
     ///   - completion: 存储完成回调
-    public func asyncSet<T: Encodable>(_ object: T?, for key: String, completion: ((Error?) -> Void)? = nil) {
+    public func asyncSet<T: Encodable>(_ object: T?,
+                                       for key: String,
+                                       completion: ((Error?) -> Void)? = nil) {
         ioQueue.async {
             var error: Error?
             defer {
@@ -73,7 +76,8 @@ public final class WQCache {
         }
     }
     @discardableResult
-    public func set<T: Encodable>(_ object: T?, for key: String) -> Bool {
+    public func set<T: Encodable>(_ object: T?,
+                                  for key: String) -> Bool {
         guard let obj = object else {
             self.delete(for: key)//为空的时候移除
             return false
@@ -90,8 +94,8 @@ public final class WQCache {
        return isSuccess
     }
     
-    public func object<T: Decodable>(_ key: String) -> T? {
-        if let data = self.load(for: key) {
+    public func object<T: Decodable>(_ key: String, expire: WQCacheExpiry = .never) -> T? {
+        if let data = self.read(for: key, expire: expire) {
             var obj: T?
             do {
                 let decoder = JSONDecoder()
@@ -107,7 +111,6 @@ public final class WQCache {
     public func remove(_ key: String) {
         self.delete(for: key)
     }
-    
     deinit {
         pthread_rwlock_destroy(&lock)
     }
@@ -145,7 +148,6 @@ public extension WQCache {
         }
        return nil
     }
-    
 }
 // MARK: - --Accessory
 public extension WQCache {
@@ -170,13 +172,13 @@ public extension WQCache {
     @discardableResult
     func save(_ data: Data, for key: String) -> Error? {
         let cachePath = path(for: key)
-        return save(data, for: cachePath, options: .atomic)
+        let error = save(data, for: cachePath, options: .atomic)
+        return error
     }
-    
     func save(_ data: Data, for path: URL, options: Data.WritingOptions) -> Error? {
         pthread_rwlock_wrlock(&lock)
         defer {
-             pthread_rwlock_unlock(&lock)
+            pthread_rwlock_unlock(&lock)
         }
         do {
             try data.write(to: path, options: options)
@@ -189,19 +191,37 @@ public extension WQCache {
         }
         return nil
     }
-    
-    func load(for key: String) -> Data? {
+    func read(for key: String, expire: WQCacheExpiry) -> Data? {
+        let path = self.path(for: key).path
         pthread_rwlock_rdlock(&lock)
-        defer {
-            pthread_rwlock_unlock(&lock)
+        switch expire {
+        case .never:
+            break
+        default:
+            do {
+                let attrs = try fileManager.attributesOfItem(atPath: path)
+                var isExpiry: Bool = false
+                if let modifydate = attrs[.modificationDate] as? Date {
+                    isExpiry = expire.isExpiry(at: modifydate)
+                } else if let createDate = attrs[.creationDate] as? Date {
+                    isExpiry = expire.isExpiry(at: createDate)
+                }
+                if isExpiry {
+                    pthread_rwlock_unlock(&lock)
+                    self.delete(for: key)
+                    return nil
+                }
+            } catch CocoaError.fileNoSuchFile {
+                pthread_rwlock_unlock(&lock)
+                return nil
+            } catch let error {
+                debugPrint(error.localizedDescription)
+            }
         }
-        do {
-           return try Data(contentsOf: path(for: key))
-        } catch {
-            return nil
-        }
+        let data = fileManager.contents(atPath: path)
+        pthread_rwlock_unlock(&lock)
+        return data
     }
-    
    @discardableResult
    func delete(for key: String) -> Error? {
         pthread_rwlock_wrlock(&lock)
@@ -220,4 +240,35 @@ public extension WQCache {
 
 public extension CocoaError {
     static let fileWriteInvalidValue = CocoaError.Code(rawValue: -20_000)
+}
+
+public enum WQCacheExpiry { //过期时间可以每个Cache单独维护一个字典
+    case never
+    case seconds(Double)
+    case date(Date)
+}
+extension WQCacheExpiry {
+    /// 4001/1/1 8:0:0 (北京时间)
+    static let distantFuture: Double = 64_092_211_200.0
+    
+    func expiryTime() -> Double {
+        switch self {
+        case .never:
+            return WQCacheExpiry.distantFuture
+        case let .seconds(secs):
+            return CFAbsoluteTimeGetCurrent() + secs
+        case let .date(time):
+            return time.timeIntervalSince1970
+        }
+    }
+    func isExpiry(at date: Date) -> Bool {
+        switch self {
+        case .never:
+            return false
+        case let .seconds(secs):
+            return date + secs < Date()
+        case let .date(time):
+            return date > time
+        }
+    }
 }

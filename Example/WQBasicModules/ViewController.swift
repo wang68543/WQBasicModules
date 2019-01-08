@@ -17,20 +17,53 @@ class ViewController: UIViewController {
         }
     }
      private let picButton = UIButton()
-    
+    let panGR: UIPanGestureRecognizer = UIPanGestureRecognizer()
     let str: String = "123123123"
    
     class WQPresentionView: UIView {
       
     }
+    @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            let presentionView = WQPresentionView()
+            let keyPath = \WQPresentationable.containerView.frame
+            let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
+            let color = WQAnimatedItem.defaultViewBackground()
+//            presentionView.wm.show(items: [item,color,TestPresent()])
+            //        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
+            presentionView.backgroundColor = UIColor.red
+            //        presentionView.wm.show(reverse: .center, from: .bottom)
+            //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            //            debugPrint(self.children)
+            //            presentionView.wm.dismiss(true)
+            //        }
+//            presentionView.wm.presentation?.interactionDissmissDirection = .down
+//            presentionView.wm.presentation?.isEnableSlideDismiss = true
+            let animator: WQTransitioningAnimator = WQTransitioningAnimator(items: [item,color,TestPresent()])
+            let present = WQPresentationable(subView: presentionView, animator: animator)
+            present.isEnableSlideDismiss = true
+            present.showInteractive = WQDrivenTransition(gesture: panGR, direction: .upwards)
+            present.showInteractive?.progressWidth = 200
+             present.showInteractive?.isInteracting = true
+            present.show(animated: true, in: self, completion: nil)
+        default:
+            break;
+        }
+//        sender.
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.addGestureRecognizer(panGR)
+        panGR.addTarget(self, action: #selector(handlePanGesture(_:)))
+        debugPrint(Date.distantFuture.timeIntervalSince1970)
 //        let str = "123123123"
         
 //        let picButton = UIButton(type: .system)
 //        picButton.titleAlignment = .right
         //        self.picButton.imgSize = CGSize(width: 30, height: 24)
         //        self.picButton.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0)
+       
         picButton.setTitleColor(.black, for: .normal)
         picButton.setImage(UIImage(named: "post-ic03"), for: .normal)
         picButton.setTitle("图片", for: .normal)
@@ -82,9 +115,13 @@ class ViewController: UIViewController {
         let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
         for idx  in 0 ..< 50 {
 //            queuen.async {
-                let test = TestModel("12345")
-                WQCache.default["test"] = test
             let model:TestModel? = WQCache.default["test"]
+            let test:TestModel? = WQCache.default.object("test", expire: .seconds(10))
+//                let test = TestModel("12345")
+//                WQCache.default["test"] = test
+            
+         
+            
                 debugPrint("==",model)
 //            }
         }
