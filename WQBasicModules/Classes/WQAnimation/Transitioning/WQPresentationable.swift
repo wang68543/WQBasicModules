@@ -146,7 +146,7 @@ private extension WQPresentationable {
         showInVC.addChild(self)
         showInVC.view.addSubview(self.view)
         if flag {
-            self.animator.animated(presented: showInVC, presenting: self, isShow: true) { [weak self] flag in
+            self.animator.animated(presented: showInVC, presenting: self, isShow: true) { [weak self] _ in
                 guard let weakSelf = self else {
                     completion?()
                     return
@@ -173,7 +173,7 @@ private extension WQPresentationable {
             self.animator.items.config(self.parent, presenting: self, isShow: false)
             animateFinshed()
         } else {
-            self.animator.animated(presented: self.parent, presenting: self, isShow: false) { flag in
+            self.animator.animated(presented: self.parent, presenting: self, isShow: false) { _ in
                 animateFinshed()
             }
         }

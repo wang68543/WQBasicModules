@@ -12,7 +12,7 @@ public extension String {
     ///
     /// - Returns: 键值对
     func serializedURLQueryParameters() -> [String: String] {
-        var parameters: [String : String] = [:]
+        var parameters: [String: String] = [:]
         let string = self.components(separatedBy: "?").last
         guard let queryString = string,
             !queryString.isEmpty else {

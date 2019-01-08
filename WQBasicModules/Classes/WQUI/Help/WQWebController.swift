@@ -61,7 +61,7 @@ open class WQWebController: UIViewController {
     
     private func configObservation() {
         let progress = \WKWebView.estimatedProgress
-        progressObservation = webView.observe(progress, options: .new, changeHandler: { [weak self]  webView, change in
+        progressObservation = webView.observe(progress, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
                     return
@@ -70,7 +70,7 @@ open class WQWebController: UIViewController {
         })
    
         let title = \WKWebView.title
-        titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self]  webView, change in
+        titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
                     return
@@ -78,7 +78,7 @@ open class WQWebController: UIViewController {
             weakSelf.navigationItem.title = newValue
         })
         let isLoading = \WKWebView.isLoading
-        isLoadingObservation = webView.observe(isLoading, options: .new, changeHandler: { [weak self]  webView, change in
+        isLoadingObservation = webView.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
                     return
@@ -89,7 +89,7 @@ open class WQWebController: UIViewController {
             }
         })
         let canGoBack = \WKWebView.canGoBack
-        canGoBackObservation = webView.observe(canGoBack, options: .new, changeHandler: { [weak self]  webView, change in
+        canGoBackObservation = webView.observe(canGoBack, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
                     return

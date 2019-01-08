@@ -258,7 +258,7 @@ public extension WQTransitioningAnimator {
          size: CGSize,
          bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
          presentedFrame: CGRect = UIScreen.main.bounds) {
-        let anchorPoint = subView.layer.anchorPoint
+//        let anchorPoint = subView.layer.anchorPoint
         let item = WQAnimatedItem(container: size, postionStyle: show, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
         self.init(items: Array(default: item, viewFrame: presentedFrame))
     }
