@@ -26,7 +26,7 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
     /// 交互的时候 用于计算动画完成百分比的
 //    open var progressSize: CGSize
     /// 手势完成长度 (用于动画完成百分比计算)
-    public var progressWidth: CGFloat = 0
+    public var completionWidth: CGFloat = 0
 //    public var interactionType: InteractionType = .dismiss
 //    public var starShowConfig: WQShowConfig?
     public var isInteracting: Bool = false
@@ -65,12 +65,12 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
         var isFinished: Bool = false
         switch self.direction {
         case .down, .upwards:
-            let progress = translate.y / progressWidth
+            let progress = translate.y / completionWidth
             if  abs(velocity.y) > shouldCompletionSpeed || progress > shouldCompletionProgress {
                 isFinished = true
             }
         case .left, .right:
-            let progress = translate.x / progressWidth
+            let progress = translate.x / completionWidth
             if abs(velocity.x) > shouldCompletionSpeed || progress > shouldCompletionProgress {
                 isFinished = true
             }
@@ -91,12 +91,12 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
             return
         }
         let size = view.frame.size
-        if progressWidth <= 0 {
+        if completionWidth <= 0 {
             switch self.direction {
             case .down, .upwards:
-                progressWidth = size.height
+                completionWidth = size.height
             case .left, .right:
-                progressWidth = size.width
+                completionWidth = size.width
             }
         }
         switch sender.state {
@@ -109,9 +109,9 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
             let translate = sender.translation(in: view)
             switch self.direction {
             case .down, .upwards:
-                percentage = translate.y / progressWidth
+                percentage = translate.y / completionWidth
             case .left, .right:
-                percentage = translate.x / progressWidth
+                percentage = translate.x / completionWidth
             }
             percentage = abs(percentage)
             self.update(percentage)

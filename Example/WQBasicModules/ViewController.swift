@@ -42,9 +42,8 @@ class ViewController: UIViewController {
 //            presentionView.wm.presentation?.isEnableSlideDismiss = true
             let animator: WQTransitioningAnimator = WQTransitioningAnimator(items: [item,color,TestPresent()])
             let present = WQPresentationable(subView: presentionView, animator: animator)
-            present.isEnableSlideDismiss = true
             present.showInteractive = WQDrivenTransition(gesture: panGR, direction: .upwards)
-            present.showInteractive?.progressWidth = 200
+            present.showInteractive?.completionWidth = 200
              present.showInteractive?.isInteracting = true
             present.show(animated: true, in: self, completion: nil)
         default:
@@ -210,7 +209,7 @@ class ViewController: UIViewController {
 //            presentionView.wm.dismiss(true)
 //        }
         presentionView.wm.presentation?.interactionDissmissDirection = .down
-        presentionView.wm.presentation?.isEnableSlideDismiss = true
+       
 //        let presnetion = WQPresentationable(UIView(), frame: .zero, dismiss: .zero, initial: .zero)
 //        let keypath = \WQPresentationable.containerView.frame
 //        let item = WQTransitioningAnimatedItem(keypath, initial: CGRect(x: 0, y: 0, width: 100, height: 100), show: UIScreen.main.bounds, dismiss: CGRect.zero)

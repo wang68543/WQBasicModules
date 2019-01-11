@@ -1,5 +1,5 @@
 //
-//  WQLayer+BasicAnimation.swift
+//  CALayer+Animations.swift
 //  Pods-WQBasicModules_Example
 //
 //  Created by WangQiang on 2018/11/4.

@@ -4,12 +4,8 @@
 //
 //  Created by WangQiang on 2018/12/12.
 //
-// swiftlint:disable line_length
 import UIKit
 
-//extension UIViewController {
-//    var 
-//}
 open class WQPresentationable: UIViewController {
     public let containerView: UIView = {
         let view = UIView()
@@ -20,12 +16,18 @@ open class WQPresentationable: UIViewController {
     /// 容器的尺寸
     public private(set) var hideInteracitve: WQDrivenTransition?
     public var showInteractive: WQDrivenTransition?
-    public var interactionDissmissDirection: WQDrivenTransition.Direction = .down {
+    public var interactionDissmissDirection: WQDrivenTransition.Direction? {
         didSet {
-            guard let ineractive = self.hideInteracitve else {
-                return
+            if let direction = interactionDissmissDirection {
+                let panGR = UIPanGestureRecognizer()
+                let driven = WQDrivenTransition(gesture: panGR, direction: direction)
+                self.view.addGestureRecognizer(panGR)
+                panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
+                panGR.delegate = self
+                self.hideInteracitve = driven
+            } else {
+                self.hideInteracitve = nil
             }
-            ineractive.direction = interactionDissmissDirection
         }
     }
     /// 是否支持点击背景消失
@@ -38,8 +40,6 @@ open class WQPresentationable: UIViewController {
             }
         }
     }
-    /// 是否支持滑动消失
-    open var isEnableSlideDismiss: Bool = false
     open var isEnableKeyboardObserver: Bool = false {
         didSet {
             if isEnableKeyboardObserver {
@@ -74,14 +74,6 @@ open class WQPresentationable: UIViewController {
             if topVC.presentedViewController != nil { //已经弹出过控制器
                 self.showInParent(topVC, flag: flag, completion: completion)
             } else {
-                if isEnableSlideDismiss {
-                    let panGR = UIPanGestureRecognizer()
-                    let driven = WQDrivenTransition(gesture: panGR, direction: self.interactionDissmissDirection)
-                        self.view.addGestureRecognizer(panGR)
-                    panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
-                    panGR.delegate = self
-                    self.hideInteracitve = driven
-                }
                 topVC.modalPresentationStyle = .custom
                 topVC.transitioningDelegate = self
                 self.modalPresentationStyle = .custom
@@ -130,11 +122,11 @@ private extension WQPresentationable {
     }
     private func addConstraints(for subView: UIView) {
         subView.translatesAutoresizingMaskIntoConstraints = false
-        let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
-        let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
-        let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
-        let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
-        containerView.addConstraints([left, right, bottom, top])
+        NSLayoutConstraint.activate([
+            subView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            subView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
     }
     private func showInParent(_ controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
         var showInVC: UIViewController = controller
@@ -160,7 +152,7 @@ private extension WQPresentationable {
             completion?()
         }
         isModal = false
-        isEnableSlideDismiss = false
+        interactionDissmissDirection = nil
     }
     private func hideFromParent(animated flag: Bool, completion: (() -> Void)? ) {
         func animateFinshed() {
@@ -261,8 +253,15 @@ public extension WQPresentationable {
         return inputViews
     }
     func addKeyboardObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChangeFrame(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidChangeFrame(_:)), name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
+        let defaultCenter = NotificationCenter.default
+        defaultCenter.addObserver(self,
+                                  selector: #selector(keyboardWillChangeFrame(_:)),
+                                  name: UIResponder.keyboardWillChangeFrameNotification,
+                                  object: nil)
+        defaultCenter.addObserver(self,
+                                  selector: #selector(keyboardDidChangeFrame(_:)),
+                                  name: UIResponder.keyboardDidChangeFrameNotification,
+                                  object: nil)
     }
     func removeKeyboardObserver() {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
@@ -298,8 +297,9 @@ public extension WQPresentationable {
         }
         let contentF = inputSuperView.convert(inputView.frame, to: keyWindow)
         let intersectFrame = contentF.intersection(keyboardF)
+        let position = self.containerView.layer.position
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
-            self.containerView.layer.position = CGPoint(x: self.containerView.layer.position.x, y: self.containerView.layer.position.y - intersectFrame.height - 10)
+            self.containerView.layer.position = CGPoint(x: position.x, y: position.y - intersectFrame.height - 10)
         })
     }
 }
@@ -320,19 +320,23 @@ extension WQPresentationable: UIGestureRecognizerDelegate {
 }
 // MARK: - -- UIViewControllerTransitioningDelegate
 extension WQPresentationable: UIViewControllerTransitioningDelegate {
-   public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+   public func animationController(forPresented presented: UIViewController,
+                                   presenting: UIViewController,
+                                   source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.animator
     }
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self.animator
     }
-    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
+        -> UIViewControllerInteractiveTransitioning? {
         guard let interactive = self.hideInteracitve else {
             return nil
         }
         return interactive.isInteracting ? interactive : nil
     }
-    public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
+        -> UIViewControllerInteractiveTransitioning? {
         guard let interactive = self.showInteractive else {
             return nil
         }
