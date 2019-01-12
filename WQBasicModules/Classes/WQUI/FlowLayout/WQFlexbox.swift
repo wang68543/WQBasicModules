@@ -14,12 +14,13 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     private weak var delegate: WQFlexboxDelegateLayout? {
         return self.collectionView?.delegate as? WQFlexboxDelegateLayout
     }
+    /// 根据 collectionView的frame限制另一边的长度 (isHorizontal contentSize限制为frame的宽度)
     public var direction: WQFlexDirection = .row
     /// 整个line主轴方向在section中的排列方式
     public var justifyContent: WQJustifyContent = .flexStart
     /// 若line中有item有尺寸不相等的以尺寸最大的item进行相对布局(当direction为水平方向时参照最大的height 否则参照最大的width)
     public var alignItems: WQAlignItems = .center
-    /// 动态调整每个section中lines之间的间距,以及first line section 顶部或右侧间距
+    /// 动态调整每个section中lines之间的间距,以及first line section 顶部或右侧间距 (只有一个section 并且section的长度 y小于主轴长度才有用)
     public var alignContent: WQAlignContent = .flexStart
     /// 主轴方向的排列cell的个数 默认0 根据最小间距属性来动态计算每行的个数
     /// 存储items的布局属性
