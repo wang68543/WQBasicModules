@@ -113,6 +113,7 @@ public extension WQAnimatedItem where Element == CGRect {
 }
 
 public extension Array where Element == WQAnimatedConfigAble {
+    
     func initial(_ presented: UIViewController?, presenting: UIViewController?) {
         self.setup(presented, presenting: presenting, state: .initial)
     }
@@ -123,17 +124,7 @@ public extension Array where Element == WQAnimatedConfigAble {
         self.forEach { item in
             item.config(presented, presenting: presenting, present: state)
         }
-//        if let nav = presented?.navigationController {
-//            nav.view.layoutIfNeeded()
-//        } else
-        if let tabBarController = presented?.tabBarController {
-            tabBarController.view.layoutIfNeeded()
-        }
-//            else {
-//            presented?.view.layoutIfNeeded()
-//        }
-    }
-    
+    }  
     /// 创建一个包含 View frame 跟 view 默认Color 动画
     init(default item: WQAnimatedConfigAble, viewFrame: CGRect) {
         self.init()

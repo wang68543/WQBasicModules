@@ -1,4 +1,4 @@
-//
+//  swiftlint:disable:this file_name
 //  WQFlexable.swift
 //  Pods-WQBasicModules_Example
 //

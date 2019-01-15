@@ -28,6 +28,7 @@ open class WQWebController: UIViewController {
     private var isLoadingObservation: NSKeyValueObservation?
     private var canGoBackObservation: NSKeyValueObservation?
     
+    private var originalRequest: URLRequest?
     public func loadURLString(_ urlString: String) {
         guard let url = URL(string: urlString) else {
             return
@@ -36,7 +37,14 @@ open class WQWebController: UIViewController {
         self.loadRequest(request)
     }
     public func loadRequest(_ request: URLRequest) {
+        self.originalRequest = request
         self.webView.load(request)
+    }
+    /// 刷新
+    public func reload() {
+        if let request = self.originalRequest  {
+            self.loadRequest(request)
+        }
     }
     override open func viewDidLoad() {
         super.viewDidLoad()

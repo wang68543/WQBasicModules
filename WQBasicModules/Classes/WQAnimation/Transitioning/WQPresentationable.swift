@@ -11,6 +11,9 @@ class WQPresentationWindow: UIWindow {
     override func layoutSubviews() {
         super.layoutSubviews()
     }
+    deinit {
+        debugPrint("弹窗窗口销毁了")
+    }
 }
 
 public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
@@ -59,12 +62,12 @@ open class WQPresentationable: UIViewController {
             }
         }
     }
+    /// 是否是Modal出来的
+    public internal(set) var shownMode: WQShownMode = .present
     /// 容器的尺寸
     public private(set) var hideInteracitve: WQDrivenTransition?
     ///containerView上的子View 用于转场动画切换
     public private(set) var childViews: [UIView] = []
-    /// 是否是Modal出来的
-    public internal(set) var shownMode: WQShownMode = .present
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     private var contentViewInputs: [UITextInput] = []
     private var tapGesture: UITapGestureRecognizer?
@@ -95,7 +98,7 @@ open class WQPresentationable: UIViewController {
         if presnetVC?.presentedViewController != nil {
             self.shownInParent(presnetVC!, flag: flag, completion: completion)
         } else if let topVC = presnetVC {
-            //TODO:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
+            //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
             self.presentSelf(in: topVC, flag: flag, completion: completion)
         } else {
             self.shownInWindow(flag, completion: completion)
@@ -123,6 +126,30 @@ open class WQPresentationable: UIViewController {
             self.removeKeyboardObserver()
         }
     }
+    /// 容器里面view的转场动画
+    public func transitionContainer(from fromView: UIView,
+                                    to toView: UIView,
+                                    duration: TimeInterval,
+                                    options: UIView.AnimationOptions = [],
+                                    animations: (() -> Void)?,
+                                    completion: ((Bool) -> Void)? = nil) {
+        guard self.childViews.last !== toView  else {
+            debugPrint("traget show view is current ")
+            return
+        }
+        self.addContainerSubview(toView)
+        UIView.transition(from: fromView, to: toView, duration: duration, options: options) { flag in
+            if flag {
+                fromView.removeFromSuperview()
+            } else {
+                toView.removeFromSuperview()
+            }
+            completion?(flag)
+        }
+        if let animateOperation = animations {
+            UIView.animate(withDuration: duration, animations: animateOperation)
+        }
+    }
     deinit {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
@@ -135,6 +162,73 @@ open class WQPresentationable: UIViewController {
     }
 }
 
+// MARK: - -- transition between sibling containerView childViews
+extension WQPresentationable {
+    private var defaultDuration: TimeInterval {
+        return 0.15
+    }
+    
+    public func push(to toView: UIView, options: UIView.AnimationOptions = .transitionFlipFromRight, completion: ((Bool) -> Void)? = nil) {
+        if self.childViews.isEmpty {
+            self.addContainerSubview(toView)
+            self.childViews.append(toView)
+        } else {
+            self.transitionContainer(from: self.childViews.last!,
+                                     to: toView,
+                                     duration: defaultDuration,
+                                     animations: nil,
+                                     completion: { flag in
+                                        if flag {
+                                            if let index = self.childViews.firstIndex(of: toView) {
+                                                self.childViews.remove(at: index)
+                                            }
+                                            self.childViews.append(toView)
+                                        }
+                                        completion?(flag)
+            })
+        }
+    }
+    /// 判断是否为空处理 (当 当前数组里面的个数小于一个的时候就直接整个dismiss掉)
+    private func isEmptyPopHandle(_ completion: ((Bool) -> Void)? = nil) -> Bool {
+        guard self.childViews.count > 1 else {
+            self.dismiss(animated: true) {
+                completion?(true)
+            }
+            debugPrint("current is root childView so direct dismiss controller")
+            return true
+        }
+        return false
+    }
+    public func pop(toRoot options: UIView.AnimationOptions = .transitionFlipFromLeft, completion: ((Bool) -> Void)? = nil) {
+        guard !self.isEmptyPopHandle(completion) else {
+            return
+        }
+        self.pop(to: self.childViews.first!, options: options, completion: completion)
+    }
+    public func pop(_ options: UIView.AnimationOptions = .transitionFlipFromLeft, completion: ((Bool) -> Void)? = nil) {
+        guard !self.isEmptyPopHandle(completion) else {
+            return
+        }
+        self.pop(to: self.childViews[self.childViews.count - 2], options: options, completion: completion)
+    }
+    public func pop(to toView: UIView, options: UIView.AnimationOptions = .transitionFlipFromLeft, completion: ((Bool) -> Void)? = nil) {
+        guard !self.isEmptyPopHandle(completion) else {
+            return
+        }
+        guard let index = self.childViews.firstIndex(of: toView) else {
+            debugPrint("\(toView) is not containerView hierarchy")
+            return
+        }
+        let from = self.childViews.last!
+        self.transitionContainer(from: from, to: toView, duration: defaultDuration, options: options, animations: nil) { flag in
+            if flag {
+                self.childViews.removeLast(index)
+            }
+            completion?(flag)
+        }
+    }
+    
+}
 // MARK: - -- 提供给外部使用的接口
 extension WQPresentationable {
    public func presentSelf(in controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
@@ -148,23 +242,33 @@ extension WQPresentationable {
    public func shownInParent(_ controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
         self.shownMode = .childController
         var topVC: UIViewController
+        var animatedVC: UIViewController?
         //保证使用全屏的View
-    if let navgationController = controller.navigationController {
-        topVC = navgationController
-    } else if let tabBarController = controller.tabBarController { //如果是他tabBar的话 会自动重新布局
-        topVC = tabBarController
-    } else {
-        topVC = controller
-    }
-    shouldUsingPresentionAnimatedController = controller
-    if topVC === controller {
-        //底下的view不能做动画了
-    }
-    //动画的时候用可见的ViewController 尽量确保当前View 与Visable的View在同一个坐标系下 然后动画的时候用当前的控制器动画
+        // 尽量确保层级是navigationController的子控制器 并动画的是navigationController的子控制器
+        var shouldAdvanceLayout: Bool = false
+        if let navgationController = controller.navigationController {
+            topVC = navgationController
+            animatedVC = navgationController.visibleViewController
+        } else if let tabBarController = controller.tabBarController {
+            shouldAdvanceLayout = true // tabBarController在增加了子控制器之后会刷新布局从而覆盖动画的效果 所以需要在动画之前刷新一遍
+            topVC = tabBarController
+            animatedVC = tabBarController.selectedViewController ?? controller
+        } else {
+            topVC = controller.parent ?? controller
+            animatedVC = controller.topVisible()
+        }
+        //这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
+        shouldUsingPresentionAnimatedController = animatedVC
         topVC.addChild(self)
         topVC.view.addSubview(self.view)
+        if shouldAdvanceLayout {
+            CATransaction.begin()
+            CATransaction.disableActions()
+            topVC.view.layoutIfNeeded()
+            CATransaction.commit()
+        }
         if flag {
-            self.animator.animated(presented: controller, presenting: self, isShow: true) { [weak self] _ in
+            self.animator.animated(presented: animatedVC, presenting: self, isShow: true) { [weak self] _ in
                 guard let weakSelf = self else {
                     completion?()
                     return
@@ -173,7 +277,7 @@ extension WQPresentationable {
                 completion?()
             }
         } else {
-            self.animator.items.config(controller, presenting: self, isShow: true)
+            self.animator.items.config(animatedVC, presenting: self, isShow: true)
             self.didMove(toParent: topVC)
             completion?()
         }
@@ -356,7 +460,7 @@ public extension WQPresentationable {
         let contentF = inputSuperView.convert(inputView.frame, to: keyWindow)
         let intersectFrame = contentF.intersection(keyboardF)
         let position = self.containerView.layer.position
-        let targetPosition = CGPoint(x: position.x, y: position.y - intersectFrame.height - 10) 
+        let targetPosition = CGPoint(x: position.x, y: position.y - intersectFrame.height - 10)
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
             self.containerView.layer.position = targetPosition
         })
