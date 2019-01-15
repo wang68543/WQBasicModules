@@ -22,9 +22,9 @@ open class WQPresentationable: UIViewController {
         return view
     }()
     public let animator: WQTransitioningAnimator
-    /// 容器的尺寸
-    public private(set) var hideInteracitve: WQDrivenTransition?
+    // 显示的时候的交互动画 暂时只支持present动画
     public var showInteractive: WQDrivenTransition?
+    /// 滑动交互消失的方向
     public var interactionDissmissDirection: WQDrivenTransition.Direction? {
         didSet {
             if let direction = interactionDissmissDirection {
@@ -49,6 +49,7 @@ open class WQPresentationable: UIViewController {
             }
         }
     }
+    /// 是否开启键盘输入框监听 (用于自动上移输入框遮挡)
     open var isEnableKeyboardObserver: Bool = false {
         didSet {
             if isEnableKeyboardObserver {
@@ -58,14 +59,23 @@ open class WQPresentationable: UIViewController {
             }
         }
     }
+    /// 容器的尺寸
+    public private(set) var hideInteracitve: WQDrivenTransition?
+    ///containerView上的子View 用于转场动画切换
     public private(set) var childViews: [UIView] = []
     /// 是否是Modal出来的
     public internal(set) var shownMode: WQShownMode = .present
+    /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     private var contentViewInputs: [UITextInput] = []
     private var tapGesture: UITapGestureRecognizer?
     
-    weak var previousKeyWindow: UIWindow?
-    var containerWindow: WQPresentationWindow?
+    /// shownInWindow的时候 记录的属性 用于消失之后恢复
+    private weak var previousKeyWindow: UIWindow?
+    //用于容纳当前控制器的window窗口
+    private var containerWindow: WQPresentationWindow?
+    
+    /// addChildController或者windowRootController的时候 用于动画管理器里面的转场动画
+    private weak var shouldUsingPresentionAnimatedController: UIViewController?
     
     public init(subView: UIView, animator: WQTransitioningAnimator) {
         self.animator = animator
@@ -85,7 +95,7 @@ open class WQPresentationable: UIViewController {
         if presnetVC?.presentedViewController != nil {
             self.shownInParent(presnetVC!, flag: flag, completion: completion)
         } else if let topVC = presnetVC {
-            //fixTODO:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
+            //TODO:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
             self.presentSelf(in: topVC, flag: flag, completion: completion)
         } else {
             self.shownInWindow(flag, completion: completion)
@@ -139,13 +149,14 @@ extension WQPresentationable {
         self.shownMode = .childController
         var topVC: UIViewController
         //保证使用全屏的View
-    if let tabBarController = controller.tabBarController {
+    if let navgationController = controller.navigationController {
+        topVC = navgationController
+    } else if let tabBarController = controller.tabBarController { //如果是他tabBar的话 会自动重新布局
         topVC = tabBarController
-    } else if let navgationController = controller.navigationController {
-            topVC = navgationController
-        } else {
-            topVC = controller
-        }
+    } else {
+        topVC = controller
+    }
+    shouldUsingPresentionAnimatedController = controller
     if topVC === controller {
         //底下的view不能做动画了
     }
@@ -179,6 +190,7 @@ extension WQPresentationable {
         self.containerWindow?.rootViewController = self
         self.containerWindow?.makeKeyAndVisible()
         let preRootViewController = UIApplication.shared.delegate?.window??.rootViewController
+        self.shouldUsingPresentionAnimatedController = preRootViewController
         if flag {
             self.animator.animated(presented: preRootViewController, presenting: self, isShow: true) { _ in
                 completion?()
@@ -198,10 +210,14 @@ extension WQPresentationable {
         }
         self.willMove(toParent: nil)
         if !flag {
-            self.animator.items.config(self.parent, presenting: self, isShow: false)
+            self.animator.items.config(self.shouldUsingPresentionAnimatedController,
+                                       presenting: self,
+                                       isShow: false)
             animateFinshed()
         } else {
-            self.animator.animated(presented: self.parent, presenting: self, isShow: false) { _ in
+            self.animator.animated(presented: self.shouldUsingPresentionAnimatedController,
+                                   presenting: self,
+                                   isShow: false) { _ in
                 animateFinshed()
             }
         }
@@ -222,10 +238,10 @@ extension WQPresentationable {
             completion?()
         }
         if !flag {
-            self.animator.items.config(self.parent, presenting: self, isShow: false)
+            self.animator.items.config(self.shouldUsingPresentionAnimatedController, presenting: self, isShow: false)
             animateFinshed()
         } else {
-            self.animator.animated(presented: self.parent, presenting: self, isShow: false) { _ in
+            self.animator.animated(presented: self.shouldUsingPresentionAnimatedController, presenting: self, isShow: false) { _ in
                 animateFinshed()
             }
         }
@@ -275,6 +291,7 @@ extension WQPresentationable {
             return
         }
         self.view.removeGestureRecognizer(tapGR)
+        self.tapGesture = nil
     }
 }
 
@@ -339,8 +356,9 @@ public extension WQPresentationable {
         let contentF = inputSuperView.convert(inputView.frame, to: keyWindow)
         let intersectFrame = contentF.intersection(keyboardF)
         let position = self.containerView.layer.position
+        let targetPosition = CGPoint(x: position.x, y: position.y - intersectFrame.height - 10) 
         UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
-            self.containerView.layer.position = CGPoint(x: position.x, y: position.y - intersectFrame.height - 10)
+            self.containerView.layer.position = targetPosition
         })
     }
 }

@@ -26,7 +26,7 @@ public protocol WQAnimatedConfigAble {
 
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
 
-/// 动画属性配置
+/// 动画属性配置 (主要配置参与动画的两个ccontroller的属性变化)
 public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedConfigAble { 
     public typealias Value = Element
     public typealias Root = ReferenceWritableKeyPath<ViewControllerType, Value>
@@ -61,6 +61,11 @@ public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedCon
         }
     }
 }
+
+/// 显示其他控制器的viewController的动画配置
+public final class WQViewControllerAnimatedItem<Element>: WQPresentedAnimatedItem<UIViewController, Element> { }
+
+/// 被present出来的viewController的动画配置
 public final class WQAnimatedItem<Element>: WQPresentedAnimatedItem<WQPresentationable, Element> { }
 public extension WQAnimatedItem where Element == UIColor? {
     class func defaultViewBackground(_ show: UIColor = UIColor.black.withAlphaComponent(0.6),
@@ -118,6 +123,15 @@ public extension Array where Element == WQAnimatedConfigAble {
         self.forEach { item in
             item.config(presented, presenting: presenting, present: state)
         }
+//        if let nav = presented?.navigationController {
+//            nav.view.layoutIfNeeded()
+//        } else
+        if let tabBarController = presented?.tabBarController {
+            tabBarController.view.layoutIfNeeded()
+        }
+//            else {
+//            presented?.view.layoutIfNeeded()
+//        }
     }
     
     /// 创建一个包含 View frame 跟 view 默认Color 动画

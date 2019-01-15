@@ -196,6 +196,8 @@ class ViewController: UIViewController {
 
     @IBAction func webViewAction(_ sender: UIButton) {
  
+//        self.view.frame = self.view.frame.offsetBy(dx: 300, dy: 0)
+//        return
 //        let second = SecondViewController()
 //        second.view.backgroundColor = UIColor.white
 //        self.navigationController?.pushViewController(second, animated: true)
@@ -214,7 +216,7 @@ class ViewController: UIViewController {
 //        }
         let itemFrame = WQAnimatedItem.defaultViewShowFrame()
         let navkey = \UIViewController.view.frame
-        let viewItem = WQPresentedAnimatedItem(navkey, initial: self.view.frame, show: self.view.frame.offsetBy(dx: 300, dy: 0))
+        let viewItem = WQPresentedAnimatedItem(navkey, initial:self.view.frame  , show:self.view.frame.offsetBy(dx: 300, dy: 0))
         let animator = WQTransitioningAnimator(items: [item, color,itemFrame,viewItem ])
         let presentation = WQPresentationable(subView: presentionView, animator: animator)
         presentation.isEnableTabBackgroundDismiss = true
