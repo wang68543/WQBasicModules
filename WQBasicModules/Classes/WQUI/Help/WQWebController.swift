@@ -7,7 +7,7 @@
 
 import UIKit
 import WebKit
-open class WQWebController: UIViewController {
+open class WQWebController: UIViewController { 
     /// 支持子类自定义初始化WebView
     public var webView = WKWebView() {
         didSet {
@@ -171,10 +171,8 @@ open class WQWebController: UIViewController {
         path.move(to: CGPoint(x: 0, y: progressHeight * 0.5))
         path.addLine(to: CGPoint(x: self.progressView.frame.maxX, y: progressHeight * 0.5))
         self.progressView.path = path.cgPath
-        
     }
 }
-
 @objc extension WQWebController {
      func arrowAction() {
         if self.webView.canGoBack {

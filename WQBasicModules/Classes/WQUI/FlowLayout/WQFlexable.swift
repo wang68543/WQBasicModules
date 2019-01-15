@@ -3,7 +3,6 @@
 //  Pods-WQBasicModules_Example
 //
 //  Created by WangQiang on 2018/11/17.
-//  swiftlint:disable line_length
 
 import UIKit
 
@@ -74,25 +73,64 @@ public enum WQAlignItems: Int {
     /// （默认值）：如果项目未设置高度或设为auto，将占满整个容器的高度。
     case stretch
 }
-
+extension WQAlignItems {
+    /// 如果是isReverse origin就是从cell的尾部开始的
+    func fixItemFrame(_ origin: CGPoint,
+                      size: CGSize,
+                      lineMaxWidth: CGFloat,
+                      isHorizontal: Bool,
+                      isReverse: Bool) -> CGRect {
+        var frame = CGRect(origin: origin, size: size)
+        if isHorizontal {
+            switch self {
+            case .center:
+                frame.origin.y += (lineMaxWidth - size.height) * 0.5
+            case .flexEnd:
+                frame.origin.y += lineMaxWidth - size.height
+            case .stretch:
+                frame.size.height = lineMaxWidth
+            default:
+                break
+            }
+            if isReverse {
+                frame.origin.x = frame.minX - size.width
+            }
+        } else {
+            switch self {
+            case .center:
+                frame.origin.x += (lineMaxWidth - size.width) * 0.5
+            case .flexEnd:
+                frame.origin.x += lineMaxWidth - size.width
+            case .stretch:
+                frame.size.width = lineMaxWidth
+            default:
+                break
+            }
+            if isReverse {
+                frame.origin.y = frame.minY - size.height
+            }
+        }
+        return frame
+    }
+}
 // 适应行间距 以line为单位布局每个Section
 @objc
 public enum WQAlignContent: Int {
     /// 交叉轴的起点对齐。
     case flexStart
-    
+
     /// 交叉轴的终点对齐。
     case flexEnd
-    
+
     /// 交叉轴的中点对齐。
     case center
-    
+
     /// 与交叉轴两端对齐，轴线之间的间隔平均分布。
     case spaceBetween
-    
+
     /// 每根轴线两侧的间隔都相等。所以，轴线之间的间隔比轴线与边框的间隔大一倍。
     case spaceAround
-    
+
     /// （默认值）：轴线占满整个交叉轴。
     //    case stretch
 }
@@ -116,94 +154,3 @@ public enum WQAlignContent: Int {
 //    case stretch
 //}
 //// MARK: - ==========Cell属性END==========
-
-@objc
-public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
-    
-    /// 返回每个Section的高度;当只有一个section的时候 高度默认为collectionView的height
-    /// section尺寸 (包含header、footer(上下布局) 包含sectionInsets)
-    @objc
-    optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, sizeForSectionAt section: Int) -> CGSize
-//        @objc optional func flexbox(_ flexbox: WQFlexbox, alignItemAt indexPath: IndexPath) -> WQAlignSelf
-    /// Cells排列方向
-    @objc
-    optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, directionForSectionAt section: Int) -> WQFlexDirection
-    @objc
-    optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, justifyContentForSectionAt section: Int, inLine lineNum: Int, linesCount: Int) -> WQJustifyContent
-    @objc
-    optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, alignItemsForSectionAt section: Int, inLine lineIndex: Int, with indexPath: IndexPath) -> WQAlignItems
-    @objc
-    optional func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, alignContentForSectionAt section: Int) -> WQAlignContent
-}
-
-internal struct LinesFrameAttribute {
-    
-    let direction: WQFlexDirection
-    /// 当前分区的左上角 主要记录用于后续计算 (包含insets和header、footer的高度)
-    var rect: CGRect = .zero
-    
-    var insets: UIEdgeInsets = .zero
-    
-    var headerSize: CGSize = .zero
-    
-    var footerSize: CGSize = .zero
-    
-    /// 分区号
-    let section: Int
-    /// 每个line中item的最大边框集合 (例:当direction水平的时候这里表示每个line中item的最大高度集合)
-    let maxValues: [CGFloat]
-    
-    /// 每个line常规边框的总和 (例:当direction水平的时候这里表示每个line中每个item宽度和的集合)
-    let totalValues: [CGFloat]
-    
-    /// 所有line的最大边框的和 (例:当direction水平的时候这里表示每个line中line中item的最大高度和)
-    let sumMaxValue: CGFloat
-    
-    /// section中lines数量
-    let count: Int
-    
-    init(_ section: Int, maxValues: [CGFloat], totalValues: [CGFloat], sumMaxValue: CGFloat, direction: WQFlexDirection) {
-        self.section = section
-        self.maxValues = maxValues
-        self.totalValues = totalValues
-        self.sumMaxValue = sumMaxValue
-        self.count = maxValues.count
-        self.direction = direction
-    }
-}
-extension LinesFrameAttribute {
-    var limitMaxLength: CGFloat {
-        if self.direction.isHorizontal {
-            return rect.width - insets.left - insets.right
-        } else {
-            return rect.height - insets.top - insets.bottom
-        }
-    }
-    var contentSize: CGSize {
-        return CGSize(width: rect.width - insets.left - insets.right, height: rect.height - insets.top - insets.bottom)
-    }
-}
-internal struct LinesMarginAttribute {
-    /// 起始部分的边距
-    let margin: CGFloat
-    /// 剩余的边距
-    let remainingMargin: CGFloat
-    /// line的间距 
-    let space: CGFloat
-   
-    let section: Int
-}
-
-internal struct LineItemsMarginAttribute {
-    /// line的主轴方向坐标起始值(参照当前Section的原点)
-    let startItemValue: CGFloat 
-    /// item间隔
-    let itemSpace: CGFloat
-    /// 当前行items的数量
-    let count: Int
-     //第几分区第几行
-    let section: Int
-    let index: Int
-    //实际的内容大小
-//    let realSize: CGSize
-}

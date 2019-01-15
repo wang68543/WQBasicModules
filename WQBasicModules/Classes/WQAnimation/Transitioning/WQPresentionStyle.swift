@@ -6,6 +6,14 @@
 //
 
 import Foundation
+public enum WQShownMode {
+    /// 系统的present的形式呈现的
+    case present
+    /// 父子控制器形式呈现的
+    case childController
+    /// 新创建一个window 并以根控制器的形式存在
+    case windowRootController
+}
 public class WQPresentionStyle {
     public enum Position {
         case none

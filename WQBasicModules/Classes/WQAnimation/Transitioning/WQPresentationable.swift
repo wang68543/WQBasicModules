@@ -6,6 +6,15 @@
 //
 import UIKit
 
+/// 专职于显示Alert的Window
+class WQPresentationWindow: UIWindow {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+}
+
+public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
+
 open class WQPresentationable: UIViewController {
     public let containerView: UIView = {
         let view = UIView()
@@ -49,11 +58,14 @@ open class WQPresentationable: UIViewController {
             }
         }
     }
-    private var tapGesture: UITapGestureRecognizer?
     public private(set) var childViews: [UIView] = []
     /// 是否是Modal出来的
-    private var isModal: Bool = true
+    public internal(set) var shownMode: WQShownMode = .present
     private var contentViewInputs: [UITextInput] = []
+    private var tapGesture: UITapGestureRecognizer?
+    
+    weak var previousKeyWindow: UIWindow?
+    var containerWindow: WQPresentationWindow?
     
     public init(subView: UIView, animator: WQTransitioningAnimator) {
         self.animator = animator
@@ -69,26 +81,24 @@ open class WQPresentationable: UIViewController {
          containerView.layoutIfNeeded()
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
-        let presnetVC: UIViewController? = controller ?? self.topViewController
-        if let topVC = presnetVC {
-            if topVC.presentedViewController != nil { //已经弹出过控制器
-                self.showInParent(topVC, flag: flag, completion: completion)
-            } else {
-                topVC.modalPresentationStyle = .custom
-                topVC.transitioningDelegate = self
-                self.modalPresentationStyle = .custom
-                self.transitioningDelegate = self
-                topVC.present(self, animated: flag, completion: completion)
-            }
+        let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
+        if presnetVC?.presentedViewController != nil {
+            self.shownInParent(presnetVC!, flag: flag, completion: completion)
+        } else if let topVC = presnetVC {
+            //fixTODO:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
+            self.presentSelf(in: topVC, flag: flag, completion: completion)
         } else {
-            debugPrint("没有依赖控制器")
+            self.shownInWindow(flag, completion: completion)
         }
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if !isModal {
+        switch shownMode {
+        case .childController:
             hideFromParent(animated: flag, completion: completion)
-        } else {
-           super.dismiss(animated: flag, completion: completion)
+        case .present:
+            super.dismiss(animated: flag, completion: completion)
+        case .windowRootController:
+            hideFromWindow(animated: flag, completion: completion)
         }
     }
     open override func viewWillAppear(_ animated: Bool) {
@@ -105,7 +115,8 @@ open class WQPresentationable: UIViewController {
     }
     deinit {
         //手动置空关联值 防止坏内存引用
-        childViews.forEach { $0.wm.setPresenter(nil) }
+        childViews.forEach { $0.presentation = nil }
+        self.containerWindow = nil
         debugPrint("控制器销毁了")
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
@@ -113,47 +124,72 @@ open class WQPresentationable: UIViewController {
         fatalError("not supported nib")
     }
 }
-// MARK: - -- Help
-private extension WQPresentationable {
-    private func addContainerSubview(_ subView: UIView) {
-        subView.wm.setPresenter(self)
-        containerView.addSubview(subView)
-        addConstraints(for: subView)
+
+// MARK: - -- 提供给外部使用的接口
+extension WQPresentationable {
+   public func presentSelf(in controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
+        self.shownMode = .present
+        controller.modalPresentationStyle = .custom
+        controller.transitioningDelegate = self
+        self.modalPresentationStyle = .custom
+        self.transitioningDelegate = self
+        controller.present(self, animated: flag, completion: completion)
     }
-    private func addConstraints(for subView: UIView) {
-        subView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            subView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            subView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
-    }
-    private func showInParent(_ controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
-        var showInVC: UIViewController = controller
-        if let tabBarVC = showInVC.tabBarController {
-            showInVC = tabBarVC
-        } else if let navVC = showInVC.navigationController {
-            showInVC = navVC
+   public func shownInParent(_ controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
+        self.shownMode = .childController
+        var topVC: UIViewController
+        //保证使用全屏的View
+    if let tabBarController = controller.tabBarController {
+        topVC = tabBarController
+    } else if let navgationController = controller.navigationController {
+            topVC = navgationController
+        } else {
+            topVC = controller
         }
-        showInVC.addChild(self)
-        showInVC.view.addSubview(self.view)
+    if topVC === controller {
+        //底下的view不能做动画了
+    }
+    //动画的时候用可见的ViewController 尽量确保当前View 与Visable的View在同一个坐标系下 然后动画的时候用当前的控制器动画
+        topVC.addChild(self)
+        topVC.view.addSubview(self.view)
         if flag {
-            self.animator.animated(presented: showInVC, presenting: self, isShow: true) { [weak self] _ in
+            self.animator.animated(presented: controller, presenting: self, isShow: true) { [weak self] _ in
                 guard let weakSelf = self else {
                     completion?()
                     return
                 }
-                weakSelf.didMove(toParent: showInVC)
+                weakSelf.didMove(toParent: topVC)
                 completion?()
             }
         } else {
-            self.animator.items.config(showInVC, presenting: self, isShow: true)
-            self.didMove(toParent: showInVC)
+            self.animator.items.config(controller, presenting: self, isShow: true)
+            self.didMove(toParent: topVC)
             completion?()
         }
-        isModal = false
         interactionDissmissDirection = nil
     }
+   public func shownInWindow(_ flag: Bool, completion: (() -> Void)?) {
+        self.shownMode = .windowRootController
+        self.previousKeyWindow = UIApplication.shared.keyWindow
+        if self.containerWindow == nil {
+            self.containerWindow = WQPresentationWindow(frame: UIScreen.main.bounds)
+            self.containerWindow?.windowLevel = WQContainerWindowLevel
+            self.containerWindow?.backgroundColor = .clear;// 避免横竖屏旋转时出现黑色
+        }
+        self.containerWindow?.rootViewController = self
+        self.containerWindow?.makeKeyAndVisible()
+        let preRootViewController = UIApplication.shared.delegate?.window??.rootViewController
+        if flag {
+            self.animator.animated(presented: preRootViewController, presenting: self, isShow: true) { _ in
+                completion?()
+            }
+        } else {
+            self.animator.items.config(preRootViewController, presenting: self, isShow: true)
+            completion?()
+        }
+        interactionDissmissDirection = nil
+    }
+    
     private func hideFromParent(animated flag: Bool, completion: (() -> Void)? ) {
         func animateFinshed() {
             self.view.removeFromSuperview()
@@ -170,40 +206,45 @@ private extension WQPresentationable {
             }
         }
     }
-    
-    private var topViewController: UIViewController? {
-        var viewController: UIViewController?
-        let windows = UIApplication.shared.windows.reversed()
-        for window in  windows {
-            let windowCls = type(of: window).description()
-            if windowCls == "UIRemoteKeyboardWindow" || windowCls == "UITextEffectsWindow" {
-                continue
+    private func hideFromWindow(animated flag: Bool, completion: (() -> Void)? ) {
+        func animateFinshed() {
+            if UIApplication.shared.keyWindow === self.containerWindow {
+                if let isPreviousHidden = self.previousKeyWindow?.isHidden,
+                    isPreviousHidden {
+                    UIApplication.shared.delegate?.window??.makeKey()
+                } else {
+                    self.previousKeyWindow?.makeKey()
+                }
             }
-            if let rootVC = window.rootViewController,
-                let topVC = self.findTopViewController(in: rootVC) {
-                viewController = topVC
-                break
-            }
+            self.containerWindow?.isHidden = true
+            self.containerWindow?.rootViewController = nil
+            self.previousKeyWindow = nil
+            completion?()
         }
-        return viewController
-    }
-    
-    private func findTopViewController(in viewController: UIViewController) -> UIViewController? {
-        if let tabBarController = viewController as? UITabBarController {
-            if let selectedController = tabBarController.selectedViewController {
-                return self.findTopViewController(in: selectedController)
-            } else {
-                return tabBarController
-            }
-        } else if let navgationController = viewController as? UINavigationController {
-            if let navTopController = navgationController.topViewController {
-                return self.findTopViewController(in: navTopController)
-            } else {
-                return navgationController
-            }
+        if !flag {
+            self.animator.items.config(self.parent, presenting: self, isShow: false)
+            animateFinshed()
         } else {
-            return viewController
+            self.animator.animated(presented: self.parent, presenting: self, isShow: false) { _ in
+                animateFinshed()
+            }
         }
+    }
+}
+// MARK: - -- Help
+private extension WQPresentationable {
+    private func addContainerSubview(_ subView: UIView) {
+        subView.presentation = self
+        containerView.addSubview(subView)
+        addConstraints(for: subView)
+    }
+    private func addConstraints(for subView: UIView) {
+        subView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            subView.topAnchor.constraint(equalTo: containerView.topAnchor),
+            subView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
     }
 }
 // MARK: - -- Gesture Handle

@@ -57,12 +57,11 @@ class SecondViewController: UIViewController {
         button.frame = CGRect(x: 20, y: 100, width: 100, height: 50);
         self.view.addSubview(button)
         let layout = WQFlexbox()
-        layout.scrollDirection = .vertical
-        layout.direction = .column
+        layout.direction = .columnReverse
         layout.justifyContent = .center
         layout.alignContent = .center
         
-        layout.alignItems = .stretch
+        layout.alignItems = .center
         
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 100, width: 300, height: 500), collectionViewLayout: layout)
 //        collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 40, right: 40)
@@ -72,7 +71,10 @@ class SecondViewController: UIViewController {
         collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
         collectionView.register(HeaderFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HeaderFooterView.reuseIdentifier)
         collectionView.backgroundColor = UIColor.green
-//        self.view.addSubview(collectionView)
+        self.view.addSubview(collectionView)
+        if #available(iOS 11.0, *) {
+            self.collectionView.contentInsetAdjustmentBehavior = .never
+        }
     }
     
 /**
@@ -94,6 +96,14 @@ class SecondViewController: UIViewController {
 
 }
 extension SecondViewController: WQFlexboxDelegateLayout {
+    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, justifyContentFor linePath: WQFlexLinePath) -> WQJustifyContent {
+        return .center
+    }
+//
+    func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, alignItemsFor section: Int, with linePath: WQFlexLinePath, in indexPath: IndexPath) -> WQAlignItems {
+        return .center
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.item % 3 == 0 {
             return CGSize(width: 30, height: 80)
@@ -102,11 +112,11 @@ extension SecondViewController: WQFlexboxDelegateLayout {
         }
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 200, height: 100)
+        return CGSize(width: 200, height: 50)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: 200, height: 200)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+//        return CGSize(width: 200, height: 50)
+//    }
 //    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
 //        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
 //    }
@@ -126,7 +136,7 @@ extension SecondViewController: UICollectionViewDataSource {
         return 2
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 50
+        return 30
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier, for: indexPath) as! Cell

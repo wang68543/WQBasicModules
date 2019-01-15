@@ -1,5 +1,5 @@
 //
-//  WQFileManager+Path.swift
+//  FileManager+Path.swift
 //  Pods
 //
 //  Created by hejinyin on 2018/1/26.

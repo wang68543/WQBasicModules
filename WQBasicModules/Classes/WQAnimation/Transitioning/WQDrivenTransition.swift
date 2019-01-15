@@ -14,21 +14,11 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
         case upwards
         case down
     }
-//    public enum InteractionType {
-//        case dismiss
-//        case present
-//        case push
-//        case pop
-//    }
     /// 手势开始的时候将要显示的控制器
 //    public typealias WQShowConfig = ((InteractionType) -> Void)
     open var direction: Direction
-    /// 交互的时候 用于计算动画完成百分比的
-//    open var progressSize: CGSize
-    /// 手势完成长度 (用于动画完成百分比计算)
+    ///交互的时候  手势完成长度 (用于动画完成百分比计算)
     public var completionWidth: CGFloat = 0
-//    public var interactionType: InteractionType = .dismiss
-//    public var starShowConfig: WQShowConfig?
     public var isInteracting: Bool = false
     public var panGesture: UIPanGestureRecognizer {
         didSet {
@@ -48,11 +38,6 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
         super.init()
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
-//    open override func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
-//        super.startInteractiveTransition(transitionContext)
-//        self.transitionContext = transitionContext
-//
-//    }
     open func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard !self.isInteracting,
             let panGR = gestureRecognizer as? UIPanGestureRecognizer,
@@ -101,7 +86,8 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
         }
         switch sender.state {
         case .began:
-            sender.setTranslation(.zero, in: view) 
+            sender.setTranslation(.zero, in: view)
+            //这里外部监听事件处理
 //            self.isInteracting = true
 //            self.starShowConfig?(self.interactionType)
         case .changed:

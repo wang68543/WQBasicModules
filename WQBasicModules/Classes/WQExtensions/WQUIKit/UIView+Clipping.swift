@@ -163,7 +163,7 @@ fileprivate extension UITableView {
                     offsetY -= sectionHeight //如果有头的
                 }
                 self.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
-                context.saveGState()
+//                context.saveGState()
                 //释放绘图对象
                 autoreleasepool(invoking: {
                     let contentH = tableViewH - sectionHeight
@@ -172,7 +172,7 @@ fileprivate extension UITableView {
                     self.drawHierarchy(in: rect, afterScreenUpdates: true)
                     let image = UIGraphicsGetImageFromCurrentImageContext()
                    UIGraphicsEndImageContext()
-                    if let img = image {
+                    if let img = image {//图片拼接
                         img.draw(in: CGRect(x: 0, y: offsetY + sectionHeight, width: tableViewW, height: contentH))
                     }
                     offsetY += tableViewH
@@ -185,7 +185,7 @@ fileprivate extension UITableView {
             UIGraphicsEndImageContext()
             return image
         } else {
-            return self.snapshotTable(drawSize, clipPath: clipPath)
+            return self.snapshotScroll(drawSize, clipPath: clipPath)
         }
     }
     /// 当前rect(已滚动到当前区域)区域悬停的头部的高度

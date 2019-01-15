@@ -25,3 +25,4 @@ public extension WQModulesCompatible {
     }
 }
 extension UIView: WQModulesCompatible { }
+extension UIViewController: WQModulesCompatible { }

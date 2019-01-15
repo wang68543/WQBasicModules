@@ -1,0 +1,16 @@
+//
+//  WQUIHelp.swift
+//  Pods
+//
+//  Created by WangQiang on 2019/1/14.
+//
+
+import Foundation
+final public class WQUIHelp {
+    class func topVisibleViewController() -> UIViewController? {
+        if let rootViewController = UIApplication.shared.delegate?.window??.rootViewController {
+            return rootViewController.topVisible()
+        }
+        return nil
+    } 
+}

@@ -196,11 +196,15 @@ class ViewController: UIViewController {
 
     @IBAction func webViewAction(_ sender: UIButton) {
  
+//        let second = SecondViewController()
+//        second.view.backgroundColor = UIColor.white
+//        self.navigationController?.pushViewController(second, animated: true)
+//        return
         let presentionView = WQPresentionView()
         let keyPath = \WQPresentationable.containerView.frame
         let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
         let color = WQAnimatedItem.defaultViewBackground()
-        presentionView.wm.show(items: [item,color,TestPresent()])
+//        presentionView.wm.show(items: [item,color,TestPresent()])
 //        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
         presentionView.backgroundColor = UIColor.red
 //        presentionView.wm.show(reverse: .center, from: .bottom)
@@ -208,8 +212,19 @@ class ViewController: UIViewController {
 //            debugPrint(self.children)
 //            presentionView.wm.dismiss(true)
 //        }
-        presentionView.wm.presentation?.interactionDissmissDirection = .down
+        let itemFrame = WQAnimatedItem.defaultViewShowFrame()
+        let navkey = \UIViewController.view.frame
+        let viewItem = WQPresentedAnimatedItem(navkey, initial: self.view.frame, show: self.view.frame.offsetBy(dx: 300, dy: 0))
+        let animator = WQTransitioningAnimator(items: [item, color,itemFrame,viewItem ])
+        let presentation = WQPresentationable(subView: presentionView, animator: animator)
+        presentation.isEnableTabBackgroundDismiss = true
+        presentation.shownInParent(self, flag: true, completion: nil)
+//        presentation.shownInWindow(true, completion: nil)
+        
+//        presentionView.wm.presentation?.interactionDissmissDirection = .down
        
+//        presentionView.wm.presentation?.shownInWindow(true, completion: nil)
+        
 //        let presnetion = WQPresentationable(UIView(), frame: .zero, dismiss: .zero, initial: .zero)
 //        let keypath = \WQPresentationable.containerView.frame
 //        let item = WQTransitioningAnimatedItem(keypath, initial: CGRect(x: 0, y: 0, width: 100, height: 100), show: UIScreen.main.bounds, dismiss: CGRect.zero)
@@ -221,7 +236,7 @@ class ViewController: UIViewController {
     
 }
 class TestPresent: WQAnimatedConfigAble {
-    func config(_ presented: UIViewController?, presenting: UIViewController?, state: WQTransitionState) {
+    func config(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) {
         guard state != .initial else {
             return
         }

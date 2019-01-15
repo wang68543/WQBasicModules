@@ -211,7 +211,7 @@ public extension WQCache {
                     self.delete(for: key)
                     return nil
                 }
-            } catch CocoaError.fileNoSuchFile {
+            } catch CocoaError.fileReadNoSuchFile {
                 pthread_rwlock_unlock(&lock)
                 return nil
             } catch let error {
