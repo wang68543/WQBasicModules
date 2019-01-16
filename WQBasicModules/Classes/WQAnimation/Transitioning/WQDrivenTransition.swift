@@ -6,17 +6,15 @@
 //
 
 import UIKit
-
+public enum DrivenDirection {
+    case left
+    case right
+    case upwards
+    case down
+}
 open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
-    public enum Direction { 
-        case left
-        case right
-        case upwards
-        case down
-    }
-    /// 手势开始的时候将要显示的控制器
-//    public typealias WQShowConfig = ((InteractionType) -> Void)
-    open var direction: Direction
+   
+    open var direction: DrivenDirection
     ///交互的时候  手势完成长度 (用于动画完成百分比计算)
     public var completionWidth: CGFloat = 0
     public var isInteracting: Bool = false
@@ -32,7 +30,7 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
     public var shouldCompletionProgress: CGFloat = 0.5
     public var shouldCompletionSpeed: CGFloat = 100
     
-    public init(gesture: UIPanGestureRecognizer, direction: Direction) {
+    public init(gesture: UIPanGestureRecognizer, direction: DrivenDirection) {
         self.direction = direction
         self.panGesture = gesture
         super.init()
@@ -118,7 +116,7 @@ open class WQDrivenTransition: UIPercentDrivenInteractiveTransition {
     } 
 }
 public extension UIPanGestureRecognizer {
-    func isSameDirection(_ direction: WQDrivenTransition.Direction) -> Bool {
+    func isSameDirection(_ direction: DrivenDirection) -> Bool {
         let velocity = self.velocity(in: self.view)
         guard velocity != .zero else {
             return false

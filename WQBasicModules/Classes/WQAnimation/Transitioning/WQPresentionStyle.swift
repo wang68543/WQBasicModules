@@ -66,8 +66,8 @@ public extension WQPresentionStyle.Position {
         return CGRect(origin: origin, size: size)
     }
     
-    func mapInteractionDirection() -> WQDrivenTransition.Direction {
-        var direction: WQDrivenTransition.Direction
+    func mapInteractionDirection() -> DrivenDirection {
+        var direction: DrivenDirection
         switch self {
         case .center, .top:
             direction = .upwards

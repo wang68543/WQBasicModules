@@ -28,7 +28,7 @@ open class WQPresentationable: UIViewController {
     // 显示的时候的交互动画 暂时只支持present动画
     public var showInteractive: WQDrivenTransition?
     /// 滑动交互消失的方向
-    public var interactionDissmissDirection: WQDrivenTransition.Direction? {
+    public var interactionDissmissDirection: DrivenDirection? {
         didSet {
             if let direction = interactionDissmissDirection {
                 let panGR = UIPanGestureRecognizer()
@@ -506,3 +506,17 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate {
         return interactive.isInteracting ? interactive : nil
     }
 }
+//extension WQPresentationable: UIViewControllerInteractiveTransitioning {
+//    
+//    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+//        
+//        // Create our helper object to manage the transition for the given transitionContext.
+////        transitionDriver = AssetTransitionDriver(operation: operation, context: transitionContext, panGestureRecognizer: panGestureRecognizer)
+//    }
+//    
+////    var wantsInteractiveStart: Bool {
+////        
+////        // Determines whether the transition begins in an interactive state
+////        return initiallyInteractive
+////    }
+//}

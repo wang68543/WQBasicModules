@@ -29,6 +29,7 @@ open class WQWebController: UIViewController {
     private var canGoBackObservation: NSKeyValueObservation?
     
     private var originalRequest: URLRequest?
+    
     public func loadURLString(_ urlString: String) {
         guard let url = URL(string: urlString) else {
             return
@@ -42,7 +43,7 @@ open class WQWebController: UIViewController {
     }
     /// 刷新
     public func reload() {
-        if let request = self.originalRequest  {
+        if let request = self.originalRequest {
             self.loadRequest(request)
         }
     }
