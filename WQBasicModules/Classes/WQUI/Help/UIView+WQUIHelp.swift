@@ -45,7 +45,7 @@ extension UIView {
     }
     func registerKeyboardManager()  {
        let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(keyboardFrameChange(_:)), name: UIResponder.keyboardWillShowNotification, object: <#T##Any?#>)
+//        center.addObserver(self, selector: #selector(keyboardFrameChange(_:)), name: UIResponder.keyboardWillShowNotification, object: <#T##Any?#>)
     }
     @objc func keyboardFrameChange(_ note: Notification) {
         

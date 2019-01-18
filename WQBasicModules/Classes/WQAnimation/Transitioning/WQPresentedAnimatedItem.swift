@@ -22,8 +22,19 @@ public protocol WQAnimatedConfigAble {
     ///   - presenting: 被show出来的Controller
     ///   - state: 动画状态
     func config(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState)
+    
+    @available(iOS 10.0, *)
+    func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator
 }
-
+public extension WQAnimatedConfigAble {
+    @available(iOS 10.0, *)
+    func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: 0.25, curve: .easeIn) {
+            self.config(presented, presenting: presenting, present: state)
+        }
+        return animator
+    }
+}
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
 
 /// 动画属性配置 (主要配置参与动画的两个ccontroller的属性变化)
@@ -60,6 +71,7 @@ public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedCon
             controller[keyPath: self.keyPath] = self.dismiss
         }
     }
+   
 }
 
 /// 显示其他控制器的viewController的动画配置
@@ -124,7 +136,7 @@ public extension Array where Element == WQAnimatedConfigAble {
         self.forEach { item in
             item.config(presented, presenting: presenting, present: state)
         }
-    }  
+    } 
     /// 创建一个包含 View frame 跟 view 默认Color 动画
     init(default item: WQAnimatedConfigAble, viewFrame: CGRect) {
         self.init()

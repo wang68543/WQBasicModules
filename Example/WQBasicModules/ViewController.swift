@@ -215,12 +215,15 @@ class ViewController: UIViewController {
 //            presentionView.wm.dismiss(true)
 //        }
         let itemFrame = WQAnimatedItem.defaultViewShowFrame()
-        let navkey = \UIViewController.view.frame
-        let viewItem = WQPresentedAnimatedItem(navkey, initial:self.view.frame  , show:self.view.frame.offsetBy(dx: 300, dy: 0))
-        let animator = WQTransitioningAnimator(items: [item, color,itemFrame,viewItem ])
+//        let navkey = \UIViewController.view.frame
+//        let viewItem = WQPresentedAnimatedItem(navkey, initial:self.view.frame  , show:self.view.frame.offsetBy(dx: 300, dy: 0))
+        let animator = WQTransitioningAnimator(items: [item, color,itemFrame ])
         let presentation = WQPresentationable(subView: presentionView, animator: animator)
-        presentation.isEnableTabBackgroundDismiss = true
-        presentation.shownInParent(self, flag: true, completion: nil)
+        presentation.interactionDissmissDirection = .down
+        presentation.show(animated: true, in: nil, completion: nil)
+//        presentation.isEnableTabBackgroundDismiss = true
+        
+//        presentation.shownInParent(self, flag: true, completion: nil)
 //        presentation.shownInWindow(true, completion: nil)
         
 //        presentionView.wm.presentation?.interactionDissmissDirection = .down

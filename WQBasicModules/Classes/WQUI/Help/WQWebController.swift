@@ -227,7 +227,7 @@ extension WQWebController: WKNavigationDelegate {
         self.errorPlaceholderView?.removeFromSuperview()
     }
     public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        if let errorView = self.errorPlaceholderView  {
+        if let errorView = self.errorPlaceholderView {
             self.view.addSubview(errorView)
             errorView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([

@@ -27,18 +27,32 @@ open class WQPresentationable: UIViewController {
     public let animator: WQTransitioningAnimator
     // 显示的时候的交互动画 暂时只支持present动画
     public var showInteractive: WQDrivenTransition?
+    public var hidenDriven: WQTransitionDriven?
     /// 滑动交互消失的方向
     public var interactionDissmissDirection: DrivenDirection? {
         didSet {
-            if let direction = interactionDissmissDirection {
-                let panGR = UIPanGestureRecognizer()
-                let driven = WQDrivenTransition(gesture: panGR, direction: direction)
-                self.view.addGestureRecognizer(panGR)
-                panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
-                panGR.delegate = self
-                self.hideInteracitve = driven
+            if #available(iOS 10.0, *) {
+                if let direction = interactionDissmissDirection {
+                    let panGR = UIPanGestureRecognizer()
+                    let driven = WQTransitionDriven(panGR, direction: direction)
+                    self.view.addGestureRecognizer(panGR)
+                    panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
+                    panGR.delegate = self
+                    self.hidenDriven = driven
+                } else {
+                    self.hidenDriven = nil
+                }
             } else {
-                self.hideInteracitve = nil
+                if let direction = interactionDissmissDirection {
+                    let panGR = UIPanGestureRecognizer()
+                    let driven = WQDrivenTransition(gesture: panGR, direction: direction)
+                    self.view.addGestureRecognizer(panGR)
+                    panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
+                    panGR.delegate = self
+                    self.hideInteracitve = driven
+                } else {
+                    self.hideInteracitve = nil
+                }
             }
         }
     }
@@ -79,7 +93,7 @@ open class WQPresentationable: UIViewController {
     
     /// addChildController或者windowRootController的时候 用于动画管理器里面的转场动画
     private weak var shouldUsingPresentionAnimatedController: UIViewController?
-    
+ 
     public init(subView: UIView, animator: WQTransitioningAnimator) {
         self.animator = animator
         super.init(nibName: nil, bundle: nil)
@@ -371,13 +385,24 @@ private extension WQPresentationable {
 extension WQPresentationable {
     @objc
     func handleDismissPanGesture(_ sender: UIPanGestureRecognizer) {
-        switch sender.state {
-        case .began:
-            self.hideInteracitve?.isInteracting = true
-            self.dismiss(animated: true)
-        default:
-            break
+        if #available(iOS 10.0, *) {
+            switch sender.state {
+            case .began:
+                self.hidenDriven?.isInteractive = true
+                self.dismiss(animated: true)
+            default:
+                break
+            }
+        } else {
+            switch sender.state {
+            case .began:
+                self.hideInteracitve?.isInteracting = true
+                self.dismiss(animated: true)
+            default:
+                break
+            }
         }
+        
     }
     @objc
     func handleTapGesture(_ sender: UITapGestureRecognizer) {
@@ -473,24 +498,121 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate {
    public func animationController(forPresented presented: UIViewController,
                                    presenting: UIViewController,
                                    source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self.animator
+        return self
     }
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return self.animator
+        return self
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-        guard let interactive = self.hideInteracitve else {
-            return nil
+        if #available(iOS 10.0, *) {
+             return self
+        } else {
+            guard let interactive = self.hideInteracitve else {
+                return nil
+            }
+            return interactive.isInteracting ? interactive : nil
         }
-        return interactive.isInteracting ? interactive : nil
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-        guard let interactive = self.showInteractive else {
-            return nil
+            if #available(iOS 10.0, *) {
+                return self
+            } else {
+                guard let interactive = self.showInteractive else {
+                    return nil
+                }
+                return interactive.isInteracting ? interactive : nil
+            }
+    }
+}
+
+extension WQPresentationable : UIViewControllerInteractiveTransitioning {
+    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+        //
+        if #available(iOS 10.0, *) {
+            guard let fromVC = transitionContext.viewController(forKey: .from),
+                let toVC = transitionContext.viewController(forKey: .to) else {
+                    return
+            }
+            let isPresented = toVC.presentingViewController === fromVC
+            if !isPresented {
+                if let driven = self.hidenDriven {
+                    let animators = self.animator.items.map { $0.setup(toVC, presenting: fromVC, present: .dismiss) }
+                    driven.configAnimations(animators)
+                }
+            } else { //
+                if transitionContext.isInteractive { //更新进度
+                    
+                } else {
+                    let vcFinalFrame = transitionContext.finalFrame(for: toVC)
+                    let toVCView = transitionContext.view(forKey: .to)
+                    let transitionView = transitionContext.containerView
+                    if let toView = toVCView {
+                        toView.frame = vcFinalFrame
+                        transitionView.addSubview(toView)
+                    }
+                    let animateCompletion: WQAnimateCompletion = { flag -> Void in
+                     debugPrint("动画完成")
+                        let success = !transitionContext.transitionWasCancelled
+                        if (isPresented && !success) || (!isPresented && success) {
+                            toVCView?.removeFromSuperview()
+                        }
+                        transitionContext.completeTransition(success)
+                    }
+                    self.animator.animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
+                }
+            }
+        } else {
+            
         }
-        return interactive.isInteracting ? interactive : nil
+    }
+    
+    public var wantsInteractiveStart: Bool {
+        if let driven = self.hidenDriven {
+            return driven.isInteractive
+        }
+        return false
+    }
+}
+extension WQPresentationable: UIViewControllerAnimatedTransitioning {
+    public func animationEnded(_ transitionCompleted: Bool) {
+        self.hidenDriven?.isInteractive = false
+    }
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return self.animator.duration
+    }
+    
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        if #available(iOS 10.0, *) {
+            // do nothing
+        } else {
+            guard let fromVC = transitionContext.viewController(forKey: .from),
+                let toVC = transitionContext.viewController(forKey: .to) else {
+                    return
+            }
+            let vcFinalFrame = transitionContext.finalFrame(for: toVC)
+            let isPresented = toVC.presentingViewController === fromVC
+            let toVCView = transitionContext.view(forKey: .to)
+            let transitionView = transitionContext.containerView
+            if let toView = toVCView {
+                toView.frame = vcFinalFrame
+                transitionView.addSubview(toView)
+            }
+            let animateCompletion: WQAnimateCompletion = { flag -> Void in
+                let success = !transitionContext.transitionWasCancelled
+                if (isPresented && !success) || (!isPresented && success) {
+                    toVCView?.removeFromSuperview()
+                }
+                transitionContext.completeTransition(success)
+            }
+            if isPresented {
+                self.animator.animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
+            } else {
+                self.animator.animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
+            }
+        }
+       
     }
 }
 //extension WQPresentationable: UIViewControllerInteractiveTransitioning {
