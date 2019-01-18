@@ -401,19 +401,6 @@ extension WQPresentationable {
 
 // MARK: - keyboard
 public extension WQPresentationable {
-     private func searchTextInputs(_ inView: UIView) -> [UITextInput] {
-        var inputViews: [UITextInput] = []
-        if let textInput = inView as? UITextInput {
-            inputViews.append(textInput)
-        } else {
-            if !inView.subviews.isEmpty {
-                inView.subviews.forEach { view in
-                    inputViews.append(contentsOf: self.searchTextInputs(view))
-                }
-            }
-        }
-        return inputViews
-    }
     func addKeyboardObserver() {
         let defaultCenter = NotificationCenter.default
         defaultCenter.addObserver(self,
@@ -439,7 +426,7 @@ public extension WQPresentationable {
     }
     private func keyboardChangeAnimation(note: Notification) {
         if contentViewInputs.isEmpty {
-            contentViewInputs = self.searchTextInputs(self.containerView)
+            contentViewInputs = self.containerView.subTextInputs
         }
         guard let textInput = contentViewInputs.first(where: { textInput -> Bool in
             if let inputView = textInput as? UIResponder {
