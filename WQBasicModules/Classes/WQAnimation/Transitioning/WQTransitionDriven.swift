@@ -1,101 +1,49 @@
 //
-//  WQTransitionDriver.swift
+//  WQPercentDrivenInteractiveTransition.swift
 //  Pods-WQBasicModules_Example
 //
-//  Created by WangQiang on 2018/12/19.
+//  Created by WangQiang on 2018/12/15.
 //
 
 import UIKit
-
-public class WQTransitionDriven: NSObject {
-//    let isShow: Bool
-    var panGesture: UIPanGestureRecognizer
-    var direction: DrivenDirection
-    
-    @available(iOS 10.0, *)
-    lazy var  propertyAnimations: [UIViewPropertyAnimator] = []
-//    public private(set) var  propertyAnimations: [UIViewPropertyAnimator] = []
-    var isInteractive: Bool = false
-    ///交互的时候  手势完成长度 (用于动画完成百分比计算)
-    var completionWidth: CGFloat = 0
-    var shouldCompletionProgress: CGFloat = 0.5
-    var shouldCompletionSpeed: CGFloat = 100
-    
-    internal var animateCompletion: ((Bool) -> Void)?
-    
-    init(_ gesture: UIPanGestureRecognizer,
-         direction: DrivenDirection) {
-        self.panGesture = gesture
-        self.direction = direction
-    }
-    @available(iOS 10.0, *)
-    func configAnimations(_ anmator: [UIViewPropertyAnimator]) {
-        self.propertyAnimations = anmator
-        if let maxDuration = anmator.max(by: { $0.duration < $1.duration }),
-            let completion = self.animateCompletion {
-            maxDuration.addCompletion { completion($0 == .end) }
-        }
-    }
-    @available(iOS 10.0, *)
-    @objc
-    func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        guard let view = sender.view else {
-            return
-        }
-        let size = view.frame.size
-        if completionWidth <= 0 {
-            switch self.direction {
-            case .down, .upwards:
-                completionWidth = size.height
-            case .left, .right:
-                completionWidth = size.width
-            }
-        }
-       
-        switch sender.state {
-        case .began:
-            sender.setTranslation(.zero, in: view)
-        case .changed:
-            var percentage: CGFloat
-            let translate = sender.translation(in: view)
-             debugPrint("=====",translate)
-            switch self.direction {
-            case .down, .upwards:
-                percentage = translate.y / completionWidth
-            case .left, .right:
-                percentage = translate.x / completionWidth
-            }
-            percentage = abs(percentage)
-            propertyAnimations.forEach({ $0.fractionComplete = percentage })
-        case .ended, .cancelled, .failed:
-            let velocity = sender.velocity(in: view)
-            let translate = sender.translation(in: view)
-            let isFinished = self.shouldCompletionInteraction(velocity, translate: translate)
-            propertyAnimations.forEach { animator in
-                animator.isReversed = !isFinished
-                if animator.state == .inactive {
-                    animator.startAnimation()
-                } else {
-                    animator.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-                }
-            }
-            self.isInteractive = false
-        default:
-            break
-        }
-    }
+public enum DrivenDirection {
+    case left
+    case right
+    case upwards
+    case down
 }
-@available(iOS 10.0, *)
-public extension WQTransitionDriven {
-    func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableProtocol { 
+    open var direction: DrivenDirection
+    ///交互的时候  手势完成长度 (用于动画完成百分比计算)
+    public var completionWidth: CGFloat = 0
+    public var isInteractive: Bool = false
+    public var panGesture: UIPanGestureRecognizer {
+        didSet {
+            if panGesture !== oldValue {
+                self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
+            }
+        }
+    }
+//    public private(set) var transitionContext: UIViewControllerContextTransitioning?
+    
+    public var shouldCompletionProgress: CGFloat = 0.5
+    public var shouldCompletionSpeed: CGFloat = 100
+    
+    public init(gesture: UIPanGestureRecognizer, direction: DrivenDirection) {
+        self.direction = direction
+        self.panGesture = gesture
+        super.init()
+        self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
+    }
+    open func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard !self.isInteractive,
             let panGR = gestureRecognizer as? UIPanGestureRecognizer,
             panGR === self.panGesture else {
-                return false
+             return false
         }
         return panGR.isSameDirection(self.direction)
     }
-    func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
+    public func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
         var isFinished: Bool = false
         switch self.direction {
         case .down, .upwards:
@@ -110,5 +58,79 @@ public extension WQTransitionDriven {
             }
         }
         return isFinished
+    }
+//    open override var completionSpeed: CGFloat {
+//        set {
+//            super.completionSpeed = completionSpeed
+//        }
+//        get {
+//            return 1 - self.percentComplete
+//        }
+//    }
+    @objc
+    func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        guard let view = sender.view else {
+            return
+        }
+        let size = view.frame.size
+        if completionWidth <= 0 {
+            switch self.direction {
+            case .down, .upwards:
+                completionWidth = size.height
+            case .left, .right:
+                completionWidth = size.width
+            }
+        }
+        switch sender.state {
+        case .began:
+            sender.setTranslation(.zero, in: view)
+            //这里外部监听事件处理
+//            self.isInteracting = true
+//            self.starShowConfig?(self.interactionType)
+        case .changed:
+            var percentage: CGFloat
+            let translate = sender.translation(in: view)
+            switch self.direction {
+            case .down, .upwards:
+                percentage = translate.y / completionWidth
+            case .left, .right:
+                percentage = translate.x / completionWidth
+            }
+            percentage = abs(percentage)
+            self.update(percentage)
+        case .ended, .cancelled, .failed:
+            let velocity = sender.velocity(in: view)
+            let translate = sender.translation(in: view) 
+            let isFinished = self.shouldCompletionInteraction(velocity, translate: translate)
+            if isFinished {
+                self.completionSpeed = 1 - self.percentComplete
+                self.finish()
+            } else {
+                self.cancel()
+            }
+            self.isInteractive = false
+        default:
+            break
+        }
+    } 
+}
+public extension UIPanGestureRecognizer {
+    func isSameDirection(_ direction: DrivenDirection) -> Bool {
+        let velocity = self.velocity(in: self.view)
+        guard velocity != .zero else {
+            return false
+        }
+        var isSame: Bool = false
+        switch direction {
+        case .upwards:
+            isSame = velocity.y < 0 && abs(velocity.y) > abs(velocity.x)
+        case .down:
+            isSame = velocity.y > 0 && abs(velocity.y) > abs(velocity.x)
+        case .left:
+            isSame = velocity.x < 0 && abs(velocity.y) < abs(velocity.x)
+        case .right:
+            isSame = velocity.x > 0 && abs(velocity.y) < abs(velocity.x)
+        }
+        return isSame
     }
 }

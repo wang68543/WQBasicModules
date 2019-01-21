@@ -42,10 +42,10 @@ class ViewController: UIViewController {
 //            presentionView.wm.presentation?.isEnableSlideDismiss = true
             let animator: WQTransitioningAnimator = WQTransitioningAnimator(items: [item,color,TestPresent()])
             let present = WQPresentationable(subView: presentionView, animator: animator)
-            present.showInteractive = WQDrivenTransition(gesture: panGR, direction: .upwards)
-            present.showInteractive?.completionWidth = 200
-             present.showInteractive?.isInteracting = true
-            present.show(animated: true, in: self, completion: nil)
+//            present.showInteractive =  WQPropertyDriven
+//            present.showInteractive?.completionWidth = 200
+//             present.showInteractive?.isInteracting = true
+//            present.show(animated: true, in: self, completion: nil)
         default:
             break;
         }
@@ -220,10 +220,10 @@ class ViewController: UIViewController {
         let animator = WQTransitioningAnimator(items: [item, color,itemFrame ])
         let presentation = WQPresentationable(subView: presentionView, animator: animator)
         presentation.interactionDissmissDirection = .down
-        presentation.show(animated: true, in: nil, completion: nil)
+//        presentation.show(animated: true, in: nil, completion: nil)
 //        presentation.isEnableTabBackgroundDismiss = true
         
-//        presentation.shownInParent(self, flag: true, completion: nil)
+        presentation.shownInParent(self, flag: true, completion: nil)
 //        presentation.shownInWindow(true, completion: nil)
         
 //        presentionView.wm.presentation?.interactionDissmissDirection = .down
