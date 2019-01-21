@@ -35,30 +35,6 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableP
         super.init()
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
-    open func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard !self.isInteractive,
-            let panGR = gestureRecognizer as? UIPanGestureRecognizer,
-            panGR === self.panGesture else {
-             return false
-        }
-        return panGR.isSameDirection(self.direction)
-    }
-    public func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
-        var isFinished: Bool = false
-        switch self.direction {
-        case .down, .upwards:
-            let progress = translate.y / completionWidth
-            if  abs(velocity.y) > shouldCompletionSpeed || progress > shouldCompletionProgress {
-                isFinished = true
-            }
-        case .left, .right:
-            let progress = translate.x / completionWidth
-            if abs(velocity.x) > shouldCompletionSpeed || progress > shouldCompletionProgress {
-                isFinished = true
-            }
-        }
-        return isFinished
-    }
 //    open override var completionSpeed: CGFloat {
 //        set {
 //            super.completionSpeed = completionSpeed

@@ -11,6 +11,7 @@ extension WQPresentationable {
     private var defaultDuration: TimeInterval {
         return 0.15
     }
+    
     internal func addContainerSubview(_ subView: UIView) {
         subView.presentation = self
         containerView.addSubview(subView)

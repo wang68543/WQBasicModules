@@ -94,15 +94,15 @@ open class WQPresentationable: UIViewController {
     public internal(set) var childViews: [UIView] = []
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     internal var contentViewInputs: [UITextInput] = []
-    private var tapGesture: UITapGestureRecognizer?
+    internal var tapGesture: UITapGestureRecognizer?
     
     /// shownInWindow的时候 记录的属性 用于消失之后恢复
-    private weak var previousKeyWindow: UIWindow?
+    internal weak var previousKeyWindow: UIWindow?
     //用于容纳当前控制器的window窗口
-    private var containerWindow: WQPresentationWindow?
+    internal var containerWindow: WQPresentationWindow?
     
-    /// addChildController或者windowRootController的时候 用于动画管理器里面的转场动画
-    private weak var shouldUsingPresentionAnimatedController: UIViewController?
+    /// 非present的时候 用于动画管理器里面的转场动画
+    internal weak var shouldUsingPresentionAnimatedController: UIViewController?
  
     public init(subView: UIView, animator: WQTransitioningAnimator) {
         self.animator = animator
@@ -131,11 +131,13 @@ open class WQPresentationable: UIViewController {
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         switch shownMode {
         case .childController:
-            hideFromParent(animated: flag, completion: completion)
+            break
         case .present:
             super.dismiss(animated: flag, completion: completion)
         case .windowRootController:
-            hideFromWindow(animated: flag, completion: completion)
+            self.hideFromWindow(animated: flag, completion: completion)
+        case .superChildController:
+            self.hideFromParent(animated: flag, completion: completion)
         }
     }
     open override func viewWillAppear(_ animated: Bool) {
@@ -162,142 +164,64 @@ open class WQPresentationable: UIViewController {
         fatalError("not supported nib")
     }
 }
-
-// MARK: - -- 提供给外部使用的接口
-extension WQPresentationable {
-   public func presentSelf(in controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
-        self.shownMode = .present
-        controller.modalPresentationStyle = .custom
-        controller.transitioningDelegate = self
-        self.modalPresentationStyle = .custom
-        self.transitioningDelegate = self
-        controller.present(self, animated: flag, completion: completion)
+// MARK: - -- UIViewControllerTransitioningDelegate
+extension WQPresentationable: UIViewControllerTransitioningDelegate {
+    public func animationController(forPresented presented: UIViewController,
+                                    presenting: UIViewController,
+                                    source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self
     }
-   public func shownInParent(_ controller: UIViewController, flag: Bool, completion: (() -> Void)?) {
-        self.shownMode = .childController
-        var topVC: UIViewController
-        var animatedVC: UIViewController?
-        //保证使用全屏的View
-        // 尽量确保层级是navigationController的子控制器 并动画的是navigationController的子控制器
-        var shouldAdvanceLayout: Bool = false
-        if let navgationController = controller.navigationController {
-            topVC = navgationController
-            animatedVC = navgationController.visibleViewController
-        } else if let tabBarController = controller.tabBarController {
-            shouldAdvanceLayout = true // tabBarController在增加了子控制器之后会刷新布局从而覆盖动画的效果 所以需要在动画之前刷新一遍
-            topVC = tabBarController
-            animatedVC = tabBarController.selectedViewController ?? controller
-        } else {
-            topVC = controller.parent ?? controller
-            animatedVC = controller.topVisible()
-        }
-        //这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
-        shouldUsingPresentionAnimatedController = animatedVC
-        topVC.addChild(self)
-        topVC.view.addSubview(self.view)
-        if shouldAdvanceLayout {
-            CATransaction.begin()
-            CATransaction.disableActions()
-            topVC.view.layoutIfNeeded()
-            CATransaction.commit()
-        }
-        if flag {
-            self.animator.animated(presented: animatedVC, presenting: self, isShow: true) { [weak self] _ in
-                guard let weakSelf = self else {
-                    completion?()
-                    return
-                }
-                weakSelf.didMove(toParent: topVC)
-                completion?()
-            }
-        } else {
-            self.animator.items.config(animatedVC, presenting: self, isShow: true)
-            self.didMove(toParent: topVC)
-            completion?()
-        }
-        if #available(iOS 10.0, *) {
-            
-        } else {
-            interactionDissmissDirection = nil
-        }
-    
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return self
     }
-   public func shownInWindow(_ flag: Bool, completion: (() -> Void)?) {
-        self.shownMode = .windowRootController
-        self.previousKeyWindow = UIApplication.shared.keyWindow
-        if self.containerWindow == nil {
-            self.containerWindow = WQPresentationWindow(frame: UIScreen.main.bounds)
-            self.containerWindow?.windowLevel = WQContainerWindowLevel
-            self.containerWindow?.backgroundColor = .clear;// 避免横竖屏旋转时出现黑色
-        }
-        self.containerWindow?.rootViewController = self
-        self.containerWindow?.makeKeyAndVisible()
-        let preRootViewController = UIApplication.shared.delegate?.window??.rootViewController
-        self.shouldUsingPresentionAnimatedController = preRootViewController
-        if flag {
-            self.animator.animated(presented: preRootViewController, presenting: self, isShow: true) { _ in
-                completion?()
+    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
+        -> UIViewControllerInteractiveTransitioning? {
+            guard let interactive = self.hidenDriven else {
+                return nil
             }
-        } else {
-            self.animator.items.config(preRootViewController, presenting: self, isShow: true)
-            completion?()
-        }
-        interactionDissmissDirection = nil
+            return interactive.isInteractive ? interactive : nil
     }
-    
-    private func hideFromParent(animated flag: Bool, completion: (() -> Void)? ) {
-        func animateFinshed() {
-            self.view.removeFromSuperview()
-            self.removeFromParent()
-            completion?()
-        }
-        self.willMove(toParent: nil)
-        if !flag {
-            self.animator.items.config(self.shouldUsingPresentionAnimatedController,
-                                       presenting: self,
-                                       isShow: false)
-            animateFinshed()
-        } else {
-            if #available(iOS 10.0, *),
-                let driven = self.hidenDriven as? WQPropertyDriven {
-                driven.startIneractive(presented: self.shouldUsingPresentionAnimatedController, presenting: self) { position in
-                    if position == .end {
-                        animateFinshed()
-                    }
-                }
-            } else {
-                self.animator.animated(presented: self.shouldUsingPresentionAnimatedController,
-                                       presenting: self,
-                                       isShow: false) { _ in
-                                        animateFinshed()
-                }
+    public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
+        -> UIViewControllerInteractiveTransitioning? {
+            guard let interactive = self.showInteractive else {
+                return nil
             }
-            
-        }
+            return interactive.isInteractive ? interactive : nil
     }
-    private func hideFromWindow(animated flag: Bool, completion: (() -> Void)? ) {
-        func animateFinshed() {
-            if UIApplication.shared.keyWindow === self.containerWindow {
-                if let isPreviousHidden = self.previousKeyWindow?.isHidden,
-                    isPreviousHidden {
-                    UIApplication.shared.delegate?.window??.makeKey()
-                } else {
-                    self.previousKeyWindow?.makeKey()
-                }
-            }
-            self.containerWindow?.isHidden = true
-            self.containerWindow?.rootViewController = nil
-            self.previousKeyWindow = nil
-            completion?()
+}
+extension WQPresentationable: UIViewControllerAnimatedTransitioning {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        return self.animator.duration
+    }
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        //        if #available(iOS 10.0, *) {
+        //            // do nothing
+        //        } else {
+        guard let fromVC = transitionContext.viewController(forKey: .from),
+            let toVC = transitionContext.viewController(forKey: .to) else {
+                return
         }
-        if !flag {
-            self.animator.items.config(self.shouldUsingPresentionAnimatedController, presenting: self, isShow: false)
-            animateFinshed()
+        let vcFinalFrame = transitionContext.finalFrame(for: toVC)
+        let isPresented = toVC.presentingViewController === fromVC
+        let toVCView = transitionContext.view(forKey: .to)
+        let transitionView = transitionContext.containerView
+        if let toView = toVCView {
+            toView.frame = vcFinalFrame
+            transitionView.addSubview(toView)
+        }
+        let animateCompletion: WQAnimateCompletion = { flag -> Void in
+            let success = !transitionContext.transitionWasCancelled
+            if (isPresented && !success) || (!isPresented && success) {
+                toVCView?.removeFromSuperview()
+            }
+            transitionContext.completeTransition(success)
+        }
+        if isPresented {
+            self.animator.animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
         } else {
-            self.animator.animated(presented: self.shouldUsingPresentionAnimatedController, presenting: self, isShow: false) { _ in
-                animateFinshed()
-            }
+            self.animator.animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
         }
+        //        }
     }
 }
 // MARK: - -- Gesture Handle

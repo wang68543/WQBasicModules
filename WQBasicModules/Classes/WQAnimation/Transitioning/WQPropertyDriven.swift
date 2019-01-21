@@ -121,9 +121,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
                 transitionView.addSubview(toView)
             }
         }
-        self.transitionAnimator?.addCompletion({ position in
-//            animateCompletion(position == .end)
-            debugPrint("动画完成")
+        self.transitionAnimator?.addCompletion({ position in 
             let completed = (position == .end)
             if (self.isShow && !completed) || (!self.isShow && completed) {
                 toVCView?.removeFromSuperview()
@@ -136,7 +134,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
     }
     
     public var wantsInteractiveStart: Bool {
-        return true
+        return self.isInteractive
     }
     
     deinit {
