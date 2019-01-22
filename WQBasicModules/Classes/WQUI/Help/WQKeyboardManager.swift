@@ -9,11 +9,11 @@ import Foundation
 /// 输入框类型
 public typealias TextInputView = UIView & UITextInput
 public final class WQKeyboardManager {
-    var keyboardDistanceFromTextInputView: CGFloat = 10
+    public var keyboardDistanceFromTextInputView: CGFloat = 10
     unowned let moveView: UIView
     
     /// 这里会加在控制器的View上 请确保当前View已经在ViewController的结构中了
-    var shouldResignOnTouchOutside: Bool = false {
+    public var shouldResignOnTouchOutside: Bool = false {
         didSet {
             if shouldResignOnTouchOutside {
                self.addTapGesture()
@@ -22,17 +22,19 @@ public final class WQKeyboardManager {
             }
         }
     }
-    var tapGesture: UITapGestureRecognizer? {
+    public var tapGesture: UITapGestureRecognizer? {
         didSet {
             tapGesture?.addTarget(self, action: #selector(tapGesture(_:)))
         }
     }
     /// moveView 开始移动之前的位置 (如果moveView是ScrollView 则记录offset)
     private var initialPosition: CGPoint = .zero
-    private var textInputViews: [TextInputView]
-    init(_ moveView: UIView) {
+    lazy var textInputViews: [TextInputView] = self.moveView.subTextInputs
+    private var _textInputView: TextInputView?
+    
+    public init(_ moveView: UIView) {
         self.moveView = moveView
-        textInputViews = moveView.subTextInputs
+        self.registerAllNotifications()
     }
     deinit {
         self.unregisterAllNotification()
@@ -42,6 +44,16 @@ public final class WQKeyboardManager {
     }
     public func layoutSuperViewIfNeed() {
         self.moveView.superview?.layoutIfNeeded()
+    }
+    public func recoveryPoistion() {
+        if let scrollView = self.moveView as? UIScrollView {
+            scrollView.setContentOffset(initialPosition, animated: UIView.areAnimationsEnabled)
+        } else {
+            self.moveView.layer.position = initialPosition
+            UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .curveEaseIn], animations: {
+                self.layoutSuperViewIfNeed()
+            }, completion: nil)
+        }
     }
 }
 extension WQKeyboardManager {
@@ -62,7 +74,7 @@ extension WQKeyboardManager {
 //    }
 }
 private extension WQKeyboardManager {
-    func addTapGesture()  {
+    func addTapGesture() {
         if let view = self.moveView.containingController?.view {
             let tapGR = UITapGestureRecognizer()
             view.addGestureRecognizer(tapGR)
@@ -74,9 +86,11 @@ private extension WQKeyboardManager {
     func registerAllNotifications() {
         self.registerKeyboardNotification()
         self.registerTextInputViewNotification()
-        NotificationCenter.default.addObserver(self, selector: #selector(willChangeStatusBarOrientation(_:)), name:  UIApplication.willChangeStatusBarOrientationNotification, object: nil)
+        let center = NotificationCenter.default
+        let notificationName: Notification.Name = UIApplication.willChangeStatusBarOrientationNotification
+        center.addObserver(self, selector: #selector(willChangeStatusBarOrientation(_:)), name: notificationName, object: nil)
     }
-    func registerKeyboardNotification()  {
+    func registerKeyboardNotification() {
         let center = NotificationCenter.default
         center.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         center.addObserver(self, selector: #selector(keyboardDidShow(_:)), name: UIResponder.keyboardDidShowNotification, object: nil)
@@ -86,13 +100,25 @@ private extension WQKeyboardManager {
     
     func registerTextInputViewNotification() {
         let center = NotificationCenter.default
-        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: nil)
-        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextField.textDidEndEditingNotification, object: nil)
-        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
-        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextView.textDidEndEditingNotification, object: nil)
+        center.addObserver(self,
+                           selector: #selector(textInputViewDidBeginEditing(_:)),
+                           name: UITextField.textDidBeginEditingNotification,
+                           object: nil)
+        center.addObserver(self,
+                           selector: #selector(textInputViewDidEndEditing(_:)),
+                           name: UITextField.textDidEndEditingNotification,
+                           object: nil)
+        center.addObserver(self,
+                           selector: #selector(textInputViewDidBeginEditing(_:)),
+                           name: UITextView.textDidBeginEditingNotification,
+                           object: nil)
+        center.addObserver(self,
+                           selector: #selector(textInputViewDidEndEditing(_:)),
+                           name: UITextView.textDidEndEditingNotification,
+                           object: nil)
     }
     
-    func unregisterAllNotification()  {
+    func unregisterAllNotification() {
         let center = NotificationCenter.default
         center.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
@@ -109,38 +135,39 @@ private extension WQKeyboardManager {
 }
 @objc extension WQKeyboardManager {
     func tapGesture(_ sender: UITapGestureRecognizer) {
+        self.moveView.endEditing(true)
         guard initialPosition != .zero else {
             //没有记录过移动位置之前的位置 所以不需要移动
             return
         }
         if sender.state == .ended {
-            if let scrollView = self.moveView as? UIScrollView {
-                scrollView.setContentOffset(initialPosition, animated: UIView.areAnimationsEnabled)
-            } else {
-                self.moveView.layer.position = initialPosition
-                UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .curveEaseIn], animations: {
-                    self.layoutSuperViewIfNeed()
-                }, completion: nil)
-            }
+           self.recoveryPoistion()
         }
     }
     func textInputViewDidBeginEditing(_ note: Notification) {
-        
+        debugPrint(#function, note.object!)
+        guard let inputView = note.object as? TextInputView,
+            let _ = self.textInputViews.firstIndex(where: { $0 === inputView }) else {
+            _textInputView = nil
+            return
+        }
+        _textInputView = inputView
     }
     func textInputViewDidEndEditing(_ note: Notification) {
-        
+        debugPrint(#function, note.object!)
+        _textInputView = nil 
     }
     func keyboardWillShow(_ note: Notification) {
-        
+        debugPrint(#function)
     }
     func keyboardDidShow(_ note: Notification) {
-        
+        debugPrint(#function)
     }
     func keyboardWillHide(_ note: Notification) {
-        
+        debugPrint(#function)
     }
     func keyboardDidHide(_ note: Notification) {
-        
+        debugPrint(#function)
     }
     func willChangeStatusBarOrientation(_ note: Notification) {
         

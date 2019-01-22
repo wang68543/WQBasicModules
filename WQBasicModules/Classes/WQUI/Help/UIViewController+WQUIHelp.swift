@@ -11,7 +11,17 @@ public extension WQModules where Base: UIViewController {
         return self.base.topVisible()
     }
 }
+private var keyboardManagerKey: Void?
 extension UIViewController {
+    var keyboardManager: WQKeyboardManager? {
+        set {
+            objc_setAssociatedObject(self, &keyboardManagerKey, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+        get {
+           return objc_getAssociatedObject(self, &keyboardManagerKey) as? WQKeyboardManager
+        }
+    }
+    
     func topVisible() -> UIViewController? {
         if self.presentedViewController != nil {
             return self.presentedViewController?.topVisible()
