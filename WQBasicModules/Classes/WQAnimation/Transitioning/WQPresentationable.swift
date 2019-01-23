@@ -93,7 +93,7 @@ open class WQPresentationable: UIViewController {
     ///containerView上的子View 用于转场动画切换
     public internal(set) var childViews: [UIView] = []
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
-    internal var contentViewInputs: [UITextInput] = []
+    internal var contentViewInputs: [TextFieldView] = []
     internal var tapGesture: UITapGestureRecognizer?
     
     /// shownInWindow的时候 记录的属性 用于消失之后恢复

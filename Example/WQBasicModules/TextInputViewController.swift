@@ -1,5 +1,5 @@
 //
-//  TextInputViewController.swift
+//  textFieldViewController.swift
 //  WQBasicModules_Example
 //
 //  Created by HuaShengiOS on 2019/1/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 import WQBasicModules
-class TextInputViewController: UIViewController {
+class textFieldViewController: UIViewController {
     var keyboardMangaer: WQKeyboardManager!
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -34,15 +34,15 @@ public extension WQPresentationable {
     }
     private func keyboardChangeAnimation(note: Notification) {
         if contentViewInputs.isEmpty {
-            contentViewInputs = self.containerView.subTextInputs
+            contentViewInputs = self.containerView.subtextFieldViews
         }
-        guard let textInput = contentViewInputs.first(where: { textInput -> Bool in
-            if let inputView = textInput as? UIResponder {
+        guard let textField = contentViewInputs.first(where: { textField -> Bool in
+            if let inputView = textField as? UIResponder {
                 return inputView.isFirstResponder
             }
             return false
         }),
-            let inputView = textInput as? UIView,
+            let inputView = textField as? UIView,
             let inputSuperView = inputView.superview else {
                 return
         }

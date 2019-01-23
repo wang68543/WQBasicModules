@@ -8,8 +8,8 @@
 import Foundation
 
 //public extension WQModules where Base: UIView {
-//    var subTextInputs: [TextInputView] {
-//        return self.base.subTextInputs
+//    var subtextFields: [textFieldView] {
+//        return self.base.subtextFields
 //    }
 //}
 extension UIView {
@@ -28,15 +28,15 @@ extension UIView {
 
 private var adjustMoveViewKey: Void?
 private var isEnableKeyboardAdjustKey: Void?
-private var keyboardDistanceFromTextInputViewKey: Void?
+private var keyboardDistanceFromtextFieldViewKey: Void?
 private var shouldResignOnTouchOutsideKey: Void?
 extension UIViewController {
-    var keyboardDistanceFromTextInputView: CGFloat {
+    var keyboardDistanceFromtextFieldView: CGFloat {
         set {
-            objc_setAssociatedObject(self, &keyboardDistanceFromTextInputViewKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, &keyboardDistanceFromtextFieldViewKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return (objc_getAssociatedObject(self, &keyboardDistanceFromTextInputViewKey) as? CGFloat) ?? 10
+            return (objc_getAssociatedObject(self, &keyboardDistanceFromtextFieldViewKey) as? CGFloat) ?? 10
         }
     }
     /// 用于上移的View 若为空就用self.view (c会在此View里面查找输入框以及调整位置)
@@ -93,19 +93,19 @@ extension UIViewController {
 //    }
     
     
-    //    func value(forTextInputView key: String) -> String? {
+    //    func value(fortextFieldView key: String) -> String? {
     //
     //    }
-    //    func setValue(_ value: String, forTextInputView key: String) {
+    //    func setValue(_ value: String, fortextFieldView key: String) {
     //
     //    }
-    //    func setValue(_ value: String, forTextInputView key: Int) {
+    //    func setValue(_ value: String, fortextFieldView key: Int) {
     //
     //    }
-    //    func isEmpty(forTextInputView key: String) -> Bool {
+    //    func isEmpty(fortextFieldView key: String) -> Bool {
     //
     //    }
-    //    func isEmpty(forTextInputView tag: Int) -> Bool {
+    //    func isEmpty(fortextFieldView tag: Int) -> Bool {
     //
     //    }
 }
@@ -118,7 +118,7 @@ extension UIViewController {
 //    }
 //    func registerAllNotifications() {
 //        self.registerKeyboardNotification()
-//        self.registerTextInputViewNotification()
+//        self.registertextFieldViewNotification()
 //        NotificationCenter.default.addObserver(self, selector: #selector(willChangeStatusBarOrientation(_:)), name:  UIApplication.willChangeStatusBarOrientationNotification, object: nil)
 //    }
 //    func registerKeyboardNotification()  {
@@ -129,12 +129,12 @@ extension UIViewController {
 //        center.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
 //    }
 //
-//    func registerTextInputViewNotification() {
+//    func registertextFieldViewNotification() {
 //        let center = NotificationCenter.default
-//        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: nil)
-//        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextField.textDidEndEditingNotification, object: nil)
-//        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
-//        center.addObserver(self, selector: #selector(textInputViewDidBeginEditing(_:)), name: UITextView.textDidEndEditingNotification, object: nil)
+//        center.addObserver(self, selector: #selector(textFieldViewDidBeginEditing(_:)), name: UITextField.textDidBeginEditingNotification, object: nil)
+//        center.addObserver(self, selector: #selector(textFieldViewDidBeginEditing(_:)), name: UITextField.textDidEndEditingNotification, object: nil)
+//        center.addObserver(self, selector: #selector(textFieldViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
+//        center.addObserver(self, selector: #selector(textFieldViewDidBeginEditing(_:)), name: UITextView.textDidEndEditingNotification, object: nil)
 //    }
 //
 //    func unregisterAllNotification()  {
@@ -158,10 +158,10 @@ extension UIViewController {
 //
 //        }
 //    }
-//    func textInputViewDidBeginEditing(_ note: Notification) {
+//    func textFieldViewDidBeginEditing(_ note: Notification) {
 //
 //    }
-//    func textInputViewDidEndEditing(_ note: Notification) {
+//    func textFieldViewDidEndEditing(_ note: Notification) {
 //
 //    }
 //    func keyboardWillShow(_ note: Notification) {

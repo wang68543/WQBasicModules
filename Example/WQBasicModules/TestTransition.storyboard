@@ -27,9 +27,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bhd-9n-yz6">
-                                <rect key="frame" x="50" y="127" width="94" height="30"/>
+                                <rect key="frame" x="51" y="127" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="textInputView"/>
+                                <state key="normal" title="textFieldView"/>
                                 <connections>
                                     <segue destination="syH-IR-vZX" kind="show" id="hGn-vX-wVV"/>
                                 </connections>
@@ -45,10 +45,10 @@
             </objects>
             <point key="canvasLocation" x="2814" y="33"/>
         </scene>
-        <!--Text Input View Controller-->
+        <!--Text Field View Controller-->
         <scene sceneID="K2Z-nP-dUe">
             <objects>
-                <viewController id="syH-IR-vZX" customClass="TextInputViewController" customModule="WQBasicModules_Example" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="syH-IR-vZX" customClass="textFieldViewController" customModule="WQBasicModules_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="I7Q-dI-LTy">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -67,8 +67,15 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aWt-Ie-TTg">
+                                <rect key="frame" x="64" y="581" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.0" green="0.81568627449999997" blue="0.57254901960000004" alpha="1" colorSpace="calibratedRGB"/>
                         <viewLayoutGuide key="safeArea" id="T1b-fQ-dwG"/>
                     </view>
                 </viewController>
