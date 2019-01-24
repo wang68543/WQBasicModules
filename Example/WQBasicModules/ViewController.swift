@@ -167,6 +167,14 @@ class ViewController: UIViewController {
 //            debugPrint(UIApplication.shared.windows)
 //        }
        tests()
+        let textView = UITextView()
+        let textField = UITextField()
+        if textField is TextFieldView {
+            debugPrint("textFiled")
+        }
+        if textView is TextFieldView {
+            debugPrint("textView")
+        }
 //        imageView.addTransitionAnimate(timing: kCAMediaTimingFunctionEaseInEaseOut, subtype: kCATransitionFade, duration: 0.2)
         //App-prefs:root=General&path=Network
 //        debugPrint(Date().toString(.))

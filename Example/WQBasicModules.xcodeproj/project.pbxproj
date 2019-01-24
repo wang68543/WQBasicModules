@@ -8,7 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		06A245CD21F6DA5B0066F57F /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */; };
+		06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */; };
 		06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FB146321ED78FC00A85B03 /* TabBarViewController.swift */; };
+		06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */; };
 		2D61CD182088864300C0279A /* NSDate+UtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D61CD172088864300C0279A /* NSDate+UtilitiesTests.swift */; };
 		44118D754EB8C9A1B93DAF5F /* Pods_WQBasicModules_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40746CAEB6B163BFD6A96328 /* Pods_WQBasicModules_Tests.framework */; };
 		5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBA1B5221995EB800B780FB /* SecondViewController.swift */; };
@@ -35,7 +37,9 @@
 
 /* Begin PBXFileReference section */
 		06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
+		06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollTextInputViewController.swift; sourceTree = "<group>"; };
 		06FB146321ED78FC00A85B03 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
+		06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTextInputViewController.swift; sourceTree = "<group>"; };
 		100E52012C00E78715F6B892 /* WQBasicModules.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = WQBasicModules.podspec; path = ../WQBasicModules.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1CFC840ADB19128D172F1E64 /* Pods-WQBasicModules_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQBasicModules_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WQBasicModules_Example/Pods-WQBasicModules_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		1D44262AD1043BDC2147E7F5 /* Pods_WQBasicModules_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WQBasicModules_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -126,6 +130,8 @@
 				5EECD18A21ECD0410033608D /* TestTransition.storyboard */,
 				06FB146321ED78FC00A85B03 /* TabBarViewController.swift */,
 				06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */,
+				06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */,
+				06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */,
 			);
 			name = "Example for WQBasicModules";
 			path = WQBasicModules;
@@ -377,6 +383,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */,
+				06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */,
+				06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5ED7C4D721CA49F000B128B7 /* SnapShotTableController.swift in Sources */,
