@@ -286,7 +286,7 @@ extension WQKeyboardManager {
             targetF.origin.y = kbFrame.minY - inputViewFrame.height
             let targetTextViewInMoveView = self.moveView.convert(targetF, from: keyWindow)
             if let scrollView = self.moveView as? UIScrollView {
-                let targetOffsetY = inputViewFrame.minY - targetTextViewInMoveView.minY
+                let targetOffsetY = targetTextViewInMoveView.minY - inputViewFrame.minY
                 var offset = scrollView.contentOffset
                 offset.y += targetOffsetY
                 offset.y = max(targetOffsetY, 0)
@@ -300,9 +300,9 @@ extension WQKeyboardManager {
                                    completion: nil)
                 }
             } else {
-                let targetMove = inputViewFrame.minY - targetTextViewInMoveView.minY
+                let targetMove = targetTextViewInMoveView.minY - inputViewFrame.minY
                 var position = self.moveView.layer.position
-                position.y += targetMove
+                position.y -= targetMove
                 position.y = max(self.initialPosition.y, position.y)
                 if self.moveView.layer.position != position {
                     UIView.animate(withDuration: animationDuration,
@@ -315,7 +315,7 @@ extension WQKeyboardManager {
                 }
             }
         } else { // 有交集往上移
-            let move = intersectRect.height
+            let move = textFrameInWindow.maxY - kbFrame.minY
             if moveViewFrameInWindow.maxY <= kbFrame.minY,
                 let scrollView = self.moveView as? UIScrollView { // 有交集 并且scrollView在键盘上面
                 let offset = scrollView.contentOffset
@@ -332,7 +332,7 @@ extension WQKeyboardManager {
                                delay: 0,
                                options: [animationCurve, .beginFromCurrentState],
                                animations: {
-                                    self.moveView.layer.position = CGPoint(x: position.x, y: position.y + move)
+                                    self.moveView.layer.position = CGPoint(x: position.x, y: position.y - move)
                                 },
                                completion: nil)
             }
