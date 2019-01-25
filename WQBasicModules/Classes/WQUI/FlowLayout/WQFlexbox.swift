@@ -159,13 +159,19 @@ private extension WQFlexbox {
             let lineCount = sectionLines.count
             for line in 0 ..< lineCount {
                 let items = sectionLines[line]
-                let range = Range(uncheckedBounds: (lower: items.first!.indexPath.item, upper: items.last!.indexPath.item))
+                let range = Range(uncheckedBounds: (lower: items.first?.indexPath.item ?? 0, upper: items.last?.indexPath.item ?? 0))
                 let linePath = WQFlexLinePath(section: section, line: line, totalLines: lineCount, range: range)
-                let justify = self.justifyContent(for: linePath)
-                //  swiftlint:disable line_length
-                let flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
-                let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
-                lineAttrs.append(lineAttr)
+                if items.isEmpty {
+                    let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: .zero, isHorizontal: isHorizontal)
+                    lineAttrs.append(lineAttr)
+                } else { 
+                    let justify = self.justifyContent(for: linePath)
+                    //  swiftlint:disable line_length
+                    let flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+                    let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
+                    lineAttrs.append(lineAttr)
+                }
+                
             }
             var totalLineMaxWidth: CGFloat
             if isHorizontal {
