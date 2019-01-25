@@ -11,7 +11,8 @@ public typealias TextFieldView = UIView & UITextInput
 public final class WQKeyboardManager: NSObject {
     public var keyboardDistanceFromtextFieldView: CGFloat = 10
     public var isEnabled: Bool = true
-    unowned let moveView: UIView
+    public var sortTextFieldViewsBy: Array<TextFieldView>.TextFieldViewSorted = .byVertical
+    unowned let view: UIView
     public var animationDuration: TimeInterval = 0.25
     public var animationCurve: UIView.AnimationOptions = [.curveEaseInOut]
     /// 这里会加在控制器的View上 请确保当前View已经在ViewController的结构中了
@@ -30,37 +31,59 @@ public final class WQKeyboardManager: NSObject {
         }
     }
     public var touchResignedGestureIgnoreClasses: [AnyClass] = [UIControl.self, UINavigationBar.self]
-    /// moveView 开始移动之前的位置 (如果moveView是ScrollView 则记录offset)
+    /// view 开始移动之前的位置 (如果moveView是ScrollView 则记录offset)
     private var initialPosition: CGPoint = .invaildPosition
     /// 懒加载 有成为响应者的输入框这里才会获取当前页面的输入框
-    lazy var textFieldViews: [TextFieldView] = self.textResponders()
+    private lazy var textFieldViews: [TextFieldView] = self.textResponders()
     private var _textFieldView: TextFieldView?
     private var _keyboardShowing: Bool = false
     private var _kbShowNotification: Notification?
     private var _kbFrame: CGRect = .zero
+    private weak var textFieldDelegate: UITextFieldDelegate? //用于拦截当前响应者的代理 处理下一个
+    private lazy var safeAreaInsets: UIEdgeInsets = { // 保存初始的safeAreaInsets
+        if #available(iOS 11.0, *) {
+           return self.view.safeAreaInsets
+        } else {
+            return .zero
+        }
+    }()
     
-    public init(_ moveView: UIView) {
-        self.moveView = moveView
+    public init(_ view: UIView) {
+        self.view = view
         super.init()
         self.registerAllNotifications()
     }
     deinit {
         self.unregisterAllNotification()
     }
-    public func reloadTextFieldViews(sorted type: Array<TextFieldView>.TextFieldViewSorted = .byVertical) {
-        textFieldViews = self.textResponders(sorted: type)
+}
+
+
+// MARK: - --Interface
+public extension WQKeyboardManager {
+    func reloadTextFieldViews() {
+        textFieldViews = self.textResponders()
     }
-    public func layoutSuperViewIfNeed() {
-        self.moveView.superview?.layoutIfNeeded()
+    func canGoNext() -> Bool {
+        guard let index = self.textFieldViews.firstIndex(of: _textFieldView) else { return false }
+        if index == self.textFieldViews.count - 1 { return false } //最后一个
+        return true
     }
-    public func recoveryPoistion() {
-        guard self.initialPosition != .invaildPosition else {
-            return
+    
+    /// 移动到下一个输入框
+    ///
+    /// - Returns: 是否跳转成功
+    @discardableResult
+    func goNext() -> Bool {
+        if canGoNext(),
+           let index = self.textFieldViews.firstIndex(of: _textFieldView),
+           index < self.textFieldViews.count - 1 {
+            let next = self.textFieldViews[index + 1]
+           return next.becomeFirstResponder()
+        } else {
+            self.recoveryPoistion()
+            return false
         }
-        self.moveView.layer.position = initialPosition
-        UIView.animate(withDuration: animationDuration, delay: 0, options: [animationCurve, .beginFromCurrentState], animations: {
-            self.layoutSuperViewIfNeed()
-        }, completion: nil)
     }
 }
 extension WQKeyboardManager {
@@ -82,7 +105,7 @@ extension WQKeyboardManager {
 }
 private extension WQKeyboardManager {
     func addTapGesture() {
-        if let view = self.moveView.containingController?.view {
+        if let view = self.view.containingController?.view {
             let tapGR = UITapGestureRecognizer()
             tapGR.delegate = self
             view.addGestureRecognizer(tapGR)
@@ -91,21 +114,46 @@ private extension WQKeyboardManager {
             debugPrint("请先将view添加到Controller的树形结构中")
         }
     }
-    func textResponders(sorted type: Array<TextFieldView>.TextFieldViewSorted = .byVertical) -> [TextFieldView] {
+    func textResponders() -> [TextFieldView] {
         var inputViews: [TextFieldView] = []
-        inputViews = self.moveView.subtextFieldViews
+        inputViews = self.view.subtextFieldViews
             .filter({ canBecomeFirstResponder(for: $0) })
-        return inputViews.sorted(by: type)
+        return inputViews.sorted(by: self.sortTextFieldViewsBy)
     }
     /// 确认是否可以响应
     func canBecomeFirstResponder(for view: TextFieldView) -> Bool {
+        
         var canBecome: Bool = view.canBecomeFirstResponder
         if let textView = view as? UITextView {
             canBecome = textView.isEditable
         } else if let textField = view as? UITextField {
+            //canBecomeFirstResponder 会调用代理textFieldShouldBeginEditing
             canBecome = textField.isEnabled
         }
         return canBecome && !view.isHidden && view.alpha > 0.01 && view.isUserInteractionEnabled
+    }
+    /// 判断响应的对象是否是当前的view的树形图中
+    func isInViewHierarchy(for textFieldView: TextFieldView) -> Bool {
+        var isInHierarchy: Bool = false
+        var textSuperView = textFieldView.superview
+        while let superView = textSuperView,
+             !isInHierarchy {
+                isInHierarchy = self.view === superView
+                textSuperView = textSuperView?.superview
+        }
+        return isInHierarchy
+    }
+    func layoutSuperViewIfNeed() {
+        self.view.superview?.layoutIfNeeded()
+    }
+    func recoveryPoistion() {
+        guard self.initialPosition != .invaildPosition else {
+            return
+        }
+        self.view.layer.position = initialPosition
+        UIView.animate(withDuration: animationDuration, delay: 0, options: [animationCurve, .beginFromCurrentState], animations: {
+            self.layoutSuperViewIfNeed()
+        }, completion: nil)
     }
     func registerAllNotifications() {
         self.registerKeyboardNotification()
@@ -162,7 +210,7 @@ private extension WQKeyboardManager {
         if let textView = _textFieldView {
             textView.resignFirstResponder()
         } else {
-            self.moveView.endEditing(true)
+            self.view.endEditing(true)
         }
         guard initialPosition != .zero else {
             //没有记录过移动位置之前的位置 所以不需要移动
@@ -173,25 +221,48 @@ private extension WQKeyboardManager {
         }
     }
     func textFieldViewDidBeginEditing(_ note: Notification) {
-        debugPrint(#function, note.object!)
+//        debugPrint(#function, note.object!)
         guard let inputView = note.object as? TextFieldView,
-        self.isEnabled else {
+        self.isEnabled,
+        self.isInViewHierarchy(for: inputView) else {
             _textFieldView = nil
             return
-        } 
+        }
+        if let textField = inputView as? UITextField {
+            textFieldDelegate = textField.delegate
+            textField.delegate = self
+        }
         _textFieldView = inputView
+        reloadTextFieldViews()
+        self.textFieldViews.dropLast().forEach { textFieldView in
+            if let textField = textFieldView as? UITextField {
+                textField.returnKeyType = .next
+            } else if let textView = textFieldView as? UITextView {
+                textView.returnKeyType = .next
+            }
+        }
+        if let textField = self.textFieldViews.last as? UITextField {
+            textField.returnKeyType = .done
+        } else if let textView = self.textFieldViews.last as? UITextView {
+            textView.returnKeyType = .done
+        }
         if _keyboardShowing,
             initialPosition != .invaildPosition {
             optimizedAdjustPosition()
         }
     }
     func textFieldViewDidEndEditing(_ note: Notification) {
-        debugPrint(#function, note.object!)
+//        debugPrint(#function, note.object!)
+        if let textField = _textFieldView as? UITextField,
+            let delegate = textFieldDelegate {
+            textField.delegate = delegate //还原
+        }
         _textFieldView = nil
+        textFieldDelegate = nil
     }
     func keyboardWillShow(_ note: Notification) {
-        debugPrint(#function)
-        initialPosition = self.moveView.layer.position
+//        debugPrint(#function)
+        initialPosition = self.view.layer.position
         guard let userInfo = note.userInfo,
          let cuvreValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt,
          let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
@@ -203,30 +274,23 @@ private extension WQKeyboardManager {
         _kbShowNotification = note
         _keyboardShowing = true
         animationCurve.insert(cuvre)
-        if duration != 0.0 {
-            animationDuration = duration
-        }
+        if duration != 0.0 { animationDuration = duration }
         let oldKBFrame = _kbFrame
         _kbFrame = kbFrame
-        guard self.isEnabled else {
-            debugPrint("已禁用")
-            return
-        }
+        guard self.isEnabled else { debugPrint("已禁用"); return }
         if oldKBFrame != kbFrame,
             _textFieldView != nil {
             self.optimizedAdjustPosition()
         }
     }
     func keyboardDidShow(_ note: Notification) {
-        debugPrint(#function)
-        guard self.isEnabled else {
-            return
-        }
+//        debugPrint(#function)
+        guard self.isEnabled else { return }
         //If _textFieldView viewController is presented as formSheet,
         //then adjustPosition again because iOS internally update formSheet frame on keyboardShown.
         if _keyboardShowing == true,
             _textFieldView != nil,
-            let controller = self.moveView.containingController,
+            let controller = self.view.containingController,
             (controller.modalPresentationStyle == .formSheet || controller.modalPresentationStyle == .pageSheet) {
             self.optimizedAdjustPosition()
         }
@@ -240,12 +304,8 @@ private extension WQKeyboardManager {
                 debugPrint("缺少参数")
                 return
         }
-        if duration != 0.0 {
-            animationDuration = duration
-        }
-        guard self.isEnabled else {
-            return
-        }
+        if duration != 0.0 { animationDuration = duration }
+        guard self.isEnabled else { return }
         self.recoveryPoistion()
     }
     func keyboardDidHide(_ note: Notification) {
@@ -253,88 +313,135 @@ private extension WQKeyboardManager {
         _kbFrame = .zero
     }
     func willChangeStatusBarOrientation(_ note: Notification) {
-        
+        // 待实现
     }
 }
 extension WQKeyboardManager {
     var keyWindow: UIWindow? {
-        return self.moveView.window ?? UIApplication.shared.keyWindow
+        return self.view.window ?? UIApplication.shared.keyWindow
     }
     //swiftlint:disable function_body_length
     func optimizedAdjustPosition() {
         guard let inputView = _textFieldView,
-            self.textFieldViews.firstIndex(where: { $0 === inputView }) != nil,
             let superView = inputView.superview,
             let keyWindow = self.keyWindow else {
                 _textFieldView = nil
                 return
         }
-        let inputViewFrame = inputView.frame
-        ///去掉 多余的边
-        var moveViewClipFrame = self.moveView.frame
-        if #available(iOS 11.0, *),
-            moveViewClipFrame != .zero { //裁切 safeAreaInsets
-            moveViewClipFrame.size.height -= self.moveView.safeAreaInsets.bottom + self.moveView.safeAreaInsets.top
-            moveViewClipFrame.origin.y -= self.moveView.safeAreaInsets.top
-        }
-//        let moveViewFrameInWindow = self.moveView.superview?.convert(moveViewClipFrame, to: keyWindow) ?? CGRect.zero
-        let textFrameInWindow = superView.convert(inputViewFrame, to: keyWindow)
+        let textFrameInWindow = superView.convert(inputView.frame, to: keyWindow)
         var kbFrame = _kbFrame
         kbFrame.origin.y -= self.keyboardDistanceFromtextFieldView
         kbFrame.size.height += self.keyboardDistanceFromtextFieldView
-//        let intersectRect = moveViewFrameInWindow.intersection(kbFrame)
-        let targetMinY = kbFrame.minY - inputViewFrame.height
-        if  let scrollView = self.moveView as? UIScrollView { // scrollview与键盘没有交集 滚动scrollView
-            let targetOffsetY = targetMinY - textFrameInWindow.minY
-            var offset = scrollView.contentOffset
-            offset.y -= targetOffsetY
-            offset.y = max(offset.y, 0)
+        let move = kbFrame.minY - textFrameInWindow.maxY // 需要移动的距离
+        guard move != 0 else { return } // == 0 无需移动
+        if  let scrollView = self.view as? UIScrollView { //scrollview与键盘没有交集 滚动scrollView
+            // 先移动 scrollView  再设置offset
             let insets = scrollView.contentInset
-            let contentSize = scrollView.contentSize
-            let maxOffsetY = contentSize.height - (scrollView.frame.height - insets.top - insets.bottom)
-            if offset.y > maxOffsetY { //移动的位置已经到头了
-                var poistion = scrollView.layer.position
-                poistion.y -= (offset.y - maxOffsetY)
-                offset.y = maxOffsetY
-                UIView.animate(withDuration: animationDuration,
-                               delay: 0,
-                               options: [animationCurve, .beginFromCurrentState],
-                               animations: {
+            let areas = self.safeAreaInsets
+            let containerHeight = scrollView.frame.height - insets.top - insets.bottom - areas.top - areas.bottom
+            var contentSize = scrollView.contentSize
+            contentSize.height = max(containerHeight, contentSize.height) // scrollView 的contentSizeHeight ke可能为0
+            let maxOffsetY = contentSize.height - containerHeight
+            debugPrint("contentSize:\(contentSize),frame:\(self.view.frame)")
+            debugPrint("maxPositionY:\(self.initialPosition.y),maxOffsetY:\(maxOffsetY)")
+            let minOffsetY = -self.safeAreaInsets.top
+            var poistion = scrollView.layer.position
+            var offset = scrollView.contentOffset
+            debugPrint("poistion:\(poistion),offset:\(offset)")
+            var adjustMove = move
+            if #available(iOS 11.0, *),
+                areas.bottom > 0 && textFrameInWindow.maxY > UIScreen.main.bounds.height - areas.bottom {
+                // 当输入框在底部非安全区域的时候 scrollView 会自动向上偏移bottom
+                adjustMove += areas.bottom //少偏移一个safe区域
+            }
+            //notaTODO: view移动遵循原则: 上移底部边界不能大于键盘顶部边界 下移不能低于原始的位置
+            if adjustMove < 0 { // 需要向上移
+                // 当上移的时候 
+                let moveViewFrameInWindow = self.view.superview?.convert(self.view.frame, to: keyWindow) ?? CGRect.zero
+                let viewCanMoveHeight = max(moveViewFrameInWindow.maxY - kbFrame.minY, 0)
+                poistion.y -= min(viewCanMoveHeight, abs(adjustMove))
+                offset.y += max(abs(adjustMove) - viewCanMoveHeight, 0)
+                debugPrint("viewCanMoveHeight:\(viewCanMoveHeight),move:\(move)")
+                debugPrint("Old poistion:\(poistion),offset:\(offset)")
+                offset.y = min(maxOffsetY, offset.y) // 最大不能超过可偏移的尺寸  最小不能小于minOffsetY
+            } else { // 需要向下移动
+                let downMaxMove = max(self.initialPosition.y - scrollView.layer.position.y, 0)
+                poistion.y += min(downMaxMove, adjustMove)
+                offset.y -= max(adjustMove - downMaxMove, 0)
+                debugPrint("downMaxMove:\(downMaxMove),move:\(move)")
+                debugPrint("poistion:\(poistion),offset:\(offset)")
+                offset.y = max(offset.y, minOffsetY) // 最大不能超过可偏移的尺寸  最小不能小于minOffsetY
+            }
+            debugPrint("fixedOffset:\(offset)")
+            debugPrint("==================================")
+            UIView.animate(withDuration: animationDuration,
+                           delay: 0,
+                           options: [animationCurve, .beginFromCurrentState],
+                           animations: {
                                 if offset != scrollView.contentOffset {
                                     scrollView.contentOffset = offset
                                 }
                                 if poistion != scrollView.layer.position {
                                     scrollView.layer.position = poistion
-                                } 
-                },
-                               completion: nil)
-            } else {
-                if offset != scrollView.contentOffset {
-                    UIView.animate(withDuration: animationDuration,
-                                   delay: 0,
-                                   options: [animationCurve, .beginFromCurrentState],
-                                   animations: {
-                                    scrollView.contentOffset = offset
-                    },
-                                   completion: nil)
-                }
-            }
+                                }
+            })
         } else {
-            let targetMove = targetMinY - textFrameInWindow.minY
-            var position = self.moveView.layer.position
-            position.y += targetMove
+            var position = self.view.layer.position
+            position.y += move
             position.y = min(self.initialPosition.y, position.y) // 下移不能超过原始位置
-            if self.moveView.layer.position != position {
+            if self.view.layer.position != position {
                 UIView.animate(withDuration: animationDuration,
                                delay: 0,
                                options: [animationCurve, .beginFromCurrentState],
                                animations: {
-                                self.moveView.layer.position = position
-                },
-                               completion: nil)
+                                self.view.layer.position = position
+                })
             }
         }
         
+    }
+}
+
+// MARK: - --TextField Delegate
+extension WQKeyboardManager: UITextFieldDelegate {
+    public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if let shouldBegin = textFieldDelegate?.textFieldShouldBeginEditing?(textField) {
+            return shouldBegin
+        } else {
+            //  &&  textField.isUserInteractionEnabled && textField.isEnabled //会造成死循环
+            return textField.alpha > 0.01 && !textField.isHidden
+        }
+    }
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
+        textFieldDelegate?.textFieldDidBeginEditing?(textField)
+    }
+    public func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+       return textFieldDelegate?.textFieldShouldEndEditing?(textField) ?? true
+    }
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        textFieldDelegate?.textFieldDidEndEditing?(textField)
+    }
+    @available(iOS 10.0, *)
+    public func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        textFieldDelegate?.textFieldDidEndEditing?(textField, reason: reason)
+    }
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return textFieldDelegate?.textField?(textField, shouldChangeCharactersIn: range, replacementString: string) ?? true
+    }
+    public func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        return textFieldDelegate?.textFieldShouldClear?(textField) ?? true
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let shouldReturn = textFieldDelegate?.textFieldShouldReturn?(textField) {
+            if !shouldReturn { //不能换行
+                goNext()
+            }
+            return shouldReturn
+        } else {
+            goNext()
+            return false
+        }
     }
 }
 extension WQKeyboardManager: UIGestureRecognizerDelegate {
@@ -344,9 +451,7 @@ extension WQKeyboardManager: UIGestureRecognizerDelegate {
     }
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldReceive touch: UITouch) -> Bool {
-        guard let touchView = touch.view else {
-            return false
-        }
+        guard let touchView = touch.view else { return false }
         if self.touchResignedGestureIgnoreClasses.firstIndex(where: { touchView.isKind(of: $0) }) != nil {
             return false
         }
@@ -401,9 +506,11 @@ extension Array where Element: TextFieldView {
     func sortedByTag() -> [TextFieldView] {
         return self.sorted(by: { $0.tag < $1.tag })
     }
-    
-    var firstResponder: TextFieldView? {
-        return self.first(where: { $0.isFirstResponder })
+    func firstIndex(of element: TextFieldView?) -> Int? {
+        guard let textFiledView = element else {
+            return nil
+        }
+        return self.firstIndex(where: { $0 === textFiledView })
     }
 }
 

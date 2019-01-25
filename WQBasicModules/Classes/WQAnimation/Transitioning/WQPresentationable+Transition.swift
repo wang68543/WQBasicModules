@@ -51,16 +51,12 @@ extension WQPresentationable {
                 driven.isInteractive {
                 driven.startIneractive(presented: topVC, presenting: self) { [weak self] position in
                     if let weakSelf = self,
-                        position == .end {
-                        weakSelf.didMove(toParent: topVC)
-                    }
+                        position == .end { weakSelf.didMove(toParent: topVC) }
                     completion?()
                 }
             } else {
                 self.animator.animated(presented: topVC, presenting: self, isShow: true) { [weak self] _ in
-                    if let weakSelf = self  {
-                        weakSelf.didMove(toParent: topVC)
-                    }
+                    if let weakSelf = self { weakSelf.didMove(toParent: topVC) }
                     completion?()
                 }
             }
@@ -69,11 +65,7 @@ extension WQPresentationable {
             self.didMove(toParent: topVC)
             completion?()
         }
-        if #available(iOS 10.0, *) {
-            
-        } else {
-            interactionDissmissDirection = nil
-        } 
+        if #available(iOS 10.0, *) { } else { interactionDissmissDirection = nil } 
     }
     public func shownInWindow(_ flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .windowRootController

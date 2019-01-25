@@ -16,9 +16,17 @@ class ScrollTextInputViewController: UIViewController {
         super.viewDidLoad()
         keyboardMangaer = WQKeyboardManager(self.scrollView)
         keyboardMangaer.shouldResignOnTouchOutside = true
+        if #available(iOS 11.0, *) {
+            self.scrollView.contentInsetAdjustmentBehavior = .never
+        }
         // Do any additional setup after loading the view.
     }
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let textFiled = UITextField(frame: CGRect(x: 10, y: self.view.frame.height - 20, width: 300, height: 40))
+        textFiled.backgroundColor = UIColor.red
+        self.scrollView.addSubview(textFiled)
+    }
 
     /*
     // MARK: - Navigation

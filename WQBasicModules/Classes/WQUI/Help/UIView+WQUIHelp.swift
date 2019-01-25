@@ -47,7 +47,7 @@ extension UIViewController {
         get {
             if let moveView = objc_getAssociatedObject(self, &adjustMoveViewKey) as? UIView {
                 return moveView
-            } else if self.isViewLoaded{
+            } else if self.isViewLoaded {
                 return self.view
             } else {
                 return nil

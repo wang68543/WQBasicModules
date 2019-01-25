@@ -37,7 +37,7 @@ class TableTextInputViewController: UIViewController {
       
         tableView = UITableView()
         tableView.register(TestCell.self, forCellReuseIdentifier: TestCell.reuseIdentifier)
-        tableView.rowHeight = 44
+        tableView.rowHeight = 100
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -48,7 +48,7 @@ class TableTextInputViewController: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = self.view.bounds
+        tableView.frame = CGRect(x: 0, y: 100, width: self.view.frame.width, height: self.view.frame.height - 100)
     }
 
 }

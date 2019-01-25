@@ -35,9 +35,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
     
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        guard let view = sender.view else {
-            return
-        }
+        guard let view = sender.view else { return }
         let size = view.frame.size
         if completionWidth <= 0 {
             switch self.direction {
