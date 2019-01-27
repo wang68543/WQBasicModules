@@ -82,9 +82,9 @@ open class WQPresentationable: UIViewController {
     open var isEnableKeyboardObserver: Bool = false {
         didSet {
             if isEnableKeyboardObserver {
-                self.addKeyboardObserver()
+                self.keyboardManager = WQKeyboardManager(self.containerView) 
             } else {
-                self.removeKeyboardObserver()
+                self.keyboardManager = nil
             }
         }
     }
@@ -142,15 +142,11 @@ open class WQPresentationable: UIViewController {
     }
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if isEnableKeyboardObserver {
-           self.addKeyboardObserver()
-        }
+        debugPrint(#function)
     }
     open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if isEnableKeyboardObserver {
-            self.removeKeyboardObserver()
-        }
+        debugPrint(#function)
     }
    
     deinit {
@@ -176,16 +172,12 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate {
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-            guard let interactive = self.hidenDriven else {
-                return nil
-            }
+            guard let interactive = self.hidenDriven else { return nil }
             return interactive.isInteractive ? interactive : nil
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-            guard let interactive = self.showInteractive else {
-                return nil
-            }
+            guard let interactive = self.showInteractive else { return nil }
             return interactive.isInteractive ? interactive : nil
     }
 }
@@ -232,8 +224,7 @@ extension WQPresentationable {
         case .began:
             self.hidenDriven?.isInteractive = true
             self.dismiss(animated: true)
-        default:
-            break
+        default: break
         }
     }
     @objc
@@ -248,9 +239,7 @@ extension WQPresentationable {
         self.tapGesture = tapGR
     }
     func removeTapGesture() {
-        guard let tapGR = self.tapGesture else {
-            return
-        }
+        guard let tapGR = self.tapGesture else { return }
         self.view.removeGestureRecognizer(tapGR)
         self.tapGesture = nil
     }
@@ -262,9 +251,7 @@ extension WQPresentationable: UIGestureRecognizerDelegate {
         if let tapGR = gestureRecognizer as? UITapGestureRecognizer,
             tapGR === self.tapGesture {
             let location = tapGR.location(in: self.view)
-            if self.containerView.frame.contains(location) {
-                return false
-            }
+            return !self.containerView.frame.contains(location)
         } else if let interactive = self.hidenDriven {
             return interactive.isEnableDriven(gestureRecognizer)
         }

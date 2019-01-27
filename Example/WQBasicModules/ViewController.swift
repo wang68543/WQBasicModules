@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         }
     }
      private let picButton = UIButton()
-    let panGR: UIPanGestureRecognizer = UIPanGestureRecognizer()
+   private let panGR: UIPanGestureRecognizer = UIPanGestureRecognizer()
     let str: String = "123123123"
    
     class WQPresentionView: UIView {
@@ -51,8 +51,11 @@ class ViewController: UIViewController {
         }
 //        sender.
     }
+    var textField: UITextField?
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.textField = UITextField()
+        self.textField?.delegate = self
         self.view.addGestureRecognizer(panGR)
         panGR.addTarget(self, action: #selector(handlePanGesture(_:)))
         debugPrint(Date.distantFuture.timeIntervalSince1970)
@@ -202,7 +205,9 @@ class ViewController: UIViewController {
     }
     
 
-    @IBAction func webViewAction(_ sender: UIButton) { 
+    @IBAction func webViewAction(_ sender: UIButton) {
+        self.textField?.isUserInteractionEnabled
+        return
 //        self.view.frame = self.view.frame.offsetBy(dx: 300, dy: 0)
 //        return
 //        let second = SecondViewController()
@@ -246,6 +251,12 @@ class ViewController: UIViewController {
 //        self.view.addSubview(presnetion.view)
     }
     
+}
+extension ViewController: UITextFieldDelegate {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        debugPrint(#function)
+        return true
+    }
 }
 class TestPresent: WQAnimatedConfigAble {
     func config(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) {

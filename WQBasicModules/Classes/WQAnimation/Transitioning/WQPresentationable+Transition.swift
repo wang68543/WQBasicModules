@@ -134,9 +134,7 @@ extension WQPresentationable {
                 }
             } else {
                 self.animator.animated(presented: top, presenting: self, isShow: true) { [weak self] _ in
-                    if let weakSelf = self  {
-                        weakSelf.didMove(toParent: top)
-                    }
+                    if let weakSelf = self { weakSelf.didMove(toParent: top) }
                     completion?()
                 }
             }
@@ -145,11 +143,7 @@ extension WQPresentationable {
             self.didMove(toParent: top)
             completion?()
         }
-        if #available(iOS 10.0, *) {
-            
-        } else {
-            interactionDissmissDirection = nil
-        }
+        if #available(iOS 10.0, *) { } else { interactionDissmissDirection = nil }
     }
     internal func hideFromParent(animated flag: Bool, completion: TransitionCompleted? ) {
         func animateFinshed(_ flag: Bool) {
@@ -166,7 +160,7 @@ extension WQPresentationable {
                     animateFinshed(position == .end)
                 }
             } else {
-                self.animator.animated(presented: other,  presenting: self, isShow: false) { _ in
+                self.animator.animated(presented: other, presenting: self, isShow: false) { _ in
                     animateFinshed(true)
                 }
             }
@@ -188,7 +182,7 @@ extension WQPresentationable {
                     animateFinshed(position == .end)
                 }
             } else {
-                self.animator.animated(presented: other,  presenting: self, isShow: false) { _ in
+                self.animator.animated(presented: other, presenting: self, isShow: false) { _ in
                     animateFinshed(true)
                 }
             }
@@ -226,7 +220,7 @@ extension WQPresentationable {
                     animateFinshed(position == .end)
                 }
             } else {
-                self.animator.animated(presented: other,  presenting: self, isShow: false) { _ in
+                self.animator.animated(presented: other, presenting: self, isShow: false) { _ in
                     animateFinshed(true)
                 }
             }

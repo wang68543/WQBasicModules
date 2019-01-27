@@ -138,21 +138,23 @@ private extension WQFlexbox {
         return groupItems
     }
     /// 所有分区的FlexSections
+     //swiftlint:disable function_body_length
     func sectionsAttrbutes(_ isHorizontal: Bool,
                            sections: Int,
                            groupItems: [[[WQFlexItemAttributes]]]) -> [WQFlexSectionAttributes] {
         var sectionAttrs: [WQFlexSectionAttributes] = []
+        guard let collectionView = self.collectionView else { return sectionAttrs }
         for section in 0 ..< groupItems.count {
             let lineSpace = self.minimumLineSpacingForSection(at: section)
             let itemSpace = self.minimumInteritemSpacingForSection(at: section)
-            let headerSize = self.referenceSizeForHeaderInSection(section)
-            let footerSize = self.referenceSizeForFooterInSection(section)
+            let header = self.referenceSizeForHeaderInSection(section)
+            let footer = self.referenceSizeForFooterInSection(section)
             let insets = self.insetForSection(at: section)
             var limitValue: CGFloat
             if isHorizontal {
-                limitValue = self.limitLength - sectionInset.left - sectionInset.right
+                limitValue = self.limitLength - insets.left - insets.right
             } else {
-                limitValue = self.limitLength - sectionInset.top - sectionInset.bottom - footerSize.height - headerSize.height
+                limitValue = self.limitLength - insets.top - insets.bottom - footer.height - header.height
             }
             let sectionLines = groupItems[section]
             var lineAttrs: [WQFlexLineAttributes] = []
@@ -171,20 +173,19 @@ private extension WQFlexbox {
                     let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
                     lineAttrs.append(lineAttr)
                 }
-                
             }
             var totalLineMaxWidth: CGFloat
             if isHorizontal {
-                let contentClip = collectionView!.contentInset.top + collectionView!.contentInset.bottom
+                let contentClip = collectionView.contentInset.top + collectionView.contentInset.bottom
                 let sectionClip = insets.bottom + insets.top
-                let headerFooterClip = headerSize.height + footerSize.height
-                totalLineMaxWidth = collectionView!.frame.height - contentClip - headerFooterClip - sectionClip
+                let headerFooterClip = header.height + footer.height
+                totalLineMaxWidth = collectionView.frame.height - contentClip - headerFooterClip - sectionClip
             } else {
-                let contentClip = collectionView!.contentInset.left + collectionView!.contentInset.right
+                let contentClip = collectionView.contentInset.left + collectionView.contentInset.right
                 let sectionClip = insets.left + insets.right
-                totalLineMaxWidth = collectionView!.frame.width - contentClip - sectionClip
+                totalLineMaxWidth = collectionView.frame.width - contentClip - sectionClip
             }
-            var sectionAttr = WQFlexSectionAttributes(section, header: headerSize, footer: footerSize, insets: insets, lines: lineAttrs)
+            var sectionAttr = WQFlexSectionAttributes(section, header: header, footer: footer, insets: insets, lines: lineAttrs)
             sectionAttr.config(viewWidth: totalLineMaxWidth, alignContent: self.alignContent, lineSpace: lineSpace, sections: sections)
             sectionAttr.config(isHorizontal)
             sectionAttrs.append(sectionAttr)
@@ -266,18 +267,10 @@ private extension WQFlexbox {
         attr.frame = frame
         if isHorizontal {
             let width = item.size.width + lineAttr.margin.space
-            if isReverse {
-                lineX -= width
-            } else {
-                lineX += width
-            }
+            if isReverse { lineX -= width } else { lineX += width }
         } else {
             let height = item.size.height + lineAttr.margin.space
-            if isReverse {
-                lineY -= height
-            } else {
-                lineY += height
-            }
+            if isReverse { lineY -= height } else { lineY += height }
         }
         return attr
     })
