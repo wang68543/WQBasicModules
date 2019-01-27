@@ -36,6 +36,22 @@ class TableTextInputViewController: UIViewController {
             fatalError("init(coder:) has not been implemented")
         }
     }
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        debugPrint(#function)
+    }
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        debugPrint(#function)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        debugPrint("*********",#function)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        debugPrint("*********",#function)
+    }
     var tableView: UITableView!
     var keyboardMangaer: WQKeyboardManager!
     var line = UIView()

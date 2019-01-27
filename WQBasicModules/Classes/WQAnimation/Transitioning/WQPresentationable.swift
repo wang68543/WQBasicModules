@@ -131,7 +131,7 @@ open class WQPresentationable: UIViewController {
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         switch shownMode {
         case .childController:
-            break
+            self.hideFromController(animated: flag, completion: completion)
         case .present:
             super.dismiss(animated: flag, completion: completion)
         case .windowRootController:
@@ -140,14 +140,18 @@ open class WQPresentationable: UIViewController {
             self.hideFromParent(animated: flag, completion: completion)
         }
     }
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        debugPrint(#function)
-    }
-    open override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        debugPrint(#function)
-    }
+//    open override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        debugPrint(#function)
+//    }
+//    open override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        debugPrint(#function)
+//    }
+//    open override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        debugPrint(#function)
+//    }
    
     deinit {
         //手动置空关联值 防止坏内存引用

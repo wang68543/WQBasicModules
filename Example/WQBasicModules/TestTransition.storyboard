@@ -220,13 +220,23 @@
                     <view key="view" contentMode="scaleToFill" id="69y-tV-aL6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ZG-wv-JS2">
+                                <rect key="frame" x="38" y="39" width="46" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <segue destination="WBI-HM-fj3" kind="show" id="pAL-Th-LMf"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Fh6-Wb-3vV"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Yc-h1-iZ2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4065" y="-63"/>
+            <point key="canvasLocation" x="3713" y="-68"/>
         </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="Tpc-8j-NRc">
@@ -248,4 +258,7 @@
             <point key="canvasLocation" x="964" y="-16.641679160419791"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="pAL-Th-LMf"/>
+    </inferredMetricsTieBreakers>
 </document>

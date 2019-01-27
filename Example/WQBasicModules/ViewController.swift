@@ -23,6 +23,22 @@ class ViewController: UIViewController {
     class WQPresentionView: UIView {
       
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        debugPrint("=====",#function)
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        debugPrint("==========",#function)
+    }
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        debugPrint(#function)
+    }
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        debugPrint(#function)
+    }
     @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .began:
@@ -206,8 +222,7 @@ class ViewController: UIViewController {
     
 
     @IBAction func webViewAction(_ sender: UIButton) {
-        self.textField?.isUserInteractionEnabled
-        return
+     
 //        self.view.frame = self.view.frame.offsetBy(dx: 300, dy: 0)
 //        return
 //        let second = SecondViewController()
