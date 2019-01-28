@@ -230,7 +230,6 @@ private extension WQKeyboardManager {
         if _keyboardShowing { optimizedAdjustPosition() }
     }
     func textFieldViewDidEndEditing(_ note: Notification) {
-        debugPrint(#function)
         if let textField = _textFieldView as? UITextField {
             textField.delegate = textFieldDelegate //还原
         }
@@ -238,7 +237,6 @@ private extension WQKeyboardManager {
         textFieldDelegate = nil
     }
     func keyboardWillShow(_ note: Notification) {
-        debugPrint(#function)
         guard let userInfo = note.userInfo,
          let cuvreValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt,
          let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
@@ -271,7 +269,6 @@ private extension WQKeyboardManager {
         }
     }
     func keyboardWillHide(_ note: Notification) {
-        debugPrint(#function)
         _kbShowNotification = nil
         _keyboardShowing = false
         guard let userInfo = note.userInfo,
@@ -399,12 +396,11 @@ extension WQKeyboardManager: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let shouldReturn = textFieldDelegate?.textFieldShouldReturn?(textField) {
             if !shouldReturn { //不能换行
-                goNext()
+               return goNext()
             }
             return shouldReturn
         } else {
-            goNext()
-            return false
+            return goNext()
         }
     }
 }

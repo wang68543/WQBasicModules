@@ -120,12 +120,12 @@ open class WQPresentationable: UIViewController {
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
         if presnetVC?.presentedViewController != nil {
-            self.shownInParent(presnetVC!, flag: flag, completion: completion)
+            self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
             //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
-            self.presentSelf(in: topVC, flag: flag, completion: completion)
+            self.presentSelf(in: topVC, animated: flag, completion: completion)
         } else {
-            self.shownInWindow(flag, completion: completion)
+            self.shownInWindow(animated: flag, completion: completion)
         }
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -140,18 +140,22 @@ open class WQPresentationable: UIViewController {
             self.hideFromParent(animated: flag, completion: completion)
         }
     }
-//    open override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        debugPrint(#function)
-//    }
-//    open override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        debugPrint(#function)
-//    }
-//    open override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        debugPrint(#function)
-//    }
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
    
     deinit {
         //手动置空关联值 防止坏内存引用

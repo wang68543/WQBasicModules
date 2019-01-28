@@ -223,6 +223,13 @@ class ViewController: UIViewController {
 
     @IBAction func webViewAction(_ sender: UIButton) {
      
+        let value: CGFloat = 200
+        func testFuns() {
+            debugPrint("=====",value)
+        }
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+            testFuns()
+        }
 //        self.view.frame = self.view.frame.offsetBy(dx: 300, dy: 0)
 //        return
 //        let second = SecondViewController()
@@ -250,8 +257,11 @@ class ViewController: UIViewController {
 //        presentation.show(animated: true, in: nil, completion: nil)
 //        presentation.isEnableTabBackgroundDismiss = true
         
-        presentation.shownInParent(self, flag: true, completion: nil)
-//        presentation.shownInWindow(true, completion: nil)
+//        presentation.shownInWindow(animated: true, completion: nil)
+ 
+        presentation.shownInParent(self, animated: true, completion: nil)
+//        presentation.shownInWindow(animated: true, completion: nil)
+//        presentation.presentSelf(in: self, animated: true, completion: nil)
         
 //        presentionView.wm.presentation?.interactionDissmissDirection = .down
        
