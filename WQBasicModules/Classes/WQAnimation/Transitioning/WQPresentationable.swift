@@ -11,9 +11,9 @@ class WQPresentationWindow: UIWindow {
     override func layoutSubviews() {
         super.layoutSubviews()
     }
-    deinit {
-        debugPrint("弹窗窗口销毁了")
-    }
+//    deinit {
+//        debugPrint("弹窗窗口销毁了")
+//    }
 }
 
 public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
@@ -140,22 +140,22 @@ open class WQPresentationable: UIViewController {
             self.hideFromParent(animated: flag, completion: completion)
         }
     }
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
+//    open override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
    
     deinit {
         //手动置空关联值 防止坏内存引用

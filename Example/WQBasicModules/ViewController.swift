@@ -254,12 +254,12 @@ class ViewController: UIViewController {
         let animator = WQTransitioningAnimator(items: [item, color,itemFrame ])
         let presentation = WQPresentationable(subView: presentionView, animator: animator)
         presentation.interactionDissmissDirection = .down
-//        presentation.show(animated: true, in: nil, completion: nil)
+        presentation.show(animated: true, in: nil, completion: nil)
 //        presentation.isEnableTabBackgroundDismiss = true
         
 //        presentation.shownInWindow(animated: true, completion: nil)
  
-        presentation.shownInParent(self, animated: true, completion: nil)
+//        presentation.shownInParent(self, animated: true, completion: nil)
 //        presentation.shownInWindow(animated: true, completion: nil)
 //        presentation.presentSelf(in: self, animated: true, completion: nil)
         

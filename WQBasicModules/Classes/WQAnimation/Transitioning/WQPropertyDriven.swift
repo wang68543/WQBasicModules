@@ -135,9 +135,9 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
         return self.isInteractive
     }
     
-    deinit {
-        debugPrint(#file)
-    }
+//    deinit {
+////        debugPrint(#file)
+//    }
 }
 public extension DrivenableProtocol {
     func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
