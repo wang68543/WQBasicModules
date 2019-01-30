@@ -113,40 +113,34 @@ extension WQPresentationable {
     }
     
     /// 直接以当前控制器的子控制器的形式显示(与当前控制器的界面显示同步)
-    public func showInController(_ controller: UIViewController?, animated flag: Bool, completion: TransitionCompleted?) {
+    public func showInController(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .childController
-        guard let top = controller ?? WQUIHelp.topVisibleViewController() else {
-            completion?()
-            return
-        }
-        shouldUsingPresentionAnimatedController = top
-        top.beginAppearanceTransition(false, animated: flag)
+        shouldUsingPresentionAnimatedController = controller
         self.beginAppearanceTransition(true, animated: flag)
         func animateFinshed(_ flag: Bool) {
             if flag {
-                self.didMove(toParent: top)
+                self.didMove(toParent: controller)
                 self.endAppearanceTransition()
-                top.endAppearanceTransition()
             }
             completion?()
         }
-        top.addChild(self)
-        top.view.addSubview(self.view)
-        if top is UITabBarController {
+        controller.addChild(self)
+        controller.view.addSubview(self.view)
+        if controller is UITabBarController {
             CATransaction.begin()
             CATransaction.disableActions()
-            top.view.layoutIfNeeded()
+            controller.view.layoutIfNeeded()
             CATransaction.commit()
         }
         if flag {
             if #available(iOS 10.0, *),
                let driven = self.showInteractive as? WQPropertyDriven {
-                driven.startIneractive(presented: top, presenting: self) { animateFinshed($0 == .end) }
+                driven.startIneractive(presented: controller, presenting: self) { animateFinshed($0 == .end) }
             } else {
-                self.animator.animated(presented: top, presenting: self, isShow: true) { animateFinshed($0) }
+                self.animator.animated(presented: controller, presenting: self, isShow: true) { animateFinshed($0) }
             }
         } else {
-            self.animator.items.config(top, presenting: self, isShow: true)
+            self.animator.items.config(controller, presenting: self, isShow: true)
            animateFinshed(true)
         }
         if #available(iOS 10.0, *) { } else { interactionDissmissDirection = nil }

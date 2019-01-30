@@ -238,7 +238,7 @@ class ViewController: UIViewController {
 //        return
         let presentionView = WQPresentionView()
         let keyPath = \WQPresentationable.containerView.frame
-        let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
+        let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width, height: 500)))
         let color = WQAnimatedItem.defaultViewBackground()
 //        presentionView.wm.show(items: [item,color,TestPresent()])
 //        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
@@ -248,13 +248,14 @@ class ViewController: UIViewController {
 //            debugPrint(self.children)
 //            presentionView.wm.dismiss(true)
 //        }
-        let itemFrame = WQAnimatedItem.defaultViewShowFrame()
-//        let navkey = \UIViewController.view.frame
-//        let viewItem = WQPresentedAnimatedItem(navkey, initial:self.view.frame  , show:self.view.frame.offsetBy(dx: 300, dy: 0))
-        let animator = WQTransitioningAnimator(items: [item, color,itemFrame ])
+//        let itemFrame = WQAnimatedItem.defaultViewShowFrame()
+        let showFrame = CGRect(x: 0, y: UIScreen.main.bounds.height - 500, width: UIScreen.main.bounds.width, height: 500)
+        let navkey = \WQPresentationable.view.frame
+        let viewItem = WQPresentedAnimatedItem(navkey, initial:showFrame, show:showFrame)
+        let animator = WQTransitioningAnimator(items: [item, color,viewItem ])
         let presentation = WQPresentationable(subView: presentionView, animator: animator)
         presentation.interactionDissmissDirection = .down
-        presentation.show(animated: true, in: nil, completion: nil)
+        presentation.showInController(self.tabBarController!, animated: true, completion: nil)
 //        presentation.isEnableTabBackgroundDismiss = true
         
 //        presentation.shownInWindow(animated: true, completion: nil)
