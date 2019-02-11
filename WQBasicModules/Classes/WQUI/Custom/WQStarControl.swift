@@ -147,6 +147,7 @@ open class WQStarControl: UIControl {
     }
     open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
         super.continueTracking(touch, with: event)
+        debugPrint("===========")
         handleTouch(touch)
         return true
     }
