@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		06A245CD21F6DA5B0066F57F /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */; };
+		06A9D04B22125D4C00A16354 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A9D04A22125D4B00A16354 /* ExampleViewController.swift */; };
+		06A9D04E2212610400A16354 /* ExampleViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A9D04C2212610400A16354 /* ExampleViewCell.swift */; };
+		06A9D04F2212610400A16354 /* ExampleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 06A9D04D2212610400A16354 /* ExampleViewCell.xib */; };
+		06A9D0512212BE0300A16354 /* WQStarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A9D0502212BE0200A16354 /* WQStarViewController.swift */; };
+		06A9D0532212BE8A00A16354 /* BaseExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A9D0522212BE8A00A16354 /* BaseExampleViewController.swift */; };
 		06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */; };
 		06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FB146321ED78FC00A85B03 /* TabBarViewController.swift */; };
 		06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */; };
@@ -37,6 +42,11 @@
 
 /* Begin PBXFileReference section */
 		06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
+		06A9D04A22125D4B00A16354 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
+		06A9D04C2212610400A16354 /* ExampleViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewCell.swift; sourceTree = "<group>"; };
+		06A9D04D2212610400A16354 /* ExampleViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExampleViewCell.xib; sourceTree = "<group>"; };
+		06A9D0502212BE0200A16354 /* WQStarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WQStarViewController.swift; sourceTree = "<group>"; };
+		06A9D0522212BE8A00A16354 /* BaseExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseExampleViewController.swift; sourceTree = "<group>"; };
 		06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollTextInputViewController.swift; sourceTree = "<group>"; };
 		06FB146321ED78FC00A85B03 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTextInputViewController.swift; sourceTree = "<group>"; };
@@ -85,6 +95,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06A9D04822125CB800A16354 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				06A9D0502212BE0200A16354 /* WQStarViewController.swift */,
+				06A9D0522212BE8A00A16354 /* BaseExampleViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		06A9D04922125CD100A16354 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				06A9D04C2212610400A16354 /* ExampleViewCell.swift */,
+				06A9D04D2212610400A16354 /* ExampleViewCell.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		56436BD85FD4013DF8CF7F05 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +146,8 @@
 		607FACD21AFB9204008FA782 /* Example for WQBasicModules */ = {
 			isa = PBXGroup;
 			children = (
+				06A9D04922125CD100A16354 /* Views */,
+				06A9D04822125CB800A16354 /* ViewControllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -132,6 +162,7 @@
 				06A245CC21F6DA5B0066F57F /* TextInputViewController.swift */,
 				06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */,
 				06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */,
+				06A9D04A22125D4B00A16354 /* ExampleViewController.swift */,
 			);
 			name = "Example for WQBasicModules";
 			path = WQBasicModules;
@@ -274,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				06A9D04F2212610400A16354 /* ExampleViewCell.xib in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				5EECD18B21ECD0410033608D /* TestTransition.storyboard in Resources */,
@@ -384,13 +416,17 @@
 			files = (
 				5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */,
 				06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */,
+				06A9D0512212BE0300A16354 /* WQStarViewController.swift in Sources */,
 				06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				06A9D0532212BE8A00A16354 /* BaseExampleViewController.swift in Sources */,
+				06A9D04E2212610400A16354 /* ExampleViewCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 				5ED7C4D721CA49F000B128B7 /* SnapShotTableController.swift in Sources */,
 				06A245CD21F6DA5B0066F57F /* TextInputViewController.swift in Sources */,
 				06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */,
 				5EBA5CB021BF6854001C46D9 /* TestWebViewController.swift in Sources */,
+				06A9D04B22125D4C00A16354 /* ExampleViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

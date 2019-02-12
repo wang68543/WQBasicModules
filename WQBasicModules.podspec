@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-主要是讲之前的Objective-c版本的[WQBasicComponents](https://github.com/wang68543/WQBasicComponents.git) 转为Swift 版本
+日常常用的功能集合, 持续优化更新(包含扩展，工具类以及一些基础框架)
                        DESC
 
   s.homepage         = 'https://github.com/wang68543/WQBasicModules'
@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
     s.subspec 'WQExtensionModule' do |ss|
         ss.source_files = 'WQBasicModules/Classes/WQExtensionModule/*.swift'
     end
+    
   	s.subspec 'WQAnimation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
@@ -48,6 +49,7 @@ Pod::Spec.new do |s|
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Transitioning/*.swift'
         end
     end
+    
     s.subspec 'WQExtensions' do |ss|
         ss.subspec 'WQUIKit' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift'
@@ -65,9 +67,6 @@ Pod::Spec.new do |s|
     end
        
      s.subspec 'WQHelpTool' do |ss|
- #        ss.subspec 'WQSingle' do |sss|
- #           sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQSingle/*.swift'
- #        end
          ss.subspec 'WQCache' do |sss|
              sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQCache/*.swift'
          end
@@ -75,6 +74,7 @@ Pod::Spec.new do |s|
          	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
          end
      end
+     
      s.subspec 'WQUI' do |ss|
          ss.subspec 'Custom' do |sss|
              sss.source_files = 'WQBasicModules/Classes/WQUI/Custom/*.swift'
@@ -91,7 +91,4 @@ Pod::Spec.new do |s|
              sss.source_files = 'WQBasicModules/Classes/WQUI/FlowLayout/*.swift'
          end
      end
- # s.public_header_files = 'Pod/Classes/**/*.h'
- # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
 end

@@ -7,7 +7,7 @@
 
 import UIKit
 public enum WQStarValueType {
-    case valueHalf, valueWhole, valueRandom
+    case valueHalf, valueWhole, valueRandom // Random is not support custom image
 }
 open class WQStarControl: UIControl {
     /// 0.0 ~ 1.0
@@ -57,7 +57,7 @@ open class WQStarControl: UIControl {
  
     public var hideUnHighlited = false
     ///默认形状(五角形)
-    public var shapeCoreners: Int = 4
+    public var shapeCoreners: Int = 5
     public var starCount: Int = 5
     
     public var normalImage: UIImage?
@@ -160,7 +160,6 @@ open class WQStarControl: UIControl {
             handleTouch(touch, isEnd: true)
         }
     }
-    
     open override var canBecomeFirstResponder: Bool {
         return true
     }
