@@ -123,9 +123,8 @@ private extension WQFlexbox {
                 let itemSize = self.sizeForItem(at: indexPath)
                 let attr = WQFlexItemAttributes(indexPath: indexPath, size: itemSize)
                 let itemLength = isHorizontal ? itemSize.width : itemSize.height
-                 maxValue += itemLength + itemSpace
-                //notaFIXME: 需要确认边界问题
-                if maxValue + itemLength > limit {
+                maxValue += itemLength + itemSpace
+                if maxValue > limit {
                     maxValue = itemLength + itemSpace
                     sectionItems.append(lineItems)
                     lineItems = []
