@@ -51,13 +51,14 @@ open class WQStarControl: UIControl {
     public var minInterSpacing: CGFloat = 5
     
     public var valueType: WQStarValueType = .valueHalf
-    public var contentEdgeInsets: UIEdgeInsets = .zero  
+    public var contentEdgeInsets: UIEdgeInsets = .zero
+    /// 旋转角度
     public var drawStarRotate: CGFloat = 0.0
     public var starSize: CGSize  = .zero
  
     public var hideUnHighlited = false
     ///默认形状(五角形)
-    public var shapeCoreners: Int = 5
+    public var shapeCoreners: Int = 4
     public var starCount: Int = 5
     
     public var normalImage: UIImage?
@@ -146,8 +147,7 @@ open class WQStarControl: UIControl {
         return true
     }
     open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        super.continueTracking(touch, with: event)
-        debugPrint("===========")
+        super.continueTracking(touch, with: event) 
         handleTouch(touch)
         return true
     }
@@ -160,6 +160,7 @@ open class WQStarControl: UIControl {
             handleTouch(touch, isEnd: true)
         }
     }
+    
     open override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -177,7 +178,6 @@ private extension WQStarControl {
             let contentRect = self.frame.inset(by: self.contentEdgeInsets)
             progress = (point.x - self.contentEdgeInsets.left) / contentRect.width
         }
-//        let oldValue = self.value
         self.progressValue = progress
         if isContinuous {
            self.sendActions(for: .valueChanged)
@@ -186,9 +186,6 @@ private extension WQStarControl {
                 self.sendActions(for: .valueChanged)
             }
         }
-//        if self.value != oldValue {
-        
-//        }
     }
     func drawItem(_ rect: CGRect, context: CGContext) {
         let contentRect = self.frame.inset(by: self.contentEdgeInsets)
@@ -216,82 +213,55 @@ private extension WQStarControl {
             drawStar(rect, progress: progress, context: context)
         }
   }
-    //  swiftlint:disable function_body_length
+    // 算法参照: https://blog.csdn.net/djh123456021/article/details/78306250
     func drawStar(_ rect: CGRect, progress: CGFloat, context: CGContext) {
-        let angle = 360.0 / CGFloat(shapeCoreners)
-        let innerAngle = angle * 0.5
-        let radius = min(rect.width, rect.height) * 0.5
-        let innerR = radius * 0.3
-        let center = CGPoint(x: rect.midX, y: rect.midY)
-        let offsetAngle: CGFloat = -90
+        let count = CGFloat(shapeCoreners)
+        let degree = 180 / count
+        context.saveGState()
+        let splitAngle = 360.0 / count // 圆上点的分割弧度
+        let radius = min(rect.width, rect.height) * 0.5 // 外角半斤
+        let center = CGPoint(x: rect.midX, y: rect.midY) // 圆心
         let radian = CGFloat.pi / 180.0
-        let progressX = progress * rect.width + rect.minX
+        let internalRadius = radius * sin(degree * 0.5 * radian) / cos(splitAngle * 0.5 * radian) // 内角半径
+        var pts: [CGPoint] = [] // 外角点集合
+        var internalPts: [CGPoint] = []
+        for index in 0 ..< shapeCoreners { //计算 内外点
+            let angle1 = (splitAngle * CGFloat(index) + drawStarRotate) * radian
+            let pt1 = CGPoint(x: center.x + sin(angle1) * radius, y: center.y - cos(angle1) * radius)
+            pts.append(pt1)
+            let angle2 = (splitAngle * CGFloat(index) + drawStarRotate + splitAngle * 0.5) * radian
+            let pt2 = CGPoint(x: center.x + sin(angle2) * internalRadius, y: center.y - cos(angle2) * internalRadius)
+            internalPts.append(pt2)
+        }
         let path = UIBezierPath()
-        let progressPath = UIBezierPath()
-        for idx in 0 ..< shapeCoreners {
-            let topCornerAngle = offsetAngle + angle * CGFloat(idx)
-            let pt1Radian = (topCornerAngle - innerAngle) * radian
-            let pt1 = CGPoint(x: cos(pt1Radian) * innerR + center.x, y: sin(pt1Radian) * innerR + center.y)
-            let pt2Radian = topCornerAngle * radian
-            let pt2 = CGPoint(x: cos(pt2Radian) * radius + center.x, y: sin(pt2Radian) * radius + center.y)
-            let pt3Radian = (topCornerAngle + innerAngle) * radian
-            let pt3 = CGPoint(x: cos(pt3Radian) * innerR + center.x, y: sin(pt3Radian) * innerR + center.y)
-            if idx == 0 { path.move(to: pt1 ) }
+        path.move(to: pts.first!)
+        for index in 0 ..< shapeCoreners { // 绘制五角星
+            let idx = (index + 1) % pts.count
+            let pt2 = pts[idx]
+            let midPt = internalPts[index]
+            path.addLine(to: midPt)
             path.addLine(to: pt2)
-            path.addLine(to: pt3)
-            if progress > 0.0 && progress < 1.0 {
-                if pt1.x <= progressX || pt2.x <= progressX {
-                    let line1Pt = twoLineIntersection(pt1, point2: pt2, intersectionX: progressX)
-                    let start: CGPoint = pt1.x <= progressX ? pt1 : line1Pt
-                    let end: CGPoint = pt2.x <= progressX ? pt2 : line1Pt
-                    if progressPath.isEmpty {
-                        progressPath.move(to: start)
-                    } else if progressPath.currentPoint != start {
-                        progressPath.addLine(to: start)
-                    }
-                    progressPath.addLine(to: end)
-                }
-                if pt2.x <= progressX || pt3.x <= progressX {
-                    let line2Pt = twoLineIntersection(pt2, point2: pt3, intersectionX: progressX)
-                    let start: CGPoint = pt2.x <= progressX ? pt2 : line2Pt
-                    let end: CGPoint = pt3.x <= progressX ? pt3 : line2Pt
-                    if progressPath.isEmpty {
-                        progressPath.move(to: start)
-                    } else if progressPath.currentPoint != start {
-                        progressPath.addLine(to: start)
-                    }
-                    progressPath.addLine(to: end)
-                }
-            }
         }
         path.close()
+        path.addClip()
         context.setStrokeColor(borderColor.cgColor)
         context.setLineWidth(borderWidth)
         context.setLineJoin(.round)
+        context.setLineCap(.round)
         context.beginPath()
         context.addPath(path.cgPath)
         context.closePath()
-        if progress == 1.0 {
-            context.setFillColor(highlightedColor.cgColor)
-            context.drawPath(using: .fillStroke)
-        } else {
-            context.setFillColor(normalColor.cgColor)
-            context.drawPath(using: .stroke)
-            if !progressPath.isEmpty {
-                progressPath.close()
-                context.setFillColor(highlightedColor.cgColor)
-                context.beginPath()
-                context.addPath(progressPath.cgPath)
-                context.closePath()
-                context.drawPath(using: .fill)
-            }
-        }
-    }
-    func twoLineIntersection(_ point1: CGPoint, point2: CGPoint, intersectionX: CGFloat) -> CGPoint {
-        let lineK = (point1.y - point2.y) / (point1.x - point2.x)
-        let lineb = point1.y - lineK * point1.x
-        let linePt = CGPoint(x: intersectionX, y: lineK * intersectionX + lineb)
-        return linePt
+        context.drawPath(using: .fillStroke)
+        // 填充
+        let fillPath = UIBezierPath(rect: CGRect(x: rect.minX, y: rect.minY, width: rect.width * progress, height: rect.height))
+        fillPath.close()
+        context.setLineWidth(0)
+        context.setFillColor(highlightedColor.cgColor)
+        context.beginPath()
+        context.addPath(fillPath.cgPath)
+        context.closePath()
+        context.drawPath(using: .fill)
+        context.restoreGState()
     }
     func drawImage(_ rect: CGRect, progress: CGFloat, context: CGContext) {
         var drawImage: UIImage?
