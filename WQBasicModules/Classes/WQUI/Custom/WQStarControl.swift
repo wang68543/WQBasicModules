@@ -30,7 +30,7 @@ open class WQStarControl: UIControl {
     public var valueType: WQStarValueType = .valueHalf
     
     ///绘制的图形的角的个数
-    public var shapeCoreners: Int = 5 {
+    public var shapeCoreners: Int = 10 {
         didSet {
             assert(shapeCoreners >= 3, "不支持小于三个角的图形绘制")
         }

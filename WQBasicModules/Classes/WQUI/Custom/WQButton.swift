@@ -13,6 +13,7 @@ public final class WQButton: UIButton {
     
     //以下计算都是基于当前button有尺寸之后的调整
    public var imgSize: CGSize = .zero
+    /// 是否允许标题换行
    public var isAllowWrap: Bool = false {
         didSet {
             self.titleLabel?.numberOfLines = isAllowWrap ? 0 : 1

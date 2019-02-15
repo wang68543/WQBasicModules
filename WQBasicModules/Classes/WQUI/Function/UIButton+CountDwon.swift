@@ -111,8 +111,7 @@ public extension UIButton {
             total -= 1
             if total <= 0 {
                 weakSelf.stopCountDown(true)
-            } else {
-//                let state = weakSelf.status?.state ?? .normal
+            } else { 
                 weakSelf.execute?(weakSelf, total )
                 weakSelf.totalCount = total
             }

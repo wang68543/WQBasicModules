@@ -7,13 +7,7 @@
 import UIKit
 
 /// 专职于显示Alert的Window
-class WQPresentationWindow: UIWindow {
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-//    deinit {
-//        debugPrint("弹窗窗口销毁了")
-//    }
+class WQPresentationWindow: UIWindow { 
 }
 
 public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
