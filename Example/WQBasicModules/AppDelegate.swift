@@ -20,6 +20,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
+         let regex1 = "^(f|ht){1}(tp|tps):\\/\\/([\\w-]+\\.)+[\\w-]+(\\/[\\w- ./?%&=]*)?"
+    
+         let pre5 = NSPredicate(format: "SELF MATCHES %@" , regex1)
+        let str = "我单位https://www.baidu.com/"
+       let range = str.range(of: regex1, options: .regularExpression, range: str.startIndex ..< str.endIndex, locale: Locale.current)
+        let bool5 = pre5.evaluate(with: "2")
         return true
     }
 
