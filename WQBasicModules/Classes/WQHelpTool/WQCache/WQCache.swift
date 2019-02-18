@@ -14,7 +14,7 @@ public final class WQCache {
     
     public let urlPath: URL
     public let fileManager: FileManager
-    
+    //读写锁
     private var lock: pthread_rwlock_t
     private let ioQueue: DispatchQueue
     /// 根据路径创建存储实例
