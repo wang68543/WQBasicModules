@@ -26,8 +26,9 @@ public enum WQRegex: String {
     case IDCard = "^(^[1-9]\\\\d{7}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])\\\\d{3}$)|(^[1-9]\\\\d{5}[1-9]\\\\d{3}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])((\\\\d{4})|\\\\d{3}[Xx])$)$"
     /// 提取网页图片
     case imgInHTML = "\\< *[img][^\\\\>]*[src] *= *[\\\"\\']{0,1}([^\\\"\\'\\ >]*)"
+    // 搜索也可以用这个 NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)     detector.enumerateMatches
     /// 提取URL链接
-    case link = "^(f|ht){1}(tp|tps):\\/\\/([\\w-]+\\.)+[\\w-]+(\\/[\\w- ./?%&=]*)?"
+    case link = "((?:http|https)://)?(?:www\\.)?[\\w\\d\\-_]+\\.\\w{2,3}(\\.\\w{2})?(/(?<=/)(?:[\\w\\d\\-./_]+)?)?"
     /** 中国手机号码 */
     case chinaPhone = "^1[0-9]\\\\d{10}$"
 //    case chinaPhone = "^1(34[0-9]|70[0-35-9]|(3[0-35-9]|4[5-9]|5[0-35-9]|66|7[135-8]|8[0-9])\\\\d)\\\\d{7}$"
