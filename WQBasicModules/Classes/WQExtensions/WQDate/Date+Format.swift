@@ -145,6 +145,7 @@ public extension Date { // MARK: 日期格式化
     func toString(_ format: DateFormatEnum, in calendar: Calendar = .current) -> String {
         return toString(format.formatString, in: calendar)
     }
+    
     func toString(_ format: String, in calendar: Calendar = .current) -> String {
         WQDateFormatter.shared.dateFormat = format
         WQDateFormatter.shared.calendar = calendar
