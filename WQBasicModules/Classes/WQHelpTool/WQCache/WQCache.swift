@@ -31,7 +31,7 @@ public final class WQCache {
         self.fileManager = fileManager
         if !fileManager.fileExists(atPath: path.path) {
             do {
-                try  fileManager.createDirectory(at: urlPath, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(at: urlPath, withIntermediateDirectories: true, attributes: nil)
             } catch let error {
                 debugPrint("创建文件夹失败", error.localizedDescription)
             }
@@ -181,7 +181,9 @@ public extension WQCache {
             pthread_rwlock_unlock(&lock)
         }
         do {
+//            _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
             try data.write(to: path, options: options)
+//             try fileManager.setAttributes([.modificationDate: Date()], ofItemAtPath: path)
         } catch CocoaError.fileWriteOutOfSpace {
             let error = CocoaError.error(.fileWriteOutOfSpace, userInfo: nil, url: path)
             NotificationCenter.default.post(name: WQCache.didReceiveCacheMemoryWarning, object: nil, userInfo: ["error": error])

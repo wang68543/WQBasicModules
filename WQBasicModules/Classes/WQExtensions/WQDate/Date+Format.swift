@@ -100,7 +100,7 @@ public enum DateFormatEnum: String {
     case HH时mm分ss秒
  
     case E
-    
+
     internal var formatString: String {
             var format = rawValue
             do {
