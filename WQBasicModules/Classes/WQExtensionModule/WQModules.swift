@@ -3,7 +3,7 @@
 //  Pods-WQBasicModules_Example
 //
 //  Created by WangQiang on 2018/12/26.
-//
+// swiftlint:disable identifier_name
 
 import Foundation
 public final class WQModules<Base> {
@@ -15,11 +15,9 @@ public final class WQModules<Base> {
 }
 public protocol WQModulesCompatible {
     associatedtype WQModulesType
-    // swiftlint:disable identifier_name
     var wm: WQModulesType { get }
 }
 public extension WQModulesCompatible {
-    // swiftlint:disable identifier_name
     var wm: WQModules<Self> {
         return WQModules(self)
     }

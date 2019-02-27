@@ -24,8 +24,6 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableP
             }
         }
     }
-//    public private(set) var transitionContext: UIViewControllerContextTransitioning?
-    
     public var shouldCompletionProgress: CGFloat = 0.5
     public var shouldCompletionSpeed: CGFloat = 100
     
@@ -35,14 +33,6 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableP
         super.init()
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
-//    open override var completionSpeed: CGFloat {
-//        set {
-//            super.completionSpeed = completionSpeed
-//        }
-//        get {
-//            return 1 - self.percentComplete
-//        }
-//    }
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         guard let view = sender.view else {
