@@ -12,7 +12,7 @@ public final class WQCache {
     //  "wq.defaultCache.disk.com"
     public static let `default` = WQCache(name: "defaultCache", for: .cachesDirectory)
     
-    public let urlPath: URL
+    public let baseDirectory: URL
     public let fileManager: FileManager
     //读写锁
     private var lock: pthread_rwlock_t
@@ -22,23 +22,23 @@ public final class WQCache {
     /// - Parameters:
     ///   - url: 存储文件夹(需是app路径下面的二级目录)
     ///   - fileManager: 文件管理器
-    private init(_ directory: URL, fileManager: FileManager = FileManager.default) {
+    private init(_ directory: URL, fileManager: FileManager = .default) { //后面需新增内存存储
         var path = directory
         path.deleteLastPathComponent()
         path = path.appendingPathComponent("wq.disk.cache.com", isDirectory: true)
             .appendingPathComponent(directory.lastPathComponent)
-        urlPath = path
+        self.baseDirectory = path
         self.fileManager = fileManager
         if !fileManager.fileExists(atPath: path.path) {
             do {
-                try fileManager.createDirectory(at: urlPath, withIntermediateDirectories: true, attributes: nil)
+                try fileManager.createDirectory(at: baseDirectory, withIntermediateDirectories: true, attributes: nil)
             } catch let error {
                 debugPrint("创建文件夹失败", error.localizedDescription)
             }
         }
         lock = pthread_rwlock_t()
         ioQueue = DispatchQueue(label: "rwOptions")
-        
+//        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveCacheMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
     }
     
     public func fileExists(_ key: String) -> Bool {
@@ -62,36 +62,32 @@ public final class WQCache {
                 }
             }
             guard let obj = object else {
-                self.delete(for: key)//为空的时候移除
+                try? self.delete(for: key)//为空的时候移除
                 error = CocoaError.error(CocoaError.fileWriteInvalidValue, userInfo: nil, url: self.path(for: key))
                 return
             }
             do {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(obj)
-                self.save(data, for: key)
+                try self.save(data, for: key)
             } catch let err {
                 error = err
             } 
         }
     }
-    @discardableResult
-    public func set<T: Encodable>(_ object: T?,
-                                  for key: String) -> Bool {
+    
+    public func set<T: Encodable>(_ object: T?, for key: String) throws {
         guard let obj = object else {
-            self.delete(for: key)//为空的时候移除
-            return false
+            try? self.delete(for: key)//为空的时候移除
+            return
         }
-        var isSuccess: Bool = true
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(obj)
-            self.save(data, for: key)
+            try self.save(data, for: key)
         } catch let error {
-            isSuccess = false
-            debugPrint(error.localizedDescription)
+            throw error
         }
-       return isSuccess
     }
     
     public func object<T: Decodable>(_ key: String, expire: WQCacheExpiry = .never) -> T? {
@@ -108,45 +104,37 @@ public final class WQCache {
             return nil
         }
     }
-    public func remove(_ key: String) {
-        self.delete(for: key)
+    public func remove(_ key: String) throws {
+       try self.delete(for: key)
     }
     deinit {
         pthread_rwlock_destroy(&lock)
+    }
+    @objc func didReceiveCacheMemoryWarning(_ note: Notification) {
+        
     }
 }
 
 // MARK: - -- Disk
 public extension WQCache {
     var totalSize: Int {
-        var size: Int = 0
-        do {
-           let attr = try fileManager.attributesOfItem(atPath: urlPath.path)
-            size = (attr[.size] as? Int) ?? 0
-        } catch let error {
-            debugPrint(error.localizedDescription)
+        if let attr = try? fileManager.attributesOfItem(atPath: baseDirectory.path),
+            let size = attr[.size] as? Int {
+            return size
+        } else {
+            return 0
         }
-        return size
     }
     
-    func clear() -> Error? {
+    func clear() throws {
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
         }
-        do {
-           let urls = try fileManager
-                .contentsOfDirectory(at: self.urlPath,
-                                     includingPropertiesForKeys: nil,
-                                     options: .skipsSubdirectoryDescendants)
-            for index in 0 ..< urls.count {
-                try fileManager.removeItem(at: urls[index])
-            }
-        } catch let error {
-            debugPrint(error.localizedDescription)
-            return error
-        }
-       return nil
+        try fileManager.contentsOfDirectory(at: self.baseDirectory,
+                                            includingPropertiesForKeys: nil,
+                                            options: .skipsSubdirectoryDescendants)
+            .forEach({ try fileManager.removeItem(at: $0) }) // 这里如果出错了就直接跑出异常 循环也不再继续
     }
 }
 // MARK: - --Accessory
@@ -164,18 +152,16 @@ public extension WQCache {
         }
     }
     func path(for key: String, isDirectory: Bool = false) -> URL {
-        return self.urlPath.appendingPathComponent(key, isDirectory: isDirectory)
+        return self.baseDirectory.appendingPathComponent(key, isDirectory: isDirectory)
     }
 }
 public extension WQCache {
-    
-    @discardableResult
-    func save(_ data: Data, for key: String) -> Error? {
+    func save(_ data: Data, for key: String) throws {
         let cachePath = path(for: key)
-        let error = save(data, for: cachePath, options: .atomic)
-        return error
+        try? save(data, for: cachePath, options: .atomic)
     }
-    func save(_ data: Data, for path: URL, options: Data.WritingOptions) -> Error? {
+    
+    func save(_ data: Data, for path: URL, options: Data.WritingOptions) throws {
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
@@ -187,18 +173,16 @@ public extension WQCache {
         } catch CocoaError.fileWriteOutOfSpace {
             let error = CocoaError.error(.fileWriteOutOfSpace, userInfo: nil, url: path)
             NotificationCenter.default.post(name: WQCache.didReceiveCacheMemoryWarning, object: nil, userInfo: ["error": error])
-            return error
+           throw error
         } catch let error {
-            return error
+            throw error
         }
-        return nil
     }
     func read(for key: String, expire: WQCacheExpiry) -> Data? {
         let path = self.path(for: key).path
         pthread_rwlock_rdlock(&lock)
         switch expire {
-        case .never:
-            break
+        case .never: break
         default:
             do {
                 let attrs = try fileManager.attributesOfItem(atPath: path)
@@ -210,8 +194,7 @@ public extension WQCache {
                 }
                 if isExpiry {
                     pthread_rwlock_unlock(&lock)
-                    self.delete(for: key)
-                    return nil
+                    try? self.delete(for: key)
                 }
             } catch CocoaError.fileReadNoSuchFile {
                 pthread_rwlock_unlock(&lock)
@@ -224,19 +207,13 @@ public extension WQCache {
         pthread_rwlock_unlock(&lock)
         return data
     }
-   @discardableResult
-   func delete(for key: String) -> Error? {
+    
+   func delete(for key: String) throws {
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
         }
-        do {
-            try fileManager.removeItem(at: path(for: key))
-        } catch let error {
-            debugPrint(error.localizedDescription)
-            return error
-        }
-        return nil
+        try fileManager.removeItem(at: path(for: key))
     }
 }
 

@@ -15,9 +15,12 @@ public final class WQModules<Base> {
 }
 public protocol WQModulesCompatible {
     associatedtype WQModulesType
+    
     var wm: WQModulesType { get }
 }
+
 public extension WQModulesCompatible {
+    
     var wm: WQModules<Self> {
         return WQModules(self)
     }
