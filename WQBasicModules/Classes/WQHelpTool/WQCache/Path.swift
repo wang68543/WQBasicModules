@@ -114,7 +114,6 @@ extension Path {
     private static func path(for searchPath: FileManager.SearchPathDirectory) -> Path {
         #if os(Linux)
         // the urls(for:in:) function is not implemented on Linux
-        //TODO strictly we should first try to use the provided binary tool
         
         let foo = { ProcessInfo.processInfo.environment[$0].flatMap(Path.init) ?? $1 }
         
@@ -126,10 +125,12 @@ extension Path {
         case .cachesDirectory:
             return foo("XDG_CACHE_HOME", Path.home/".cache")
         default:
-            fatalError()
+            fatalError("not support type")
         }
         #else
-        guard let pathString = FileManager.default.urls(for: searchPath, in: .userDomainMask).first?.path else { return defaultUrl(for: searchPath) }
+        guard let pathString = FileManager.default.urls(for: searchPath, in: .userDomainMask).first?.path else {
+            return defaultUrl(for: searchPath)
+        }
         return Path(string: pathString)
         #endif
     }
@@ -162,7 +163,6 @@ extension Path {
      */
     public func relative(to base: Path) -> String {
         // Split the two paths into their components.
-        // FIXME: The is needs to be optimized to avoid unncessary copying.
         let pathComps = (string as NSString).pathComponents
         let baseComps = (base.string as NSString).pathComponents
         
@@ -225,7 +225,7 @@ extension Path {
      - SeeAlso: `join(_:)`
      */
     @inlinable
-    public static func /<S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
+    public static func / <S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
         return lhs.join(rhs)
     }
     
@@ -236,7 +236,7 @@ extension Path {
     
     private func join_<S>(prefix: String, pathComponents: S) -> String where S: Sequence, S.Element: StringProtocol {
         assert(prefix.first == "/")
-        
+        //  swiftlint:disable identifier_name
         var rv = prefix
         for component in pathComponents {
             
@@ -275,18 +275,19 @@ func defaultUrl(for searchPath: FileManager.SearchPathDirectory) -> Path {
     case .cachesDirectory:
         return Path.home/"Library/Caches"
     default:
-        fatalError()
+        fatalError("not support")
     }
 }
 #endif
-//MARK: Filesystem Attributes
+
+// MARK: - Filesystem Attributes
 public extension Path {
     /**
      Returns the creation-time of the file.
      - Note: Returns `nil` if there is no creation-time, this should only happen if the file doesn’t exist.
      - Important: On Linux this is filesystem dependendent and may not exist.
      */
-    public var ctime: Date? {
+    var ctime: Date? {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
             return attrs[.creationDate] as? Date
@@ -299,7 +300,7 @@ public extension Path {
      Returns the modification-time of the file.
      - Note: If this returns `nil` and the file exists, something is very wrong.
      */
-    public var mtime: Date? {
+    var mtime: Date? {
         do {
             let attrs = try FileManager.default.attributesOfItem(atPath: string)
             return attrs[.modificationDate] as? Date
@@ -340,9 +341,11 @@ extension Path: Codable {
             string = value
         } else {
             guard let root = decoder.userInfo[.relativePath] as? Path else {
-                throw DecodingError.dataCorrupted(.init(codingPath: [], debugDescription: "Path cannot decode a relative path if `userInfo[.relativePath]` not set to a Path object."))
+                let msg = "Path cannot decode a relative path if `userInfo[.relativePath]` not set to a Path object."
+                throw DecodingError.dataCorrupted(.init(codingPath: [],
+                                                        debugDescription: msg))
             }
-            string = (root/value).string
+            string = (root / value).string
         }
     }
     

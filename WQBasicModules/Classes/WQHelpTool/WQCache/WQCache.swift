@@ -7,7 +7,7 @@
 
 import UIKit
 
-public final class WQCache {
+public class WQCache {
     public static let didReceiveCacheMemoryWarning = NSNotification.Name("didReceiveCacheMemoryWarning")
     //  "wq.defaultCache.disk.com"
     public static let `default` = WQCache(name: "defaultCache", for: .cachesDirectory)
@@ -37,8 +37,7 @@ public final class WQCache {
             }
         }
         lock = pthread_rwlock_t()
-        ioQueue = DispatchQueue(label: "rwOptions")
-//        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveCacheMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        ioQueue = DispatchQueue(label: "rwOptions") 
     }
     
     public func fileExists(_ key: String) -> Bool {
@@ -50,33 +49,21 @@ public final class WQCache {
     /// - Parameters:
     ///   - completion: 存储完成回调
     public func asyncSet<T: Encodable>(_ object: T?,
-                                       for key: String,
+                                       forKey key: String,
+                                       expire: WQCacheExpiry = .never,
                                        completion: ((Error?) -> Void)? = nil) {
         ioQueue.async {
-            var error: Error?
-            defer {
-                if let complete = completion {
-                    DispatchQueue.main.async {
-                      complete(error)
-                    } 
-                }
-            }
-            guard let obj = object else {
-                try? self.delete(for: key)//为空的时候移除
-                error = CocoaError.error(CocoaError.fileWriteInvalidValue, userInfo: nil, url: self.path(for: key))
-                return
-            }
+            var err: Error?
             do {
-                let encoder = JSONEncoder()
-                let data = try encoder.encode(obj)
-                try self.save(data, for: key)
-            } catch let err {
-                error = err
-            } 
+                try self.set(object, forKey: key, expire: expire)
+            } catch let error {
+                err = error
+            }
+            completion?(err)
         }
     }
     
-    public func set<T: Encodable>(_ object: T?, for key: String) throws {
+    public func set<T: Encodable>(_ object: T?, forKey key: String, expire: WQCacheExpiry = .never) throws {
         guard let obj = object else {
             try? self.delete(for: key)//为空的时候移除
             return
@@ -84,14 +71,14 @@ public final class WQCache {
         do {
             let encoder = JSONEncoder()
             let data = try encoder.encode(obj)
-            try self.save(data, for: key)
+            try self.save(data, forKey: key)
         } catch let error {
             throw error
         }
     }
     
-    public func object<T: Decodable>(_ key: String, expire: WQCacheExpiry = .never) -> T? {
-        if let data = self.read(for: key, expire: expire) {
+    public func object<T: Decodable>(forKey key: String) -> T? {
+        if let data = self.read(for: key) {
             var obj: T?
             do {
                 let decoder = JSONDecoder()
@@ -110,9 +97,6 @@ public final class WQCache {
     deinit {
         pthread_rwlock_destroy(&lock)
     }
-    @objc func didReceiveCacheMemoryWarning(_ note: Notification) {
-        
-    }
 }
 
 // MARK: - -- Disk
@@ -125,17 +109,6 @@ public extension WQCache {
             return 0
         }
     }
-    
-    func clear() throws {
-        pthread_rwlock_wrlock(&lock)
-        defer {
-            pthread_rwlock_unlock(&lock)
-        }
-        try fileManager.contentsOfDirectory(at: self.baseDirectory,
-                                            includingPropertiesForKeys: nil,
-                                            options: .skipsSubdirectoryDescendants)
-            .forEach({ try fileManager.removeItem(at: $0) }) // 这里如果出错了就直接跑出异常 循环也不再继续
-    }
 }
 // MARK: - --Accessory
 public extension WQCache {
@@ -145,10 +118,10 @@ public extension WQCache {
     }
     subscript<T: Codable>(key: String) -> T? {
         set {
-            self.asyncSet(newValue, for: key)
+            self.asyncSet(newValue, forKey: key)
         }
         get {
-            return self.object(key)
+            return self.object(forKey: key)
         }
     }
     func path(for key: String, isDirectory: Bool = false) -> URL {
@@ -156,12 +129,11 @@ public extension WQCache {
     }
 }
 public extension WQCache {
-    func save(_ data: Data, for key: String) throws {
-        let cachePath = path(for: key)
-        try? save(data, for: cachePath, options: .atomic)
-    }
-    
-    func save(_ data: Data, for path: URL, options: Data.WritingOptions) throws {
+    func save(_ data: Data,
+              forKey key: String,
+              options: Data.WritingOptions = .atomic,
+              expire: WQCacheExpiry = .never) throws {
+        let path = self.path(for: key)
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
@@ -169,7 +141,7 @@ public extension WQCache {
         do {
 //            _ = fileManager.createFile(atPath: filePath, contents: data, attributes: nil)
             try data.write(to: path, options: options)
-//             try fileManager.setAttributes([.modificationDate: Date()], ofItemAtPath: path)
+            try? fileManager.setAttributes([.modificationDate: expire.expiryDate()], ofItemAtPath: path.path)
         } catch CocoaError.fileWriteOutOfSpace {
             let error = CocoaError.error(.fileWriteOutOfSpace, userInfo: nil, url: path)
             NotificationCenter.default.post(name: WQCache.didReceiveCacheMemoryWarning, object: nil, userInfo: ["error": error])
@@ -178,34 +150,21 @@ public extension WQCache {
             throw error
         }
     }
-    func read(for key: String, expire: WQCacheExpiry) -> Data? {
+    func read(for key: String) -> Data?  {
         let path = self.path(for: key).path
         pthread_rwlock_rdlock(&lock)
-        switch expire {
-        case .never: break
-        default:
-            do {
-                let attrs = try fileManager.attributesOfItem(atPath: path)
-                var isExpiry: Bool = false
-                if let modifydate = attrs[.modificationDate] as? Date {
-                    isExpiry = expire.isExpiry(at: modifydate)
-                } else if let createDate = attrs[.creationDate] as? Date {
-                    isExpiry = expire.isExpiry(at: createDate)
-                }
-                if isExpiry {
-                    pthread_rwlock_unlock(&lock)
-                    try? self.delete(for: key)
-                }
-            } catch CocoaError.fileReadNoSuchFile {
-                pthread_rwlock_unlock(&lock)
-                return nil
-            } catch let error {
-                debugPrint(error.localizedDescription)
-            }
+        //FIXME: 需要解决老版本的修改日期问题
+        if let attrs = try? fileManager.attributesOfItem(atPath: path),
+            let date = attrs[.modificationDate] as? Date,
+            date.timeIntervalSinceNow < 0 { //是否过期
+            pthread_rwlock_unlock(&lock)
+            try? self.delete(for: key)
+            return nil
+        } else {
+            let data = fileManager.contents(atPath: path)
+            pthread_rwlock_unlock(&lock)
+            return data
         }
-        let data = fileManager.contents(atPath: path)
-        pthread_rwlock_unlock(&lock)
-        return data
     }
     
    func delete(for key: String) throws {
@@ -215,10 +174,64 @@ public extension WQCache {
         }
         try fileManager.removeItem(at: path(for: key))
     }
+    
+    /// 清除数据
+    ///
+    /// - Parameters:
+    ///   - isOnlyExpired: 是否只是清除过期的
+    ///   - completion: 清除完成
+    func clear(_ isOnlyExpired: Bool = false, completion: ((Error?) -> Void)? = nil) {
+        ioQueue.async {
+            pthread_rwlock_wrlock(&self.lock)
+            var err: Error?
+            if !isOnlyExpired {
+                do {
+                    try self.fileManager.contentsOfDirectory(at: self.baseDirectory,
+                                                             includingPropertiesForKeys: nil,
+                                                             options: [.skipsSubdirectoryDescendants, .skipsHiddenFiles])
+                        .forEach({ try self.fileManager.removeItem(at: $0) }) // 这里如果出错了就直接跑出异常 循环也不再继续
+                } catch let error {
+                    err = error
+                }
+            } else {
+                let storageURL = URL(fileURLWithPath: self.baseDirectory.path)
+                let resourceKeys: [URLResourceKey] = [
+                    .isDirectoryKey,
+                    .contentModificationDateKey,
+                    .totalFileAllocatedSizeKey
+                ]
+                let fileEnumerator = self.fileManager.enumerator(
+                    at: storageURL,
+                    includingPropertiesForKeys: resourceKeys,
+                    options: [.skipsSubdirectoryDescendants, .skipsHiddenFiles],
+                    errorHandler: nil
+                )
+                if let urlArray = fileEnumerator?.allObjects as? [URL] {
+                    do {
+                        try urlArray.forEach { url in
+                            let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
+                            if resourceValues.isDirectory == false,
+                                let date = resourceValues.contentModificationDate,
+                                date.timeIntervalSinceNow < 0 {//过期了
+                                try self.fileManager.removeItem(at: url)
+                            }
+                        }
+                    } catch let error {
+                        err = error
+                    }
+                } else {
+                    err = CocoaError.error(CocoaError.fileEnumeratorFailed, userInfo: nil, url: nil)
+                }
+            }
+            pthread_rwlock_unlock(&self.lock)
+            completion?(err)
+        }
+    }
 }
 
 public extension CocoaError {
     static let fileWriteInvalidValue = CocoaError.Code(rawValue: -20_000)
+    static let fileEnumeratorFailed = CocoaError.Code(rawValue: -20_100)
 }
 
 public enum WQCacheExpiry { //过期时间可以每个Cache单独维护一个字典
@@ -238,6 +251,16 @@ extension WQCacheExpiry {
             return CFAbsoluteTimeGetCurrent() + secs
         case let .date(time):
             return time.timeIntervalSince1970
+        }
+    }
+    func expiryDate() -> Date {
+        switch self {
+        case .never:
+            return Date.distantFuture
+        case let .seconds(secs):
+            return Date() + secs
+        case let .date(time):
+            return time
         }
     }
     func isExpiry(at date: Date) -> Bool {
