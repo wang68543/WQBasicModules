@@ -18,6 +18,10 @@ class ExampleViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         ExampleViewCell.register(for: self.tableView)
+        let test = ViewController.TestModel("12345")
+        WQCache.default["test"] = test
+//          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
+         let model:ViewController.TestModel? = WQCache.default["test"]
     }
 
     // MARK: - Table view data source

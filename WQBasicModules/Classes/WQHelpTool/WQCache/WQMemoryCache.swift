@@ -9,7 +9,8 @@ import Foundation
 class MemeoryObject: NSObject {
     let value: Any
     let expiryTime: Double
-    init(_ value: Any, expiry: WQCacheExpiry) {
+    
+    init(_ value: Any, expiry: WQCacheExpiry ) {
         self.value = value
         self.expiryTime = expiry.expiryTime()
         super.init()
@@ -28,11 +29,12 @@ public class WQMemoryCache {
     public func object<T>(forKey key: String) -> T? {
         return self.cache.object(forKey: NSString(string: key))?.value as? T
     }
-    public func set<T>(_ obj: T?, forKey key: String) {
+    public func set<T>(_ obj: T?, forKey key: String, expire: WQCacheExpiry = .never) {
+        let cacheKey = self.cacheKey(forKey: key)
         if let value = obj {
-//            self.cache.setObject(MemeoryObject, forKey: <#T##NSString#>)
+            self.cache.setObject(MemeoryObject(value, expiry: expire), forKey: cacheKey)
         } else {
-            
+            self.cache.removeObject(forKey: cacheKey)
         }
     }
     
@@ -41,5 +43,20 @@ public class WQMemoryCache {
     }
     public func removeAll() {
         self.cache.removeAllObjects()
+    }
+}
+public extension WQMemoryCache {
+    subscript<T>(key: String) -> T? {
+        set {
+            self.set(newValue, forKey: key)
+        }
+        get {
+            return self.object(forKey: key)
+        }
+    }
+}
+extension WQMemoryCache {
+    private func cacheKey(forKey key: String) -> NSString {
+        return NSString(string: key)
     }
 }

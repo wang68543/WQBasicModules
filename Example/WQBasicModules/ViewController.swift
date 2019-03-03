@@ -131,21 +131,21 @@ class ViewController: UIViewController {
 //        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
         let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
-        for idx  in 0 ..< 50 {
-//            queuen.async {
-            let model:TestModel? = WQCache.default["test"]
-            let test:TestModel? = WQCache.default.object("test", expire: .seconds(10))
-//                let test = TestModel("12345")
-//                WQCache.default["test"] = test
-            
-         
-            
-                debugPrint("==",model)
-//            }
-        }
+//        for idx  in 0 ..< 50 {
+////            queuen.async {
+//            let model:TestModel? = WQCache.default["test"]
+//            let test:TestModel? = WQCache.default.object(forKey: "test")
+////                let test = TestModel("12345")
+////                WQCache.default["test"] = test
+//
+//
+//
+//                debugPrint("==",model)
+////            }
+//        }
        debugPrint("************")
         
-        let value: ViewController.TestModel? = WQCache.default.object ("233")
+//        let value: ViewController.TestModel? = WQCache.default.object (forKey: "233")
        
 //        cache["testFile"] =
 //        let pragra = NSParagraphStyle

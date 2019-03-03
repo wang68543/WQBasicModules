@@ -63,13 +63,15 @@ public class WQCache {
         }
     }
     
-    public func set<T: Encodable>(_ object: T?, forKey key: String, expire: WQCacheExpiry = .never) throws {
+    public func set<T: Encodable>(_ object: T?,
+                                  forKey key: String,
+                                  encoder: JSONEncoder = JSONEncoder(),
+                                  expire: WQCacheExpiry = .never) throws {
         guard let obj = object else {
-            try? self.delete(for: key)//为空的时候移除
+            try? self.delete(forKey: key)//为空的时候移除
             return
         }
         do {
-            let encoder = JSONEncoder()
             let data = try encoder.encode(obj)
             try self.save(data, forKey: key)
         } catch let error {
@@ -77,11 +79,10 @@ public class WQCache {
         }
     }
     
-    public func object<T: Decodable>(forKey key: String) -> T? {
+    public func object<T: Decodable>(forKey key: String, decoder: JSONDecoder = JSONDecoder()) -> T? {
         if let data = self.read(for: key) {
             var obj: T?
             do {
-                let decoder = JSONDecoder()
                 obj = try decoder.decode(T.self, from: data)
             } catch let error {
                 debugPrint(error.localizedDescription)
@@ -90,9 +91,6 @@ public class WQCache {
         } else {
             return nil
         }
-    }
-    public func remove(_ key: String) throws {
-       try self.delete(for: key)
     }
     deinit {
         pthread_rwlock_destroy(&lock)
@@ -150,24 +148,45 @@ public extension WQCache {
             throw error
         }
     }
-    func read(for key: String) -> Data?  {
+    
+    func read(for key: String) -> Data? {
         let path = self.path(for: key).path
         pthread_rwlock_rdlock(&lock)
-        //FIXME: 需要解决老版本的修改日期问题
-        if let attrs = try? fileManager.attributesOfItem(atPath: path),
-            let date = attrs[.modificationDate] as? Date,
-            date.timeIntervalSinceNow < 0 { //是否过期
-            pthread_rwlock_unlock(&lock)
-            try? self.delete(for: key)
-            return nil
-        } else {
-            let data = fileManager.contents(atPath: path)
-            pthread_rwlock_unlock(&lock)
-            return data
-        }
+        let data = fileManager.contents(atPath: path)
+        pthread_rwlock_unlock(&lock)
+        return data
     }
     
-   func delete(for key: String) throws {
+    /// 判断文件是否过期 (内部不处理过期文件 外部主动调取)
+    ///
+    /// - Returns: 读取失败或者没有都为false
+    func isExpired(forKey key: String) -> Bool {
+        let path = self.path(for: key).path
+        pthread_rwlock_rdlock(&lock)
+        guard let attrs = try? fileManager.attributesOfItem(atPath: path)  else {
+            pthread_rwlock_unlock(&lock)
+            return false
+        }
+        pthread_rwlock_unlock(&lock)
+        if let date = attrs[.modificationDate] as? Date,
+            date.timeIntervalSinceNow < 0 { //是否过期
+            return true
+        } else {
+            return false
+        }
+    }
+    /// 删除已过期的对象
+    ///
+    /// - Returns: 对象是否过期 (读取失败或者没有都为false, true直接删除)
+    func removeObjectIfExpire(forKey key: String) -> Bool {
+        if self.isExpired(forKey: key) {
+            try? self.delete(forKey: key)
+            return true
+        } else {
+            return false
+        }
+    }
+   func delete(forKey key: String) throws {
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
