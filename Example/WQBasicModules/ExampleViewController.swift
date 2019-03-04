@@ -12,7 +12,7 @@ class ExampleViewController: UITableViewController {
 
     let sections: [String] = ["WQUI", "Transitioning"]
     let sources:[[[String: String]]] = [
-        [ ], // WQUI
+        [["浏览器控件": "TestWebViewController"] ], // WQUI
         [["自定义评分控件": "WQStarViewController"]]
     ]
     override func viewDidLoad() {

@@ -7,7 +7,7 @@
 
 import UIKit
 import WebKit
-open class WQWebController: UIViewController { 
+open class WQWebController: UIViewController {
     /// 支持子类自定义初始化WebView
     public var webView = WKWebView() {
         didSet {
@@ -17,7 +17,7 @@ open class WQWebController: UIViewController {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
-    }
+    } 
     /// 网页加载失败或者 没网的时候 错误的占位页
     public var errorPlaceholderView: UIView? {
         didSet {
@@ -137,25 +137,25 @@ open class WQWebController: UIViewController {
         let scale = Int(UIScreen.main.scale)
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
        
-        var arrowItem: UIBarButtonItem
-        if self.navigationItem.leftBarButtonItem != nil {
-            arrowItem = self.navigationItem.leftBarButtonItem!
+//        var arrowItem: UIBarButtonItem
+//        if self.navigationItem.leftBarButtonItem != nil {
+//            arrowItem = self.navigationItem.leftBarButtonItem!
+//        } else {
+        let backBtn = UIButton(frame: btnFrame)
+        let backImgPath = bundle.path(forResource: "back@\(scale)x", ofType: "png")
+        let backImg = UIImage(contentsOfFile: backImgPath ?? "")?.withRenderingMode(.alwaysTemplate)
+        backBtn.setImage(backImg, for: .normal)
+        if #available(iOS 11.0, *) {
+            // do nothing
         } else {
-            let backBtn = UIButton(frame: btnFrame)
-            let backImgPath = bundle.path(forResource: "back@\(scale)x", ofType: "png")
-            let backImg = UIImage(contentsOfFile: backImgPath ?? "")?.withRenderingMode(.alwaysTemplate)
-            backBtn.setImage(backImg, for: .normal)
-            if #available(iOS 11.0, *) {
-                // do nothing
-            } else {
-                backBtn.contentHorizontalAlignment = .right
-            }
-            backBtn.adjustsImageWhenDisabled = false
-            backBtn.adjustsImageWhenHighlighted = false
-            backBtn.addTarget(self, action: #selector(arrowAction), for: .touchUpInside)
-            arrowItem = UIBarButtonItem(customView: backBtn)
-            
+            backBtn.contentHorizontalAlignment = .right
         }
+        backBtn.adjustsImageWhenDisabled = false
+        backBtn.adjustsImageWhenHighlighted = false
+        backBtn.addTarget(self, action: #selector(arrowAction), for: .touchUpInside)
+       let arrowItem = UIBarButtonItem(customView: backBtn)
+            
+//        }
         var items: [UIBarButtonItem] = []
         if #available(iOS 11.0, *) {
             // do nothing

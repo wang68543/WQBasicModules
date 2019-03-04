@@ -12,7 +12,8 @@ import WebKit
 class TestWebViewController: WQWebController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.webView = WKWebView()
+//        self.webView = WKWebView()
+        self.webView.load(URLRequest(url: URL(string: "https://www.baidu.com/")!))
     }
     
 }
