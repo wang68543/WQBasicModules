@@ -18,12 +18,13 @@ public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
 public class WQFlexbox: UICollectionViewFlowLayout {
     
     public var direction: WQFlexDirection = .row
-    /// 整个line主轴方向在section中的排列方式
+    /// 整个line主轴方向在section中的排列方式 (每个items之间的间隔)
     public var justifyContent: WQJustifyContent = .flexStart
-    /// 若line中有item有尺寸不相等的以尺寸最大的item进行相对布局(当direction为水平方向时参照最大的height 否则参照最大的width)
-    public var alignItems: WQAlignItems = .center
+    //每个line之间的间隔以及line与section顶部的间隔
     /// 动态调整每个section中lines之间的间距,以及first line section 顶部或右侧间距 (只有单个section且内容不超过高度的时候起作用)
     public var alignContent: WQAlignContent = .flexStart
+    /// 若line中有item有尺寸不相等的以尺寸最大的item进行相对布局(当direction为水平方向时参照最大的height 否则参照最大的width)
+    public var alignItems: WQAlignItems = .center
     /// 主轴方向的排列cell的个数 默认0 根据最小间距属性来动态计算每行的个数
     /// 存储items的布局属性
     private var attrs: [UICollectionViewLayoutAttributes] = []
