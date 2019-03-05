@@ -42,6 +42,28 @@ open class WQWebController: UIViewController {
     public let progressView: CAShapeLayer = CAShapeLayer()
     public var progressHeight: CGFloat = 3.0
     
+    /// item 图标
+    public var closeActionItemIcon: UIImage = {
+        let frameworkBundle = Bundle(for: WQWebController.self)
+        guard let path = frameworkBundle.url(forResource: "WQUIBundle", withExtension: "bundle"),
+            let bundle = Bundle(url: path),
+            let imgPath = bundle.path(forResource: "close@\(Int(UIScreen.main.scale))x", ofType: "png"),
+            let img = UIImage(contentsOfFile: imgPath ) else {
+                return UIImage()
+        }
+        return img.withRenderingMode(.alwaysTemplate)
+    }()
+    
+    public var backActionItemIcon: UIImage = {
+        let frameworkBundle = Bundle(for: WQWebController.self)
+        guard let path = frameworkBundle.url(forResource: "WQUIBundle", withExtension: "bundle"),
+            let bundle = Bundle(url: path),
+            let imgPath = bundle.path(forResource: "back@\(Int(UIScreen.main.scale))x", ofType: "png"),
+            let img = UIImage(contentsOfFile: imgPath ) else {
+                return UIImage()
+        }
+        return img.withRenderingMode(.alwaysTemplate)
+    }()
     /// KVO
     private var progressObservation: NSKeyValueObservation?
     private var titleObservation: NSKeyValueObservation?
@@ -118,33 +140,24 @@ open class WQWebController: UIViewController {
             }
         })
         let canGoBack = \WKWebView.canGoBack
-        canGoBackObservation = webView.observe(canGoBack, options: .new, changeHandler: { [weak self] _, change in
+        canGoBackObservation = webView.observe(canGoBack, options: [.new, .old], changeHandler: { [weak self] _, change in
+            self?.progressView.strokeEnd = 0.0
             guard let weakSelf = self,
-                let newValue = change.newValue else {
-                    return
-            }
+                let newValue = change.newValue,
+                newValue != change.oldValue else { return }
             weakSelf.configLeftItems(newValue)
         })
     }
     
     public func configLeftItems(_ canGoBack: Bool) {
-        let frameworkBundle = Bundle(for: WQWebController.self)
-        guard let path = frameworkBundle.url(forResource: "WQUIBundle", withExtension: "bundle"),
-            let bundle = Bundle(url: path ) else {
-            return
-        }
-       
-        let scale = Int(UIScreen.main.scale)
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
-       
 //        var arrowItem: UIBarButtonItem
 //        if self.navigationItem.leftBarButtonItem != nil {
 //            arrowItem = self.navigationItem.leftBarButtonItem!
 //        } else {
         let backBtn = UIButton(frame: btnFrame)
-        let backImgPath = bundle.path(forResource: "back@\(scale)x", ofType: "png")
-        let backImg = UIImage(contentsOfFile: backImgPath ?? "")?.withRenderingMode(.alwaysTemplate)
-        backBtn.setImage(backImg, for: .normal)
+ 
+        backBtn.setImage(self.backActionItemIcon, for: .normal)
         if #available(iOS 11.0, *) {
             // do nothing
         } else {
@@ -166,10 +179,8 @@ open class WQWebController: UIViewController {
         }
         items.append(arrowItem)
         if canGoBack {
-            let closeImgPath = bundle.path(forResource: "close@\(scale)x", ofType: "png")
-            let closeImg = UIImage(contentsOfFile: closeImgPath ?? "")?.withRenderingMode(.alwaysTemplate)
             let closeBtn = UIButton(frame: btnFrame)
-            closeBtn.setImage(closeImg, for: .normal)
+            closeBtn.setImage(self.closeActionItemIcon, for: .normal)
             closeBtn.contentHorizontalAlignment = .left
             closeBtn.addTarget(self, action: #selector(closeAction), for: .touchUpInside)
              let goBackItem = UIBarButtonItem(customView: closeBtn)

@@ -32,7 +32,7 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     private var supplementary: [UICollectionViewLayoutAttributes] = []
     /// 不包含contentInset
     private var contentSize: CGSize = .zero
-//    private var contentWidth: CGFloat = 0
+    
     private var limitLength: CGFloat = 0
     
     override public
@@ -367,7 +367,7 @@ private extension WQFlexbox {
                                  layout: self,
                                  minimumLineSpacingForSectionAt: section) ?? self.minimumLineSpacing
         }
-        return self.minimumLineSpacing
+        return self.minimumLineSpacing // default 10
     }
     //
     func minimumInteritemSpacingForSection(at section: Int) -> CGFloat {
