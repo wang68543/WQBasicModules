@@ -104,6 +104,7 @@ open class WQWebController: UIViewController {
     }
     /// 进度条默认外观配置
     open func defaultProgressApperance() {
+        // 背景色默认是透明色
         progressView.backgroundColor = UIColor.lightText.cgColor
         progressView.strokeColor = UIColor.blue.cgColor
         self.progressView.lineCap = .round
@@ -151,12 +152,7 @@ open class WQWebController: UIViewController {
     
     public func configLeftItems(_ canGoBack: Bool) {
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
-//        var arrowItem: UIBarButtonItem
-//        if self.navigationItem.leftBarButtonItem != nil {
-//            arrowItem = self.navigationItem.leftBarButtonItem!
-//        } else {
         let backBtn = UIButton(frame: btnFrame)
- 
         backBtn.setImage(self.backActionItemIcon, for: .normal)
         if #available(iOS 11.0, *) {
             // do nothing
@@ -167,8 +163,6 @@ open class WQWebController: UIViewController {
         backBtn.adjustsImageWhenHighlighted = false
         backBtn.addTarget(self, action: #selector(arrowAction), for: .touchUpInside)
        let arrowItem = UIBarButtonItem(customView: backBtn)
-            
-//        }
         var items: [UIBarButtonItem] = []
         if #available(iOS 11.0, *) {
             // do nothing
