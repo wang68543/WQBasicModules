@@ -13,7 +13,8 @@ class ExampleViewController: UITableViewController {
     let sections: [String] = ["WQUI", "Transitioning"]
     let sources:[[[String: String]]] = [
         [["浏览器控件": "TestWebViewController"] ], // WQUI
-        [["自定义评分控件": "WQStarViewController"]]
+        [["自定义评分控件": "WQStarViewController"],
+         ["仿系统弹出框": "ExampleAlertViewController"]]
     ]
     override func viewDidLoad() {
         super.viewDidLoad()
