@@ -22,9 +22,10 @@ public class WQAlertAction: NSObject {
     }
 }
 public extension WQAlertAction {
-    convenience init(title: String,
-                     attrs: [NSAttributedString.Key : Any] = [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.black],
-                     handler: Handler? = nil) {
+    convenience
+    init(title: String,
+         attrs: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.black],
+         handler: Handler? = nil) {
         self.init(attributedText: NSAttributedString(string: title, attributes: attrs), handler: handler)
     }
 }
@@ -75,7 +76,8 @@ public class WQAlertView: UIView {
             attributedTitle = NSAttributedString(string: text,
                                                  attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.black])
         }
-        self.messageLabel.attributedText = attributedMessage
+        self.attributedMessage = attributedTitle!
+//        self.messageLabel.attributedText = attributedMessage
     }
     public func addAction(_ action: WQAlertAction) {
         if self.bottomView.superview == nil {
@@ -104,6 +106,7 @@ public class WQAlertView: UIView {
        return self.bottomView.btns.isEmpty ? CGSize(width: width, height: viewH ) : CGSize(width: width, height: viewH + self.bottomHeight)
     }
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
+        self.attributedMessage = attributedTitle!
         self.showSize = self.size(for: width)
         self.frame = CGRect(origin: .zero, size: self.size(for: width)) 
         let animator = WQTransitioningAnimator(items: [])
