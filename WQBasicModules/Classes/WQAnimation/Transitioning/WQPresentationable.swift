@@ -113,7 +113,7 @@ open class WQPresentationable: UIViewController {
     }
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-        if presnetVC?.presentedViewController != nil {
+        if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
             //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
@@ -133,6 +133,7 @@ open class WQPresentationable: UIViewController {
         case .superChildController:
             self.hideFromParent(animated: flag, completion: completion)
         }
+     
     }
 //    open override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
@@ -155,7 +156,7 @@ open class WQPresentationable: UIViewController {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
         self.containerWindow = nil
-        debugPrint("控制器销毁了")
+        debugPrint("弹出框控制器销毁了")
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {

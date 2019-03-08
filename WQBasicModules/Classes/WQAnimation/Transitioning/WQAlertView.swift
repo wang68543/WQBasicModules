@@ -65,6 +65,10 @@ public class WQAlertView: UIView {
         messageLabel.numberOfLines = 0
         attributedMessage = NSAttributedString(string: message,
                                                attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.black])
+        if let text = title {
+            attributedTitle = NSAttributedString(string: text,
+                                                 attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.black])
+        }
         super.init(frame: .zero)
         self.backgroundColor = UIColor.white
         self.layer.cornerRadius = 5
@@ -72,12 +76,8 @@ public class WQAlertView: UIView {
         self.addSubview(titleLabel)
         self.addSubview(messageLabel)
         titleLabel.textAlignment = .center
-        if let text = title {
-            attributedTitle = NSAttributedString(string: text,
-                                                 attributes: [.font: UIFont.boldSystemFont(ofSize: 16), .foregroundColor: UIColor.black])
-        }
-        self.attributedMessage = attributedTitle!
-//        self.messageLabel.attributedText = attributedMessage
+        self.titleLabel.attributedText = attributedTitle
+        self.messageLabel.attributedText = attributedMessage
     }
     public func addAction(_ action: WQAlertAction) {
         if self.bottomView.superview == nil {
@@ -99,19 +99,19 @@ public class WQAlertView: UIView {
             viewH += titleSize.height + self.margin
             self.titleLabel.bounds = CGRect(origin: .zero, size: titleSize)
         }
-        let msgBounds = CGRect(origin: .zero, size: CGSize(width: limitWidth, height: 400))
+       let msgBounds = CGRect(origin: .zero, size: CGSize(width: limitWidth, height: 400))
        let msgSize = self.messageLabel.textRect(forBounds: msgBounds, limitedToNumberOfLines: 0).size
        self.messageLabel.bounds = CGRect(origin: .zero, size: msgSize)
        viewH += msgSize.height + self.contentEdgeInsets.bottom
        return self.bottomView.btns.isEmpty ? CGSize(width: width, height: viewH ) : CGSize(width: width, height: viewH + self.bottomHeight)
     }
+    
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
-        self.attributedMessage = attributedTitle!
-        self.showSize = self.size(for: width)
-        self.frame = CGRect(origin: .zero, size: self.size(for: width)) 
-        let animator = WQTransitioningAnimator(items: [])
-        animator.delegate = self
-        let presention = WQPresentationable(subView: self, animator: animator)
+        let size = self.size(for: width)
+//        self.frame = CGRect(origin: .zero, size: self.size(for: width))
+        let showFrame = CGRect(x: (UIScreen.main.bounds.width - size.width) * 0.5, y: (UIScreen.main.bounds.height - size.height) * 0.5, width: size.width, height: size.height)
+        let initailItem = WQAnimatedItem(containerFrame: showFrame, show: .zero)
+        let presention = WQPresentationable(subView: self, animator: WQTransitioningAnimator(items: [initailItem], delegate: self))
         presention.show(animated: true, in: nil, completion: nil)
     }
     public override func layoutSubviews() {
@@ -131,7 +131,21 @@ public class WQAlertView: UIView {
         } else {
             bottomView.frame = CGRect(x: 0, y: self.frame.height - self.bottomHeight, width: self.frame.width, height: self.bottomHeight)
         }
-        
+    }
+    public override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        if newSuperview != nil {
+            self.bottomView.btns.forEach { btn in
+                btn.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+            }
+        } else {
+            self.bottomView.btns.forEach { btn in
+                btn.removeTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+            }
+        }
+    }
+    deinit {
+        debugPrint("销毁了")
     }
 }
 
@@ -191,7 +205,15 @@ extension WQAlertView {
    
     @objc
     func buttonAction(_ sender: Button) {
-//        sender.action.
+        let action = sender.action
+        guard action.isEnabled else { return }
+        if action.isDestructive {
+            self.wm.dismiss(true) {
+                action.handler?(action)
+            }
+        } else {
+            action.handler?(action)
+        }
     }
 }
 extension WQAlertView: WQTransitioningAnimatorable {
@@ -201,34 +223,35 @@ extension WQAlertView: WQTransitioningAnimatorable {
                            isShow: Bool,
                            completion: @escaping WQAnimateCompletion) {
         if let presentingVC = presenting as? WQPresentationable {
-           
-            let targetSize = isShow ? self.showSize : .zero
-            let targetFrame = CGRect(x: (UIScreen.main.bounds.width - targetSize.width) * 0.5,
-                                     y: (UIScreen.main.bounds.height - targetSize.height) * 0.5,
-                                     width: targetSize.width,
-                                     height: targetSize.height)
+            
             if isShow {
                 presentingVC.view.backgroundColor = UIColor.clear
                 presentingVC.view.frame = UIScreen.main.bounds
-                presentingVC.containerView.frame = CGRect(x: targetFrame.minX, y: targetFrame.minY, width: 0, height: 0)
+                presentingVC.containerView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
             }
-//            presentingVC.view.setNeedsLayout()
-            UIView.animate(withDuration: 0.15,
-                           delay: 0,
-                           usingSpringWithDamping: 0.7,
-                           initialSpringVelocity: 3,
-                           options: [.beginFromCurrentState, .curveEaseIn, .layoutSubviews],
-                           animations: {
-                            presentingVC.containerView.frame = targetFrame
-            },
-                           completion: nil)
-            
-            UIView.animate(withDuration: 0.15, animations: {
-                presentingVC.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            }, completion: { flag in
-                completion(flag)
-            })
-           
+            if isShow {
+                UIView.animate(withDuration: 0.15,
+                               delay: 0,
+                               usingSpringWithDamping: 0.8,
+                               initialSpringVelocity: 15,
+                               options: [.beginFromCurrentState, .curveEaseOut, .layoutSubviews],
+                               animations: {
+                                presentingVC.containerView.transform = CGAffineTransform.identity
+                },
+                               completion: nil)
+                UIView.animate(withDuration: 0.15, animations: {
+                    presentingVC.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+                }, completion: { flag in
+                    completion(flag)
+                })
+            } else {
+                UIView.animate(withDuration: 0.2, animations: {
+                    presentingVC.containerView.removeFromSuperview()
+                    presentingVC.view.backgroundColor = UIColor.clear
+                }, completion: { flag in
+                    completion(flag)
+                })
+            }
         }
     }
 }

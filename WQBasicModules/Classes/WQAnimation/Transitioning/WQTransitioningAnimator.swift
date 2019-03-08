@@ -19,10 +19,13 @@ public typealias WQAnimateCompletion = ((Bool) -> Void)
 open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     open var duration: TimeInterval = 0.25
     public var items: WQAnimatedConfigItems
+    /// 当设置代理之后 所有的动画 以及初始化都有代理完成
     public weak var delegate: WQTransitioningAnimatorable?
     
-    public init(items: WQAnimatedConfigItems) {
+    public init(items: WQAnimatedConfigItems = [], delegate: WQTransitioningAnimatorable? = nil) {
+        assert(!items.isEmpty || delegate != nil, "请选择属性动画或者代理自定义动画方式其中一种(优先使用代理动画)")
         self.items = items
+        self.delegate = delegate
         super.init()
     }
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
