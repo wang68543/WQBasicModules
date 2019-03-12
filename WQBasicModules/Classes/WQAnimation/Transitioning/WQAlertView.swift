@@ -107,11 +107,15 @@ public class WQAlertView: UIView {
     }
     
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
-        let size = self.size(for: width)
-//        self.frame = CGRect(origin: .zero, size: self.size(for: width))
-        let showFrame = CGRect(x: (UIScreen.main.bounds.width - size.width) * 0.5, y: (UIScreen.main.bounds.height - size.height) * 0.5, width: size.width, height: size.height)
-        let initailItem = WQAnimatedItem(containerFrame: showFrame, show: .zero)
-        let presention = WQPresentationable(subView: self, animator: WQTransitioningAnimator(items: [initailItem], delegate: self))
+        let size = self.size(for: width) 
+//        let showFrame = CGRect(x: (UIScreen.main.bounds.width - size.width) * 0.5,
+//                               y: (UIScreen.main.bounds.height - size.height) * 0.5,
+//                               width: size.width,
+//                               height: size.height)
+        //WQTransitioningAnimator(items: [initailItem], delegate: self)
+        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
+        let animator = WQTransitioningAnimator(items: [initailItem], preferredStyle: .alert(size: size))
+        let presention = WQPresentationable(subView: self, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
     }
     public override func layoutSubviews() {

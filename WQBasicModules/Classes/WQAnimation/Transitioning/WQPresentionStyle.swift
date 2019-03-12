@@ -16,6 +16,7 @@ public enum WQShownMode {
     /// 新创建一个window 并以根控制器的形式存在
     case windowRootController
 }
+// 预处理
 public class WQPresentionStyle {
     public enum Position {
         case none

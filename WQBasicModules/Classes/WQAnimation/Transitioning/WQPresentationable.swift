@@ -7,11 +7,10 @@
 import UIKit
 
 /// 专职于显示Alert的Window
-class WQPresentationWindow: UIWindow { 
-}
+class WQPresentationWindow: UIWindow { }
 
 public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
-
+/// 解决 iOS10之前以及非Modal形式的动画无法手势驱动问题
 public protocol DrivenableProtocol: NSObjectProtocol {
     var isInteractive: Bool { get set }
     var completionWidth: CGFloat { get set }
@@ -23,8 +22,12 @@ public protocol DrivenableProtocol: NSObjectProtocol {
     func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool
     func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool
 }
+
 public typealias Drivenable = NSObject & UIViewControllerInteractiveTransitioning & DrivenableProtocol
+
 open class WQPresentationable: UIViewController {
+    
+    /// 容器View 所有的View都需要成为当前View的子View
     public let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.clear
@@ -111,6 +114,7 @@ open class WQPresentationable: UIViewController {
          self.view.addSubview(containerView)
          containerView.layoutIfNeeded()
     }
+    /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
         if presnetVC?.presentingViewController != nil {
@@ -164,7 +168,7 @@ open class WQPresentationable: UIViewController {
     }
 }
 // MARK: - -- UIViewControllerTransitioningDelegate
-extension WQPresentationable: UIViewControllerTransitioningDelegate {
+extension WQPresentationable: UIViewControllerTransitioningDelegate { // 转场管理
     public func animationController(forPresented presented: UIViewController,
                                     presenting: UIViewController,
                                     source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -184,14 +188,13 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate {
             return interactive.isInteractive ? interactive : nil
     }
 }
+
+// MARK: - -- UIViewControllerAnimatedTransitioning
 extension WQPresentationable: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.animator.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        //        if #available(iOS 10.0, *) {
-        //            // do nothing
-        //        } else {
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
                 return
@@ -216,7 +219,6 @@ extension WQPresentationable: UIViewControllerAnimatedTransitioning {
         } else {
             self.animator.animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
         }
-        //        }
     }
 }
 // MARK: - -- Gesture Handle
