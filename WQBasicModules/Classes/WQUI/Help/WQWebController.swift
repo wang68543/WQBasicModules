@@ -150,7 +150,7 @@ open class WQWebController: UIViewController {
         })
     }
     
-    public func configLeftItems(_ canGoBack: Bool) {
+    open func configLeftItems(_ canGoBack: Bool) {
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
         let backBtn = UIButton(frame: btnFrame)
         backBtn.setImage(self.backActionItemIcon, for: .normal)
@@ -208,14 +208,14 @@ open class WQWebController: UIViewController {
     }
 }
 @objc extension WQWebController {
-     func arrowAction() {
+    open func arrowAction() {
         if self.webView.canGoBack {
             self.webView.goBack()
         } else {
             self.closeAction()
         }
     }
-    func closeAction() {
+    open func closeAction() {
         if self.presentingViewController != nil {
             self.dismiss(animated: true)
         } else if self.navigationController != nil {

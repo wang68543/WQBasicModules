@@ -23,6 +23,9 @@ class ExampleViewController: UITableViewController {
         WQCache.default["test"] = test
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
          let model:ViewController.TestModel? = WQCache.default["test"]
+        if "18898768609".isLegalPhone() {
+            debugPrint("正确的手机号码")
+        }
     }
 
     // MARK: - Table view data source
