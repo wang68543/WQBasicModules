@@ -107,12 +107,7 @@ public class WQAlertView: UIView {
     }
     
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
-        let size = self.size(for: width) 
-//        let showFrame = CGRect(x: (UIScreen.main.bounds.width - size.width) * 0.5,
-//                               y: (UIScreen.main.bounds.height - size.height) * 0.5,
-//                               width: size.width,
-//                               height: size.height)
-        //WQTransitioningAnimator(items: [initailItem], delegate: self)
+        let size = self.size(for: width)
         let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
         let animator = WQTransitioningAnimator(items: [initailItem], preferredStyle: .alert(size: size))
         let presention = WQPresentationable(subView: self, animator: animator)
@@ -217,45 +212,6 @@ extension WQAlertView {
             }
         } else {
             action.handler?(action)
-        }
-    }
-}
-extension WQAlertView: WQTransitioningAnimatorable {
-    public func transition(shouldAnimated animator: WQTransitioningAnimator,
-                           presented: UIViewController?,
-                           presenting: UIViewController?,
-                           isShow: Bool,
-                           completion: @escaping WQAnimateCompletion) {
-        if let presentingVC = presenting as? WQPresentationable {
-            
-            if isShow {
-                presentingVC.view.backgroundColor = UIColor.clear
-                presentingVC.view.frame = UIScreen.main.bounds
-                presentingVC.containerView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
-            }
-            if isShow {
-                UIView.animate(withDuration: 0.15,
-                               delay: 0,
-                               usingSpringWithDamping: 0.8,
-                               initialSpringVelocity: 15,
-                               options: [.beginFromCurrentState, .curveEaseOut, .layoutSubviews],
-                               animations: {
-                                presentingVC.containerView.transform = CGAffineTransform.identity
-                },
-                               completion: nil)
-                UIView.animate(withDuration: 0.15, animations: {
-                    presentingVC.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-                }, completion: { flag in
-                    completion(flag)
-                })
-            } else {
-                UIView.animate(withDuration: 0.2, animations: {
-                    presentingVC.containerView.removeFromSuperview()
-                    presentingVC.view.backgroundColor = UIColor.clear
-                }, completion: { flag in
-                    completion(flag)
-                })
-            }
         }
     }
 }
