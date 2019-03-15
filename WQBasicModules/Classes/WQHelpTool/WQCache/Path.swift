@@ -26,6 +26,7 @@ public struct Path {
         return URL(fileURLWithPath: string)
     }
 }
+
 public extension Path {
     /// Returns true if the path represents an actual filesystem entry.
     var exists: Bool {
@@ -78,6 +79,7 @@ public extension Path {
         return (sbuf.st_mode & S_IFMT) == S_IFLNK
     }
 }
+
 extension Path {
     /**
      Returns the parent directory for this path.
@@ -153,6 +155,7 @@ extension Path {
         return path(for: .cachesDirectory)
     }
 }
+
 extension Path {
     /**
      Returns a string representing the relative path to `base`.
