@@ -85,6 +85,7 @@ extension WQTransitioningAnimator {
             self.defaultAnimated(presented: presented, presenting: presenting, isShow: isShow, completion: completion)
         }
     }
+    /// 默认动画方式
     public
     func defaultAnimated(presented: UIViewController?,
                          presenting: UIViewController?,
@@ -216,6 +217,7 @@ public extension WQTransitioningAnimator {
         self.init(items: Array(default: item, viewFrame: presentedFrame))
     }
 }
+// 若有代理但是没有实现动画就用代理里面的默认动画
 extension WQTransitioningAnimatorable {
     func transition(shouldAnimated animator: WQTransitioningAnimator,
                     presented: UIViewController?,

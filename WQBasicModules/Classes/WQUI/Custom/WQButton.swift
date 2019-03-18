@@ -267,6 +267,42 @@ public final class WQButton: UIButton {
     }
   
 }
+
+public extension WQModules where Base: WQButton {
+    
+    func setImageMasks(_ radius: CGFloat) {
+        self.base.imageView?.layer.cornerRadius = radius
+        self.base.imageView?.layer.masksToBounds = true
+    }
+    
+    func setImageCircularBorder(_ width: CGFloat, color: CGColor) {
+        guard let imgView = self.base.imageView else {
+            return
+        }
+        self.setImageBorder(width, color: color, radius: imgView.frame.height * 0.5)
+    }
+    
+    func setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
+        self.base.imageView?.layer.borderWidth = width
+        self.base.imageView?.layer.cornerRadius = radius
+        self.base.imageView?.layer.borderColor = color
+        self.base.imageView?.layer.masksToBounds = true
+    }
+    
+    func setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
+        guard let label = self.base.titleLabel else {
+            return
+        }
+        self.setTitleBorder(width, color: color, radius: label.frame.height * 0.5)
+    }
+    
+    func setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
+        self.base.titleLabel?.layer.borderWidth = width
+        self.base.titleLabel?.layer.cornerRadius = radius
+        self.base.titleLabel?.layer.borderColor = color
+        self.base.titleLabel?.layer.masksToBounds = true
+    }
+}
 public extension WQButton {
     convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left, state: UIControl.State = .normal) {
         self.init()
@@ -274,28 +310,33 @@ public extension WQButton {
         self.setTitle(title, for: state)
         self.setImage(image, for: state)
     }
+    @available(*, deprecated, renamed: "wm.setImageMasks")
     func wq_setImageMasks(_ radius: CGFloat) {
         self.imageView?.layer.cornerRadius = radius
         self.imageView?.layer.masksToBounds = true
     }
+    @available(*, deprecated, renamed: "wm.setImageCircularBorder")
     func wq_setImageCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let imgView = self.imageView else {
             return
         }
         self.wq_setImageBorder(width, color: color, radius: imgView.frame.height * 0.5)
     }
+    @available(*, deprecated, renamed: "wm.setImageBorder")
     func wq_setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         self.imageView?.layer.borderWidth = width
         self.imageView?.layer.cornerRadius = radius
         self.imageView?.layer.borderColor = color
         self.imageView?.layer.masksToBounds = true
     }
+    @available(*, deprecated, renamed: "wm.setTitleCircularBorder")
     func wq_setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let label = self.titleLabel else {
             return
         }
         self.wq_setTitleBorder(width, color: color, radius: label.frame.height * 0.5)
     }
+    @available(*, deprecated, renamed: "wm.setTitleBorder")
     func wq_setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         self.titleLabel?.layer.borderWidth = width
         self.titleLabel?.layer.cornerRadius = radius

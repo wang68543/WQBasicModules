@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 public struct Screen {
     public static let bounds = UIScreen.main.bounds
+    public static let size = UIScreen.main.bounds.size
     public static let scale = UIScreen.main.scale
     public static let width = UIScreen.main.bounds.width
     public static let height = UIScreen.main.bounds.height
