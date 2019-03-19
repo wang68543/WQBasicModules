@@ -98,7 +98,8 @@ public extension UIScrollView {
     func snapping(_ minSize: CGSize) -> UIImage? {
         guard let faterView = self.superview,
             let superSnap = faterView.snapshotView(afterScreenUpdates: true) else {
-                fatalError("must has superView")
+                debugPrint("must has superView")
+                return nil
         }
         faterView.addSubview(superSnap)
         let long = self.longSnapshot(minSize)

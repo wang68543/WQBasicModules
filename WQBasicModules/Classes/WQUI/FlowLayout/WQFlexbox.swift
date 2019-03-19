@@ -326,7 +326,7 @@ private extension WQFlexbox {
 }
 // MARK: - -- FlexboxLayout Datat Source
 private extension WQFlexbox {
-    weak var delegate: WQFlexboxDelegateLayout? {
+    var delegate: WQFlexboxDelegateLayout? {
         return self.collectionView?.delegate as? WQFlexboxDelegateLayout
     }
     
@@ -343,7 +343,7 @@ private extension WQFlexbox {
 }
 // MARK: - -- FlowLayout Data Source
 private extension WQFlexbox {
-    weak var collectionViewLayout: UICollectionViewDelegateFlowLayout? {
+    var collectionViewLayout: UICollectionViewDelegateFlowLayout? {
         return self.collectionView?.delegate as? UICollectionViewDelegateFlowLayout
     }
     

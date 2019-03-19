@@ -53,7 +53,7 @@ public class WQTextView: UITextView {
     }
     override public var text: String! {
         set {
-            super.text = text
+            super.text = newValue
             self.refreshPlaceholder()
         }
         get {

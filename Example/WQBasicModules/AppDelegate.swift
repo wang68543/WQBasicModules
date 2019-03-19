@@ -10,7 +10,6 @@ import UIKit
 import WQBasicModules
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-//    @available(*, deprecated, message: "Objective-C garbage collection is no longer supported") 方法过时
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

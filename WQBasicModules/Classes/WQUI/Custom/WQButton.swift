@@ -3,16 +3,31 @@
 //  Pods-WQBasicModules_Example
 //
 //  Created by WangQiang on 2018/8/5.
-//
+//  1.当没有加到superView中的时候不会产生布局
+//  2.布局顺序是①backgroundRect ②contentRect->imageRect ③contentRect->titleRect(若没有对应属性就不会产生对应的属性布局)
+//  3.当加到superView后改变标题或者图片都会整个重新布局(若图片或标题不变不会引起布局)
+//  4.state改变也会重新布局
 
 import UIKit
 public enum WQTitleAlignment {
     case left, right, bottom, top
 }
+extension WQTitleAlignment {
+    var isHorizontal: Bool {
+        return self == .left || self == .right
+    }
+    var isVertical: Bool {
+        return self == .top || self == .bottom
+    }
+}
 public final class WQButton: UIButton {
     
     //以下计算都是基于当前button有尺寸之后的调整
-   public var imgSize: CGSize = .zero
+    public var imgSize: CGSize = .zero {
+        didSet {
+            setNeedsLayout()
+        }
+    }
     /// 是否允许标题换行
    public var isAllowWrap: Bool = false {
         didSet {
@@ -20,39 +35,14 @@ public final class WQButton: UIButton {
         }
     }
     
-    public var titleAlignment: WQTitleAlignment = .left
-    
-    private var _titleFont: UIFont = UIFont.systemFont(ofSize: 18)
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
-        addKVO()
-    }
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        addKVO()
-    }
-    private func addKVO() {
-        self.addObserver(self, forKeyPath: "titleLabel.font", options: [.new], context: nil)
-    }
-    //  swiftlint:disable block_based_kvo
-    public override
-    func observeValue(forKeyPath keyPath: String?,
-                      of object: Any?,
-                      change: [NSKeyValueChangeKey: Any]?,
-                      context: UnsafeMutableRawPointer?) {
-        if let newValue = change?[NSKeyValueChangeKey.newKey] as? UIFont {
-            _titleFont = newValue
+    public var titleAlignment: WQTitleAlignment = .left {
+        didSet {
+             setNeedsLayout()
         }
     }
-     // swiftlint:enable block_based_kvo
-    private func removeKVO() {
-        removeObserver(self, forKeyPath: "titleLabel.font")
-    }
-    deinit {
-        removeKVO()
-    }
-
+    
+    private var titleFont = UIFont.systemFont(ofSize: 15) // 系统按钮默认字体字体
+    private var titleFontObservation: NSKeyValueObservation?
     //AutoLayout时候 默认尺寸
     public override var intrinsicContentSize: CGSize {
         var contentSize: CGSize = .zero
@@ -62,83 +52,18 @@ public final class WQButton: UIButton {
         let imageEdgeH = self.imageEdgeInsets.top + self.imageEdgeInsets.bottom
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
         let titleEdgeH = self.titleEdgeInsets.bottom + self.titleEdgeInsets.top
-        switch titleAlignment {
-        case .left, .right:
+        let contentEdgeW = self.contentEdgeInsets.left + self.contentEdgeInsets.right
+        let contentEdgeH = self.contentEdgeInsets.top + self.contentEdgeInsets.bottom
+        if titleAlignment.isHorizontal {
             contentSize.width = imageEdgeW + titleEdgeW + imageSize.width + titleSize.width
             contentSize.height = max(imageSize.height + imageEdgeH, titleSize.height + titleEdgeH)
-        case .bottom, .top:
+        } else {
             contentSize.height = imageEdgeH + titleEdgeH + imageSize.height + titleSize.height
             contentSize.width = max(imageSize.width + imageEdgeW, titleSize.width + titleEdgeW)
-        }
-        return CGSize(width: contentSize.width + self.contentEdgeInsets.left + self.contentEdgeInsets.right,
-                      height: contentSize.height + self.contentEdgeInsets.top + self.contentEdgeInsets.bottom)
+        } 
+        return CGSize(width: contentSize.width + contentEdgeW, height: contentSize.height + contentEdgeH)
     }
-   private var currentImageSize: CGSize {
-        if imgSize != .zero {
-            return fitImageSize(imgSize)
-        } else if let image = self.currentImage {
-            return fitImageSize(image.size)
-        }
-        return .zero
-    }
-    
-    private
-     func fitImageSize(_ size: CGSize) -> CGSize {
-        guard frame.size != .zero else {
-            return size
-        }
-        let insetsBound = frame.inset(by: self.contentEdgeInsets)
-        var fitSize = size
-        if size.width > insetsBound.width {
-            self.imageEdgeInsets = .zero
-            fitSize.width = insetsBound.width
-            fitSize.height = insetsBound.width / size.width * size.height
-        }
-        if fitSize.height > insetsBound.height {
-            self.imageEdgeInsets = .zero
-            fitSize.height = insetsBound.height
-            fitSize.width = insetsBound.height / fitSize.height * fitSize.width
-        }
-        return fitSize
-    }
-    
-    private var currentTitleSize: CGSize {
-        var titleMaxW: CGFloat = CGFloat.greatestFiniteMagnitude
-        var titleMaxH: CGFloat = 20
-        if frame.size != .zero {
-            let insetsBound = frame.inset(by: self.contentEdgeInsets)
-            titleMaxW = insetsBound.width - self.titleEdgeInsets.left
-                - self.titleEdgeInsets.right
-            titleMaxH = insetsBound.height - self.titleEdgeInsets.top
-                - self.titleEdgeInsets.bottom
-        }
-     
-        let imageSize = self.currentImageSize
-        if  imageSize != .zero {
-            if titleAlignment == .left || titleAlignment == .right {
-                titleMaxW -= (self.imageEdgeInsets.left + self.imageEdgeInsets.right + imageSize.width)
-            } else {
-                titleMaxH -= (self.imageEdgeInsets.top + self.imageEdgeInsets.bottom + imageSize.height)
-            }
-        }
-        let titleMaxSize = CGSize(width: titleMaxW, height: titleMaxH)
-        if let attributeString = self.currentAttributedTitle {
-            return  attributeString
-                   .boundingRect(with: titleMaxSize,
-                                 options: .usesLineFragmentOrigin,
-                                 context: nil).size
-        } else if let title = self.currentTitle {
-            let size = (title as NSString)
-                .boundingRect(with: titleMaxSize,
-                              options: .usesLineFragmentOrigin,
-                              attributes: [.font: _titleFont],
-                              context: nil ).size
-            return size
-        } else {
-            return .zero
-        }
-    }
-    
+       
     public override
     func contentRect(forBounds bounds: CGRect) -> CGRect {
         guard bounds.size != .zero else { return .zero }
@@ -149,14 +74,13 @@ public final class WQButton: UIButton {
         let titleEdgeH = self.titleEdgeInsets.top + self.titleEdgeInsets.bottom
         let imageEdgeW = self.imageEdgeInsets.left + self.imageEdgeInsets.right
         let imageEdgeH = self.imageEdgeInsets.top + self.imageEdgeInsets.bottom
-        switch self.titleAlignment {
-        case .left, .right:
+        if self.titleAlignment.isHorizontal {
             contentW = titleEdgeW + imageEdgeW + titleSize.width + imageSize.width
             contentH = max(titleSize.height + titleEdgeH, imageSize.height + imageEdgeH)
-        case .bottom, .top:
+        } else {
             contentH = titleEdgeH + imageEdgeH + titleSize.height + imageSize.height
             contentW = max(titleSize.width + titleEdgeW, imageSize.width + imageEdgeW)
-        }
+        } 
         var contentX: CGFloat
         switch self.contentHorizontalAlignment {
         case .left :
@@ -186,18 +110,16 @@ public final class WQButton: UIButton {
         return CGRect(x: contentX, y: contentY, width: contentW, height: contentH)
     }
     
-    public override
-    func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        var imgX: CGFloat; var imgY: CGFloat
+    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        var imgX, imgY: CGFloat
         let imageSize = self.currentImageSize
         let imageEdgeW = self.imageEdgeInsets.left + self.imageEdgeInsets.right
         let imageEdgeH = self.imageEdgeInsets.top + self.imageEdgeInsets.bottom
-        switch self.titleAlignment {
-        case .top, .bottom:
+        if self.titleAlignment.isVertical {
             if self.titleAlignment == .top {
-               imgY = contentRect.height - self.imageEdgeInsets.bottom - imageSize.height
+                imgY = contentRect.height - self.imageEdgeInsets.bottom - imageSize.height
             } else {
-               imgY = self.imageEdgeInsets.top
+                imgY = self.imageEdgeInsets.top
             }
             switch self.contentHorizontalAlignment {
             case .left:
@@ -209,7 +131,7 @@ public final class WQButton: UIButton {
             default:
                 fatalError("暂不支持类型")
             }
-        case .right, .left:
+        } else {
             if self.titleAlignment == .left {
                 imgX = contentRect.width - self.imageEdgeInsets.right - imageSize.width
             } else {
@@ -224,15 +146,15 @@ public final class WQButton: UIButton {
                 imgY = contentRect.height - imageSize.height - self.imageEdgeInsets.bottom
             }
         }
+        debugPrint("imgX:\(imgX), contentRectX:\(contentRect.minX), imageSize:\(imageSize)")
         return CGRect(origin: CGPoint(x: imgX + contentRect.minX, y: imgY + contentRect.minY), size: imageSize)
     }
     public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        var titleX: CGFloat; var titleY: CGFloat
+        var titleX, titleY: CGFloat 
         let titleSize = self.currentTitleSize
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
         let titleEdgeH = self.titleEdgeInsets.top + self.titleEdgeInsets.bottom
-        switch self.titleAlignment {
-        case .top, .bottom:
+        if titleAlignment.isVertical {
             if self.titleAlignment == .bottom {
                 titleY = contentRect.height - self.titleEdgeInsets.bottom - titleSize.height
             } else {
@@ -248,7 +170,7 @@ public final class WQButton: UIButton {
             default:
                 fatalError("暂不支持类型")
             }
-        case .right, .left:
+        } else {
             if self.titleAlignment == .right {
                 titleX = contentRect.width - self.titleEdgeInsets.right - titleSize.width
             } else {
@@ -263,11 +185,111 @@ public final class WQButton: UIButton {
                 titleY = contentRect.height - titleSize.height - self.titleEdgeInsets.bottom
             }
         }
+        debugPrint("titleSize:\(titleSize),titleX:\(titleX),contentRectX:\(contentRect.minX)")
         return CGRect(origin: CGPoint(x: titleX + contentRect.minX, y: titleY + contentRect.minY), size: titleSize)
     }
-  
+    
+    public override func awakeFromNib() {
+        super.awakeFromNib()
+        self.addTitleLabelFontObservation()
+    }
+    public override func setTitle(_ title: String?, for state: UIControl.State) {
+        super.setTitle(title, for: state)
+        self.addTitleLabelFontObservation()
+    }
+    public override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
+        super.setAttributedTitle(title, for: state)
+        self.addTitleLabelFontObservation()
+    }
 }
-
+private extension WQButton {
+    /// 内容的布局区域
+    var conentBounds: CGRect {
+        return self.bounds.inset(by: self.contentEdgeInsets)
+    }
+    var hasTitle: Bool {
+        return self.currentTitle != nil || self.currentAttributedTitle != nil
+    }
+    var currentImageSize: CGSize {
+        guard self.frame.size != .zero else {
+            return .zero
+        }
+        if imgSize != .zero {
+            return fitImageSize(imgSize)
+        } else if let image = self.currentImage {
+            return fitImageSize(image.size)
+        }
+        return .zero
+    }
+    var currentTitleSize: CGSize {
+        guard self.hasTitle && self.frame.size != .zero else { return .zero }
+        let rect = self.conentBounds
+        var maxW = rect.width - self.titleEdgeInsets.left - self.titleEdgeInsets.right
+        var maxH = rect.height - self.titleEdgeInsets.top - self.titleEdgeInsets.bottom
+        let imageSize = self.currentImageSize
+        if  imageSize != .zero {
+            if titleAlignment.isHorizontal {
+                maxW -= (self.imageEdgeInsets.left + self.imageEdgeInsets.right + imageSize.width)
+            } else {
+                maxH -= (self.imageEdgeInsets.top + self.imageEdgeInsets.bottom + imageSize.height)
+            }
+        }
+        let maxSize = CGSize(width: maxW, height: maxH)
+        let options: NSStringDrawingOptions = .usesLineFragmentOrigin
+        var size: CGSize = .zero
+        if let attributeString = self.currentAttributedTitle {
+            size = attributeString.boundingRect(with: maxSize, options: options, context: nil).size
+        } else if let title = self.currentTitle {
+            let text = NSString(string: title)
+            size = text.boundingRect(with: maxSize, options: options, attributes: [.font: titleFont], context: nil).size
+        }
+        //向上取整 解决达不到最大值的问题 ceil(size.width)
+        return CGSize(width: 110, height: ceil(size.height))
+    }
+    // 修正尺寸过大的图片
+    func fitImageSize(_ size: CGSize) -> CGSize {
+        guard frame.size != .zero else { return size }
+        let insetsBound = self.conentBounds
+        var maxW = insetsBound.width - self.imageEdgeInsets.left - self.imageEdgeInsets.right
+        var maxH = insetsBound.height - self.imageEdgeInsets.top - self.imageEdgeInsets.bottom
+        if self.hasTitle {
+            if self.titleAlignment.isHorizontal {
+                maxW -= (self.titleEdgeInsets.left - self.titleEdgeInsets.right)
+            } else {
+                maxH -= (self.titleEdgeInsets.top - self.titleEdgeInsets.bottom)
+            }
+        }
+        var fitSize = size
+        if fitSize.width > maxW {
+            fitSize.width = maxW
+            fitSize.height = maxW / size.width * size.height
+        }
+        if fitSize.height > maxH {
+            fitSize.height = maxH
+            fitSize.width = maxH / fitSize.height * fitSize.width
+        }
+        return fitSize
+    }
+    func addTitleLabelFontObservation() {
+        guard self.titleFontObservation == nil else {
+            return
+        }
+        if let font = self.titleLabel?.font {
+            debugPrint("字体:\(font)")
+            self.titleFont = font
+        }
+        self.titleFontObservation = self.observe(\WQButton.titleLabel?.font, options: [.old, .new], changeHandler: { sender, change in
+            guard change.newValue != change.oldValue else { return }
+            guard let newValue = change.newValue,
+                let newFont = newValue else {
+                return
+            }
+             debugPrint("字体改变了:\(newFont)")
+            sender.titleFont = newFont
+            sender.setNeedsLayout()
+        })
+    }
+}
 public extension WQModules where Base: WQButton {
     
     func setImageMasks(_ radius: CGFloat) {
@@ -303,12 +325,13 @@ public extension WQModules where Base: WQButton {
         self.base.titleLabel?.layer.masksToBounds = true
     }
 }
+
 public extension WQButton {
     convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left, state: UIControl.State = .normal) {
         self.init()
-        self.titleAlignment = alignment
         self.setTitle(title, for: state)
         self.setImage(image, for: state)
+        self.titleAlignment = alignment
     }
     @available(*, deprecated, renamed: "wm.setImageMasks")
     func wq_setImageMasks(_ radius: CGFloat) {
