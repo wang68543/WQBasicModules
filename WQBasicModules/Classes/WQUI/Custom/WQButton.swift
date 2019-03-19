@@ -235,7 +235,7 @@ private extension WQButton {
             }
         }
         let maxSize = CGSize(width: maxW, height: maxH)
-        let options: NSStringDrawingOptions = .usesLineFragmentOrigin
+        let options: NSStringDrawingOptions = .usesFontLeading
         var size: CGSize = .zero
         if let attributeString = self.currentAttributedTitle {
             size = attributeString.boundingRect(with: maxSize, options: options, context: nil).size
@@ -243,8 +243,8 @@ private extension WQButton {
             let text = NSString(string: title)
             size = text.boundingRect(with: maxSize, options: options, attributes: [.font: titleFont], context: nil).size
         }
-        //向上取整 解决达不到最大值的问题 ceil(size.width)
-        return CGSize(width: 110, height: ceil(size.height))
+        //向上取整 解决达不到最大值的问题
+        return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
     // 修正尺寸过大的图片
     func fitImageSize(_ size: CGSize) -> CGSize {

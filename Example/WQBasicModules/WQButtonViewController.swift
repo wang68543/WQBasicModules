@@ -32,6 +32,9 @@ class WQButtonViewController: UIViewController {
 //        }
         // Do any additional setup after loading the view.
 //        self.setupButtons()
+        let text = NSString(string: "指定图片尺寸")
+        let size = text.boundingRect(with: CGSize(width: 110, height: 100), options: .usesFontLeading, attributes: [.font: UIFont.systemFont(ofSize: 18)], context: nil).size
+        
         self.setupMultiButtons()
     }
     
