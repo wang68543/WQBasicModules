@@ -32,6 +32,7 @@ public final class WQButton: UIButton {
    public var isAllowWrap: Bool = false {
         didSet {
             self.titleLabel?.numberOfLines = isAllowWrap ? 0 : 1
+            setNeedsLayout()
         }
     }
     
@@ -64,11 +65,10 @@ public final class WQButton: UIButton {
         return CGSize(width: contentSize.width + contentEdgeW, height: contentSize.height + contentEdgeH)
     }
        
-    public override
-    func contentRect(forBounds bounds: CGRect) -> CGRect {
+    public override func contentRect(forBounds bounds: CGRect) -> CGRect {
         guard bounds.size != .zero else { return .zero }
         let rect = bounds.inset(by: self.contentEdgeInsets)
-        var contentW: CGFloat; var contentH: CGFloat
+        var contentW, contentH: CGFloat
         let titleSize = self.currentTitleSize; let imageSize = self.currentImageSize
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
         let titleEdgeH = self.titleEdgeInsets.top + self.titleEdgeInsets.bottom
@@ -146,9 +146,9 @@ public final class WQButton: UIButton {
                 imgY = contentRect.height - imageSize.height - self.imageEdgeInsets.bottom
             }
         }
-        debugPrint("imgX:\(imgX), contentRectX:\(contentRect.minX), imageSize:\(imageSize)")
         return CGRect(origin: CGPoint(x: imgX + contentRect.minX, y: imgY + contentRect.minY), size: imageSize)
     }
+    
     public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var titleX, titleY: CGFloat 
         let titleSize = self.currentTitleSize
@@ -185,7 +185,6 @@ public final class WQButton: UIButton {
                 titleY = contentRect.height - titleSize.height - self.titleEdgeInsets.bottom
             }
         }
-        debugPrint("titleSize:\(titleSize),titleX:\(titleX),contentRectX:\(contentRect.minX)")
         return CGRect(origin: CGPoint(x: titleX + contentRect.minX, y: titleY + contentRect.minY), size: titleSize)
     }
     
@@ -235,12 +234,13 @@ private extension WQButton {
             }
         }
         let maxSize = CGSize(width: maxW, height: maxH)
-        let options: NSStringDrawingOptions = .usesFontLeading
+        let options: NSStringDrawingOptions = [.usesFontLeading, .usesLineFragmentOrigin]
         var size: CGSize = .zero
         if let attributeString = self.currentAttributedTitle {
             size = attributeString.boundingRect(with: maxSize, options: options, context: nil).size
         } else if let title = self.currentTitle {
             let text = NSString(string: title)
+            //notaTODO: 如果当maxSize不够的时候 就会缩减多余的字符以..代替并返回缩减之后的尺寸
             size = text.boundingRect(with: maxSize, options: options, attributes: [.font: titleFont], context: nil).size
         }
         //向上取整 解决达不到最大值的问题
@@ -275,7 +275,6 @@ private extension WQButton {
             return
         }
         if let font = self.titleLabel?.font {
-            debugPrint("字体:\(font)")
             self.titleFont = font
         }
         self.titleFontObservation = self.observe(\WQButton.titleLabel?.font, options: [.old, .new], changeHandler: { sender, change in
@@ -284,7 +283,6 @@ private extension WQButton {
                 let newFont = newValue else {
                 return
             }
-             debugPrint("字体改变了:\(newFont)")
             sender.titleFont = newFont
             sender.setNeedsLayout()
         })

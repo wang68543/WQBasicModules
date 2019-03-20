@@ -77,6 +77,7 @@ Pod::Spec.new do |s|
      
      s.subspec 'WQUI' do |ss|
          ss.subspec 'Custom' do |sss|
+             sss.dependency 'WQBasicModules/WQExtensionModule'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Custom/*.swift'
          end
          ss.subspec 'Function' do |sss|
