@@ -17,7 +17,7 @@ open class WQWebController: UIViewController {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
-    } 
+    }
     /// 网页加载失败或者 没网的时候 错误的占位页
     public var errorPlaceholderView: UIView? {
         didSet {
@@ -93,10 +93,10 @@ open class WQWebController: UIViewController {
         super.viewDidLoad()
         self.view.addSubview(webView)
         self.progressView.lineWidth = progressHeight
-        self.progressView.bounds = CGRect(origin: .zero, size: CGSize(width: 0, height: progressHeight))
         self.progressView.strokeStart = 0.0
         self.progressView.strokeEnd = 0.0
         self.view.layer.addSublayer(self.progressView)
+        self.progressView.zPosition = 1000.0
         defaultProgressApperance()
         configObservation()
         self.navigationItem.hidesBackButton = true
@@ -106,7 +106,8 @@ open class WQWebController: UIViewController {
     open func defaultProgressApperance() {
         // 背景色默认是透明色
         progressView.backgroundColor = UIColor.lightText.cgColor
-        progressView.strokeColor = UIColor.blue.cgColor
+        let color = self.navigationController?.navigationBar.tintColor ?? self.view.tintColor ?? UIColor.blue
+        progressView.strokeColor = color.cgColor
         self.progressView.lineCap = .round
         self.progressView.lineJoin = .round
     }
@@ -186,21 +187,19 @@ open class WQWebController: UIViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let viewW = self.view.frame.width
-        let viewH = self.view.frame.height
         if let navBar = self.navigationController?.navigationBar,
             navBar.isTranslucent {//透明
-            var rect = CGRect(x: 0, y: 0, width: viewW, height: self.progressView.bounds.height)
+            var rect = CGRect(x: 0, y: 0, width: viewW, height: progressHeight)
             if #available(iOS 11.0, *) {
                  rect.origin.y = self.view.safeAreaInsets.top
             } else {
                 rect.origin.y = UIApplication.shared.statusBarFrame.height + navBar.frame.height
             }
             self.progressView.frame = rect
-            self.webView.frame = self.view.bounds
         } else {
-            self.progressView.frame = CGRect(x: 0, y: 0, width: viewW, height: self.progressView.bounds.height)
-            self.webView.frame = CGRect(x: 0, y: self.progressView.frame.maxY, width: viewW, height: viewH - self.progressView.frame.maxY)
+            self.progressView.frame = CGRect(x: 0, y: 0, width: viewW, height: progressHeight)
         }
+         self.webView.frame = self.view.bounds
         let path = UIBezierPath()
         path.move(to: CGPoint(x: 0, y: progressHeight * 0.5))
         path.addLine(to: CGPoint(x: self.progressView.frame.maxX, y: progressHeight * 0.5))

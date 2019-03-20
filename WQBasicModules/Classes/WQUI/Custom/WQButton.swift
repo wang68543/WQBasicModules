@@ -288,11 +288,13 @@ private extension WQButton {
         })
     }
 }
+ 
 public extension WQModules where Base: WQButton {
     
     func setImageMasks(_ radius: CGFloat) {
-        self.base.imageView?.layer.cornerRadius = radius
-        self.base.imageView?.layer.masksToBounds = true
+        guard let imgView = self.base.imageView else { return }
+        imgView.layer.cornerRadius = radius
+        imgView.layer.masksToBounds = true
     }
     
     func setImageCircularBorder(_ width: CGFloat, color: CGColor) {
@@ -303,10 +305,11 @@ public extension WQModules where Base: WQButton {
     }
     
     func setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
-        self.base.imageView?.layer.borderWidth = width
-        self.base.imageView?.layer.cornerRadius = radius
-        self.base.imageView?.layer.borderColor = color
-        self.base.imageView?.layer.masksToBounds = true
+        guard let imgView = self.base.imageView else { return }
+        imgView.layer.borderWidth = width
+        imgView.layer.cornerRadius = radius
+        imgView.layer.borderColor = color
+        imgView.layer.masksToBounds = true
     }
     
     func setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
@@ -317,10 +320,11 @@ public extension WQModules where Base: WQButton {
     }
     
     func setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
-        self.base.titleLabel?.layer.borderWidth = width
-        self.base.titleLabel?.layer.cornerRadius = radius
-        self.base.titleLabel?.layer.borderColor = color
-        self.base.titleLabel?.layer.masksToBounds = true
+        guard let label = self.base.titleLabel else { return }
+        label.layer.borderWidth = width
+        label.layer.cornerRadius = radius
+        label.layer.borderColor = color
+        label.layer.masksToBounds = true
     }
 }
 
