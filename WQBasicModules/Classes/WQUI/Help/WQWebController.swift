@@ -38,9 +38,6 @@ open class WQWebController: UIViewController {
             }
         }
     }
-    /// 进度条
-    public let progressView: CAShapeLayer = CAShapeLayer()
-    public var progressHeight: CGFloat = 3.0
     
     /// item 图标
     public var closeActionItemIcon: UIImage = {
@@ -65,9 +62,7 @@ open class WQWebController: UIViewController {
         return img.withRenderingMode(.alwaysTemplate)
     }()
     /// KVO
-    private var progressObservation: NSKeyValueObservation?
     private var titleObservation: NSKeyValueObservation?
-    private var isLoadingObservation: NSKeyValueObservation?
     private var canGoBackObservation: NSKeyValueObservation?
     
     private var originalRequest: URLRequest?
@@ -92,36 +87,12 @@ open class WQWebController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView)
-        self.progressView.lineWidth = progressHeight
-        self.progressView.strokeStart = 0.0
-        self.progressView.strokeEnd = 0.0
-        self.view.layer.addSublayer(self.progressView)
-        self.progressView.zPosition = 1000.0
-        defaultProgressApperance()
         configObservation()
         self.navigationItem.hidesBackButton = true
         configLeftItems(false)
     }
-    /// 进度条默认外观配置
-    open func defaultProgressApperance() {
-        // 背景色默认是透明色
-        progressView.backgroundColor = UIColor.lightText.cgColor
-        let color = self.navigationController?.navigationBar.tintColor ?? self.view.tintColor ?? UIColor.blue
-        progressView.strokeColor = color.cgColor
-        self.progressView.lineCap = .round
-        self.progressView.lineJoin = .round
-    }
     
     private func configObservation() {
-        let progress = \WKWebView.estimatedProgress
-        progressObservation = webView.observe(progress, options: .new, changeHandler: { [weak self] _, change in
-            guard let weakSelf = self,
-                let newValue = change.newValue else {
-                    return
-            }
-            weakSelf.progressView.strokeEnd = CGFloat(newValue)
-        })
-   
         let title = \WKWebView.title
         titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
@@ -130,20 +101,8 @@ open class WQWebController: UIViewController {
             }
             weakSelf.navigationItem.title = newValue
         })
-        let isLoading = \WKWebView.isLoading
-        isLoadingObservation = webView.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
-            guard let weakSelf = self,
-                let newValue = change.newValue else {
-                    return
-            }
-            weakSelf.progressView.isHidden = !newValue
-            if !newValue {
-                weakSelf.progressView.strokeEnd = 0.0
-            }
-        })
         let canGoBack = \WKWebView.canGoBack
         canGoBackObservation = webView.observe(canGoBack, options: [.new, .old], changeHandler: { [weak self] _, change in
-            self?.progressView.strokeEnd = 0.0
             guard let weakSelf = self,
                 let newValue = change.newValue,
                 newValue != change.oldValue else { return }
@@ -186,24 +145,8 @@ open class WQWebController: UIViewController {
     }
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let viewW = self.view.frame.width
-        if let navBar = self.navigationController?.navigationBar,
-            navBar.isTranslucent {//透明
-            var rect = CGRect(x: 0, y: 0, width: viewW, height: progressHeight)
-            if #available(iOS 11.0, *) {
-                 rect.origin.y = self.view.safeAreaInsets.top
-            } else {
-                rect.origin.y = UIApplication.shared.statusBarFrame.height + navBar.frame.height
-            }
-            self.progressView.frame = rect
-        } else {
-            self.progressView.frame = CGRect(x: 0, y: 0, width: viewW, height: progressHeight)
-        }
-         self.webView.frame = self.view.bounds
-        let path = UIBezierPath()
-        path.move(to: CGPoint(x: 0, y: progressHeight * 0.5))
-        path.addLine(to: CGPoint(x: self.progressView.frame.maxX, y: progressHeight * 0.5))
-        self.progressView.path = path.cgPath
+        self.webView.frame = self.view.bounds
+        self.webView.reloadProgressFrame()
     }
 }
 @objc extension WQWebController {
