@@ -10,14 +10,12 @@ import WebKit
 public class WQWebViewProgressLayer: CAShapeLayer {
     public weak private(set) var webView: WKWebView? {
         didSet {
-            let color = self.webView?.tintColor ?? UIColor.blue
-            self.strokeColor = color.cgColor
-            self.strokeEnd = 0.0
-            self.configObservation()
+           self.initialApperance()
+           self.configObservation()
         }
     }
     
-    public var progressHeight: CGFloat = 10.0 {
+    public var progressHeight: CGFloat = 3.0 {
         didSet {
            self.setupHeight(progressHeight)
         }
@@ -32,6 +30,7 @@ public class WQWebViewProgressLayer: CAShapeLayer {
         self.setupHeight(self.progressHeight) 
         self.backgroundColor = UIColor.lightText.cgColor
         self.lineCap = .round
+        self.initialApperance()
         self.configObservation()
         
     }
@@ -59,7 +58,7 @@ extension WQWebViewProgressLayer {
                 let newValue = change.newValue else {
                     return
             }
-            weakSelf.strokeEnd = CGFloat(newValue)
+//            weakSelf.strokeEnd = CGFloat(newValue)
         })
         
         let isLoading = \WKWebView.isLoading
@@ -68,13 +67,18 @@ extension WQWebViewProgressLayer {
                 let newValue = change.newValue else {
                     return
             }
-//            weakSelf.isHidden = !newValue
+            weakSelf.isHidden = !newValue
             if !newValue {
                 weakSelf.strokeEnd = 0.0
             }
         })
     }
-    
+    func initialApperance() {
+        let color = self.webView?.tintColor ?? UIColor.blue
+        self.strokeColor = color.cgColor
+        self.strokeEnd = 0.0
+        self.isHidden = false
+    }
     func setupHeight(_ height: CGFloat) {
         self.lineWidth = height
         self.frame = CGRect(origin: self.frame.origin, size: CGSize(width: self.frame.width, height: height))
