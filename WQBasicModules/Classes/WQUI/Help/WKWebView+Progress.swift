@@ -14,7 +14,7 @@ public extension WKWebView {
     /// WebView的加载进度条
     var progressLayer: WQWebViewProgressLayer {
         set {
-            objc_setAssociatedObject(self, &WKWebViewProgressKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) //无需强引用 创建的时候就会加到superLayer上面
+            objc_setAssociatedObject(self, &WKWebViewProgressKey, newValue, .OBJC_ASSOCIATION_ASSIGN) //无需强引用 创建的时候就会加到superLayer上面
         }
         get {
             if let progress = objc_getAssociatedObject(self, &WKWebViewProgressKey) as? WQWebViewProgressLayer {
