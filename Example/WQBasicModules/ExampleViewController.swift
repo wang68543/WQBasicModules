@@ -15,7 +15,8 @@ class ExampleViewController: UITableViewController {
         [["浏览器控件": "TestWebViewController"],
          ["多布局风格按钮": "WQButtonViewController"]], // WQUI
         [["自定义评分控件": "WQStarViewController"],
-         ["仿系统弹出框": "ExampleAlertViewController"]]
+         ["仿系统弹出框": "ExampleAlertViewController"],
+         ["半截屏幕上下移动交互": "WQPanViewController"]]
     ]
     override func viewDidLoad() {
         super.viewDidLoad()

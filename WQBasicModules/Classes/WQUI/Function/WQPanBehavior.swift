@@ -8,9 +8,9 @@
 import UIKit
 
 public enum WQPanState {
-    case top
-    case mid
-    case bottom
+    case top(margin: CGPoint)
+    case mid(poition: CGPoint)
+    case bottom(margin: CGPoint)
 }
 public extension WQPanState {
     func toNextDown(_ states: [WQPanState]) -> WQPanState? {
@@ -74,6 +74,26 @@ public extension WQPanState {
         return value
     }
 }
+//protocol WQPanViewable {
+//    var animator: UIDynamicAnimator { get }
+//    func panViewDidScroll(_ panView: UIScrollView)
+//    func panViewWillBeginDragging(_ panView: UIScrollView)
+//    func panViewWillEndDragging(_ panView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: CGPoint)
+//}
+//extension WQPanViewable {
+//    func panViewDidScroll(_ panView: UIView) {
+//        
+//    }
+//    func panViewWillBeginDragging(_ panView: UIView) {
+//        self.animator.removeAllBehaviors()
+//    }
+//    func panViewWillEndDragging(_ panView: UIView, withVelocity velocity: CGPoint, targetContentOffset: CGPoint) {
+//        let panBehavior = WQPanBehavior(with: panView)
+//        panBehavior.targetPoint = targetContentOffset
+//        panBehavior.velocity = velocity
+//        self.animator.addBehavior(panBehavior)
+//    }
+//}
 public class WQPanBehavior: UIDynamicBehavior {
     
     public let item: UIDynamicItem
@@ -88,18 +108,21 @@ public class WQPanBehavior: UIDynamicBehavior {
     public var velocity: CGPoint = .zero {
         didSet {
             let currentVelocity = self.itemBehavior.linearVelocity(for: self.item)
+            // 与当前速度的差速
             let velocityDelta = CGPoint(x: velocity.x - currentVelocity.x, y: velocity.y - currentVelocity.y)
-            self.itemBehavior.addLinearVelocity(velocityDelta, for: self.item)
+            self.itemBehavior.addLinearVelocity(velocityDelta, for: self.item) //保持移动速度跟手势放开的速度一样
         }
     }
     
     public init(with item: UIDynamicItem) {
         self.item = item
+        /// 弹簧动画
         attachmentBehavior = UIAttachmentBehavior(item: item, attachedToAnchor: .zero)
         attachmentBehavior.frequency = 3.5
         attachmentBehavior.damping = 0.4
         attachmentBehavior.length = 0
         
+        //阻力动画
         itemBehavior = UIDynamicItemBehavior(items: [item])
         itemBehavior.density = 100
         itemBehavior.resistance = 10

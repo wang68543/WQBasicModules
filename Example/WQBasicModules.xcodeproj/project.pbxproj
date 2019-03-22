@@ -16,6 +16,10 @@
 		06A9D0532212BE8A00A16354 /* BaseExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A9D0522212BE8A00A16354 /* BaseExampleViewController.swift */; };
 		06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */; };
 		06C799112231098600C19330 /* ExampleAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C799102231098600C19330 /* ExampleAlertViewController.swift */; };
+		06CD9E422244DA0900E67E38 /* WQPanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD9E412244DA0900E67E38 /* WQPanViewController.swift */; };
+		06CD9E442244DAAF00E67E38 /* PanContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD9E432244DAAF00E67E38 /* PanContainerView.swift */; };
+		06CD9E462244DADD00E67E38 /* PanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD9E452244DADD00E67E38 /* PanView.swift */; };
+		06CD9E482244DB0A00E67E38 /* PanScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CD9E472244DB0A00E67E38 /* PanScrollView.swift */; };
 		06EFFC9D223FA6CC0073D8D3 /* TestButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EFFC9C223FA6CC0073D8D3 /* TestButton.swift */; };
 		06EFFC9F223FA8890073D8D3 /* WQButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EFFC9E223FA8890073D8D3 /* WQButtonViewController.swift */; };
 		06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FB146321ED78FC00A85B03 /* TabBarViewController.swift */; };
@@ -54,6 +58,10 @@
 		06A9D0522212BE8A00A16354 /* BaseExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseExampleViewController.swift; sourceTree = "<group>"; };
 		06B8B6DA21F962AC002DA1D7 /* ScrollTextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollTextInputViewController.swift; sourceTree = "<group>"; };
 		06C799102231098600C19330 /* ExampleAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleAlertViewController.swift; sourceTree = "<group>"; };
+		06CD9E412244DA0900E67E38 /* WQPanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WQPanViewController.swift; sourceTree = "<group>"; };
+		06CD9E432244DAAF00E67E38 /* PanContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanContainerView.swift; sourceTree = "<group>"; };
+		06CD9E452244DADD00E67E38 /* PanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanView.swift; sourceTree = "<group>"; };
+		06CD9E472244DB0A00E67E38 /* PanScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanScrollView.swift; sourceTree = "<group>"; };
 		06EFFC9C223FA6CC0073D8D3 /* TestButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestButton.swift; sourceTree = "<group>"; };
 		06EFFC9E223FA8890073D8D3 /* WQButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WQButtonViewController.swift; sourceTree = "<group>"; };
 		06FB146321ED78FC00A85B03 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +120,7 @@
 				06C799102231098600C19330 /* ExampleAlertViewController.swift */,
 				06EFFC9E223FA8890073D8D3 /* WQButtonViewController.swift */,
 				0602870D2240BECA00CBD968 /* WQButtonViewController.xib */,
+				06CD9E412244DA0900E67E38 /* WQPanViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -122,6 +131,9 @@
 				06A9D04C2212610400A16354 /* ExampleViewCell.swift */,
 				06A9D04D2212610400A16354 /* ExampleViewCell.xib */,
 				06EFFC9C223FA6CC0073D8D3 /* TestButton.swift */,
+				06CD9E432244DAAF00E67E38 /* PanContainerView.swift */,
+				06CD9E452244DADD00E67E38 /* PanView.swift */,
+				06CD9E472244DB0A00E67E38 /* PanScrollView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -429,11 +441,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				06CD9E422244DA0900E67E38 /* WQPanViewController.swift in Sources */,
 				5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */,
+				06CD9E442244DAAF00E67E38 /* PanContainerView.swift in Sources */,
 				06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */,
 				06A9D0512212BE0300A16354 /* WQStarViewController.swift in Sources */,
 				06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				06CD9E462244DADD00E67E38 /* PanView.swift in Sources */,
 				06EFFC9D223FA6CC0073D8D3 /* TestButton.swift in Sources */,
 				06A9D0532212BE8A00A16354 /* BaseExampleViewController.swift in Sources */,
 				06A9D04E2212610400A16354 /* ExampleViewCell.swift in Sources */,
@@ -441,6 +456,7 @@
 				06C799112231098600C19330 /* ExampleAlertViewController.swift in Sources */,
 				06EFFC9F223FA8890073D8D3 /* WQButtonViewController.swift in Sources */,
 				5ED7C4D721CA49F000B128B7 /* SnapShotTableController.swift in Sources */,
+				06CD9E482244DB0A00E67E38 /* PanScrollView.swift in Sources */,
 				06A245CD21F6DA5B0066F57F /* TextInputViewController.swift in Sources */,
 				06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */,
 				5EBA5CB021BF6854001C46D9 /* TestWebViewController.swift in Sources */,

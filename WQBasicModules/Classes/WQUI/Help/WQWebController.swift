@@ -86,7 +86,7 @@ open class WQWebController: UIViewController {
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(webView)
+        self.view.addSubview(webView) 
         configObservation()
         self.navigationItem.hidesBackButton = true
         configLeftItems(false)
@@ -146,7 +146,7 @@ open class WQWebController: UIViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.webView.frame = self.view.bounds
-        self.webView.reloadProgressFrame()
+        self.webView.progressLayer.attachTop()
     }
 }
 @objc extension WQWebController {

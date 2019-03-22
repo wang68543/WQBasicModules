@@ -34,6 +34,7 @@ public class WQWebViewProgressLayer: CAShapeLayer {
         self.configObservation()
         
     }
+    // strokeEnd 会执行动画 动画的时候 会调用这个方法来创建展示layer 仅仅只用于动画展示
     public override init(layer: Any) {
         super.init(layer: layer)
     }
@@ -49,8 +50,27 @@ public class WQWebViewProgressLayer: CAShapeLayer {
         fatalError("init(coder:) has not been implemented")
     }
     
+    /// 这里需要在Webview的尺寸确定之后再刷新
+    func attachTop() {
+        guard let webView = self.webView else {
+            return
+        }
+        var topY: CGFloat = 0
+        if #available(iOS 11.0, *) {
+            topY = webView.safeAreaInsets.top
+        } else {
+            // 如果下级响应者是VC 或者是VCView的子View
+            let viewController = (webView.next as? UIViewController) ?? webView.next?.next as? UIViewController
+            topY = UIApplication.shared.statusBarFrame.height
+            if let navBar = viewController?.navigationController?.navigationBar,
+                !navBar.isHidden && navBar.isTranslucent {
+                topY += navBar.frame.height
+            }
+        }
+        self.frame = CGRect(x: 0, y: topY, width: webView.frame.width, height: self.progressHeight)
+    }
 }
-extension WQWebViewProgressLayer {
+private extension WQWebViewProgressLayer {
      func configObservation() {
         let progress = \WKWebView.estimatedProgress
         progressObservation = webView?.observe(progress, options: .new, changeHandler: { [weak self] _, change in
@@ -58,7 +78,7 @@ extension WQWebViewProgressLayer {
                 let newValue = change.newValue else {
                     return
             }
-//            weakSelf.strokeEnd = CGFloat(newValue)
+            weakSelf.strokeEnd = CGFloat(newValue)
         })
         
         let isLoading = \WKWebView.isLoading
@@ -71,6 +91,7 @@ extension WQWebViewProgressLayer {
             if !newValue {
                 weakSelf.strokeEnd = 0.0
             }
+            
         })
     }
     func initialApperance() {
