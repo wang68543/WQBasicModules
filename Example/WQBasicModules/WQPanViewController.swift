@@ -9,10 +9,13 @@
 import UIKit
 
 class WQPanViewController: BaseExampleViewController {
-
+    let containerView: PanContainerView = PanContainerView()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.view.addSubview(containerView)
     }
-
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.containerView.frame = self.view.bounds
+    }
 }

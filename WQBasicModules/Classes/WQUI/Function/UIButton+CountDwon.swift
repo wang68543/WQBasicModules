@@ -23,16 +23,16 @@ public extension UIButton {
     /// - Parameters:
     ///   - UIButton: 当前对象
     ///   - UInt: 剩余数量
-    public typealias IntervalExecute = (UIButton, UInt) -> Void
+    typealias IntervalExecute = (UIButton, UInt) -> Void
     
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
     ///   - UIButton: 当前对象
     ///   - Bool: 是否是正常结束
     /// - Returns: 背景颜色、标题是否恢复到倒计时之前的状态
-    public typealias CountDownCompletion = (UIButton, Bool) -> Bool
+    typealias CountDownCompletion = (UIButton, Bool) -> Bool
     /// 当前的状态
-    public var currentControlState: UIControl.State {
+    var currentControlState: UIControl.State {
         var state: UIControl.State
         if !self.isEnabled {
             state = .disabled
@@ -47,7 +47,7 @@ public extension UIButton {
     }
     
     /// 倒计时是否可以中途中断 Default `false`
-    public var isCanCancel: Bool {
+    var isCanCancel: Bool {
         set {
             objc_setAssociatedObject(self, CountDownKeys.isCanCancel, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
@@ -65,10 +65,10 @@ public extension UIButton {
     ///   - formater: 倒计时的时候格式化标题
     ///   - color: 倒计时时候的标题颜色 (为空的时候使用.normal标题色)
     ///   - completion: 倒计时完成回调
-    public func countDown(total: UInt,
-                          formater: NumberFormatter,
-                          color: UIColor? = nil,
-                          completion: CountDownCompletion? = nil) {
+    func countDown(total: UInt,
+                   formater: NumberFormatter,
+                   color: UIColor? = nil,
+                   completion: CountDownCompletion? = nil) {
         let titleColor = color ?? self.titleColor(for: .normal)
         let currentState = self.currentControlState
         let excute: IntervalExecute = { sender, secs in
@@ -85,10 +85,10 @@ public extension UIButton {
     ///   - interval: 重复的间隔,单位时间秒数
     ///   - execute: 间隔回调
     ///   - completion: 终止或者总数小于0就倒计时终止
-    public func countDown(_ count: UInt,
-                          interval: Double = 1,
-                          execute: @escaping IntervalExecute,
-                          completion: CountDownCompletion?) { //末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
+    func countDown(_ count: UInt,
+                   interval: Double = 1,
+                   execute: @escaping IntervalExecute,
+                   completion: CountDownCompletion?) { //末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
         self.countDownCompletion = completion
         if self.source != nil {
             stopCountDown(false)

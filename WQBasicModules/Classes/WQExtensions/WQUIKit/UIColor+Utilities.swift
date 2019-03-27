@@ -69,7 +69,7 @@ public extension UIColor {
 // MARK: - Helpers
 public extension UIColor {
     
-    public func hex(hashPrefix: Bool = true) -> String {
+    func hex(hashPrefix: Bool = true) -> String {
         var (r, g, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (0.0, 0.0, 0.0, 0.0)
         getRed(&r, green: &g, blue: &b, alpha: &a)
         
@@ -85,27 +85,27 @@ public extension UIColor {
         return [r, g, b]
     }
     
-    public var isDark: Bool {
+    var isDark: Bool {
         let RGB = rgbComponents()
         return (0.2126 * RGB[0] + 0.7152 * RGB[1] + 0.0722 * RGB[2]) < 0.5
     }
     
-    public var isBlackOrWhite: Bool {
+    var isBlackOrWhite: Bool {
         let RGB = rgbComponents()
         return (RGB[0] > 0.91 && RGB[1] > 0.91 && RGB[2] > 0.91) || (RGB[0] < 0.09 && RGB[1] < 0.09 && RGB[2] < 0.09)
     }
     
-    public var isBlack: Bool {
+    var isBlack: Bool {
         let RGB = rgbComponents()
         return (RGB[0] < 0.09 && RGB[1] < 0.09 && RGB[2] < 0.09)
     }
     
-    public var isWhite: Bool {
+    var isWhite: Bool {
         let RGB = rgbComponents()
         return (RGB[0] > 0.91 && RGB[1] > 0.91 && RGB[2] > 0.91)
     }
     
-    public func isDistinct(from color: UIColor) -> Bool {
+    func isDistinct(from color: UIColor) -> Bool {
         let bg = rgbComponents()
         let fg = color.rgbComponents()
         let threshold: CGFloat = 0.25
@@ -123,7 +123,7 @@ public extension UIColor {
         return result
     }
     
-    public func isContrasting(with color: UIColor) -> Bool {
+    func isContrasting(with color: UIColor) -> Bool {
         let bg = rgbComponents()
         let fg = color.rgbComponents()
         

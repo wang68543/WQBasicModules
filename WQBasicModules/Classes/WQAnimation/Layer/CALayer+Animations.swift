@@ -14,7 +14,7 @@ public extension CALayer {
         static let isAnimating = UnsafeRawPointer(bitPattern: "wq.layer.anmations.isAnimating".hashValue)!
     }
     
-    public private(set) var isAnimating: Bool {
+    private(set) var isAnimating: Bool {
         set {
             objc_setAssociatedObject(self, AnimationKeys.isAnimating, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
@@ -24,10 +24,10 @@ public extension CALayer {
     }
     
     @discardableResult
-    public func rotation(_ from: Double = 0,
-                         to angle: Double = Double.pi * 2,
-                         duration: Double,
-                         isRepeat: Bool) -> CABasicAnimation {
+    func rotation(_ from: Double = 0,
+                  to angle: Double = Double.pi * 2,
+                  duration: Double,
+                  isRepeat: Bool) -> CABasicAnimation {
         let keyPath = "transform.rotation"
         let animate = CABasicAnimation(keyPath: keyPath)
         animate.fromValue = Double(0)
@@ -39,14 +39,14 @@ public extension CALayer {
         return animate
     }
      
-    public func stopRotation() {
+    func stopRotation() {
         self.interal_remove(forKey: AnimationKeys.rotation)
     }
     
     @discardableResult
-    public func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
-                           type: CATransitionType = .fade,
-                           duration: CFTimeInterval = 0.2) -> CATransition {
+    func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
+                    type: CATransitionType = .fade,
+                    duration: CFTimeInterval = 0.2) -> CATransition {
         let transtion = CATransition()
         transtion.duration = duration
         transtion.timingFunction = timing
@@ -55,7 +55,7 @@ public extension CALayer {
         return transtion
     }
     
-    public func stopTransition() {
+    func stopTransition() {
         self.interal_remove(forKey: AnimationKeys.transition)
     }
     
