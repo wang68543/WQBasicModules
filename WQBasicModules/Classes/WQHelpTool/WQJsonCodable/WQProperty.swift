@@ -56,6 +56,10 @@ public enum WQPropertyStyle {
             self = .dictionary
         case .set:
             self = .set
+            #if swift (>=5.0)
+        @unknown default:
+            fatalError("不支持的布局类型")
+            #endif
         }
     }
 }

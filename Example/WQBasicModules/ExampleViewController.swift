@@ -28,6 +28,19 @@ class ExampleViewController: UITableViewController {
         if "13898768609".isLegalPhone() {
             debugPrint("正确的手机号码")
         }
+//        let str = #"SELF MATCHES "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1]\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx]))$""#
+//        let str = #"^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$"#
+////        let predicate = NSPredicate(format: str)
+//        let predicate = NSPredicate(format: "SELF MATCHES \"\(str)\"")
+//        if predicate.evaluate(with: "421281199010135718")  {
+//            debugPrint("正确的身份证号码")
+//        }
+        if "421281199010135718".isLegalIDCard   {
+            debugPrint("正确的身份证号码")
+        }
+        if "https://www.jianshu.com".evaluate(predicate: "SELF MATCHES \"\(WQRegex.link.rawValue)\"") {
+            debugPrint("正确的网站")
+        }
     }
 
     // MARK: - Table view data source

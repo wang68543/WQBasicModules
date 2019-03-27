@@ -106,6 +106,10 @@ public final class WQButton: UIButton {
         case .fill:
             contentY = self.contentEdgeInsets.top
             contentH = rect.height
+            #if swift (>=5.0)
+        @unknown default:
+            fatalError("不支持的布局类型")
+            #endif
         }
         return CGRect(x: contentX, y: contentY, width: contentW, height: contentH)
     }
@@ -144,6 +148,10 @@ public final class WQButton: UIButton {
                 imgY = self.imageEdgeInsets.top + (contentRect.height - imageSize.height - imageEdgeH) * 0.5
             case .bottom:
                 imgY = contentRect.height - imageSize.height - self.imageEdgeInsets.bottom
+                #if swift (>=5.0)
+            @unknown default:
+                fatalError("不支持的布局类型")
+                #endif
             }
         }
         return CGRect(origin: CGPoint(x: imgX + contentRect.minX, y: imgY + contentRect.minY), size: imageSize)
@@ -183,6 +191,10 @@ public final class WQButton: UIButton {
                 titleY = self.titleEdgeInsets.top + (contentRect.height - titleSize.height - titleEdgeH) * 0.5
             case .bottom:
                 titleY = contentRect.height - titleSize.height - self.titleEdgeInsets.bottom
+                #if swift (>=5.0)
+            @unknown default:
+                fatalError("不支持的布局类型")
+                #endif
             }
         }
         return CGRect(origin: CGPoint(x: titleX + contentRect.minX, y: titleY + contentRect.minY), size: titleSize)
@@ -190,7 +202,9 @@ public final class WQButton: UIButton {
     
     public override func awakeFromNib() {
         super.awakeFromNib()
-        self.addTitleLabelFontObservation()
+        if self.hasTitle {
+           self.addTitleLabelFontObservation()
+        } 
     }
     public override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
