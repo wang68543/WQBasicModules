@@ -119,7 +119,11 @@ public extension String {
         guard self.count == 18 else { return true } // 15位的无需继续校验了
         //将前17位加权因子保存在数组里
         let weightFactor = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2]
+        #if swift(>=5.0)
         let nums = self.dropLast().compactMap({ $0.wholeNumberValue })
+        #else
+        let nums = self.dropLast().compactMap({ Int(String($0)) ?? 0 })
+        #endif
         var sum: Int = 0
         for index in 0 ..< 17 {
             sum += (weightFactor[index] * nums[index])
