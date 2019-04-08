@@ -350,3 +350,58 @@ public extension Date {// MARK: - Compare
         .timeZone]
   
 }
+
+// MARK: - --equal
+public extension Date {
+    func isSame(_ otherDate: Date, unit: Calendar.Component = .day, calendar: Calendar = Calendar.current) -> Bool {
+        let cmps = calendar.dateComponents(in: calendar.timeZone, from: self)
+        let otherCmps = calendar.dateComponents(in: calendar.timeZone, from: otherDate)
+        var isSame: Bool = true
+        switch unit {
+        case .nanosecond:
+            if cmps.nanosecond != otherCmps.nanosecond { return false }
+            fallthrough
+        case .second:
+            if cmps.second != otherCmps.second { return false }
+            fallthrough
+        case .minute:
+            if cmps.minute != otherCmps.minute { return false }
+            fallthrough
+        case .hour:
+            if cmps.hour != otherCmps.hour { return false }
+            fallthrough
+        case .day:
+            if cmps.day != otherCmps.day { return false }
+            fallthrough
+        case .month:
+            if cmps.month != otherCmps.month { return false }
+            fallthrough
+        case .year:
+            if cmps.year != otherCmps.year { return false }
+            fallthrough
+        case .era:
+            isSame = cmps.era == otherCmps.era
+        case .weekday:
+            isSame = cmps.weekday == otherCmps.weekday
+                    && self.isSame(otherDate, unit: .day, calendar: calendar)
+        case .weekdayOrdinal:
+            isSame = cmps.weekdayOrdinal == otherCmps.weekdayOrdinal
+                    && self.isSame(otherDate, unit: .day, calendar: calendar)
+        case .quarter:
+            isSame = cmps.quarter == otherCmps.quarter
+                    && self.isSame(otherDate, unit: .day, calendar: calendar)
+        case .weekOfMonth:
+            isSame = cmps.weekOfMonth == otherCmps.weekOfMonth
+                    && self.isSame(otherDate, unit: .month, calendar: calendar)
+        case .weekOfYear:
+            isSame = cmps.weekOfYear == otherCmps.weekOfYear
+                    && self.isSame(otherDate, unit: .year, calendar: calendar)
+        case .yearForWeekOfYear:
+            isSame = cmps.yearForWeekOfYear == otherCmps.yearForWeekOfYear
+                    && self.isSame(otherDate, unit: .year, calendar: calendar)
+        default:
+            isSame = false
+        }
+        return isSame
+    }
+}
