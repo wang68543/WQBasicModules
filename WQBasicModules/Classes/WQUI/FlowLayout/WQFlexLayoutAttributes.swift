@@ -59,7 +59,7 @@ internal struct WQFlexLineSpace {
          isHorizontal: Bool) {
         let lineCount = CGFloat(items.count)
         let totalWidth = items.totalLength(isHorizontal)
-        let minTotalValue = totalWidth + lineCount * minItemsSpace
+        let minTotalValue = totalWidth + (lineCount - 1) * minItemsSpace 
         switch justify {
         case .flexStart:
         space = minItemsSpace
@@ -168,12 +168,12 @@ internal struct WQFlexSectionAttributes {
     /// - Parameters:
     ///   - viewWidth: 非主轴方向的 view的内容长度 (不包含insets 、header/footer)
     ///   - alignContent: lines整体排列方式(以collectionView的size为参照 sections 为1的时候 并且内容小于size的时候才起作用)
-    ///   - lineSpace: 最小的line 间距
+    ///   - lineSpace:  (item 之间的间距) //最小的line 间距
     mutating func config(viewWidth: CGFloat, alignContent: WQAlignContent, lineSpace: CGFloat, sections: Int) {
         var fixAlign: WQAlignContent = alignContent
         let lineCount = CGFloat(lines.count)
         let linesTotalWidth = self.lines.totalWidth()
-        let minTotalWidth = lineCount * lineSpace + linesTotalWidth
+        let minTotalWidth = (lineCount - 1) * lineSpace + linesTotalWidth
         if sections > 1 || viewWidth < minTotalWidth { // 只有一个分区并且内容长度小于限制长度
             fixAlign = .flexStart
         }

@@ -150,6 +150,7 @@ private extension WQFlexbox {
             let header = self.referenceSizeForHeaderInSection(section)
             let footer = self.referenceSizeForFooterInSection(section)
             let insets = self.insetForSection(at: section)
+            // 限制line的的长度
             var limitValue: CGFloat
             if isHorizontal {
                 limitValue = self.limitLength - insets.left - insets.right

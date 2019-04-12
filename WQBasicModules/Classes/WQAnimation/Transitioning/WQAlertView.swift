@@ -37,8 +37,8 @@ public extension WQAlertAction {
 //public typealias WQAlertBottomView = UIView & WQAlertBottomViewProtocol
 
 public class WQAlertView: UIView {
-    let titleLabel: UILabel
-    let messageLabel: UILabel
+    public let titleLabel: UILabel
+    public let messageLabel: UILabel
     /// 标题跟内容的周边间距 不包含底部按钮视图
     public var contentEdgeInsets: UIEdgeInsets = UIEdgeInsets(top: 25, left: 15, bottom: 25, right: 10)
     /// 标题与内容之间的间距
