@@ -19,25 +19,25 @@ open class WQWebController: UIViewController {
         }
     }
     /// 网页加载失败或者 没网的时候 错误的占位页
-    public var errorPlaceholderView: UIView? {
-        didSet {
-            if errorPlaceholderView != nil {
-                self.webView.navigationDelegate = self
-            } else {
-                 self.webView.navigationDelegate = nil
-            }
-        }
-    }
+//    public var errorPlaceholderView: UIView? {
+//        didSet {
+//            if errorPlaceholderView != nil {
+//                self.webView.navigationDelegate = self
+//            } else {
+//                 self.webView.navigationDelegate = nil
+//            }
+//        }
+//    }
     /// 网页加载失败或者 没网的时候 错误的Html占位页
-    public var errorPlaceholderHtmlFilepath: String? {
-        didSet {
-            if errorPlaceholderHtmlFilepath != nil {
-                self.webView.navigationDelegate = self
-            } else {
-                self.webView.navigationDelegate = nil
-            }
-        }
-    }
+//    public var errorPlaceholderHtmlFilepath: String? {
+//        didSet {
+//            if errorPlaceholderHtmlFilepath != nil {
+//                self.webView.navigationDelegate = self
+//            } else {
+//                self.webView.navigationDelegate = nil
+//            }
+//        }
+//    }
     
     /// item 图标
     public var closeActionItemIcon: UIImage = {
@@ -169,23 +169,23 @@ open class WQWebController: UIViewController {
         }
     }
 }
-extension WQWebController: WKNavigationDelegate {
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-        self.errorPlaceholderView?.removeFromSuperview()
-    }
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        if let errorView = self.errorPlaceholderView {
-            self.view.addSubview(errorView)
-            errorView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                errorView.topAnchor.constraint(equalTo: self.view.topAnchor),
-                errorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-                errorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-                errorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)])
-        } else if let path = self.errorPlaceholderHtmlFilepath {
-            let request = URLRequest(url: URL(fileURLWithPath: path))
-            self.webView.load(request)
-        }
-    }
-       
-}
+// 不实现代理 
+//extension WQWebController: WKNavigationDelegate {
+//    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+//        self.errorPlaceholderView?.removeFromSuperview()
+//    }
+//    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+//        if let errorView = self.errorPlaceholderView {
+//            self.view.addSubview(errorView)
+//            errorView.translatesAutoresizingMaskIntoConstraints = false
+//            NSLayoutConstraint.activate([
+//                errorView.topAnchor.constraint(equalTo: self.view.topAnchor),
+//                errorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//                errorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//                errorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)])
+//        } else if let path = self.errorPlaceholderHtmlFilepath {
+//            let request = URLRequest(url: URL(fileURLWithPath: path))
+//            self.webView.load(request)
+//        }
+//    }
+//}
