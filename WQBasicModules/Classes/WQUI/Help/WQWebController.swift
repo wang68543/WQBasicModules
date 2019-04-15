@@ -171,21 +171,21 @@ open class WQWebController: UIViewController {
 }
 // 不实现代理 
 //extension WQWebController: WKNavigationDelegate {
-//    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
-//        self.errorPlaceholderView?.removeFromSuperview()
+//    open func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+////        self.errorPlaceholderView?.removeFromSuperview()
 //    }
-//    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-//        if let errorView = self.errorPlaceholderView {
-//            self.view.addSubview(errorView)
-//            errorView.translatesAutoresizingMaskIntoConstraints = false
-//            NSLayoutConstraint.activate([
-//                errorView.topAnchor.constraint(equalTo: self.view.topAnchor),
-//                errorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                errorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                errorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)])
-//        } else if let path = self.errorPlaceholderHtmlFilepath {
-//            let request = URLRequest(url: URL(fileURLWithPath: path))
-//            self.webView.load(request)
-//        }
+//    open func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+////        if let errorView = self.errorPlaceholderView {
+////            self.view.addSubview(errorView)
+////            errorView.translatesAutoresizingMaskIntoConstraints = false
+////            NSLayoutConstraint.activate([
+////                errorView.topAnchor.constraint(equalTo: self.view.topAnchor),
+////                errorView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+////                errorView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+////                errorView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)])
+////        } else if let path = self.errorPlaceholderHtmlFilepath {
+////            let request = URLRequest(url: URL(fileURLWithPath: path))
+////            self.webView.load(request)
+////        }
 //    }
 //}

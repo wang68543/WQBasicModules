@@ -112,11 +112,19 @@ open class WQPresentationable: UIViewController {
         //延迟加载View
          self.animator.items.initial(nil, presenting: self)
          self.view.addSubview(containerView)
-         containerView.layoutIfNeeded()
+//         containerView.layoutIfNeeded()
+    }
+    /// 刷新子子控件的布局
+    private func layoutContainerSubViews() {
+        self.loadViewIfNeeded()
+        containerView.setNeedsUpdateConstraints()
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
+        self.layoutContainerSubViews()
         if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
