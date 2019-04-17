@@ -91,5 +91,8 @@ Pod::Spec.new do |s|
          ss.subspec 'FlowLayout' do |sss| 
              sss.source_files = 'WQBasicModules/Classes/WQUI/FlowLayout/*.swift'
          end
+         ss.subspec 'Extensions' do |sss|
+             sss.source_files = 'WQBasicModules/Classes/WQUI/Extensions/*.swift'
+         end
      end
 end

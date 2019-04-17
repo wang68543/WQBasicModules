@@ -147,9 +147,10 @@ public extension Date { // MARK: 日期格式化
     }
     
     func toString(_ format: String, in calendar: Calendar = .current) -> String {
-        WQDateFormatter.shared.dateFormat = format
-        WQDateFormatter.shared.calendar = calendar
-        return WQDateFormatter.shared.string(from: self)
+        let fortmatter = WQDateFormatter.shared
+        fortmatter.dateFormat = format
+        fortmatter.calendar = calendar
+        return fortmatter.string(from: self)
     }
 }
 public extension String { // MARK: 字符串转日期
@@ -162,9 +163,10 @@ public extension String { // MARK: 字符串转日期
        return toDate(dateFormat.formatString, in: calendar)
     }
     func toDate(_ format: String, in calendar: Calendar = .current) -> Date {
-        WQDateFormatter.shared.dateFormat = format
-        WQDateFormatter.shared.calendar = calendar
-        guard let date = WQDateFormatter.shared.date(from: self) else {
+        let fortmatter = WQDateFormatter.shared
+        fortmatter.dateFormat = format
+        fortmatter.calendar = calendar
+        guard let date = fortmatter.date(from: self) else {
             return Date()
         }
         return date

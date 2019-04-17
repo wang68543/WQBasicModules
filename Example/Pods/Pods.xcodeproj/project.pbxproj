@@ -10,6 +10,8 @@
 		01F38701F6A47E385636F6CE2A11B773 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB4607EFCA7C5F75397649E792E2AFCB /* Foundation.framework */; };
 		027EF9D56E99B4F6AB1F28E7E4D1B753 /* WQPresentationable+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4647862CD5B628C6CE63DE1FDEFD05 /* WQPresentationable+Transition.swift */; };
 		06575E3B224380AB005A1F23 /* WQPanBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06575E3A224380AA005A1F23 /* WQPanBehavior.swift */; };
+		066155E322672F68001B2370 /* UITextFiled+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066155E222672F68001B2370 /* UITextFiled+Extension.swift */; };
+		066155E522673190001B2370 /* UITextView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 066155E422673190001B2370 /* UITextView+Extension.swift */; };
 		1068D58AE10F365487C7273004BCE6B7 /* UIView+Presentationable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FBA22BEB71CCDA9B978BD81425837BC /* UIView+Presentationable.swift */; };
 		117170EE8E3B6BC2634F051DADC9DE48 /* WQPresentedAnimatedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6449077CB4485B139268D5EB3E2D146A /* WQPresentedAnimatedItem.swift */; };
 		1446FB5B4E0CAF75F94872ABA1465D6F /* WQBasicModules-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CDC50989BFB26F9A407DAE35ACD3E219 /* WQBasicModules-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -99,6 +101,8 @@
 		00AD84EFE1E18465E75DEBD191DC8FFE /* WQTransitioningAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitioningAnimator.swift; path = WQBasicModules/Classes/WQAnimation/Transitioning/WQTransitioningAnimator.swift; sourceTree = "<group>"; };
 		03EDADCBCA8A7F03CAFA1A63FE3B7E73 /* UIColor+Utilities.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIColor+Utilities.swift"; path = "WQBasicModules/Classes/WQExtensions/WQUIKit/UIColor+Utilities.swift"; sourceTree = "<group>"; };
 		06575E3A224380AA005A1F23 /* WQPanBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WQPanBehavior.swift; path = WQBasicModules/Classes/WQUI/Function/WQPanBehavior.swift; sourceTree = "<group>"; };
+		066155E222672F68001B2370 /* UITextFiled+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UITextFiled+Extension.swift"; path = "WQBasicModules/Classes/WQUI/Extensions/UITextFiled+Extension.swift"; sourceTree = "<group>"; };
+		066155E422673190001B2370 /* UITextView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "UITextView+Extension.swift"; path = "WQBasicModules/Classes/WQUI/Extensions/UITextView+Extension.swift"; sourceTree = "<group>"; };
 		07DD16B64329ED7B7336743DBB72314B /* WQBasicModules.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WQBasicModules.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		08547ED13E8887C7A576AA94269BAAE0 /* FileManager+Path.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "FileManager+Path.swift"; path = "WQBasicModules/Classes/WQHelpTool/WQCache/FileManager+Path.swift"; sourceTree = "<group>"; };
 		1DB0614CAB2AA49055BAA047C318F2F7 /* Date+Format.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Date+Format.swift"; path = "WQBasicModules/Classes/WQExtensions/WQDate/Date+Format.swift"; sourceTree = "<group>"; };
@@ -209,6 +213,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		066155E122672EB5001B2370 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				066155E222672F68001B2370 /* UITextFiled+Extension.swift */,
+				066155E422673190001B2370 /* UITextView+Extension.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		0E28D254F8EFAF41875BD279D171D61F /* Function */ = {
 			isa = PBXGroup;
 			children = (
@@ -496,6 +509,7 @@
 		F03EB0D8F19E50014B9449398B6A2A66 /* WQUI */ = {
 			isa = PBXGroup;
 			children = (
+				066155E122672EB5001B2370 /* Extensions */,
 				707ACEDFBD417DBAB0BE0A692B85FDE7 /* Custom */,
 				92A7E29A7CBBF06608E98DFB32043450 /* FlowLayout */,
 				0E28D254F8EFAF41875BD279D171D61F /* Function */,
@@ -634,6 +648,9 @@
 				LastSwiftUpdateCheck = 0930;
 				LastUpgradeCheck = 0930;
 				TargetAttributes = {
+					21ED8A39845A4CDE930D252211EB2862 = {
+						LastSwiftMigration = 1020;
+					};
 					C92A3D42D83552830947EA3C3D43D1D8 = {
 						LastSwiftMigration = 1020;
 					};
@@ -754,6 +771,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				C96A1F27C3D472CE69CE8ABFDB1464AE /* Pods-WQBasicModules_Example-dummy.m in Sources */,
+				066155E322672F68001B2370 /* UITextFiled+Extension.swift in Sources */,
+				066155E522673190001B2370 /* UITextView+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -786,6 +805,7 @@
 			baseConfigurationReference = 70D64D3F23DC4485E9124157F5F4F05A /* Pods-WQBasicModules_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -808,6 +828,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -914,6 +936,7 @@
 			baseConfigurationReference = 763C98A0B44A8C0F68992421AF63B987 /* Pods-WQBasicModules_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -936,6 +959,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
