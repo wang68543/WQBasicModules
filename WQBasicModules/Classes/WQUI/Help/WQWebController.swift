@@ -17,7 +17,9 @@ open class WQWebController: UIViewController {
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
-    }  
+    }
+    public private(set) var progressView: UIProgressView?
+//    public let progress: WQWebViewProgressLayer = WQWebViewProgressLayer()
     /// item 图标
     public var closeActionItemIcon: UIImage = {
         let frameworkBundle = Bundle(for: WQWebController.self)
@@ -43,6 +45,9 @@ open class WQWebController: UIViewController {
     /// KVO
     private var titleObservation: NSKeyValueObservation?
     private var canGoBackObservation: NSKeyValueObservation?
+    /// KVO
+    private var progressObservation: NSKeyValueObservation?
+    private var isLoadingObservation: NSKeyValueObservation?
     
     private var originalRequest: URLRequest?
     
@@ -62,6 +67,18 @@ open class WQWebController: UIViewController {
         if let request = self.originalRequest {
             self.loadRequest(request)
         }
+    }
+    public func setupProgress() {
+        let progressView =  UIProgressView(frame: .zero)
+        self.progressView = progressView
+        self.webView.addSubview(progressView)
+        self.configProgressObservation()
+        let color = self.webView.tintColor ?? UIColor.blue
+        self.progressView?.progressViewStyle = .bar
+        self.progressView?.trackTintColor = UIColor.lightGray
+        self.progressView?.progressTintColor = color
+        self.progressView?.progress = 0
+        
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -125,7 +142,52 @@ open class WQWebController: UIViewController {
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.webView.frame = self.view.bounds
-        self.webView.progressLayer.attachTop()
+        var topY: CGFloat
+        if #available(iOS 11.0, *) {
+            topY = self.webView.safeAreaInsets.top
+        } else {
+            topY = 0
+        }
+        self.progressView?.frame = CGRect(x: 0, y: topY, width: self.webView.frame.width, height: 3)
+        //        self.progress.attach(to: self.webView)
+    }
+    deinit {
+        self.titleObservation?.invalidate()
+        self.canGoBackObservation?.invalidate()
+        self.titleObservation = nil
+        self.canGoBackObservation = nil
+        self.invalidate()
+        debugPrint(#function)
+    }
+}
+extension WQWebController {
+    func invalidate() {
+        progressObservation?.invalidate()
+        isLoadingObservation?.invalidate()
+        progressObservation = nil
+        isLoadingObservation = nil
+    }
+    func configProgressObservation() {
+        let progress = \WKWebView.estimatedProgress
+        progressObservation = webView.observe(progress, options: .new, changeHandler: { [weak self] _, change in
+            guard let weakSelf = self,
+                let newValue = change.newValue else {
+                    return
+            }
+            weakSelf.progressView?.progress = Float(newValue)
+        })
+        
+        let isLoading = \WKWebView.isLoading
+        isLoadingObservation = webView.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
+            guard let weakSelf = self,
+                let newValue = change.newValue else {
+                    return
+            }
+            weakSelf.progressView?.isHidden = !newValue
+            if !newValue {
+                weakSelf.progressView?.progress = 0.0
+            }
+        })
     }
 }
 @objc extension WQWebController {

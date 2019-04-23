@@ -10,6 +10,12 @@ import WebKit
 public class WQWebViewProgressLayer: CAShapeLayer {
     public weak private(set) var webView: WKWebView? {
         didSet {
+            guard oldValue == webView else {
+                return
+            }
+            if oldValue != webView {
+                self.invalidate()
+            }
            self.initialApperance()
            self.configObservation()
         }
@@ -24,15 +30,10 @@ public class WQWebViewProgressLayer: CAShapeLayer {
     private var progressObservation: NSKeyValueObservation?
     private var isLoadingObservation: NSKeyValueObservation?
     
-    public init(for webView: WKWebView) {
-        self.webView = webView
+    public override init() {
         super.init()
-        self.setupHeight(self.progressHeight) 
         self.backgroundColor = UIColor.lightText.cgColor
         self.lineCap = .round
-        self.initialApperance()
-        self.configObservation()
-        
     }
     // strokeEnd 会执行动画 动画的时候 会调用这个方法来创建展示layer 仅仅只用于动画展示
     public override init(layer: Any) {
@@ -51,7 +52,15 @@ public class WQWebViewProgressLayer: CAShapeLayer {
     }
     
     /// 这里需要在Webview的尺寸确定之后再刷新
-    func attachTop() {
+    public func attach(to webView: WKWebView) {
+        self.webView = webView
+        webView.layer.addSublayer(self)
+        self.backgroundColor = UIColor.lightText.cgColor
+        self.lineCap = .round
+        self.zPosition = 1000
+        self.layoutProgressFrame()
+    }
+    public func layoutProgressFrame() {
         guard let webView = self.webView else {
             return
         }
@@ -59,20 +68,31 @@ public class WQWebViewProgressLayer: CAShapeLayer {
         if #available(iOS 11.0, *) {
             topY = webView.safeAreaInsets.top
         } else {
-            // 如果下级响应者是VC 或者是VCView的子View
-            let viewController = (webView.next as? UIViewController) ?? webView.next?.next as? UIViewController
-            topY = UIApplication.shared.statusBarFrame.height
-            if let navBar = viewController?.navigationController?.navigationBar,
-                !navBar.isHidden && navBar.isTranslucent {
-                topY += navBar.frame.height
-            }
+            topY = webView.scrollView.contentInset.top
         }
         self.frame = CGRect(x: 0, y: topY, width: webView.frame.width, height: self.progressHeight)
     }
+    public override func removeFromSuperlayer() {
+        super.removeFromSuperlayer()
+        self.invalidate()
+        debugPrint(#function)
+    }
+    
+    deinit {
+        self.invalidate()
+        debugPrint("进度条销毁了")
+    }
 }
 private extension WQWebViewProgressLayer {
+    func invalidate() {
+        progressObservation?.invalidate()
+        isLoadingObservation?.invalidate()
+        progressObservation = nil
+        isLoadingObservation = nil
+    }
      func configObservation() {
-        let progress = \WKWebView.estimatedProgress
+    
+        let progress = \WKWebView.estimatedProgress 
         progressObservation = webView?.observe(progress, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
@@ -80,7 +100,7 @@ private extension WQWebViewProgressLayer {
             }
             weakSelf.strokeEnd = CGFloat(newValue)
         })
-        
+
         let isLoading = \WKWebView.isLoading
         isLoadingObservation = webView?.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
@@ -91,7 +111,6 @@ private extension WQWebViewProgressLayer {
             if !newValue {
                 weakSelf.strokeEnd = 0.0
             }
-            
         })
     }
     func initialApperance() {
@@ -99,6 +118,7 @@ private extension WQWebViewProgressLayer {
         self.strokeColor = color.cgColor
         self.strokeEnd = 0.0
         self.isHidden = false
+        self.setupHeight(self.progressHeight)
     }
     func setupHeight(_ height: CGFloat) {
         self.lineWidth = height
