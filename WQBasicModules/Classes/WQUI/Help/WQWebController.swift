@@ -69,7 +69,7 @@ open class WQWebController: UIViewController {
         }
     }
     public func setupProgress() {
-        let progressView =  UIProgressView(frame: .zero)
+        let progressView = UIProgressView(frame: .zero)
         self.progressView = progressView
         self.webView.addSubview(progressView)
         self.configProgressObservation()

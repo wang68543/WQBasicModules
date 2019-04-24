@@ -19,11 +19,19 @@ extension WQPresentationable {
     }
     private func addConstraints(for subView: UIView) {
         subView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            subView.topAnchor.constraint(equalTo: containerView.topAnchor),
-            subView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-            subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-            subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
+        if #available(iOS 9.0, *) {
+            NSLayoutConstraint.activate([
+                subView.topAnchor.constraint(equalTo: containerView.topAnchor),
+                subView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
+        } else {
+            let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
+            let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
+            let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
+            let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
+            NSLayoutConstraint.activate([left, right, top, bottom])
+        }
     }
     /// 容器里面view的转场动画
     public func transitionContainer(from fromView: UIView,

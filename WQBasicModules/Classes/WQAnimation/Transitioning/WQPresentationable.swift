@@ -116,7 +116,11 @@ open class WQPresentationable: UIViewController {
     }
     /// 刷新子子控件的布局
     private func layoutContainerSubViews() {
-        self.loadViewIfNeeded()
+        if #available(iOS 9.0, *) {
+            self.loadViewIfNeeded()
+        } else {
+            // Fallback on earlier versions
+        }
         containerView.setNeedsUpdateConstraints()
         containerView.setNeedsLayout()
         containerView.layoutIfNeeded()

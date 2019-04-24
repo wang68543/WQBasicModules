@@ -9,7 +9,7 @@ import Foundation
 public extension UITextView {
     //textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String)
     /// 限制最长输入字符串
-    func shouldChange(_ limitLength: Int,  charactersIn  range: NSRange, replacementString string: String) -> Bool {
+    func shouldChange(_ limitLength: Int, charactersIn  range: NSRange, replacementString string: String) -> Bool {
         // range 为将要被改变的原有输入框里面字符的范围(也就是光标选中的范围)
         //1.输入跟粘贴 都是 lenth为0 但是 replacementString有值 不为空 一次粘贴多个字符 lenth也为0
         //2.删除 就是string为空 一次删除多个 lenth就为删除的个数

@@ -131,8 +131,7 @@ public class WQPanBehavior: UIDynamicBehavior {
         self.addChildBehavior(attachmentBehavior)
         self.addChildBehavior(itemBehavior)
     }
-    
-    
+     
     /*- (void)animatePaneWithInitialVelocity:(CGPoint)initialVelocity
     {
     if (!self.paneBehavior) {
