@@ -64,7 +64,8 @@ public final class WQButton: UIButton {
         } 
         return CGSize(width: contentSize.width + contentEdgeW, height: contentSize.height + contentEdgeH)
     }
-       
+    
+       //swiftlint:disable function_body_length
     public override func contentRect(forBounds bounds: CGRect) -> CGRect {
         guard bounds.size != .zero else { return .zero }
         let rect = bounds.inset(by: self.contentEdgeInsets)

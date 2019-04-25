@@ -227,14 +227,13 @@ fileprivate extension UIButton {
         status.borderColor = self.layer.borderColor
         status.cornerRadius = self.layer.cornerRadius
         self.status = status
-    }
-    
+    } 
     /// 恢复之前的状态
     func recoveryBeforeStatues() {
+        if !self.isCanCancel { // 不管怎样 需要先恢复能用
+            self.isUserInteractionEnabled = true
+        }
         guard let status = self.status  else {
-            if !self.isCanCancel {
-                self.isUserInteractionEnabled = true
-            }
             return
         }
         let state = status.state

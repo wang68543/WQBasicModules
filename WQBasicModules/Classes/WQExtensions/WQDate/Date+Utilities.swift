@@ -353,6 +353,7 @@ public extension Date {// MARK: - Compare
 
 // MARK: - --equal
 public extension Date {
+    //swiftlint:disable function_body_length
     func isSame(_ otherDate: Date, unit: Calendar.Component = .day, calendar: Calendar = Calendar.current) -> Bool {
         let cmps = calendar.dateComponents(in: calendar.timeZone, from: self)
         let otherCmps = calendar.dateComponents(in: calendar.timeZone, from: otherDate)

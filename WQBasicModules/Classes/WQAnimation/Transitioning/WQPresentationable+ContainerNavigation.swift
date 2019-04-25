@@ -26,10 +26,34 @@ extension WQPresentationable {
                 subView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
                 subView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)])
         } else {
-            let left = NSLayoutConstraint(item: subView, attribute: .left, relatedBy: .equal, toItem: containerView, attribute: .left, multiplier: 1.0, constant: 0)
-            let right = NSLayoutConstraint(item: subView, attribute: .right, relatedBy: .equal, toItem: containerView, attribute: .right, multiplier: 1.0, constant: 0)
-            let top = NSLayoutConstraint(item: subView, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1.0, constant: 0)
-            let bottom = NSLayoutConstraint(item: subView, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1.0, constant: 0)
+            let left = NSLayoutConstraint(item: subView,
+                                          attribute: .left,
+                                          relatedBy: .equal,
+                                          toItem: containerView,
+                                          attribute: .left,
+                                          multiplier: 1.0,
+                                          constant: 0)
+            let right = NSLayoutConstraint(item: subView,
+                                           attribute: .right,
+                                           relatedBy: .equal,
+                                           toItem: containerView,
+                                           attribute: .right,
+                                           multiplier: 1.0,
+                                           constant: 0)
+            let top = NSLayoutConstraint(item: subView,
+                                         attribute: .top,
+                                         relatedBy: .equal,
+                                         toItem: containerView,
+                                         attribute: .top,
+                                         multiplier: 1.0,
+                                         constant: 0)
+            let bottom = NSLayoutConstraint(item: subView,
+                                            attribute: .bottom,
+                                            relatedBy: .equal,
+                                            toItem: containerView,
+                                            attribute: .bottom,
+                                            multiplier: 1.0,
+                                            constant: 0)
             NSLayoutConstraint.activate([left, right, top, bottom])
         }
     }

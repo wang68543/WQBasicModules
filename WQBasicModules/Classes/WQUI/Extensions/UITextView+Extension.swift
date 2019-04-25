@@ -7,6 +7,46 @@
 
 import Foundation
 public extension UITextView {
+    struct AssociatedKeys {
+        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)!
+    }
+    
+    var maxInputLength: Int? {
+        set {
+            if newValue == nil {
+                self.removeObserver()
+            } else {
+                self.addObserver()
+            }
+            objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+        get {
+            return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int
+        }
+    }
+    
+    private func addObserver() {
+        self.removeObserver()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(textDidChange),
+                                               name: UITextView.textDidChangeNotification,
+                                               object: self)
+    }
+    private func removeObserver() {
+        NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
+    }
+    @objc
+    func textDidChange() {
+        guard let length = self.maxInputLength,
+            let string = self.text, string.count > length else {
+                return
+        }
+        let range = self.selectedTextRange
+        self.text = String(string.prefix(length))
+        self.selectedTextRange = range
+    }
+}
+public extension UITextView {
     //textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String)
     /// 限制最长输入字符串
     func shouldChange(_ limitLength: Int, charactersIn  range: NSRange, replacementString string: String) -> Bool {
