@@ -209,7 +209,7 @@ public final class WQButton: UIButton {
     }
     public override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
-        self.addTitleLabelFontObservation()
+        self.addTitleLabelFontObservation() 
     }
     public override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
         super.setAttributedTitle(title, for: state)

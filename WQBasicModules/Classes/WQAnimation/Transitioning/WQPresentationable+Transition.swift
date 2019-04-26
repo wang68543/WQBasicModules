@@ -44,13 +44,18 @@ extension WQPresentationable {
         }
         //这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
         shouldUsingPresentionAnimatedController = animatedVC
-        topVC.beginAppearanceTransition(false, animated: flag)
-        self.beginAppearanceTransition(true, animated: flag)
+        let isAppearanceTransition = self.shouldViewWillApperance
+        if isAppearanceTransition {
+            topVC.beginAppearanceTransition(false, animated: flag)
+            self.beginAppearanceTransition(true, animated: flag)
+        }
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.didMove(toParent: topVC)
-                self.endAppearanceTransition()
-                topVC.endAppearanceTransition()
+                if isAppearanceTransition {
+                    self.endAppearanceTransition()
+                    topVC.endAppearanceTransition()
+                }
             }
             completion?()
         }
@@ -81,7 +86,10 @@ extension WQPresentationable {
         self.shownMode = .windowRootController
         let preRootViewController = UIApplication.shared.delegate?.window??.rootViewController
         self.shouldUsingPresentionAnimatedController = preRootViewController
-        preRootViewController?.beginAppearanceTransition(false, animated: flag) // 当前控制器会直接调用viewAppear
+        let isAppearanceTransition = self.shouldViewWillApperance
+        if isAppearanceTransition {
+            preRootViewController?.beginAppearanceTransition(false, animated: flag) // 当前控制器会直接调用viewAppear
+        }
         self.previousKeyWindow = UIApplication.shared.keyWindow
         if self.containerWindow == nil {
             self.containerWindow = WQPresentationWindow(frame: UIScreen.main.bounds)
@@ -94,7 +102,9 @@ extension WQPresentationable {
             if !flag {
                 self.clearShowWindow()
             } else {
-                preRootViewController?.endAppearanceTransition()
+                if isAppearanceTransition {
+                    preRootViewController?.endAppearanceTransition()
+                }
             }
             completion?()
         }
@@ -115,12 +125,17 @@ extension WQPresentationable {
     /// 直接以当前控制器的子控制器的形式显示(与当前控制器的界面显示同步)
     public func showInController(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .childController
+        let isAppearanceTransition = self.shouldViewWillApperance
         shouldUsingPresentionAnimatedController = controller
-        self.beginAppearanceTransition(true, animated: flag)
+        if isAppearanceTransition {
+            self.beginAppearanceTransition(true, animated: flag)
+        }
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.didMove(toParent: controller)
-                self.endAppearanceTransition()
+                if isAppearanceTransition {
+                  self.endAppearanceTransition()
+                }
             }
             completion?()
         }
@@ -147,17 +162,22 @@ extension WQPresentationable {
     }
     internal func hideFromParent(animated flag: Bool, completion: TransitionCompleted? ) {
         let other = self.shouldUsingPresentionAnimatedController
+        let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.view.removeFromSuperview()
                 self.removeFromParent()
-                other?.endAppearanceTransition()
-                self.endAppearanceTransition()
+                if isAppearanceTransition {
+                    other?.endAppearanceTransition()
+                    self.endAppearanceTransition()
+                }
             }
             completion?()
         }
-        self.beginAppearanceTransition(false, animated: flag)
-        other?.beginAppearanceTransition(true, animated: flag)
+        if isAppearanceTransition {
+            self.beginAppearanceTransition(false, animated: flag)
+            other?.beginAppearanceTransition(true, animated: flag)
+        }
         self.willMove(toParent: nil) 
         if flag {
             if #available(iOS 10.0, *),
@@ -173,14 +193,19 @@ extension WQPresentationable {
     }
     internal func hideFromWindow(animated flag: Bool, completion: TransitionCompleted?) {
         let other = self.shouldUsingPresentionAnimatedController
+        let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.clearShowWindow()
-                other?.endAppearanceTransition()
+                if isAppearanceTransition {
+                    other?.endAppearanceTransition()
+                }
             }
             completion?()
         }
-        other?.beginAppearanceTransition(true, animated: flag)
+        if isAppearanceTransition {
+            other?.beginAppearanceTransition(true, animated: flag)
+        }
         if flag {
             if #available(iOS 10.0, *),
                 let driven = self.hidenDriven as? WQPropertyDriven {
@@ -208,17 +233,22 @@ extension WQPresentationable {
     }
     internal func hideFromController(animated flag: Bool, completion: TransitionCompleted?) {
         let other = self.shouldUsingPresentionAnimatedController
+        let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.view.removeFromSuperview()
                 self.removeFromParent()
-                other?.endAppearanceTransition()
-                self.endAppearanceTransition()
+                if isAppearanceTransition {
+                    other?.endAppearanceTransition()
+                    self.endAppearanceTransition()
+                }
             }
             completion?()
         }
-        self.beginAppearanceTransition(false, animated: flag)
-        other?.beginAppearanceTransition(true, animated: flag)
+        if isAppearanceTransition {
+            self.beginAppearanceTransition(false, animated: flag)
+            other?.beginAppearanceTransition(true, animated: flag)
+        }
         self.willMove(toParent: nil)
         if flag {
             if #available(iOS 10.0, *),

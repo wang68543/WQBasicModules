@@ -100,7 +100,10 @@ open class WQPresentationable: UIViewController {
     
     /// 非present的时候 用于动画管理器里面的转场动画
     internal weak var shouldUsingPresentionAnimatedController: UIViewController?
- 
+    
+    /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
+    public var shouldViewWillApperance: Bool = false
+    
     public init(subView: UIView, animator: WQTransitioningAnimator) {
         self.animator = animator
         super.init(nibName: nil, bundle: nil)
