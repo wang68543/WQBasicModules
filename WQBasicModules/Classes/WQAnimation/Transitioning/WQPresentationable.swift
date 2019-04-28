@@ -115,7 +115,6 @@ open class WQPresentationable: UIViewController {
         //延迟加载View
          self.animator.items.initial(nil, presenting: self)
          self.view.addSubview(containerView)
-//         containerView.layoutIfNeeded()
     }
     /// 刷新子子控件的布局
     private func layoutContainerSubViews() {
@@ -174,8 +173,7 @@ open class WQPresentationable: UIViewController {
     deinit {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
-        self.containerWindow = nil
-        debugPrint("弹出框控制器销毁了")
+        self.containerWindow = nil 
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {

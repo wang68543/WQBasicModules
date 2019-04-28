@@ -160,62 +160,62 @@ extension WQTransitioningAnimator {
 
 // MARK: - -- convenice init
 public extension WQTransitioningAnimator {
-    convenience
-    init(container initial: CGRect,
-         show: CGRect,
-         dismiss: CGRect? = nil,
-         presentedFrame: CGRect = UIScreen.main.bounds) {
-        let item = WQAnimatedItem(containerFrame: initial, show: show, dismiss: dismiss)
-        let items = Array(default: item, viewFrame: presentedFrame)
-        self.init(items: items)
-    }
-    
-    /// 根据TransitionType计算containerView 三个状态的尺寸
-    ///
-    /// - Parameters:
-    ///   - subView: 显示的View
-    ///   - size: contianerView size
-    ///   - initial: 初始的方位
-    ///   - show: 显示的w方位
-    ///   - dismiss: 消失的方位
-    ///   - presentedFrame: 控制器的尺寸
-    convenience
-    init(size: CGSize,
-         initial: WQPresentionStyle.Position,
-         show: WQPresentionStyle.Position,
-         dismiss: WQPresentionStyle.Position? = nil,
-         presentedFrame: CGRect = UIScreen.main.bounds) {
-        let item = WQAnimatedItem(container: size, initial: initial, show: show, dismiss: dismiss, presentedFrame: presentedFrame)
-        let items = Array(default: item, viewFrame: presentedFrame)
-        self.init(items: items)
-    }
-    /// 根据position和size来显示View
-    ///
-    /// - Parameters:
-    ///   - subView: 显示的View
-    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
-    ///   - size: contianerView的size
-    ///   - bounceType: contianerView展开类型
-    ///   - presentedFrame: 控制器的尺寸
-    convenience
-    init(anchor point: CGPoint,
-         position: CGPoint,
-         size: CGSize,
-         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
-         presentedFrame: CGRect = UIScreen.main.bounds) {
-        let item = WQAnimatedItem(container: position, anchor: point, size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
-        self.init(items: Array(default: item, viewFrame: presentedFrame))
-    }
-    
-    convenience
-    init(position subView: UIView,
-         show: WQPresentionStyle.Position,
-         size: CGSize,
-         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
-         presentedFrame: CGRect = UIScreen.main.bounds) {
-        let item = WQAnimatedItem(container: size, postionStyle: show, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
-        self.init(items: Array(default: item, viewFrame: presentedFrame))
-    }
+//    convenience
+//    init(container initial: CGRect,
+//         show: CGRect,
+//         dismiss: CGRect? = nil,
+//         presentedFrame: CGRect = UIScreen.main.bounds) {
+//        let item = WQAnimatedItem(containerFrame: initial, show: show, dismiss: dismiss)
+//        let items = Array(default: item, viewFrame: presentedFrame)
+//        self.init(items: items)
+//    }
+//    
+//    /// 根据TransitionType计算containerView 三个状态的尺寸
+//    ///
+//    /// - Parameters:
+//    ///   - subView: 显示的View
+//    ///   - size: contianerView size
+//    ///   - initial: 初始的方位
+//    ///   - show: 显示的w方位
+//    ///   - dismiss: 消失的方位
+//    ///   - presentedFrame: 控制器的尺寸
+//    convenience
+//    init(size: CGSize,
+//         initial: WQPresentionStyle.Position,
+//         show: WQPresentionStyle.Position,
+//         dismiss: WQPresentionStyle.Position? = nil,
+//         presentedFrame: CGRect = UIScreen.main.bounds) {
+//        let item = WQAnimatedItem(container: size, initial: initial, show: show, dismiss: dismiss, presentedFrame: presentedFrame)
+//        let items = Array(default: item, viewFrame: presentedFrame)
+//        self.init(items: items)
+//    }
+//    /// 根据position和size来显示View
+//    ///
+//    /// - Parameters:
+//    ///   - subView: 显示的View
+//    ///   - point: contianerView的position(计算的时候回包含anchorPoint)
+//    ///   - size: contianerView的size
+//    ///   - bounceType: contianerView展开类型
+//    ///   - presentedFrame: 控制器的尺寸
+//    convenience
+//    init(anchor point: CGPoint,
+//         position: CGPoint,
+//         size: CGSize,
+//         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
+//         presentedFrame: CGRect = UIScreen.main.bounds) {
+//        let item = WQAnimatedItem(container: position, anchor: point, size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+//        self.init(items: Array(default: item, viewFrame: presentedFrame))
+//    }
+//    
+//    convenience
+//    init(position subView: UIView,
+//         show: WQPresentionStyle.Position,
+//         size: CGSize,
+//         bounceStyle: WQPresentionStyle.Bounce = .horizontalMiddle,
+//         presentedFrame: CGRect = UIScreen.main.bounds) {
+//        let item = WQAnimatedItem(container: size, postionStyle: show, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+//        self.init(items: Array(default: item, viewFrame: presentedFrame))
+//    }
 }
 // 若有代理但是没有实现动画就用代理里面的默认动画
 extension WQTransitioningAnimatorable {

@@ -30,11 +30,14 @@ public extension WQModules where Base: UIView {
             self.base.layoutIfNeeded()
         }
         assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
-        let animator = WQTransitioningAnimator(size: self.base.frame.size,
-                                               initial: from,
-                                               show: show,
-                                               dismiss: dismiss,
-                                               presentedFrame: UIScreen.main.bounds)
+        // notaTODO: 这里亟待测试确认
+         let item = WQAnimatedItem(container: self.base.frame.size, initial: from, show: show, dismiss: dismiss, presentedFrame: UIScreen.main.bounds)
+         let animator = WQTransitioningAnimator(items: [item])
+//        let animator = WQTransitioningAnimator(size: self.base.frame.size,
+//                                               initial: from,
+//                                               show: show,
+//                                               dismiss: dismiss,
+//                                               presentedFrame: UIScreen.main.bounds)
         let presention = WQPresentationable(subView: self.base, animator: animator)
         return presention
     }
