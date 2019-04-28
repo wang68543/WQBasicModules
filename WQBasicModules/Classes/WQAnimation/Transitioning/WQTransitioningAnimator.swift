@@ -61,6 +61,13 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
         }
     }
 }
+
+// MARK: - --convenience init
+public extension WQTransitioningAnimator {
+    convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
+        self.init(items: items, preferredStyle: preferredStyle)
+    }
+}
 extension WQTransitioningAnimator {
     public enum Style {
         case `default`

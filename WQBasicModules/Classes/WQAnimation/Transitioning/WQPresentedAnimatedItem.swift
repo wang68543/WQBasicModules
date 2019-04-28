@@ -26,6 +26,9 @@ public protocol WQAnimatedConfigAble {
     @available(iOS 10.0, *)
     func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator
 }
+
+
+// MARK: - -- 手势驱动动画的目标状态
 public extension WQAnimatedConfigAble {
     @available(iOS 10.0, *)
     func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator {
@@ -35,6 +38,7 @@ public extension WQAnimatedConfigAble {
         return animator
     }
 }
+
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
 
 /// 动画属性配置 (主要配置参与动画的两个ccontroller的属性变化)
@@ -87,6 +91,8 @@ public extension WQAnimatedItem where Element == UIColor? {
     }
 }
 public extension WQAnimatedItem where Element == CGRect {
+    
+    /// VC view的背景动画 
     class func defaultViewShowFrame(_ show: CGRect = UIScreen.main.bounds,
                                     initial: CGRect = UIScreen.main.bounds) -> WQAnimatedItem {
         let keyPath = \WQPresentationable.view.frame
