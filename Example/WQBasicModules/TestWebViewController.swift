@@ -13,6 +13,7 @@ class TestWebViewController: WQWebController {
     override func viewDidLoad() {
         super.viewDidLoad()
 //        self.webView = WKWebView()
+        self.webView.attachProgressView()
         self.webView.load(URLRequest(url: URL(string: "https://www.baidu.com/")!))
     }
     

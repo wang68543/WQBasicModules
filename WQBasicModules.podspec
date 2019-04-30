@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   	s.ios.deployment_target = '8.0'
- 	s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
+    s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
  
     s.subspec 'WQExtensionModule' do |ss|
         ss.source_files = 'WQBasicModules/Classes/WQExtensionModule/*.swift'

@@ -10,22 +10,25 @@ import WebKit
 
 private var WKWebViewProgressKey: Void?
 
-//public extension WKWebView {
-//    /// WebView的加载进度条
-//    var progressLayer: WQWebViewProgressLayer? {
+public extension WKWebView {
+    /// WebView的加载进度条
+    @discardableResult
+    func attachProgressView() -> WQWebProgressView {
+        let progressView = WQWebProgressView(for: self)
+        return progressView
+    }
+//    var progressView: WQWebProgressView {
 //        set {
-//            objc_setAssociatedObject(self, &WKWebViewProgressKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) //无需强引用 创建的时候就会加到superLayer上面
+//            objc_setAssociatedObject(self, &WKWebViewProgressKey, newValue, .OBJC_ASSOCIATION_ASSIGN) //无需强引用 创建的时候就会加到superLayer上面
 //        }
 //        get {
-//            if let progressLayer = objc_getAssociatedObject(self, &WKWebViewProgressKey) as? WQWebViewProgressLayer {
-//                return progressLayer
+//            if let progressView = objc_getAssociatedObject(self, &WKWebViewProgressKey) as? WQWebProgressView {
+//                return progressView
 //            } else {
-//               let progress = WQWebViewProgressLayer(for: self)
-//               progress.zPosition = 1000.0
-//               self.layer.addSublayer(progress)
-//               self.progressLayer = progress
-//               return progress
+//               let progressView = WQWebProgressView(for: self)
+//               self.progressView = progressView
+//               return progressView
 //            }
 //        }
 //    }
-//}
+}

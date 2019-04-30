@@ -9,19 +9,12 @@
 //  4.state改变也会重新布局
 
 import UIKit
-public enum WQTitleAlignment {
-    case left, right, bottom, top
-}
-extension WQTitleAlignment {
-    var isHorizontal: Bool {
-        return self == .left || self == .right
-    }
-    var isVertical: Bool {
-        return self == .top || self == .bottom
-    }
-}
+
+
 public final class WQButton: UIButton {
-    
+    public enum TitleAlignment {
+        case left, right, bottom, top
+    }
     //以下计算都是基于当前button有尺寸之后的调整
     public var imgSize: CGSize = .zero {
         didSet {
@@ -36,7 +29,7 @@ public final class WQButton: UIButton {
         }
     }
     
-    public var titleAlignment: WQTitleAlignment = .left {
+    public var titleAlignment: TitleAlignment = .left {
         didSet {
              setNeedsLayout()
         }
@@ -205,15 +198,32 @@ public final class WQButton: UIButton {
         super.awakeFromNib()
         if self.hasTitle {
            self.addTitleLabelFontObservation()
-        } 
+        }
     }
     public override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
-        self.addTitleLabelFontObservation() 
+        self.addTitleLabelFontObservation()
     }
     public override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
         super.setAttributedTitle(title, for: state)
         self.addTitleLabelFontObservation()
+    }
+    deinit {
+        // fix: iOS 10
+        if let observer = self.titleFontObservation {
+          observer.invalidate()
+          self.removeObserver(observer, forKeyPath: "titleLabel.font")
+          self.titleFontObservation = nil
+        }
+    }
+}
+
+private extension WQButton.TitleAlignment {
+    var isHorizontal: Bool {
+        return self == .left || self == .right
+    }
+    var isVertical: Bool {
+        return self == .top || self == .bottom
     }
 }
 private extension WQButton {
@@ -292,14 +302,17 @@ private extension WQButton {
         if let font = self.titleLabel?.font {
             self.titleFont = font
         }
-        self.titleFontObservation = self.observe(\WQButton.titleLabel?.font, options: [.old, .new], changeHandler: { sender, change in
+        // nota: 这里如果是自身监听自身的话不能把自身传入到回调中 会引起crash 只能通过弱引用
+        self.titleFontObservation = self.observe(\WQButton.titleLabel?.font,
+                                                 options: [.old, .new], changeHandler: { [weak self ] _, change in
             guard change.newValue != change.oldValue else { return }
-            guard let newValue = change.newValue,
+            guard let weakSelf = self,
+                let newValue = change.newValue,
                 let newFont = newValue else {
                 return
             }
-            sender.titleFont = newFont
-            sender.setNeedsLayout()
+            weakSelf.titleFont = newFont
+            weakSelf.setNeedsLayout()
         })
     }
 }
@@ -344,7 +357,7 @@ public extension WQModules where Base: WQButton {
 }
 
 public extension WQButton {
-    convenience init(_ title: String?, image: UIImage?, alignment: WQTitleAlignment = .left, state: UIControl.State = .normal) {
+    convenience init(_ title: String?, image: UIImage?, alignment: TitleAlignment = .left, state: UIControl.State = .normal) {
         self.init()
         self.setTitle(title, for: state)
         self.setImage(image, for: state)

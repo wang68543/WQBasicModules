@@ -19,7 +19,7 @@ extension UIView {
 }
 
 public extension WQModules where Base: UIView {
-    internal var presentation: WQPresentationable? {
+    public var presentation: WQPresentationable? {
         return self.base.presentation
     }
 //    /// 内部没有强引用PresentationController 需要外部持有
