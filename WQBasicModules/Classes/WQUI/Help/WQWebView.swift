@@ -25,9 +25,16 @@ open class WQWebView: WKWebView {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
+        debugPrint(#function)
         var progressY: CGFloat = 0
         if !isAttachProgressTop {
-            progressY = self.frame.height - self.progressHeight 
+            progressY = self.frame.height - self.progressHeight
+        } else {
+            if #available(iOS 11.0, *) {
+               progressY = self.safeAreaInsets.top
+            } else {
+               progressY = self.scrollView.contentInset.top
+            }
         }
         self.progressView.frame = CGRect(x: 0, y: progressY, width: self.frame.width, height: self.progressHeight)
     }
@@ -36,9 +43,12 @@ open class WQWebView: WKWebView {
         self.progressView.progressTintColor = tintColor
     }
     deinit {
+        
         self.invalidate()
     }
+   
 }
+
 extension WQWebView {
     func invalidate() {
         if let observer = progressObservation {
@@ -52,8 +62,8 @@ extension WQWebView {
             isLoadingObservation = nil
         }
     }
+   
     func configObservation() {
-        
         let progress = \WQWebView.estimatedProgress
         progressObservation = self.observe(progress, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
@@ -69,7 +79,7 @@ extension WQWebView {
                 let newValue = change.newValue else {
                     return
             }
-            weakSelf.isHidden = !newValue
+            weakSelf.progressView.isHidden = !newValue
             if !newValue {
                  weakSelf.progressView.progress = 0.0
             }

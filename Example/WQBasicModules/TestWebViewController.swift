@@ -15,10 +15,10 @@ class TestWebViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView)
-        webView.frame = self.view.bounds
-//        self.webView = WKWebView()
-//        self.webView.attachProgressView()
         self.webView.load(URLRequest(url: URL(string: "https://www.baidu.com/")!))
     }
-    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        webView.frame = self.view.bounds
+    }
 }
