@@ -7,8 +7,8 @@
 
 import Foundation
 public extension UITextView {
-    struct AssociatedKeys {
-        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)!
+    private struct AssociatedKeys {
+        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textView.maxInputLength".hashValue)!
     }
     
     var maxInputLength: Int? {

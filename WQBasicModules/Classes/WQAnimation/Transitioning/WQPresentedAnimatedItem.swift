@@ -26,8 +26,7 @@ public protocol WQAnimatedConfigAble {
     @available(iOS 10.0, *)
     func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator
 }
-
-
+ 
 // MARK: - -- 手势驱动动画的目标状态
 public extension WQAnimatedConfigAble {
     @available(iOS 10.0, *)

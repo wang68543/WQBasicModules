@@ -252,6 +252,7 @@ public extension UIColor {
 }
 // MARK: - covert to image
 public extension UIColor {
+    @available(*, deprecated, message: "use UIImage.create")
     func image(_ size: CGSize = CGSize(width: 100, height: 200)) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
         let image = UIGraphicsGetImageFromCurrentImageContext()

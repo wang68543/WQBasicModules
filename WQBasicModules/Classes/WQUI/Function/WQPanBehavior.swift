@@ -146,7 +146,7 @@ public class WQPanBehavior: UIDynamicBehavior {
     - (CGPoint)targetPoint
     {
     CGSize size = self.bounds.size;
-    return self.paneState == PaneStateClosed > 0 ? CGPointMake(size.width/2, size.height * 1.25) : CGPointMake(size.width/2, size.height/2 + 50);
+    return self.paneState == PaneStateClosed > 0 ? CGPointMake(size.width/2, size.height * 1.25) : CGPointMake(size.width/2, size.height/2 + 50)
     }
     
     

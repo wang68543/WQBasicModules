@@ -1,4 +1,5 @@
-//  UITextFiled+Extension.swift
+//
+//  UITextField+Extension.swift
 //  Pods-WQBasicModules_Example
 //
 //  Created by HuaShengiOS on 2019/4/17.
@@ -7,7 +8,7 @@
 import UIKit
 
 public extension UITextField {
-    struct AssociatedKeys {
+    private struct AssociatedKeys {
         static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)! 
     }
     
@@ -35,6 +36,7 @@ public extension UITextField {
     private func removeObserver() {
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: self)
     }
+    
     @objc
     func textDidChange() {
         guard let length = self.maxInputLength,

@@ -42,8 +42,7 @@ open class WQWebView: WKWebView {
         super.tintColorDidChange()
         self.progressView.progressTintColor = tintColor
     }
-    deinit {
-        
+    deinit { 
         self.invalidate()
     }
    

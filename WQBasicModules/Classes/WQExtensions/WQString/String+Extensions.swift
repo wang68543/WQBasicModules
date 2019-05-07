@@ -10,7 +10,7 @@ public extension String {
     
     /// 序列化URL的查询参数 (可处理包含=)
     ///
-    /// - Returns: 键值对
+    /// - Returns: 键值对 (由于URLString 都是字符串所有这里的键值对类型就是[String: String])
     func serializedURLQueryParameters() -> [String: String] {
         var parameters: [String: String] = [:]
         let string = self.components(separatedBy: "?").last
@@ -36,7 +36,9 @@ public extension String {
     /// 创建二维码
     ///
     /// - Parameter size: 二维码图片尺寸
-    /// - Returns: UIImage 
+    /// - Returns: UIImage
+    
+    @available(*, deprecated, message: "use UIImage.create")
     func QRCode(_ size: CGSize) -> UIImage? {
         let filter = CIFilter(name: "CIQRCodeGenerator")
         filter?.setDefaults()

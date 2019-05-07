@@ -25,6 +25,7 @@ extension WQPresentationable {
     ///   - controller: 当前控制器
     ///   - flag: 是否动画
     ///   - completion: 显示完成
+    //  swiftlint:disable function_body_length
     public func shownInParent(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .superChildController
         var topVC: UIViewController

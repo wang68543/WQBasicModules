@@ -65,10 +65,7 @@ public enum WQAlignItems: Int {
     case flexEnd
     
     /// 交叉轴的中点对齐。
-    case center
-    
-    //    /// 项目的第一行文字的基线对齐。
-    //    case baseline
+    case center 
     
     /// （默认值）：如果项目未设置高度或设为auto，将占满整个容器的高度。
     case stretch
@@ -130,27 +127,4 @@ public enum WQAlignContent: Int {
 
     /// 每根轴线两侧的间隔都相等。所以，轴线之间的间隔比轴线与边框的间隔大一倍。
     case spaceAround
-
-    /// （默认值）：轴线占满整个交叉轴。
-    //    case stretch
 }
-// MARK: - ==========整个View的属性END===============
-//// MARK: - ==========Cell属性==========
-//@objc public enum WQAlignSelf: Int {
-//    case auto //继承自父View的属性
-//    /// 交叉轴的起点对齐。
-//    case flexStart
-//
-//    /// 交叉轴的终点对齐。
-//    case flexEnd
-//
-//    /// 交叉轴的中点对齐。
-//    case center
-//
-//    /// 项目的第一行文字的基线对齐。
-//    case baseline
-//
-//    /// （默认值）：如果项目未设置高度或设为auto，将占满整个容器的高度。
-//    case stretch
-//}
-//// MARK: - ==========Cell属性END==========

@@ -10,7 +10,6 @@
 
 import UIKit
 
-
 public final class WQButton: UIButton {
     public enum TitleAlignment {
         case left, right, bottom, top
