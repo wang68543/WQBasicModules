@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 public extension UITextField {
     private struct AssociatedKeys {
         static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)! 

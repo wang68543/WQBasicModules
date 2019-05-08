@@ -16,7 +16,7 @@ public protocol WQTransitioningAnimatorable: NSObjectProtocol {
 }
 
 public typealias WQAnimateCompletion = ((Bool) -> Void)
-open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+open class WQTransitioningAnimator: NSObject {
     
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
@@ -30,6 +30,14 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
         self.preferredStyle = preferredStyle
         super.init()
     }
+    
+    public convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
+        self.init(items: items, preferredStyle: preferredStyle)
+    }
+}
+ 
+// MARK: - --UIViewControllerAnimatedTransitioning
+extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return duration
     }
@@ -55,17 +63,10 @@ open class WQTransitioningAnimator: NSObject, UIViewControllerAnimatedTransition
             transitionContext.completeTransition(success)
         }
         if isPresented {
-           animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
+            animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
         } else {
-           animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
+            animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
         }
-    }
-}
-
-// MARK: - --convenience init
-public extension WQTransitioningAnimator {
-    convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
-        self.init(items: items, preferredStyle: preferredStyle)
     }
 }
 extension WQTransitioningAnimator {
@@ -113,7 +114,6 @@ extension WQTransitioningAnimator {
                        options: options,
                        animations: animateBlock,
                        completion: completion)
-        
         guard let presentingVC = presenting as? WQPresentationable else { return }
         self.handlePreferredStyle(presenting: presentingVC, isShow: isShow)
     }

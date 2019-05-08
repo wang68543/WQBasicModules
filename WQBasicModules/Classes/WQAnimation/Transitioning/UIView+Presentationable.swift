@@ -5,19 +5,6 @@
 //  Created by WangQiang on 2019/1/7.
 //
 
-private var presenterKey: Void?
-
-extension UIView {
-    var presentation: WQPresentationable? {
-        set {
-            objc_setAssociatedObject(self, &presenterKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-        get {
-            return objc_getAssociatedObject(self, &presenterKey) as? WQPresentationable
-        }
-    }
-}
-
 public extension WQModules where Base: UIView {
     var presentation: WQPresentationable? {
         return self.base.presentation
@@ -59,5 +46,18 @@ public extension WQModules where Base: UIView {
    
     func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
         self.presentation?.dismiss(animated: true, completion: completion)
+    }
+}
+
+private var presenterKey: Void?
+
+internal extension UIView {
+    var presentation: WQPresentationable? {
+        set {
+            objc_setAssociatedObject(self, &presenterKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+        get {
+            return objc_getAssociatedObject(self, &presenterKey) as? WQPresentationable
+        }
     }
 }

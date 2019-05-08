@@ -22,12 +22,12 @@ public extension UIImage {
         let scale = min(size.width / extent.width, size.height / extent.height)
         // 创建 bitmap
         guard let bitmapRef = CGContext(data: nil,
-                                  width: Int(extent.width * scale),
-                                  height: Int(extent.height * scale),
-                                  bitsPerComponent: 8,
-                                  bytesPerRow: 0,
-                                  space: CGColorSpaceCreateDeviceGray(),
-                                  bitmapInfo: CGImageAlphaInfo.none.rawValue) else {
+                                        width: Int(extent.width * scale),
+                                        height: Int(extent.height * scale),
+                                        bitsPerComponent: 8,
+                                        bytesPerRow: 0,
+                                        space: CGColorSpaceCreateDeviceGray(),
+                                        bitmapInfo: CGImageAlphaInfo.none.rawValue) else {
                                     return nil
         }
         let context = CIContext(options: nil)
