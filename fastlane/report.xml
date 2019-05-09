@@ -5,39 +5,52 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.010347">
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.009234">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="1: cocoapods" time="7.166002">
+      <testcase classname="fastlane.lanes" name="1: cocoapods" time="3.956261">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="2: git_tag_exists" time="0.042931">
+      <testcase classname="fastlane.lanes" name="2: git_tag_exists" time="0.014174">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="3: remove_tag" time="5.183524">
+      <testcase classname="fastlane.lanes" name="3: git_add" time="0.019146">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="4: git_add" time="0.147856">
+      <testcase classname="fastlane.lanes" name="4: git_commit" time="0.039923">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="5: git_commit" time="0.063144">
+      <testcase classname="fastlane.lanes" name="5: push_to_git_remote" time="8.744849">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="6: push_to_git_remote" time="1.968929">
+      <testcase classname="fastlane.lanes" name="6: add_git_tag" time="0.01916">
         
-          <failure message="/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:235:in `block in execute_action'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:227:in `chdir'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:227:in `execute_action'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/fast_file.rb:154:in `method_missing'&#10;Fastfile:51:in `block (2 levels) in parsing_binding'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;/Users/huasheng/.fastlane/bin/bundle/lib/ruby/gems/2.2.0/gems/fastlane-2.122.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/Users/huasheng/.fastlane/bin/bundle/bin/fastlane:22:in `load'&#10;/Users/huasheng/.fastlane/bin/bundle/bin/fastlane:22:in `&lt;main&gt;'&#10;&#10;Exit status of command 'git push origin master:master --tags' was 1 instead of 0.&#10;To https://github.com/wang68543/WQBasicModules&#10; ! [rejected]        master -&gt; master (non-fast-forward)&#10;error: failed to push some refs to 'https://github.com/wang68543/WQBasicModules'&#10;hint: Updates were rejected because the tip of your current branch is behind&#10;hint: its remote counterpart. Integrate the remote changes (e.g.&#10;hint: 'git pull ...') before pushing again.&#10;hint: See the 'Note about fast-forwards' in 'git push --help' for details.&#10;" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="7: push_git_tags" time="6.541241">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="8: pod_lib_lint" time="176.328434">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="9: pod_push" time="351.976886">
         
       </testcase>
     
