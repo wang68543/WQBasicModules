@@ -28,6 +28,8 @@ class ExampleViewController: UITableViewController {
         if "13898768609".isLegalPhone() {
             debugPrint("正确的手机号码")
         }
+        let format: DateFormatEnum = .k1MM1ddCHHBmm
+        debugPrint(format.formatString)
 //        let str = #"SELF MATCHES "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1]\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx]))$""#
 //        let str = #"^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$"#
 ////        let predicate = NSPredicate(format: str)

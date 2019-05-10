@@ -101,10 +101,10 @@ public enum DateFormatEnum: String {
  
     case E
 
-    internal var formatString: String {
+    public var formatString: String {
             var format = rawValue
             do {
-                let regularExpression = try NSRegularExpression(pattern: "[ABCk]{1}", options: [])
+                let regularExpression = try NSRegularExpression(pattern: "[ABCk1]{1}", options: [])
                 let matchRange = NSRange(location: 0, length: rawValue.count)
                 let results = regularExpression.matches(in: rawValue, options: [], range: matchRange)
                 format = results.reversed().reduce(rawValue, { fmtStr, result -> String in
@@ -123,6 +123,8 @@ public enum DateFormatEnum: String {
                         replaceStr = " "
                     case "k":
                         replaceStr = "yyyy"
+                    case "1":
+                        replaceStr = "/"
                     default:
                         replaceStr = String(match)
                     }
