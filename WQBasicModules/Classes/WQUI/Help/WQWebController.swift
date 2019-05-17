@@ -12,7 +12,7 @@ open class WQWebController: UIViewController {
     public var webView = WKWebView() {
         didSet {
             oldValue.removeFromSuperview()
-//            self.configObservation()
+            self.configObservation()
             self.view.addSubview(self.webView)
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
@@ -43,7 +43,7 @@ open class WQWebController: UIViewController {
         return img.withRenderingMode(.alwaysTemplate)
     }()
     /// KVO
-//    private var titleObservation: NSKeyValueObservation?
+    private var titleObservation: NSKeyValueObservation?
 //    private var canGoBackObservation: NSKeyValueObservation?
 //    /// KVO
 //    private var progressObservation: NSKeyValueObservation?
@@ -83,20 +83,20 @@ open class WQWebController: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView) 
-//        configObservation()
+        configObservation()
         self.navigationItem.hidesBackButton = true
         configLeftItems(false)
     }
     
-//    private func configObservation() {
-//        let title = \WKWebView.title
-//        titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self] _, change in
-//            guard let weakSelf = self,
-//                let newValue = change.newValue else {
-//                    return
-//            }
-//            weakSelf.navigationItem.title = newValue
-//        })
+    private func configObservation() {
+        let title = \WKWebView.title
+        titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self] _, change in
+            guard let weakSelf = self,
+                let newValue = change.newValue else {
+                    return
+            }
+            weakSelf.navigationItem.title = newValue
+        })
 //        let canGoBack = \WKWebView.canGoBack
 //        canGoBackObservation = webView.observe(canGoBack, options: [.new, .old], changeHandler: { [weak self] _, change in
 //            guard let weakSelf = self,
@@ -104,7 +104,7 @@ open class WQWebController: UIViewController {
 //                newValue != change.oldValue else { return }
 //            weakSelf.configLeftItems(newValue)
 //        })
-//    }
+    }
     
     open func configLeftItems(_ canGoBack: Bool) {
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
@@ -162,6 +162,10 @@ open class WQWebController: UIViewController {
 }
 extension WQWebController {
     func invalidate() {
+        if let observer = titleObservation {
+            observer.invalidate() 
+            titleObservation = nil
+        }
 //        progressObservation?.invalidate()
 //        isLoadingObservation?.invalidate()
 //        progressObservation = nil

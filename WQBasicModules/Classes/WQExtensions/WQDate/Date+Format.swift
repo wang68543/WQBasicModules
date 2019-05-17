@@ -128,8 +128,7 @@ public enum DateFormatEnum: String {
                     default:
                         replaceStr = String(match)
                     }
-                    let resultStr = fmtStr.replacingOccurrences(of: match, with: replaceStr, options: [], range: range)
-                    
+                    let resultStr = fmtStr.replacingOccurrences(of: match, with: replaceStr, options: [], range: range) 
                     return resultStr
                 })
             } catch {

@@ -30,7 +30,7 @@ open class WQTransitioningAnimator: NSObject {
         self.preferredStyle = preferredStyle
         super.init()
     }
-    
+    /// convenience init
     public convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
         self.init(items: items, preferredStyle: preferredStyle)
     }

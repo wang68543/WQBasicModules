@@ -17,7 +17,7 @@ public enum WQShownMode {
     case windowRootController
 }
 // 预处理
-public class WQPresentionStyle {
+public enum WQPresentionStyle {
     public enum Position {
         case none
         case left
