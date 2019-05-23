@@ -53,10 +53,10 @@ extension WQPresentationable {
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.didMove(toParent: topVC)
-                if isAppearanceTransition {
-                    self.endAppearanceTransition()
-                    topVC.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                self.endAppearanceTransition()
+                topVC.endAppearanceTransition()
             }
             completion?()
         }
@@ -102,10 +102,9 @@ extension WQPresentationable {
         func animateFinshed(_ flag: Bool) {
             if !flag {
                 self.clearShowWindow()
-            } else {
-                if isAppearanceTransition {
-                    preRootViewController?.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                preRootViewController?.endAppearanceTransition()
             }
             completion?()
         }
@@ -134,9 +133,9 @@ extension WQPresentationable {
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.didMove(toParent: controller)
-                if isAppearanceTransition {
-                  self.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                self.endAppearanceTransition()
             }
             completion?()
         }
@@ -168,10 +167,10 @@ extension WQPresentationable {
             if flag {
                 self.view.removeFromSuperview()
                 self.removeFromParent()
-                if isAppearanceTransition {
-                    other?.endAppearanceTransition()
-                    self.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                other?.endAppearanceTransition()
+                self.endAppearanceTransition()
             }
             completion?()
         }
@@ -198,9 +197,9 @@ extension WQPresentationable {
         func animateFinshed(_ flag: Bool) {
             if flag {
                 self.clearShowWindow()
-                if isAppearanceTransition {
-                    other?.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                other?.endAppearanceTransition()
             }
             completion?()
         }
@@ -239,10 +238,10 @@ extension WQPresentationable {
             if flag {
                 self.view.removeFromSuperview()
                 self.removeFromParent()
-                if isAppearanceTransition {
-                    other?.endAppearanceTransition()
-                    self.endAppearanceTransition()
-                }
+            }
+            if isAppearanceTransition {
+                other?.endAppearanceTransition()
+                self.endAppearanceTransition()
             }
             completion?()
         }

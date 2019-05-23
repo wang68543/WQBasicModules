@@ -17,4 +17,15 @@ public struct Screen {
     public static let lineWidth = 1 / UIScreen.main.scale
     /// 绘制1像素线条时候的偏移
     public static let lineAdjustOffset = (1 / UIScreen.main.scale) / 2
+    
+    /// 屏幕的 周边限制显示区域
+    public static let safeAreaInsets: UIEdgeInsets = {
+        var instets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        if #available(iOS 11.0, *),
+         let window = UIApplication.shared.delegate?.window,
+            let area = window?.safeAreaInsets {
+            instets = area
+        }
+        return instets
+    }()
 }
