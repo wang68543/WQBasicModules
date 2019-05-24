@@ -20,6 +20,7 @@ public extension WQModules where Base: UIView {
     func show(from: WQPresentionStyle.Position,
               show: WQPresentionStyle.Position,
               dismiss: WQPresentionStyle.Position? = nil,
+              isDimming: Bool = true,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
         let viewSize = self.base.frame.size
@@ -33,7 +34,13 @@ public extension WQModules where Base: UIView {
                                   show: show,
                                   dismiss: dismiss,
                                   presentedFrame: UIScreen.main.bounds)
-        self.show(items: [item], inController: inController, completion: completion)
+        var items: [WQAnimatedConfigAble] = []
+        items.append(item)
+        if isDimming {
+           let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
+            items.append(dimmingBakcground)
+        }
+        self.show(items: items, inController: inController, completion: completion)
     }
     
     func show(items: WQAnimatedConfigItems,
