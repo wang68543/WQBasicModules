@@ -17,9 +17,9 @@ public extension WQModules where Base: UIView {
         }
     }
     /// 采用默认的动画风格展示
-    func show(from: WQPresentionStyle.Position,
-              show: WQPresentionStyle.Position,
-              dismiss: WQPresentionStyle.Position? = nil,
+    func show(from: WQPresentationOption.Position,
+              show: WQPresentationOption.Position,
+              dismiss: WQPresentationOption.Position? = nil,
               isDimming: Bool = true,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {

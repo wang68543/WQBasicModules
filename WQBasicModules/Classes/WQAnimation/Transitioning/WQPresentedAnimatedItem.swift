@@ -98,9 +98,9 @@ public extension WQAnimatedItem where Element == CGRect {
         return WQAnimatedItem(keyPath, initial: initial, show: show)
     }
     convenience init(container size: CGSize,
-                     initial: WQPresentionStyle.Position,
-                     show: WQPresentionStyle.Position,
-                     dismiss: WQPresentionStyle.Position? = nil,
+                     initial: WQPresentationOption.Position,
+                     show: WQPresentationOption.Position,
+                     dismiss: WQPresentationOption.Position? = nil,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
         let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
@@ -110,15 +110,15 @@ public extension WQAnimatedItem where Element == CGRect {
     convenience init(container position: CGPoint,
                      anchor point: CGPoint,
                      size: CGSize,
-                     bounceStyle: WQPresentionStyle.Bounce,
+                     bounceStyle: WQPresentationOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let showFrame = CGRect(origin: position, size: size)
         let initialFrame = bounceStyle.estimateInitialFrame(position, anchorPoint: point, size: size, presentedFrame: presentedFrame)
         self.init(containerFrame: initialFrame, show: showFrame)
     }
     convenience init(container size: CGSize,
-                     postionStyle: WQPresentionStyle.Position,
-                     bounceStyle: WQPresentionStyle.Bounce,
+                     postionStyle: WQPresentationOption.Position,
+                     bounceStyle: WQPresentationOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let postion = postionStyle.positionPoint(size, anchorPoint: CGPoint(x: 0.5, y: 0.5), viewFrame: presentedFrame)
         self.init(container: postion, anchor: CGPoint(x: 0.5, y: 0.5), size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)

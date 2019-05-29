@@ -17,7 +17,7 @@ public enum WQShownMode {
     case windowRootController
 }
 // 预处理
-public enum WQPresentionStyle {
+public enum WQPresentationOption {
     public enum Position {
         case none
         case left
@@ -38,8 +38,12 @@ public enum WQPresentionStyle {
         case bounceRight // 右
         case bounceDown // 向下弹 
     }
+    public enum Style {
+        case alert
+        case actionSheet
+    }
 }
-public extension WQPresentionStyle.Position {
+public extension WQPresentationOption.Position {
     /// 根据TransitionType计算尺寸
     ///
     /// - Parameters:
@@ -107,7 +111,7 @@ public extension WQPresentionStyle.Position {
         return position
     }
 }
-public extension WQPresentionStyle.Bounce {
+public extension WQPresentationOption.Bounce {
     func estimateInitialFrame(_ position: CGPoint,
                               anchorPoint: CGPoint,
                               size: CGSize,
@@ -185,4 +189,8 @@ public extension WQPresentionStyle.Bounce {
         }
         return postion
     }
+}
+
+public extension WQPresentationOption.Style {
+    
 }

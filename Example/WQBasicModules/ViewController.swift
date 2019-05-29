@@ -123,11 +123,7 @@ class ViewController: UIViewController {
         
         debugPrint("=====",date.range(.month))
         
-        let button = SecondViewController.DownButton()
-        button.setTitle("测试倒计时", for: .normal)
-        button.setTitleColor(UIColor.red, for: .normal)
-        button.backgroundColor = UIColor.yellow
-        button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)  
+        
 //        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
         let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
@@ -158,8 +154,8 @@ class ViewController: UIViewController {
 //            //是否恢复原状态
 //            return true
 //        }
-        button.frame = CGRect(x: 100, y: 100, width: 100, height: 50);
-        self.view.addSubview(button)
+//        button.frame = CGRect(x: 100, y: 100, width: 100, height: 50);
+//        self.view.addSubview(button)
         let imageView = UIImageView()
         imageView.fadeImage(UIImage(named: "003"))
         self.view.addSubview(imageView)

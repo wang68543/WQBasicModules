@@ -43,6 +43,14 @@ class ExampleViewController: UITableViewController {
         if "https://www.jianshu.com".evaluate(predicate: "SELF MATCHES \"\(WQRegex.link.rawValue)\"") {
             debugPrint("正确的网站")
         }
+        
+        let button = SecondViewController.DownButton()
+        button.frame = CGRect(x: 100, y: 100, width: 100, height: 40)
+        button.setTitle("测试倒计时", for: .normal)
+        button.setTitleColor(UIColor.red, for: .normal)
+        button.backgroundColor = UIColor.yellow
+        button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
+        self.view.addSubview(button)
     }
 
     // MARK: - Table view data source
