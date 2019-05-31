@@ -28,14 +28,15 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  	s.ios.deployment_target = '8.0'
-    s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
- 
+  s.ios.deployment_target = '8.0'
+  s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
+  s.swift_versions = ['3.0', '4.0', '4.2', '5.0']
+  
     s.subspec 'WQExtensionModule' do |ss|
         ss.source_files = 'WQBasicModules/Classes/WQExtensionModule/*.swift'
     end
-    
-  	s.subspec 'WQAnimation' do |ss|
+
+    s.subspec 'WQAnimation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
         end
@@ -43,13 +44,13 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/WQAnimation/Layer'
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Views/*.swift'
         end
-        ss.subspec 'Transitioning' do |sss| 
+        ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/WQExtensionModule'
             sss.dependency 'WQBasicModules/WQUI/Help'
             sss.source_files = 'WQBasicModules/Classes/WQAnimation/Transitioning/*.swift'
         end
     end
-    
+
     s.subspec 'WQExtensions' do |ss|
         ss.subspec 'WQUIKit' do |sss|
             sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift'
@@ -65,13 +66,13 @@ Pod::Spec.new do |s|
             sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQString/*.{swift,h,m}'
         end
     end
-       
+    
      s.subspec 'WQHelpTool' do |ss|
          ss.subspec 'WQCache' do |sss|
              sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQCache/*.swift'
          end
          ss.subspec 'WQJsonCodable' do |sss|
-         	sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
+            sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
          end
      end
      
@@ -88,7 +89,7 @@ Pod::Spec.new do |s|
              ss.resource = 'WQBasicModules/Classes/WQUI/Help/WQUIBundle.bundle'
              sss.source_files = 'WQBasicModules/Classes/WQUI/Help/*.swift'
          end
-         ss.subspec 'FlowLayout' do |sss| 
+         ss.subspec 'FlowLayout' do |sss|
              sss.source_files = 'WQBasicModules/Classes/WQUI/FlowLayout/*.swift'
          end
          ss.subspec 'Extensions' do |sss|
