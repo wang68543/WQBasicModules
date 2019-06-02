@@ -17,19 +17,54 @@ public protocol WQTransitioningAnimatorable: NSObjectProtocol {
 
 public typealias WQAnimateCompletion = ((Bool) -> Void)
 open class WQTransitioningAnimator: NSObject {
+    public struct Options {
+        public var duration: TimeInterval
+        public var delay: TimeInterval
+        public var damping: CGFloat
+        public var initialVelocity: CGFloat
+        public var options: UIView.AnimationOptions
+        
+        init(_ duration: TimeInterval = 0.25,
+             delay: TimeInterval = 0.0,
+             damping: CGFloat = 0,
+            velocity: CGFloat = 0,
+            options:UIView.AnimationOptions = []) {
+            self.duration = duration
+            self.delay = delay
+            self.damping = damping
+            self.initialVelocity = velocity
+            self.options = options
+        }
+    }
+    public enum TransitionStyle {
+        case presentation
+        case dismissal
+    }
     
+    @available(*, deprecated, message: "use Options.duration")
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
-    public let preferredStyle: Style
+    public let preferredStyle: Style = .default
     public var items: WQAnimatedConfigItems
     /// 当设置代理之后 所有的动画 以及初始化都有代理完成
     public weak var delegate: WQTransitioningAnimatorable?
-    
-    public init(items: WQAnimatedConfigItems = [], preferredStyle: Style = .default) {
-        self.items = items
-        self.preferredStyle = preferredStyle
+    public let presentOptions: Options
+    public let dismissOptions: Options
+    private var transitionStyle: TransitionStyle = .presentation
+    public init(items: WQAnimatedConfigItems = [],
+                presentOptions: Options,
+                dismissOptions: Options? = nil) {
+         self.items = items
+//        self.preferredStyle = preferredStyle
+        self.presentOptions = presentOptions
+        self.dismissOptions = dismissOptions ?? presentOptions
         super.init()
     }
+//    public init(items: WQAnimatedConfigItems = [], preferredStyle: Style = .default) {
+//        self.items = items
+//        self.preferredStyle = preferredStyle
+//        super.init()
+//    }
     /// convenience init
     public convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
         self.init(items: items, preferredStyle: preferredStyle)
@@ -39,7 +74,13 @@ open class WQTransitioningAnimator: NSObject {
 // MARK: - --UIViewControllerAnimatedTransitioning
 extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return duration
+//        return duration
+        if self.transitionStyle == .dismissal {
+            return self.dismissOptions.duration
+        } else {
+            return self.presentOptions.duration
+        }
+//        return self.transitionStyle ==
     }
     
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
@@ -55,7 +96,7 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
             toView.frame = vcFinalFrame
             transitionView.addSubview(toView)
         }
-        let animateCompletion: WQAnimateCompletion = { flag -> Void in
+        let animateCompletion: WQAnimateCompletion = { [weak self] flag -> Void in
             let success = !transitionContext.transitionWasCancelled
             if (isPresented && !success) || (!isPresented && success) {
                 toVCView?.removeFromSuperview()
@@ -174,4 +215,8 @@ extension WQTransitioningAnimatorable {
                     completion: @escaping WQAnimateCompletion) {
         animator.defaultAnimated(presented: presented, presenting: presenting, isShow: isShow, completion: completion)
     }
+}
+
+extension WQTransitioningAnimator.Options {
+    static let normal = WQTransitioningAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
 }
