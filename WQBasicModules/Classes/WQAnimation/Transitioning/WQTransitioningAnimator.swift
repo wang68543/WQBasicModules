@@ -44,28 +44,27 @@ open class WQTransitioningAnimator: NSObject {
     @available(*, deprecated, message: "use Options.duration")
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
-    public let preferredStyle: Style = .default
+    public var preferredStyle: Style = .default
     public var items: WQAnimatedConfigItems
     /// 当设置代理之后 所有的动画 以及初始化都有代理完成
     public weak var delegate: WQTransitioningAnimatorable?
-    public let presentOptions: Options
-    public let dismissOptions: Options
+//    public let presentOptions: Options
+//    public let dismissOptions: Options
     private var transitionStyle: TransitionStyle = .presentation
-    public init(items: WQAnimatedConfigItems = [],
-                presentOptions: Options,
-                dismissOptions: Options? = nil) {
-         self.items = items
-//        self.preferredStyle = preferredStyle
-        self.presentOptions = presentOptions
-        self.dismissOptions = dismissOptions ?? presentOptions
-        super.init()
-    }
-//    public init(items: WQAnimatedConfigItems = [], preferredStyle: Style = .default) {
-//        self.items = items
-//        self.preferredStyle = preferredStyle
+//    public init(items: WQAnimatedConfigItems = [],
+//                presentOptions: Options,
+//                dismissOptions: Options? = nil) {
+//         self.items = items
+////        self.preferredStyle = preferredStyle
+//        self.presentOptions = presentOptions
+//        self.dismissOptions = dismissOptions ?? presentOptions
 //        super.init()
 //    }
-    /// convenience init
+    public init(items: WQAnimatedConfigItems = [], preferredStyle: Style = .default) {
+        self.items = items
+        self.preferredStyle = preferredStyle
+        super.init()
+    }
     public convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
         self.init(items: items, preferredStyle: preferredStyle)
     }
@@ -74,12 +73,12 @@ open class WQTransitioningAnimator: NSObject {
 // MARK: - --UIViewControllerAnimatedTransitioning
 extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-//        return duration
-        if self.transitionStyle == .dismissal {
-            return self.dismissOptions.duration
-        } else {
-            return self.presentOptions.duration
-        }
+        return duration
+//        if self.transitionStyle == .dismissal {
+//            return self.dismissOptions.duration
+//        } else {
+//            return self.presentOptions.duration
+//        }
 //        return self.transitionStyle ==
     }
     

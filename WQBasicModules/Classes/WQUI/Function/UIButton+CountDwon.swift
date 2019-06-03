@@ -112,7 +112,7 @@ public extension UIButton {
             if total <= 0 {
                 weakSelf.stopCountDown(true)
             } else { 
-                weakSelf.execute?(weakSelf, total )
+                weakSelf.execute?(weakSelf, total)
                 weakSelf.totalCount = total
             }
         }
@@ -146,7 +146,7 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return  (objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1
+            return (objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1
         }
     }
     var interval: Double {
