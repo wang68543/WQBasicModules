@@ -190,7 +190,3 @@ public extension WQPresentationOption.Bounce {
         return postion
     }
 }
-
-public extension WQPresentationOption.Style {
-    
-}

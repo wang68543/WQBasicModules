@@ -74,7 +74,6 @@ public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedCon
             controller[keyPath: self.keyPath] = self.dismiss
         }
     }
-   
 }
 
 /// 显示其他控制器的viewController的动画配置
@@ -128,6 +127,14 @@ public extension WQAnimatedItem where Element == CGRect {
         self.init(keyPath, initial: initial, show: show, dismiss: dismiss ?? initial)
     }
 }
+
+public extension WQAnimatedItem where Element == CGAffineTransform {
+    convenience init(containerTransform initial: CGAffineTransform, show: CGAffineTransform, dismiss: CGAffineTransform? = nil) {
+        let keyPath = \WQPresentationable.containerView.transform
+        self.init(keyPath, initial: initial, show: show, dismiss: dismiss ?? initial)
+    }
+}
+
 
 public extension Array where Element == WQAnimatedConfigAble {
     

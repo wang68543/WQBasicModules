@@ -29,13 +29,7 @@ public extension WQAlertAction {
         self.init(attributedText: NSAttributedString(string: title, attributes: attrs), handler: handler)
     }
 }
-//public protocol WQAlertBottomViewProtocol {
-//    static var heightForView: CGFloat { get }
-//    func addActions(_ actions: [WQAlertAction])
-//    var buttons: [UIButton] { get }
-//}
-//public typealias WQAlertBottomView = UIView & WQAlertBottomViewProtocol
-
+@available(*, deprecated, message: "use WQPresentedAnimatedItem")
 public class WQAlertView: UIView {
     public let titleLabel: UILabel
     public let messageLabel: UILabel
@@ -109,7 +103,9 @@ public class WQAlertView: UIView {
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
         let size = self.size(for: width)
         let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
-        let animator = WQTransitioningAnimator(items: [initailItem], preferredStyle: .alert(size: size))
+        let item = WQAnimatedItem(container: size, postionStyle: .center, bounceStyle: .bounceCenter)
+        let animator = WQTransitioningAnimator(items: [initailItem], options: .alertPresent, dismiss: .alertDismiss)
+//        let animator = WQTransitioningAnimator(items: [initailItem], preferredStyle: .alert(size: size))
         let presention = WQPresentationable(subView: self, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
     }

@@ -74,7 +74,7 @@ public extension UIButton {
         let excute: IntervalExecute = { sender, secs in
             let title = formater.string(from: NSNumber(value: secs))
             sender.setTitle(title, for: currentState)
-        } 
+        }
         self.countDown(total, interval: 1, execute: excute, completion: completion)
         self.setTitleColor(titleColor, for: currentState)
     }
@@ -146,7 +146,12 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return (objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1
+//            debugPrint((objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1)
+            if let count = objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt {
+                return count
+            } else {
+                return 1
+            }
         }
     }
     var interval: Double {
