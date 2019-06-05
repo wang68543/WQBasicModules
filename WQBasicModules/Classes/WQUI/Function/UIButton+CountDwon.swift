@@ -95,7 +95,7 @@ public extension UIButton {
         } else {
             self.totalCount = count
             self.execute = execute
-            self.interval = interval
+//            self.interval = interval
             self.saveCurrentStatues()
             startTimer(interval)
         }
@@ -154,14 +154,14 @@ private extension UIButton {
             }
         }
     }
-    var interval: Double {
-        set {
-            objc_setAssociatedObject(self, CountDownKeys.interval, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-        get {
-            return (objc_getAssociatedObject(self, CountDownKeys.interval) as? Double) ?? 0
-        }
-    }
+//    var interval: Double {
+//        set {
+//            objc_setAssociatedObject(self, CountDownKeys.interval, newValue, .OBJC_ASSOCIATION_ASSIGN)
+//        }
+//        get {
+//            return (objc_getAssociatedObject(self, CountDownKeys.interval) as? Double) ?? 0
+//        }
+//    }
     var countDownCompletion: CountDownCompletion? {
         set {
             objc_setAssociatedObject(self, CountDownKeys.completion, newValue, .OBJC_ASSOCIATION_COPY)
@@ -185,7 +185,7 @@ fileprivate extension UIButton {
     struct CountDownKeys {
         static let timerSource = UnsafeRawPointer(bitPattern: "wq.button.countDown.timerSource".hashValue)!
         static let totalCount = UnsafeRawPointer(bitPattern: "wq.button.countDown.totalCount".hashValue)!
-        static let interval = UnsafeRawPointer(bitPattern: "wq.button.countDown.interval".hashValue)!
+//        static let interval = UnsafeRawPointer(bitPattern: "wq.button.countDown.interval".hashValue)!
         static let completion = UnsafeRawPointer(bitPattern: "wq.button.countDown.completion".hashValue)!
         static let execute = UnsafeRawPointer(bitPattern: "wq.button.countDown.execute".hashValue)!
         static let isCanCancel = UnsafeRawPointer(bitPattern: "wq.button.countDown.isCanCancel".hashValue)!
@@ -277,6 +277,6 @@ fileprivate extension UIButton {
         self.countDownCompletion = nil
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
-        objc_setAssociatedObject(self, CountDownKeys.interval, nil, .OBJC_ASSOCIATION_ASSIGN)
+//        objc_setAssociatedObject(self, CountDownKeys.interval, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-}
+} 
