@@ -52,11 +52,7 @@ public extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.isCanCancel, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            if let cancel = objc_getAssociatedObject(self, CountDownKeys.isCanCancel) as? Bool {
-                return cancel
-            } else {
-                return false
-            }
+            return objc_getAssociatedObject(self, CountDownKeys.isCanCancel) as? Bool ?? false
         }
     }
     /// 倒计时
@@ -93,12 +89,15 @@ public extension UIButton {
         if self.source != nil {
             stopCountDown(false)
         } else {
-            self.totalCount = count
+            self.totalCount = count - 1 //先减一
             self.execute = execute
-//            self.interval = interval
             self.saveCurrentStatues()
             startTimer(interval)
         }
+    }
+    ///取消倒计时
+    func cancelCountDown() {
+        self.stopCountDown(true, isFinshed: false)
     }
     private func startTimer(_ interval: Double) {
         let source: DispatchSourceTimer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
@@ -108,21 +107,21 @@ public extension UIButton {
                 return
             }
             var total = weakSelf.totalCount
-            total -= 1
             if total <= 0 {
                 weakSelf.stopCountDown(true)
             } else { 
                 weakSelf.execute?(weakSelf, total)
+                total -= 1
                 weakSelf.totalCount = total
             }
         }
         self.source = source
         source.resume()
     }
-    private func stopCountDown(_ flag: Bool) {
+    private func stopCountDown(_ flag: Bool, isFinshed: Bool = true) {
         var shouldRecovery = true
         if let completion = self.countDownCompletion {
-            shouldRecovery = completion(self, flag)
+            shouldRecovery = completion(self, isFinshed)
         }
         if shouldRecovery {
             recoveryBeforeStatues()
@@ -130,7 +129,6 @@ public extension UIButton {
         clearAssociatedObjects()
     }
 }
-
 // MARK: - -- Associated Objects
 private extension UIButton {
     var source: DispatchSourceTimer? {
@@ -143,25 +141,17 @@ private extension UIButton {
     }
    var totalCount: UInt {
         set {
+            //使用copy策略代替assign策略避免在32位机器上没有Tagged Pointer 而造成坏内存访问
+            #if arch(arm64) || arch(x86_64)
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            #else
+            objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
+            #endif
         }
-        get {
-//            debugPrint((objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt) ?? 1)
-            if let count = objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt {
-                return count
-            } else {
-                return 1
-            }
+        get { 
+           return objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt ?? 0
         }
     }
-//    var interval: Double {
-//        set {
-//            objc_setAssociatedObject(self, CountDownKeys.interval, newValue, .OBJC_ASSOCIATION_ASSIGN)
-//        }
-//        get {
-//            return (objc_getAssociatedObject(self, CountDownKeys.interval) as? Double) ?? 0
-//        }
-//    }
     var countDownCompletion: CountDownCompletion? {
         set {
             objc_setAssociatedObject(self, CountDownKeys.completion, newValue, .OBJC_ASSOCIATION_COPY)
@@ -185,7 +175,6 @@ fileprivate extension UIButton {
     struct CountDownKeys {
         static let timerSource = UnsafeRawPointer(bitPattern: "wq.button.countDown.timerSource".hashValue)!
         static let totalCount = UnsafeRawPointer(bitPattern: "wq.button.countDown.totalCount".hashValue)!
-//        static let interval = UnsafeRawPointer(bitPattern: "wq.button.countDown.interval".hashValue)!
         static let completion = UnsafeRawPointer(bitPattern: "wq.button.countDown.completion".hashValue)!
         static let execute = UnsafeRawPointer(bitPattern: "wq.button.countDown.execute".hashValue)!
         static let isCanCancel = UnsafeRawPointer(bitPattern: "wq.button.countDown.isCanCancel".hashValue)!
@@ -277,6 +266,25 @@ fileprivate extension UIButton {
         self.countDownCompletion = nil
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
-//        objc_setAssociatedObject(self, CountDownKeys.interval, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-} 
+}
+
+fileprivate extension UIButton {
+    static let keyCopyButton = UnsafeRawPointer(bitPattern: "wq.button.countDown.copyButton".hashValue)!
+    var copyButton: UIButton? {
+        set {
+            objc_setAssociatedObject(self, UIButton.keyCopyButton, newValue, .OBJC_ASSOCIATION_RETAIN)
+        }
+        get {
+            if let copyBtn = objc_getAssociatedObject(self, UIButton.keyCopyButton) as? UIButton {
+                return copyBtn
+            } else {
+                let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
+                let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? UIButton
+                copyView?.isUserInteractionEnabled = false
+                self.copyButton = copyView
+                return copyView
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import UIKit
 import WebKit
 open class WQWebController: UIViewController {
     /// 支持子类自定义初始化WebView
-    public var webView = WKWebView() {
+    dynamic public var webView = WKWebView() {
         didSet {
             oldValue.removeFromSuperview()
             self.configObservation()
@@ -163,7 +163,7 @@ open class WQWebController: UIViewController {
 extension WQWebController {
     func invalidate() {
         if let observer = titleObservation {
-            observer.invalidate() 
+            observer.invalidate()  
             titleObservation = nil
         }
 //        progressObservation?.invalidate()

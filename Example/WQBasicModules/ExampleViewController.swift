@@ -18,6 +18,7 @@ class ExampleViewController: UITableViewController {
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"]]
     ]
+    weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
         ExampleViewCell.register(for: self.tableView)
@@ -49,10 +50,22 @@ class ExampleViewController: UITableViewController {
         button.setTitle("测试倒计时", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
         button.backgroundColor = UIColor.yellow
+       
+        let cancel = false
+        
+            let address = String(format: "%p", cancel)
+            print(address)
+        button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
         self.view.addSubview(button)
+        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
+//        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
+       self.btn = button
     }
-
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        debugPrint(self.btn?.totalValue)
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

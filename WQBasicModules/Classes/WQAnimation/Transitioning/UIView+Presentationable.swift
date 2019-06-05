@@ -125,13 +125,13 @@ public extension WQModules where Base: UIView {
     } 
     
 }
-
-
+ 
 private var presenterKey: Void?
 
 internal extension UIView {
     var presentation: WQPresentationable? {
         set {
+            //这里内存由外部管理
             objc_setAssociatedObject(self, &presenterKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {

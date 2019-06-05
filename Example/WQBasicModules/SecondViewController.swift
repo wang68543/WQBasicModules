@@ -159,3 +159,31 @@ extension SecondViewController: UICollectionViewDataSource {
         return view
     }
 }
+extension SecondViewController.DownButton {
+   private struct CountDownKeys {
+        static let timerSource = UnsafeRawPointer(bitPattern: "wq.button.countDown.timerSource".hashValue)!
+        static let totalCount = UnsafeRawPointer(bitPattern: "wq.button.countDown.totalCount".hashValue)!
+        static let completion = UnsafeRawPointer(bitPattern: "wq.button.countDown.completion".hashValue)!
+        static let execute = UnsafeRawPointer(bitPattern: "wq.button.countDown.execute".hashValue)!
+        static let isCanCancel = UnsafeRawPointer(bitPattern: "wq.button.countDown.isCanCancel".hashValue)!
+        static let beforeStatus = UnsafeRawPointer(bitPattern: "wq.button.countDown.beforeStatus".hashValue)!
+    }
+    var totalValue: String {
+        set {
+            #if arch(arm64) || arch(x86_64)
+            objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            #else
+            objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
+            #endif
+            
+        }
+        get {
+        
+            if let count = objc_getAssociatedObject(self, CountDownKeys.totalCount) as? String {
+                return count
+            } else {
+                return "1"
+            }
+        }
+    }
+}

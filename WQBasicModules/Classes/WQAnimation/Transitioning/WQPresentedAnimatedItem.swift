@@ -135,7 +135,6 @@ public extension WQAnimatedItem where Element == CGAffineTransform {
     }
 }
 
-
 public extension Array where Element == WQAnimatedConfigAble {
     
     func initial(_ presented: UIViewController?, presenting: UIViewController?) {
