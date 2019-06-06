@@ -10,14 +10,29 @@ import UIKit
 import WQBasicModules
 class ExampleViewController: UITableViewController {
 
-    let sections: [String] = ["WQUI", "Transitioning"]
-    let sources:[[[String: String]]] = [
+    var sections: [String] = ["WQUI", "Transitioning"]
+    var sources:[[[String: String]]] = [
         [["浏览器控件": "TestWebViewController"],
          ["多布局风格按钮": "WQButtonViewController"]], // WQUI
         [["自定义评分控件": "WQStarViewController"],
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"]]
     ]
+    
+//    let sections2: [String] = ["WQUI", "Transitioning","WQUI", "Transitioning"]
+//    let sources2:[[[String: String]]] = [
+//        [["浏览器控件": "TestWebViewController"],
+//         ["多布局风格按钮": "WQButtonViewController"]], // WQUI
+//        [["自定义评分控件": "WQStarViewController"],
+//         ["仿系统弹出框": "ExampleAlertViewController"],
+//         ["半截屏幕上下移动交互": "WQPanViewController"]],
+//
+//        [["浏览器控件": "TestWebViewController"],
+//         ["多布局风格按钮": "WQButtonViewController"]], // WQUI
+//        [["自定义评分控件": "WQStarViewController"],
+//         ["仿系统弹出框": "ExampleAlertViewController"],
+//         ["半截屏幕上下移动交互": "WQPanViewController"]]
+//    ]
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,10 +76,15 @@ class ExampleViewController: UITableViewController {
         let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
        self.btn = button
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
+//            debugPrint("数据刷新了")
+//            self.sections = self.sections2
+//            self.sources = self.sources2
+//            self.tableView.reloadData()
+//        }
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        debugPrint(self.btn?.totalValue)
     }
     // MARK: - Table view data source
 
@@ -81,6 +101,7 @@ class ExampleViewController: UITableViewController {
         let values = sources[indexPath.section][indexPath.row]
         cell.titleLabel.text = values.keys.first
         cell.exampleLabel.text = values.values.first
+        debugPrint(indexPath)
         return cell
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

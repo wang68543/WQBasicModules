@@ -24,10 +24,10 @@ open class WQTransitioningAnimator: NSObject {
         public var options: UIView.AnimationOptions
         
         public init(_ duration: TimeInterval = 0.25,
-             delay: TimeInterval = 0.0,
-             damping: CGFloat = 0,
-             velocity: CGFloat = 0,
-             options:UIView.AnimationOptions = []) {
+                    delay: TimeInterval = 0.0,
+                    damping: CGFloat = 0,
+                    velocity: CGFloat = 0,
+                    options: UIView.AnimationOptions = []) {
              self.duration = duration
              self.delay = delay
              self.damping = damping
@@ -50,22 +50,15 @@ open class WQTransitioningAnimator: NSObject {
     public let presentOptions: Options
     public let dismissOptions: Options
     private var willTransitionStyle: TransitionStyle = .presentation
+    
     public init(items: WQAnimatedConfigItems = [],
                 options present: Options = .normalPresent,
                 dismiss: Options? = .normalDismiss) {
-         self.items = items
+        self.items = items
         self.presentOptions = present
         self.dismissOptions = dismiss ?? present
         super.init()
-    }
-//    public init(items: WQAnimatedConfigItems = [], preferredStyle: Style = .default) {
-//        self.items = items
-//        self.preferredStyle = preferredStyle
-//        super.init()
-//    }
-//    public convenience init(_ items: WQAnimatedConfigAble ..., preferredStyle: Style = .default) {
-//        self.init(items: items, preferredStyle: preferredStyle)
-//    }
+    } 
     public convenience init(_ items: WQAnimatedConfigAble ...,
                             options present: Options = .normalPresent,
                             dismiss: Options? = .normalDismiss) {
@@ -96,13 +89,16 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
             transitionView.addSubview(toView)
         }
         let animateCompletion: WQAnimateCompletion = { [weak self] flag -> Void in
+            guard let weakSelf = self else {
+                return
+            }
             let success = !transitionContext.transitionWasCancelled
             if (isPresented && !success) || (!isPresented && success) {
                 toVCView?.removeFromSuperview()
             }
             transitionContext.completeTransition(success)
             if isPresented && success {
-                self?.willTransitionStyle = .dismissal
+                weakSelf.willTransitionStyle = .dismissal
             }
         }
         if isPresented {
@@ -112,12 +108,7 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
         }
     }
 }
-extension WQTransitioningAnimator {
-    public enum Style {
-        case `default`
-        case actionSheet(size: CGSize)
-        case alert(size: CGSize)
-    }
+public extension WQTransitioningAnimator {
     /// 执行动画
     ///
     /// - Parameters:
@@ -125,7 +116,6 @@ extension WQTransitioningAnimator {
     ///   - presenting: 被present出来的UIViewController
     ///   - isShow: 是否是显示
     ///   - completion: 动画完成
-    public
     func animated(presented: UIViewController?,
                   presenting: UIViewController?,
                   isShow: Bool,
@@ -136,8 +126,7 @@ extension WQTransitioningAnimator {
             self.defaultAnimated(presented: presented, presenting: presenting, isShow: isShow, completion: completion)
         }
     }
-    /// 默认动画方式
-    public
+    /// 默认动画方式 
     func defaultAnimated(presented: UIViewController?,
                          presenting: UIViewController?,
                          isShow: Bool,
@@ -159,61 +148,12 @@ extension WQTransitioningAnimator {
             
         } else {
             UIView.animate(withDuration: duration,
-                            delay: options.delay,
-                            options: options.options,
-                            animations: animateBlock,
-                            completion: completion)
+                           delay: options.delay,
+                           options: options.options,
+                           animations: animateBlock,
+                           completion: completion)
         }
-//
-//        guard let presentingVC = presenting as? WQPresentationable else { return }
-//        self.handlePreferredStyle(presenting: presentingVC, isShow: isShow)
     }
-    /// 单独处理中间View的特殊动画效果
-//    private func handlePreferredStyle(presenting: WQPresentationable, isShow: Bool) {
-//        let viewW = presenting.view.frame.width
-//        let viewH = presenting.view.frame.height
-//        let containerView = presenting.containerView
-//        let options: UIView.AnimationOptions = [.layoutSubviews, .beginFromCurrentState, .curveEaseOut]
-//        switch preferredStyle {
-//        case let .actionSheet(size):
-//            if isShow {
-//                containerView.frame = CGRect(x: (viewW - size.width) * 0.5, y: viewH - size.height, width: size.width, height: size.height)
-//                containerView.transform = CGAffineTransform(translationX: 0, y: size.height)
-//            }
-//            UIView.animate(withDuration: self.duration, delay: 0, options: options, animations: {
-//                if isShow {
-//                    containerView.transform = CGAffineTransform.identity
-//                } else {
-//                    containerView.transform = CGAffineTransform(translationX: 0, y: size.height)
-//                }
-//            }, completion: nil)
-//        case let .alert(size):
-//            if isShow { // 初始化
-//                containerView.frame = CGRect(x: (viewW - size.width) * 0.5,
-//                                             y: (viewH - size.height) * 0.5,
-//                                             width: size.width,
-//                                             height: size.height)
-//                containerView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
-//            }
-//            if isShow {
-//                UIView.animate(withDuration: self.duration,
-//                               delay: 0,
-//                               usingSpringWithDamping: 0.8,
-//                               initialSpringVelocity: 15,
-//                               options: options,
-//                               animations: {
-//                                containerView.transform = CGAffineTransform.identity
-//                },
-//                               completion: nil)
-//            } else {
-//                UIView.animate(withDuration: self.duration, delay: 0, options: options, animations: {
-//                    containerView.removeFromSuperview()
-//                }, completion: nil)
-//            }
-//        default:
-//            break
-//        }
-//    }
 }
 
 // 若有代理但是没有实现动画就用代理里面的默认动画
@@ -234,8 +174,16 @@ public extension WQTransitioningAnimator.Options {
     static let actionSheetPresent = WQTransitioningAnimator.Options(0.25, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
     static let actionSheetDismiss = WQTransitioningAnimator.Options(0.15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     
-    static let alertPresent = WQTransitioningAnimator.Options(0.15, delay: 0, damping: 0.8, velocity: 15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
-    static let alertDismiss = WQTransitioningAnimator.Options(0.1, delay: 0, damping: 0, velocity: 0, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
+    static let alertPresent = WQTransitioningAnimator.Options(0.15,
+                                                              delay: 0,
+                                                              damping: 3,
+                                                              velocity: 15,
+                                                              options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
+    static let alertDismiss = WQTransitioningAnimator.Options(0.25,
+                                                              delay: 0,
+                                                              damping: 0,
+                                                              velocity: 0,
+                                                              options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     /// 是否是spring 动画
     var isSpringAnimate: Bool {
         return self.initialVelocity * self.damping != 0

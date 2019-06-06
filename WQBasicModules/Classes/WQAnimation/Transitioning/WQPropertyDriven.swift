@@ -44,20 +44,13 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
             case .left, .right:
                 completionWidth = size.width
             }
-        }
+        } 
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
         case .changed:
-            var percentage: CGFloat
             let translate = sender.translation(in: view)
-            switch self.direction {
-            case .down, .upwards:
-                percentage = translate.y / completionWidth
-            case .left, .right:
-                percentage = translate.x / completionWidth
-            }
-            percentage = abs(percentage)
+            let percentage = self.progress(for: translate)
             self.transitionContext?.updateInteractiveTransition(percentage)
             self.transitionAnimator?.fractionComplete = percentage
         case .ended, .cancelled, .failed:
@@ -74,7 +67,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
                 self.transitionContext?.finishInteractiveTransition()
             } else {
                 self.transitionContext?.cancelInteractiveTransition()
-            }
+            } 
             self.isInteractive = false
             self.transitionContext = nil
             self.transitionAnimator = nil
@@ -144,20 +137,54 @@ public extension DrivenableProtocol {
         }
         return panGR.isSameDirection(self.direction)
     }
-    func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
-        var isFinished: Bool = false
+    func progress(for translate: CGPoint) -> CGFloat {
+        var percentage: CGFloat
         switch self.direction {
-        case .down, .upwards:
-            let progress = translate.y / completionWidth
-            if  abs(velocity.y) > shouldCompletionSpeed || progress > shouldCompletionProgress {
-                isFinished = true
+        case .down: //向下为正
+            if translate.y <= 0 {
+                percentage = 0.0
+            } else {
+                percentage = translate.y / completionWidth
             }
-        case .left, .right:
-            let progress = translate.x / completionWidth
-            if abs(velocity.x) > shouldCompletionSpeed || progress > shouldCompletionProgress {
-                isFinished = true
+        case .upwards:
+            if translate.y >= 0 {
+                percentage = 0.0
+            } else {
+                percentage = -translate.y / completionWidth
+            }
+        case .left:
+            if translate.x >= 0 {
+                percentage = 0.0
+            } else {
+                percentage = -translate.x / completionWidth
+            }
+        case .right:
+            if translate.x <= 0 {
+                percentage = 0.0
+            } else {
+                percentage = translate.x / completionWidth
             }
         }
+        return percentage
+    }
+    func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
+        var isFinished: Bool = false
+        let progress = self.progress(for: translate)
+        if progress > shouldCompletionProgress {
+            isFinished = true
+        } else {
+            let speed = shouldCompletionSpeed
+            switch self.direction {
+            case .down:
+               isFinished = velocity.y > speed
+            case .upwards:
+               isFinished = -velocity.y > speed
+            case .left:
+                isFinished = -velocity.x > speed
+            case .right:
+                isFinished = velocity.x > speed
+            }
+        } 
         return isFinished
     }
 }

@@ -20,16 +20,27 @@ public protocol DrivenableProtocol: NSObjectProtocol {
     var direction: DrivenDirection { get set }
     
     func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool
+    func progress(for translate: CGPoint) -> CGFloat
     func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool
 }
 
 public typealias Drivenable = NSObject & UIViewControllerInteractiveTransitioning & DrivenableProtocol
 
+public class WQVectorView: UIView {
+    /// 解决transform属性动画问题
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        guard let subView = self.subviews.first else { return }
+        subView.bounds = self.bounds
+        let anchorPoint = subView.layer.anchorPoint
+        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
+    }
+}
 open class WQPresentationable: UIViewController {
     
     /// 容器View 所有的View都需要成为当前View的子View
-    public let containerView: UIView = {
-        let view = UIView()
+    public let containerView: WQVectorView = {
+        let view = WQVectorView()
         view.backgroundColor = UIColor.clear
         return view
     }()
@@ -103,12 +114,27 @@ open class WQPresentationable: UIViewController {
     
     /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
     public var shouldViewWillApperance: Bool = false
-    
-    public init(subView: UIView, animator: WQTransitioningAnimator) {
+ 
+    /// 初始化
+    ///
+    /// - Parameters:
+    ///   - animator: 动画管理者
+    ///   - containerFrme: 初始化设置的container的frame
+    ///   - presentedFrame: 弹出框的frame
+    public init(subView: UIView,
+                animator: WQTransitioningAnimator,
+                containerFrame: CGRect? = nil,
+                presentedFrame: CGRect? = nil) {
         self.animator = animator
         super.init(nibName: nil, bundle: nil)
         self.childViews.append(subView)
+        if let frame = containerFrame {
+            self.containerView.frame = frame
+        }
         self.addContainerSubview(subView)
+        if let viewFrame = presentedFrame {
+            self.view.frame = viewFrame
+        }
     } 
     override open func viewDidLoad() {
         super.viewDidLoad()
@@ -116,21 +142,10 @@ open class WQPresentationable: UIViewController {
          self.animator.items.initial(nil, presenting: self)
          self.view.addSubview(containerView)
     }
-    /// 刷新子子控件的布局
-    private func layoutContainerSubViews() {
-        if #available(iOS 9.0, *) {
-            self.loadViewIfNeeded()
-        } else {
-            // Fallback on earlier versions
-        }
-        containerView.setNeedsUpdateConstraints()
-        containerView.setNeedsLayout()
-        containerView.layoutIfNeeded()
-    }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-        self.layoutContainerSubViews()
+//        self.layoutContainerSubViews()
         if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
@@ -150,30 +165,30 @@ open class WQPresentationable: UIViewController {
             self.hideFromWindow(animated: flag, completion: completion)
         case .superChildController:
             self.hideFromParent(animated: flag, completion: completion)
-        }
-     
+        } 
     }
-//    open override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        debugPrint("WQPresentionable:", #function)
-//    }
-//    open override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        debugPrint("WQPresentionable:", #function)
-//    }
-//    open override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        debugPrint("WQPresentionable:", #function)
-//    }
-//    open override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//        debugPrint("WQPresentionable:", #function)
-//    }
-   
+    #if DEBUG
+    open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    open override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        debugPrint("WQPresentionable:", #function)
+    }
+    #endif
     deinit {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
-        self.containerWindow = nil 
+        self.containerWindow = nil
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {

@@ -23,9 +23,12 @@ class ExampleAlertViewController: BaseExampleViewController {
  
     @objc func alertAction(_ sender: UIButton) {
         
-//        let alertView = UIView()
-//        alertView.frame = CGRect(x: 0, y: 0, width: 280, height: 300)
-//        alertView.backgroundColor = UIColor.red
+        let alertView = UIView()
+        alertView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 300)
+        alertView.backgroundColor = UIColor.red
+        alertView.wm.alert()
+//        alertView.wm.presentation?.isEnableTabBackgroundDismiss = true
+        alertView.wm.presentation?.interactionDissmissDirection = .down
 //        alertView.wm.show(from: .bottom, show: .center)
         
 //        let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")

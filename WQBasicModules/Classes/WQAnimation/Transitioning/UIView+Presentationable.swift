@@ -5,7 +5,6 @@
 //  Created by WangQiang on 2019/1/7.
 //
 
-
 // MARK: - common
 public extension WQModules where Base: UIView {
     var presentation: WQPresentationable? {
@@ -13,14 +12,11 @@ public extension WQModules where Base: UIView {
     }
     //显示
     func show(animator: WQTransitioningAnimator,
+              frame container: CGRect? = nil,
+              presented: CGRect? = nil,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
-        if self.base.bounds.size == .zero {
-            self.base.setNeedsUpdateConstraints()
-            self.base.layoutIfNeeded()
-        }
-        assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
-        let presention = WQPresentationable(subView: self.base, animator: animator)
+        let presention = WQPresentationable(subView: self.base, animator: animator, containerFrame: container, presentedFrame: presented)
         presention.show(animated: true, in: inController, completion: completion)
     }
     
@@ -45,6 +41,11 @@ public extension WQModules where Base: UIView {
               isDimming: Bool = true,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
+        if self.base.bounds.size == .zero {
+            self.base.setNeedsUpdateConstraints()
+            self.base.layoutIfNeeded()
+        }
+        assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
         let viewSize = self.base.frame.size
         let item = WQAnimatedItem(container: viewSize,
                                   initial: from,
@@ -70,58 +71,71 @@ public extension WQModules where Base: UIView {
 
 // MARK: - alert
 public extension WQModules where Base: UIView {
-    func alert(options present:WQTransitioningAnimator.Options = .alertPresent,
-               dismiss:WQTransitioningAnimator.Options = .alertDismiss,
+    func alert(options present: WQTransitioningAnimator.Options = .alertPresent,
+               dismiss: WQTransitioningAnimator.Options = .alertDismiss,
                isDimming: Bool = true,
+               containerSize: CGSize? = nil,
                inController: UIViewController? = nil,
                completion: (() -> Void)? = nil) {
         let presentedFrame = UIScreen.main.bounds
         let viewW = presentedFrame.width
         let viewH = presentedFrame.height
-        if self.base.bounds.size == .zero {
-            self.base.setNeedsUpdateConstraints()
-            self.base.layoutIfNeeded()
+        var size: CGSize
+        if let vectorSize = containerSize {
+            size = vectorSize
+        } else {
+            if self.base.bounds.size == .zero {
+                self.base.setNeedsUpdateConstraints()
+                self.base.layoutIfNeeded()
+            }
+            size = self.base.bounds.size
         }
-        let size = self.base.bounds.size
+        let frame = CGRect(x: (viewW - size.width) * 0.5,
+                           y: (viewH - size.height) * 0.5,
+                           width: size.width,
+                           height: size.height)
         var items: [WQAnimatedConfigAble] = []
-        self.base.frame = CGRect(x: (viewW - size.width) * 0.5,
-                                 y: (viewH - size.height) * 0.5,
-                                 width: size.width,
-                                 height: size.height)
-        
-        let item = WQAnimatedItem(containerTransform: CGAffineTransform(scaleX: 0.3, y: 0.3), show: CGAffineTransform.identity, dismiss: CGAffineTransform(scaleX: 0, y: 0))
+        let initial = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        let dis = CGAffineTransform(scaleX: 0, y: 0)
+        let item = WQAnimatedItem(containerTransform: initial, show: .identity, dismiss: dis)
         items.append(item)
         if isDimming {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
         let animator = WQTransitioningAnimator(items: items, options: present, dismiss: dismiss)
-        self.show(animator: animator, inController: inController, completion: completion)
-        
+        self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     }
-    func actionSheet(options present:WQTransitioningAnimator.Options = .actionSheetPresent,
-                     dismiss:WQTransitioningAnimator.Options = .actionSheetDismiss,
+    func actionSheet(options present: WQTransitioningAnimator.Options = .actionSheetPresent,
+                     dismiss: WQTransitioningAnimator.Options = .actionSheetDismiss,
                      isDimming: Bool = true,
+                     containerSize: CGSize? = nil,
                      inController: UIViewController? = nil,
                      completion: (() -> Void)? = nil) {
         let presentedFrame = UIScreen.main.bounds
         let viewW = presentedFrame.width
         let viewH = presentedFrame.height
-        if self.base.bounds.size == .zero {
-            self.base.setNeedsUpdateConstraints()
-            self.base.layoutIfNeeded()
+        var size: CGSize
+        if let vectorSize = containerSize {
+            size = vectorSize
+        } else {
+            if self.base.bounds.size == .zero {
+                self.base.setNeedsUpdateConstraints()
+                self.base.layoutIfNeeded()
+            }
+            size = self.base.bounds.size
         }
-        let size = self.base.bounds.size
         var items: [WQAnimatedConfigAble] = []
-        self.base.frame = CGRect(x: (viewW - size.width) * 0.5, y: viewH - size.height, width: size.width, height: size.height)
-        let item = WQAnimatedItem(containerTransform: CGAffineTransform(translationX: 0, y: size.height), show: CGAffineTransform.identity)
+        let frame = CGRect(x: (viewW - size.width) * 0.5, y: viewH - size.height, width: size.width, height: size.height)
+        let initial = CGAffineTransform(translationX: 0, y: viewH)
+        let item = WQAnimatedItem(containerTransform: initial, show: .identity)
         items.append(item)
         if isDimming {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
         let animator = WQTransitioningAnimator(items: items, options: present, dismiss: dismiss)
-        self.show(animator: animator, inController: inController, completion: completion)
+        self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     } 
     
 }

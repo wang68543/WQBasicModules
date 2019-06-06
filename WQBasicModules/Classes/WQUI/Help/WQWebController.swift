@@ -7,19 +7,18 @@
 
 import UIKit
 import WebKit
+@available(*, deprecated, message: "use WQWebView")
 open class WQWebController: UIViewController {
     /// 支持子类自定义初始化WebView
-    dynamic public var webView = WKWebView() {
+     public var webView = WKWebView() {
         didSet {
             oldValue.removeFromSuperview()
-            self.configObservation()
             self.view.addSubview(self.webView)
             self.view.setNeedsLayout()
             self.view.layoutIfNeeded()
         }
     }
     public private(set) var progressView: UIProgressView?
-//    public let progress: WQWebViewProgressLayer = WQWebViewProgressLayer()
     /// item 图标
     public var closeActionItemIcon: UIImage = {
         let frameworkBundle = Bundle(for: WQWebController.self)
@@ -42,13 +41,6 @@ open class WQWebController: UIViewController {
         }
         return img.withRenderingMode(.alwaysTemplate)
     }()
-    /// KVO
-    private var titleObservation: NSKeyValueObservation?
-//    private var canGoBackObservation: NSKeyValueObservation?
-//    /// KVO
-//    private var progressObservation: NSKeyValueObservation?
-//    private var isLoadingObservation: NSKeyValueObservation?
-    
     private var originalRequest: URLRequest?
     
     public func loadURLString(_ urlString: String) {
@@ -72,7 +64,6 @@ open class WQWebController: UIViewController {
         let progressView = UIProgressView(frame: .zero)
         self.progressView = progressView
         self.webView.addSubview(progressView)
-//        self.configProgressObservation()
         let color = self.webView.tintColor ?? UIColor.blue
         self.progressView?.progressViewStyle = .bar
         self.progressView?.trackTintColor = UIColor.lightGray
@@ -82,30 +73,12 @@ open class WQWebController: UIViewController {
     }
     override open func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(webView) 
-        configObservation()
+        self.view.addSubview(webView)
+        //只能用此方法监听 否则在iOS13 或者iOS9下面都有问题
+        webView.addObserver(self, forKeyPath: "title", options: .new, context: nil)
         self.navigationItem.hidesBackButton = true
         configLeftItems(false)
     }
-    
-    private func configObservation() {
-        let title = \WKWebView.title
-        titleObservation = webView.observe(title, options: .new, changeHandler: { [weak self] _, change in
-            guard let weakSelf = self,
-                let newValue = change.newValue else {
-                    return
-            }
-            weakSelf.navigationItem.title = newValue
-        })
-//        let canGoBack = \WKWebView.canGoBack
-//        canGoBackObservation = webView.observe(canGoBack, options: [.new, .old], changeHandler: { [weak self] _, change in
-//            guard let weakSelf = self,
-//                let newValue = change.newValue,
-//                newValue != change.oldValue else { return }
-//            weakSelf.configLeftItems(newValue)
-//        })
-    }
-    
     open func configLeftItems(_ canGoBack: Bool) {
         let btnFrame = CGRect(origin: .zero, size: CGSize(width: 44, height: 44))
         let backBtn = UIButton(frame: btnFrame)
@@ -139,6 +112,31 @@ open class WQWebController: UIViewController {
         self.navigationItem.leftBarButtonItems = items
         
     }
+    //添加观察者方法
+    override open func observeValue(forKeyPath keyPath: String?,
+                                    of object: Any?,
+                                    change: [NSKeyValueChangeKey: Any]?,
+                                    context: UnsafeMutableRawPointer?) {
+        
+//        //设置进度条
+//        if keyPath == "estimatedProgress"{
+//            progressView.alpha = 1.0
+//            progressView.setProgress(Float(webView.estimatedProgress), animated: true)
+//            if webView.estimatedProgress >= 1.0 {
+//                UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseOut, animations: {
+//                    self.progressView.alpha = 0
+//                }, completion: { (finish) in
+//                    self.progressView.setProgress(0.0, animated: false)
+//                })
+//            }
+//        }
+        
+            //重设标题
+//        else
+        if keyPath == "title" {
+            self.navigationItem.title = self.webView.title
+        }
+    }
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.webView.frame = self.view.bounds
@@ -149,51 +147,13 @@ open class WQWebController: UIViewController {
             topY = 0
         }
         self.progressView?.frame = CGRect(x: 0, y: topY, width: self.webView.frame.width, height: 3)
-        //        self.progress.attach(to: self.webView)
     }
     deinit {
-//        self.titleObservation?.invalidate()
-//        self.canGoBackObservation?.invalidate()
-//        self.titleObservation = nil
-//        self.canGoBackObservation = nil
-        self.invalidate()
+        webView.removeObserver(self, forKeyPath: "title")
         debugPrint(#function)
     }
 }
-extension WQWebController {
-    func invalidate() {
-        if let observer = titleObservation {
-            observer.invalidate()  
-            titleObservation = nil
-        }
-//        progressObservation?.invalidate()
-//        isLoadingObservation?.invalidate()
-//        progressObservation = nil
-//        isLoadingObservation = nil
-    }
-//    func configProgressObservation() {
-//        let progress = \WKWebView.estimatedProgress
-//        progressObservation = webView.observe(progress, options: .new, changeHandler: { [weak self] _, change in
-//            guard let weakSelf = self,
-//                let newValue = change.newValue else {
-//                    return
-//            }
-//            weakSelf.progressView?.progress = Float(newValue)
-//        })
-//
-//        let isLoading = \WKWebView.isLoading
-//        isLoadingObservation = webView.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
-//            guard let weakSelf = self,
-//                let newValue = change.newValue else {
-//                    return
-//            }
-//            weakSelf.progressView?.isHidden = !newValue
-//            if !newValue {
-//                weakSelf.progressView?.progress = 0.0
-//            }
-//        })
-//    }
-}
+
 @objc extension WQWebController {
     open func arrowAction() {
         if self.webView.canGoBack {

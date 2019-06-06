@@ -50,19 +50,9 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableP
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
-            //这里外部监听事件处理
-//            self.isInteracting = true
-//            self.starShowConfig?(self.interactionType)
-        case .changed:
-            var percentage: CGFloat
+        case .changed: 
             let translate = sender.translation(in: view)
-            switch self.direction {
-            case .down, .upwards:
-                percentage = translate.y / completionWidth
-            case .left, .right:
-                percentage = translate.x / completionWidth
-            }
-            percentage = abs(percentage)
+            let percentage = self.progress(for: translate)
             self.update(percentage)
         case .ended, .cancelled, .failed:
             let velocity = sender.velocity(in: view)
