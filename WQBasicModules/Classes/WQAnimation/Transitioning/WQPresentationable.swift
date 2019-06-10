@@ -33,7 +33,7 @@ public class WQVectorView: UIView {
         guard let subView = self.subviews.first else { return }
         subView.bounds = self.bounds
         let anchorPoint = subView.layer.anchorPoint
-        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
+        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height) 
     }
 }
 open class WQPresentationable: UIViewController {

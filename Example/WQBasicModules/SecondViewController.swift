@@ -172,7 +172,7 @@ extension SecondViewController.DownButton {
         set {
             #if arch(arm64) || arch(x86_64)
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
-            #else
+            #else //解决非64位 内存优化问题
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
             

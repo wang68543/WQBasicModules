@@ -96,10 +96,10 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
             if (isPresented && !success) || (!isPresented && success) {
                 toVCView?.removeFromSuperview()
             }
-            transitionContext.completeTransition(success)
             if isPresented && success {
                 weakSelf.willTransitionStyle = .dismissal
-            }
+            } 
+            transitionContext.completeTransition(success)
         }
         if isPresented {
             animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
@@ -179,7 +179,7 @@ public extension WQTransitioningAnimator.Options {
                                                               damping: 3,
                                                               velocity: 15,
                                                               options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
-    static let alertDismiss = WQTransitioningAnimator.Options(0.25,
+    static let alertDismiss = WQTransitioningAnimator.Options(0.15,
                                                               delay: 0,
                                                               damping: 0,
                                                               velocity: 0,

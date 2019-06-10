@@ -50,16 +50,20 @@ open class WQWebView: WKWebView {
 
 extension WQWebView {
     func invalidate() {
-        if let observer = progressObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "estimatedProgress")
+        if #available(iOS 11.0, *) {
             progressObservation = nil
+            isLoadingObservation = nil 
+        } else {
+            if let observer = progressObservation {
+                self.removeObserver(observer, forKeyPath: "estimatedProgress")
+                progressObservation = nil
+            }
+            if let observer = isLoadingObservation {
+                self.removeObserver(observer, forKeyPath: "loading")
+                isLoadingObservation = nil
+            }
         }
-        if let observer = isLoadingObservation {
-            observer.invalidate()
-            self.removeObserver(observer, forKeyPath: "loading")
-            isLoadingObservation = nil
-        }
+    
     }
    
     func configObservation() {

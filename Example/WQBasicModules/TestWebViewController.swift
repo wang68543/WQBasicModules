@@ -9,16 +9,16 @@
 import UIKit
 import WQBasicModules
 import WebKit
-class TestWebViewController: WQWebController {
-//    let webView = WQWebView()
+class TestWebViewController: UIViewController {
+    let webView = WQWebView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.view.addSubview(webView)
+        self.view.addSubview(webView)
         self.webView.load(URLRequest(url: URL(string: "https://www.baidu.com/")!))
     }
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        webView.frame = self.view.bounds
-//    }
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        webView.frame = self.view.bounds
+    }
 }

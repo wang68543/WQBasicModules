@@ -184,7 +184,7 @@ public final class WQButton: UIButton {
                 titleY = self.titleEdgeInsets.top + (contentRect.height - titleSize.height - titleEdgeH) * 0.5
             case .bottom:
                 titleY = contentRect.height - titleSize.height - self.titleEdgeInsets.bottom
-                #if swift (>=5.0)
+                #if swift(>=5.0)
             @unknown default:
                 fatalError("不支持的布局类型")
                 #endif
@@ -208,12 +208,16 @@ public final class WQButton: UIButton {
         self.addTitleLabelFontObservation()
     }
     deinit {
-        // fix: iOS 10
-        if let observer = self.titleFontObservation {
-          observer.invalidate()
-          self.removeObserver(observer, forKeyPath: "titleLabel.font")
-          self.titleFontObservation = nil
+        if #available(iOS 11.0, *) {
+            // nota: Observation deinit的时候 会自动调用 invalidate
+            titleFontObservation = nil
+        } else { // iOS 11.0以下 需要自己手动移除监听
+            if let observer = self.titleFontObservation {
+                self.removeObserver(observer, forKeyPath: "titleLabel.font")
+                self.titleFontObservation = nil
+            }
         }
+
     }
 }
 

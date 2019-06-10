@@ -40,7 +40,7 @@ class ExampleViewController: UITableViewController {
         let test = ViewController.TestModel("12345")
         WQCache.default["test"] = test
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
-         let model:ViewController.TestModel? = WQCache.default["test"]
+//         let model:ViewCåontroller.TestModel? = WQCache.default["test"]
         if "13898768609".isLegalPhone() {
             debugPrint("正确的手机号码")
         }
@@ -73,7 +73,7 @@ class ExampleViewController: UITableViewController {
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
         self.view.addSubview(button)
-        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
+//        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
        self.btn = button
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {

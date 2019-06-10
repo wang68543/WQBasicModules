@@ -96,7 +96,8 @@ public extension WQModules where Base: UIView {
                            height: size.height)
         var items: [WQAnimatedConfigAble] = []
         let initial = CGAffineTransform(scaleX: 0.5, y: 0.5)
-        let dis = CGAffineTransform(scaleX: 0, y: 0)
+        // 这里不能用scale 0,否则在手势驱动动画的时候会出现bounds与frame不一致的异常
+        let dis = CGAffineTransform(scaleX: 0.01, y: 0.01)
         let item = WQAnimatedItem(containerTransform: initial, show: .identity, dismiss: dis)
         items.append(item)
         if isDimming {
