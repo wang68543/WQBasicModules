@@ -58,7 +58,7 @@ class SecondViewController: UIViewController {
         self.view.addSubview(button)
         let layout = WQFlexbox()
         layout.direction = .columnReverse
-        layout.justifyContent = .center
+        layout.mainAxis = .center
         layout.alignContent = .center
         
         layout.alignItems = .center
