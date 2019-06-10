@@ -25,7 +25,6 @@ open class WQWebView: WKWebView {
     
     open override func layoutSubviews() {
         super.layoutSubviews()
-        debugPrint(#function)
         var progressY: CGFloat = 0
         if !isAttachProgressTop {
             progressY = self.frame.height - self.progressHeight
@@ -52,7 +51,7 @@ extension WQWebView {
     func invalidate() {
         if #available(iOS 11.0, *) {
             progressObservation = nil
-            isLoadingObservation = nil 
+            isLoadingObservation = nil
         } else {
             if let observer = progressObservation {
                 self.removeObserver(observer, forKeyPath: "estimatedProgress")
@@ -63,7 +62,6 @@ extension WQWebView {
                 isLoadingObservation = nil
             }
         }
-    
     }
    
     func configObservation() {
@@ -74,8 +72,7 @@ extension WQWebView {
                     return
             }
             weakSelf.progressView.progress = Float(newValue)
-        })
-
+        }) 
         let isLoading = \WQWebView.isLoading
         isLoadingObservation = self.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,

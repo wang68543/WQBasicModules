@@ -25,6 +25,8 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     public var alignContent: WQAlignContent = .flexStart
     /// 若line中有item有尺寸不相等的以尺寸最大的item进行相对布局(当direction为水平方向时参照最大的height 否则参照最大的width)
     public var alignItems: WQAlignItems = .center
+    /// 是否只是单行布局
+    public var isSingleLine: Bool = false
     /// 主轴方向的排列cell的个数 默认0 根据最小间距属性来动态计算每行的个数
     /// 存储items的布局属性
     private var attrs: [UICollectionViewLayoutAttributes] = []
@@ -111,10 +113,14 @@ private extension WQFlexbox {
             let headerSize = self.referenceSizeForHeaderInSection(section)
             let footerSize = self.referenceSizeForFooterInSection(section)
             var limit: CGFloat
-            if isHorizontal {
-                limit = limitValue - (insets.left + insets.right)
+            if self.isSingleLine {
+                limit = CGFloat.greatestFiniteMagnitude
             } else {
-                limit = limitValue - (insets.top + insets.bottom + footerSize.height + headerSize.height)
+                if isHorizontal {
+                    limit = limitValue - (insets.left + insets.right)
+                } else {
+                    limit = limitValue - (insets.top + insets.bottom + footerSize.height + headerSize.height)
+                }
             }
             var sectionItems: [[WQFlexItemAttributes]] = []
             var lineItems: [WQFlexItemAttributes] = []
@@ -169,8 +175,20 @@ private extension WQFlexbox {
                     lineAttrs.append(lineAttr)
                 } else { 
                     let justify = self.justifyContent(for: linePath)
-                    //  swiftlint:disable line_length
-                    let flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+                    var flexSpace: WQFlexLineSpace
+                    if self.isSingleLine {
+                        var totalLength = items.totalLength(isHorizontal)
+                        totalLength += itemSpace * CGFloat(items.count - 1)
+                        if totalLength > limitValue {
+                           flexSpace = WQFlexLineSpace(singleLine: itemSpace)
+                        } else { // 没有越界 就按照原来布局继续走
+                            //  swiftlint:disable line_length
+                            flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+                        }
+                    } else {
+                         //  swiftlint:disable line_length
+                        flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+                    }
                     let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
                     lineAttrs.append(lineAttr)
                 }

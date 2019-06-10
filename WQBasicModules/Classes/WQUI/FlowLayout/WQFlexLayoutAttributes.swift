@@ -52,6 +52,11 @@ internal struct WQFlexLineSpace {
     let leading: CGFloat
     let trailing: CGFloat
     
+    init(singleLine space: CGFloat) {
+        leading = 0
+        trailing = 0
+        self.space = space
+    }
     init(_ items: [WQFlexItemAttributes],
          limitLength: CGFloat,
          justify: WQJustifyContent,
