@@ -176,7 +176,7 @@ private extension WQFlexbox {
                 } else { 
                     let justify = self.justifyContent(for: linePath)
                     var flexSpace: WQFlexLineSpace
-                    if self.isSingleLine {
+                    if self.isSingleLine { // 处理单行的
                         var totalLength = items.totalLength(isHorizontal)
                         totalLength += itemSpace * CGFloat(items.count - 1)
                         if totalLength > limitValue {

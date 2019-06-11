@@ -111,16 +111,18 @@ public extension WQAnimatedItem where Element == CGRect {
                      size: CGSize,
                      bounceStyle: WQPresentationOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
+        let origin = CGPoint(x: position.x + point.x * size.width, y: position.y + point.y * size.height)
         let showFrame = CGRect(origin: position, size: size)
-        let initialFrame = bounceStyle.estimateInitialFrame(position, anchorPoint: point, size: size, presentedFrame: presentedFrame)
+        let initialFrame = bounceStyle.estimateInitialFrame(origin, anchorPoint: point, size: size, presentedFrame: presentedFrame)
         self.init(containerFrame: initialFrame, show: showFrame)
     }
     convenience init(container size: CGSize,
                      postionStyle: WQPresentationOption.Position,
                      bounceStyle: WQPresentationOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
-        let postion = postionStyle.positionPoint(size, anchorPoint: CGPoint(x: 0.5, y: 0.5), viewFrame: presentedFrame)
-        self.init(container: postion, anchor: CGPoint(x: 0.5, y: 0.5), size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
+        let anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        let postion = postionStyle.positionPoint(size, anchorPoint: anchorPoint, viewFrame: presentedFrame)
+        self.init(container: postion, anchor: anchorPoint, size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
     }
     convenience init(containerFrame initial: CGRect, show: CGRect, dismiss: CGRect? = nil) {
         let keyPath = \WQPresentationable.containerView.frame

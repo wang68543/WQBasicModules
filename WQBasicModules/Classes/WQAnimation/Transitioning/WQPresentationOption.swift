@@ -89,24 +89,28 @@ public extension WQPresentationOption.Position {
         }
         return direction
     }
-    /// 内部
-    func positionPoint(_ size: CGSize, anchorPoint: CGPoint, viewFrame: CGRect) -> CGPoint {
+    /// 左上角的位置
+    func positionPoint(_ size: CGSize,
+                       anchorPoint: CGPoint,
+                       viewFrame: CGRect) -> CGPoint {
         var position: CGPoint
         let viewW = viewFrame.width
-        let viewH = viewFrame.height
+        let viewH = viewFrame.height 
+        let insetW = anchorPoint.x * size.width
+        let insetH = anchorPoint.y * size.height
         switch self {
         case .none:
             position = .zero
         case .top:
-            position = CGPoint(x: viewW * 0.5, y: size.height * anchorPoint.y)
+            position = CGPoint(x: viewW * 0.5 - insetW, y: 0)
         case .left:
-            position = CGPoint(x: size.width * anchorPoint.x, y: viewH * 0.5)
+            position = CGPoint(x: 0, y: viewH * 0.5 - insetH)
         case .bottom:
-            position = CGPoint(x: viewW * 0.5, y: viewH - size.height * (1.0 - anchorPoint.y))
+            position = CGPoint(x: viewW * 0.5 - insetW, y: viewH - size.height)
         case .right:
-            position = CGPoint(x: viewW - size.width * (1.0 - anchorPoint.x), y: viewH * 0.5)
+            position = CGPoint(x: viewW - size.width, y: viewH * 0.5)
         case .center:
-            position = CGPoint(x: viewW * 0.5, y: viewH * 0.5)
+            position = CGPoint(x: viewW * 0.5 - insetW, y: viewH * 0.5 - insetH)
         }
         return position
     }
@@ -116,45 +120,44 @@ public extension WQPresentationOption.Bounce {
                               anchorPoint: CGPoint,
                               size: CGSize,
                               presentedFrame: CGRect) -> CGRect {
-        let point = position
-        let positionPt = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+        let positionPt = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
         var origin: CGPoint
         var estSize: CGSize
         switch self {
-        case .verticalAuto:
+        case .verticalAuto: //这两个暂时不起作用 要配合showFrame 一起使用
             estSize = CGSize(width: 0, height: size.height)
             if size.width + positionPt.x > presentedFrame.width { //向左
-                origin = CGPoint(x: point.x + anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+                origin = CGPoint(x: position.x + anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
             } else {
-                origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+                origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
             }
         case .horizontalAuto:
             estSize = CGSize(width: size.width, height: 0)
             if size.height + positionPt.y > presentedFrame.height {
-                origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y + anchorPoint.y * size.height)
+                origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y + anchorPoint.y * size.height)
             } else {
-                origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+                origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
             }
         case .bounceCenter:
-            origin = positionPt
+            origin = position
             estSize = .zero
         case .horizontalMiddle:
-            origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y)
+            origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y)
             estSize = CGSize(width: size.width, height: 0)
         case .verticalMiddle:
-            origin = CGPoint(x: point.x, y: point.y - anchorPoint.y * size.height)
+            origin = CGPoint(x: position.x, y: position.y - anchorPoint.y * size.height)
             estSize = CGSize(width: 0, height: size.height)
         case .bounceUp:
-            origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y + anchorPoint.y * size.height)
+            origin = CGPoint(x: positionPt.x, y: position.y + anchorPoint.y * size.height)
             estSize = CGSize(width: size.width, height: 0)
         case .bounceDown:
-            origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+            origin = CGPoint(x: positionPt.x, y: position.y - anchorPoint.y * size.height)
             estSize = CGSize(width: size.width, height: 0)
         case .bounceLeft:
-            origin = CGPoint(x: point.x + anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+            origin = CGPoint(x: position.x + anchorPoint.x * size.width, y: positionPt.y)
             estSize = CGSize(width: 0, height: size.height)
         case .bounceRight:
-            origin = CGPoint(x: point.x - anchorPoint.x * size.width, y: point.y - anchorPoint.y * size.height)
+            origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: positionPt.y)
             estSize = CGSize(width: 0, height: size.height)
         }
         return CGRect(origin: origin, size: estSize)

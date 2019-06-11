@@ -24,12 +24,20 @@ class ExampleAlertViewController: BaseExampleViewController {
     @objc func alertAction(_ sender: UIButton) {
         
         let alertView = UIView()
-        alertView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 300)
+        alertView.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
         alertView.backgroundColor = UIColor.red
-        alertView.wm.alert()
+//        alertView.wm.alert()
 //        alertView.wm.presentation?.isEnableTabBackgroundDismiss = true
-        alertView.wm.presentation?.interactionDissmissDirection = .down
+//        alertView.wm.presentation?.interactionDissmissDirection = .down
 //        alertView.wm.show(from: .bottom, show: .center)
+        
+        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
+        let item = WQAnimatedItem(container: alertView.frame.size, postionStyle: .left, bounceStyle: .bounceCenter)
+        let animator = WQTransitioningAnimator(items: [item, initailItem])
+        let presention = WQPresentationable(subView: alertView, animator: animator)
+        presention.show(animated: true, in: nil, completion: nil)
+        
+         presention.isEnableTabBackgroundDismiss = true
         
 //        let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")
 //        alertView.addAction(WQAlertAction(title: "取消", handler: { action in

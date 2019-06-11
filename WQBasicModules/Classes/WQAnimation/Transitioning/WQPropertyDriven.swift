@@ -3,7 +3,7 @@
 //  Pods-WQBasicModules_Example
 //
 //  Created by WangQiang on 2018/12/19.
-//
+//  根据属性的最终效果和当前的效果进行比例计算 (如果最终效果是0 可能比例计算一直是0例如:transform scale)
 
 import UIKit
 @available(iOS 10.0, *)

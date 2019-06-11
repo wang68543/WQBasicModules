@@ -141,6 +141,7 @@ open class WQPresentationable: UIViewController {
         //延迟加载View
          self.animator.items.initial(nil, presenting: self)
          self.view.addSubview(containerView)
+        containerView.layoutIfNeeded() // 提前刷新 用于动画
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
