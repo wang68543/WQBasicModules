@@ -140,13 +140,13 @@ open class WQPresentationable: UIViewController {
         super.viewDidLoad()
         //延迟加载View
          self.animator.items.initial(nil, presenting: self)
-         self.view.addSubview(containerView)
-        containerView.layoutIfNeeded() // 提前刷新 用于动画
+         self.view.addSubview(containerView) 
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
 //        self.layoutContainerSubViews()
+        containerView.layoutIfNeeded() // 提前刷新 用于动画
         if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
