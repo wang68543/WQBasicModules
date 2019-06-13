@@ -47,11 +47,13 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         guard collectionView.frame.size != .zero else {
             return
         }
+        let frame = collectionView.frame
+        let contentInset = collectionView.contentInset
         let isHorizontal = self.direction.isHorizontal
         if isHorizontal { //水平方向 限制宽度为collectionView的frame宽度
-            self.limitLength = collectionView.frame.width - collectionView.contentInset.left - collectionView.contentInset.right
+            self.limitLength = frame.width - contentInset.left - contentInset.right
         } else {
-            self.limitLength = collectionView.frame.height - collectionView.contentInset.top - collectionView.contentInset.bottom
+            self.limitLength = frame.height - contentInset.top - contentInset.bottom
         }
         let sections = collectionView.numberOfSections
         
@@ -64,10 +66,10 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         supplementary = self.layoutSupplementaries(isHorizontal, sectionAttrs: sectionAttrs)
         if isHorizontal {
             let length = sectionAttrs.reduce(0, { $0 + $1.bounds.height })
-            contentSize = CGSize(width: collectionView.frame.width, height: length)
+            contentSize = CGSize(width: collectionView.frame.width - contentInset.left - contentInset.right, height: length)
         } else {
             let length = sectionAttrs.reduce(0, { $0 + $1.bounds.width })
-            contentSize = CGSize(width: length, height: collectionView.frame.height)
+            contentSize = CGSize(width: length, height: collectionView.frame.height - contentInset.top - contentInset.bottom)
         }
     }
     
@@ -105,9 +107,10 @@ public class WQFlexbox: UICollectionViewFlowLayout {
 private extension WQFlexbox {
     func groupItems(_ isHorizontal: Bool, limitValue: CGFloat, sections: Int) -> [[[WQFlexItemAttributes]]] {
         var groupItems: [[[WQFlexItemAttributes]]] = []
+         guard let collectionView = self.collectionView else { return groupItems }
         //分组 分列
         for section in 0 ..< sections {
-            let items = collectionView!.numberOfItems(inSection: section)
+            let items = collectionView.numberOfItems(inSection: section)
             let insets = self.insetForSection(at: section)
             let itemSpace = self.minimumInteritemSpacingForSection(at: section)
             let headerSize = self.referenceSizeForHeaderInSection(section)
@@ -152,10 +155,10 @@ private extension WQFlexbox {
         guard let collectionView = self.collectionView else { return sectionAttrs }
         for section in 0 ..< groupItems.count {
             let lineSpace = self.minimumLineSpacingForSection(at: section)
-            let itemSpace = self.minimumInteritemSpacingForSection(at: section)
             let header = self.referenceSizeForHeaderInSection(section)
             let footer = self.referenceSizeForFooterInSection(section)
             let insets = self.insetForSection(at: section)
+            let contentInset = collectionView.contentInset
             // 限制line的的长度
             var limitValue: CGFloat
             if isHorizontal {
@@ -168,39 +171,17 @@ private extension WQFlexbox {
             let lineCount = sectionLines.count
             for line in 0 ..< lineCount {
                 let items = sectionLines[line]
-                let range = Range(uncheckedBounds: (lower: items.first?.indexPath.item ?? 0, upper: items.last?.indexPath.item ?? 0))
-                let linePath = WQFlexLinePath(section: section, line: line, totalLines: lineCount, range: range)
-                if items.isEmpty {
-                    let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: .zero, isHorizontal: isHorizontal)
-                    lineAttrs.append(lineAttr)
-                } else { 
-                    let justify = self.justifyContent(for: linePath)
-                    var flexSpace: WQFlexLineSpace
-                    if self.isSingleLine { // 处理单行的
-                        var totalLength = items.totalLength(isHorizontal)
-                        totalLength += itemSpace * CGFloat(items.count - 1)
-                        if totalLength > limitValue {
-                           flexSpace = WQFlexLineSpace(singleLine: itemSpace)
-                        } else { // 没有越界 就按照原来布局继续走
-                            //  swiftlint:disable line_length
-                            flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
-                        }
-                    } else {
-                         //  swiftlint:disable line_length
-                        flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
-                    }
-                    let lineAttr = WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
-                    lineAttrs.append(lineAttr)
-                }
+                let lineAttr = self.lineAttributes(section: section, line: line, items: items, totalLine: lineCount, limitValue: limitValue, isHorizontal: isHorizontal)
+                lineAttrs.append(lineAttr)
             }
             var totalLineMaxWidth: CGFloat
             if isHorizontal {
-                let contentClip = collectionView.contentInset.top + collectionView.contentInset.bottom
+                let contentClip = contentInset.top + contentInset.bottom
                 let sectionClip = insets.bottom + insets.top
                 let headerFooterClip = header.height + footer.height
                 totalLineMaxWidth = collectionView.frame.height - contentClip - headerFooterClip - sectionClip
             } else {
-                let contentClip = collectionView.contentInset.left + collectionView.contentInset.right
+                let contentClip = contentInset.left + contentInset.right
                 let sectionClip = insets.left + insets.right
                 totalLineMaxWidth = collectionView.frame.width - contentClip - sectionClip
             }
@@ -211,9 +192,41 @@ private extension WQFlexbox {
         }
         return sectionAttrs
     }
+    
+    func lineAttributes(section: Int,
+                        line: Int,
+                        items: [WQFlexItemAttributes],
+                        totalLine: Int,
+                        limitValue: CGFloat,
+                        isHorizontal: Bool) -> WQFlexLineAttributes {
+        let itemSpace = self.minimumInteritemSpacingForSection(at: section)
+        let range = Range(uncheckedBounds: (lower: items.first?.indexPath.item ?? 0, upper: items.last?.indexPath.item ?? 0))
+        let linePath = WQFlexLinePath(section: section, line: line, totalLines: totalLine, range: range)
+        if items.isEmpty {
+            return WQFlexLineAttributes(linePath, items: items, margin: .zero, isHorizontal: isHorizontal)
+        } else {
+            let justify = self.justifyContent(for: linePath)
+            var flexSpace: WQFlexLineSpace
+            if self.isSingleLine { // 处理单行的
+                var totalLength = items.totalLength(isHorizontal)
+                totalLength += itemSpace * CGFloat(items.count - 1)
+                if totalLength > limitValue {
+                    flexSpace = WQFlexLineSpace(singleLine: itemSpace)
+                } else { // 没有越界 就按照原来布局继续走
+                    //  swiftlint:disable line_length
+                    flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+                }
+            } else {
+                //  swiftlint:disable line_length
+                flexSpace = WQFlexLineSpace(items, limitLength: limitValue, justify: justify, minItemsSpace: itemSpace, isHorizontal: isHorizontal)
+            }
+            return WQFlexLineAttributes(linePath, items: items, margin: flexSpace, isHorizontal: isHorizontal)
+        }
+    }
     func layoutSectionsItems(_ isHorizontal: Bool, sectionAttributes: [WQFlexSectionAttributes]) -> [UICollectionViewLayoutAttributes] {
-        var rectX = collectionView!.contentInset.left
-        var rectY = collectionView!.contentInset.top
+        /// 坐标起始点从除了contentInset部分开始
+        var rectX: CGFloat = 0
+        var rectY: CGFloat = 0
         let itemAttrs = sectionAttributes.flatMap({ sectionAttr -> [UICollectionViewLayoutAttributes] in
             let sectionOrigin = CGPoint(x: rectX, y: rectY)
             let sectionItems = self.sectionItemsAttributes(forSection: isHorizontal, sectionOrigin: sectionOrigin, sectionAttr: sectionAttr)
@@ -359,6 +372,9 @@ private extension WQFlexbox {
                                  with: inLine,
                                  in: indexPath) ?? self.alignItems
     }
+//    func limitWidth(for section: Int, isHorizontal: Bool) -> CGFloat {
+//
+//    }
 }
 // MARK: - -- FlowLayout Data Source
 private extension WQFlexbox {
