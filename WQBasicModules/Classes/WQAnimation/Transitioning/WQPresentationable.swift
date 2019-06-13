@@ -37,7 +37,6 @@ public class WQVectorView: UIView {
     }
 }
 open class WQPresentationable: UIViewController {
-    
     /// 容器View 所有的View都需要成为当前View的子View
     public let containerView: WQVectorView = {
         let view = WQVectorView()
@@ -145,8 +144,7 @@ open class WQPresentationable: UIViewController {
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-//        self.layoutContainerSubViews()
-        containerView.layoutIfNeeded() // 提前刷新 用于动画
+        containerView.layoutIfNeeded() // 提前刷新 用于动画准备
         if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {

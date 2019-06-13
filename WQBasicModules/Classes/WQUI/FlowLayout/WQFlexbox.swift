@@ -147,7 +147,6 @@ private extension WQFlexbox {
         return groupItems
     }
     /// 所有分区的FlexSections
-     //swiftlint:disable function_body_length
     func sectionsAttrbutes(_ isHorizontal: Bool,
                            sections: Int,
                            groupItems: [[[WQFlexItemAttributes]]]) -> [WQFlexSectionAttributes] {
@@ -171,6 +170,7 @@ private extension WQFlexbox {
             let lineCount = sectionLines.count
             for line in 0 ..< lineCount {
                 let items = sectionLines[line]
+                 //  swiftlint:disable line_length
                 let lineAttr = self.lineAttributes(section: section, line: line, items: items, totalLine: lineCount, limitValue: limitValue, isHorizontal: isHorizontal)
                 lineAttrs.append(lineAttr)
             }
@@ -192,7 +192,7 @@ private extension WQFlexbox {
         }
         return sectionAttrs
     }
-    
+     //  swiftlint:disable function_parameter_count
     func lineAttributes(section: Int,
                         line: Int,
                         items: [WQFlexItemAttributes],
