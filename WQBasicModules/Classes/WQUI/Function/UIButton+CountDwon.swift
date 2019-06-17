@@ -267,24 +267,23 @@ fileprivate extension UIButton {
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-}
-
-fileprivate extension UIButton {
-    static let keyCopyButton = UnsafeRawPointer(bitPattern: "wq.button.countDown.copyButton".hashValue)!
-    var copyButton: UIButton? {
-        set {
-            objc_setAssociatedObject(self, UIButton.keyCopyButton, newValue, .OBJC_ASSOCIATION_RETAIN)
-        }
-        get {
-            if let copyBtn = objc_getAssociatedObject(self, UIButton.keyCopyButton) as? UIButton {
-                return copyBtn
-            } else {
-                let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
-                let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? UIButton
-                copyView?.isUserInteractionEnabled = false
-                self.copyButton = copyView
-                return copyView
-            }
-        }
-    }
-}
+}  
+//fileprivate extension UIButton {
+//    static let keyCopyButton = UnsafeRawPointer(bitPattern: "wq.button.countDown.copyButton".hashValue)!
+//    var copyButton: UIButton? {
+//        set {
+//            objc_setAssociatedObject(self, UIButton.keyCopyButton, newValue, .OBJC_ASSOCIATION_RETAIN)
+//        }
+//        get {
+//            if let copyBtn = objc_getAssociatedObject(self, UIButton.keyCopyButton) as? UIButton {
+//                return copyBtn
+//            } else {
+//                let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
+//                let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? UIButton
+//                copyView?.isUserInteractionEnabled = false
+//                self.copyButton = copyView
+//                return copyView
+//            }
+//        }
+//    }
+//}

@@ -10,7 +10,7 @@ public extension UITextField {
     private struct AssociatedKeys {
         static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)! 
     }
-    
+    /// 限制最大输入长度
     var maxInputLength: Int? {
         set {
             if newValue == nil {
@@ -23,7 +23,6 @@ public extension UITextField {
             #else
             objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
-            
         }
         get {
            return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int

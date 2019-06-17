@@ -10,7 +10,7 @@ import UIKit
 import WQBasicModules
 class ExampleAlertViewController: BaseExampleViewController {
     let alertView = UIView()
-    
+    let imageView: UIImageView = UIImageView(image: UIImage(named: "首页8"))
     override func viewDidLoad() {
         super.viewDidLoad()
         let button = UIButton()
@@ -19,10 +19,12 @@ class ExampleAlertViewController: BaseExampleViewController {
         button.setTitleColor(UIColor.blue, for: .normal)
         button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
+        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
+        self.view.addSubview(imageView)
     }
  
     @objc func alertAction(_ sender: UIButton) {
-        
+        imageView.fadeImage(UIImage(named: "loud_speaker"))
         let alertView = UIView()
         alertView.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
         alertView.backgroundColor = UIColor.red
