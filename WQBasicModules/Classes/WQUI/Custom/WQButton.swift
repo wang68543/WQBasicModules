@@ -208,16 +208,7 @@ public final class WQButton: UIButton {
         self.addTitleLabelFontObservation()
     }
     deinit {
-        if #available(iOS 11.0, *) {
-            // nota: Observation deinit的时候 会自动调用 invalidate
-            titleFontObservation = nil
-        } else { // iOS 11.0以下 需要自己手动移除监听
-            if let observer = self.titleFontObservation {
-                self.removeObserver(observer, forKeyPath: "titleLabel.font")
-                self.titleFontObservation = nil
-            }
-        }
-
+       
     }
 }
 
@@ -317,6 +308,18 @@ private extension WQButton {
             weakSelf.titleFont = newFont
             weakSelf.setNeedsLayout()
         })
+    }
+    func invalidate() {
+        if #available(iOS 11.0, *) {
+            // nota: Observation deinit的时候 会自动调用 invalidate
+            titleFontObservation = nil
+        } else { // iOS 11.0以下 需要自己手动移除监听
+            if let observer = self.titleFontObservation {
+                self.removeObserver(observer, forKeyPath: "titleLabel.font")
+                self.titleFontObservation = nil
+            }
+        }
+
     }
 }
  
