@@ -26,16 +26,25 @@ class ExampleAlertViewController: BaseExampleViewController {
     @objc func alertAction(_ sender: UIButton) {
         imageView.fadeImage(UIImage(named: "loud_speaker"))
         let alertView = UIView()
-        alertView.frame = CGRect(x: 0, y: 0, width: 200, height: 300)
+        let size = CGSize(width: 200, height: 300)
+//        alertView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         alertView.backgroundColor = UIColor.red
 //        alertView.wm.alert()
 //        alertView.wm.presentation?.isEnableTabBackgroundDismiss = true
 //        alertView.wm.presentation?.interactionDissmissDirection = .down
 //        alertView.wm.show(from: .bottom, show: .center)
         
-        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
-        let item = WQAnimatedItem(container: alertView.frame.size, postionStyle: .left, bounceStyle: .bounceCenter)
-        let animator = WQTransitioningAnimator(items: [item, initailItem])
+//        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
+//        let item = WQAnimatedItem(container: alertView.frame.size, postionStyle: .left, bounceStyle: .bounceCenter)
+//        let animator = WQTransitioningAnimator(items: [item, initailItem])
+        let presentedFrame = UIScreen.main.bounds
+        let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: presentedFrame.height * 0.5, width: size.width, height: 0)
+       
+        let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
+        
+        let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
+        let animator = WQTransitioningAnimator(items: items)
+        
         let presention = WQPresentationable(subView: alertView, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
         
