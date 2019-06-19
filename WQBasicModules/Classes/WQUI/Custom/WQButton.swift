@@ -10,7 +10,7 @@
 
 import UIKit
 
-public final class WQButton: UIButton {
+open class WQButton: UIButton {
     public enum TitleAlignment {
         case left, right, bottom, top
     }
@@ -37,7 +37,7 @@ public final class WQButton: UIButton {
     private var titleFont = UIFont.systemFont(ofSize: 15) // 系统按钮默认字体字体
     private var titleFontObservation: NSKeyValueObservation?
     //AutoLayout时候 默认尺寸
-    public override var intrinsicContentSize: CGSize {
+    open override var intrinsicContentSize: CGSize {
         var contentSize: CGSize = .zero
         let imageSize = self.currentImageSize
         let titleSize = self.currentTitleSize
@@ -58,7 +58,7 @@ public final class WQButton: UIButton {
     }
     
        //swiftlint:disable function_body_length
-    public override func contentRect(forBounds bounds: CGRect) -> CGRect {
+    open override func contentRect(forBounds bounds: CGRect) -> CGRect {
         guard bounds.size != .zero else { return .zero }
         let rect = bounds.inset(by: self.contentEdgeInsets)
         var contentW, contentH: CGFloat
@@ -107,7 +107,7 @@ public final class WQButton: UIButton {
         return CGRect(x: contentX, y: contentY, width: contentW, height: contentH)
     }
     
-    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+    open override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var imgX, imgY: CGFloat
         let imageSize = self.currentImageSize
         let imageEdgeW = self.imageEdgeInsets.left + self.imageEdgeInsets.right
@@ -150,7 +150,7 @@ public final class WQButton: UIButton {
         return CGRect(origin: CGPoint(x: imgX + contentRect.minX, y: imgY + contentRect.minY), size: imageSize)
     }
     
-    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+    open override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var titleX, titleY: CGFloat 
         let titleSize = self.currentTitleSize
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
@@ -193,17 +193,17 @@ public final class WQButton: UIButton {
         return CGRect(origin: CGPoint(x: titleX + contentRect.minX, y: titleY + contentRect.minY), size: titleSize)
     }
     
-    public override func awakeFromNib() {
+    open override func awakeFromNib() {
         super.awakeFromNib()
         if self.hasTitle {
            self.addTitleLabelFontObservation()
         }
     }
-    public override func setTitle(_ title: String?, for state: UIControl.State) {
+    open override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         self.addTitleLabelFontObservation()
     }
-    public override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
+    open override func setAttributedTitle(_ title: NSAttributedString?, for state: UIControl.State) {
         super.setAttributedTitle(title, for: state)
         self.addTitleLabelFontObservation()
     }

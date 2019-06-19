@@ -27,7 +27,7 @@ public protocol DrivenableProtocol: NSObjectProtocol {
 public typealias Drivenable = NSObject & UIViewControllerInteractiveTransitioning & DrivenableProtocol
 
 public class WQVectorView: UIView {
-    /// 解决transform属性动画问题
+    /// center 与 point 布局解决transform属性动画问题
     public override func layoutSubviews() {
         super.layoutSubviews()
         guard let subView = self.subviews.first else { return }
@@ -138,13 +138,16 @@ open class WQPresentationable: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
-         self.animator.items.initial(nil, presenting: self)
-         self.view.addSubview(containerView) 
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        self.animator.items.initial(nil, presenting: self)
+        self.view.addSubview(containerView)
+        containerView.layoutIfNeeded() // 提前刷新 用于动画准备
+        CATransaction.commit()
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-        containerView.layoutIfNeeded() // 提前刷新 用于动画准备
         if presnetVC?.presentingViewController != nil {
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {

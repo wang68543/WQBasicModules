@@ -17,6 +17,8 @@ public class WQCache {
     //读写锁
     private var lock: pthread_rwlock_t
     private let ioQueue: DispatchQueue
+    
+//    public let memory: NSCache<NSString, Codable>
     /// 根据路径创建存储实例
     ///
     /// - Parameters:
@@ -25,10 +27,12 @@ public class WQCache {
     private init(_ directory: URL, fileManager: FileManager = .default) { //后面需新增内存存储
         var path = directory
         path.deleteLastPathComponent()
+        let lastComponment = directory.lastPathComponent
         path = path.appendingPathComponent("wq.disk.cache.com", isDirectory: true)
-            .appendingPathComponent(directory.lastPathComponent)
+            .appendingPathComponent(lastComponment)
         self.baseDirectory = path
         self.fileManager = fileManager
+        
         if !fileManager.fileExists(atPath: path.path) {
             do {
                 try fileManager.createDirectory(at: baseDirectory, withIntermediateDirectories: true, attributes: nil)
