@@ -17,7 +17,9 @@ public class WQCache {
     //读写锁
     private var lock: pthread_rwlock_t
     private let ioQueue: DispatchQueue
-    
+    #if DEBUG
+    public let memory: WQMemoryCache<String, Any>
+    #endif
 //    public let memory: NSCache<NSString, Codable>
     /// 根据路径创建存储实例
     ///
@@ -32,7 +34,10 @@ public class WQCache {
             .appendingPathComponent(lastComponment)
         self.baseDirectory = path
         self.fileManager = fileManager
-        
+        #if DEBUG
+        memory = WQMemoryCache()
+        memory.name = lastComponment
+        #endif
         if !fileManager.fileExists(atPath: path.path) {
             do {
                 try fileManager.createDirectory(at: baseDirectory, withIntermediateDirectories: true, attributes: nil)
@@ -41,7 +46,7 @@ public class WQCache {
             }
         }
         lock = pthread_rwlock_t()
-        ioQueue = DispatchQueue(label: "rwOptions") 
+        ioQueue = DispatchQueue(label: "rwOptions", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: .inherit, target: nil  )
     }
     
     public func fileExists(_ key: String) -> Bool {
@@ -56,10 +61,17 @@ public class WQCache {
                                        forKey key: String,
                                        expire: WQCacheExpiry = .never,
                                        completion: ((Error?) -> Void)? = nil) {
-        ioQueue.async {
+        #if DEBUG
+        if let obj = object {
+            self.setMemory(obj, for: key)
+        } else {
+            self.removeMemory(for: key)
+        }
+        #endif
+        ioQueue.async { 
             var err: Error?
             do {
-                try self.set(object, forKey: key, expire: expire)
+                try self.cache(object, forKey: key, expire: expire)
             } catch let error {
                 err = error
             }
@@ -71,19 +83,22 @@ public class WQCache {
                                   forKey key: String,
                                   encoder: JSONEncoder = JSONEncoder(),
                                   expire: WQCacheExpiry = .never) throws {
-        guard let obj = object else {
-            try? self.delete(forKey: key)//为空的时候移除
-            return
+        #if DEBUG
+        if let obj = object {
+            self.setMemory(obj, for: key)
+        } else {
+            self.removeMemory(for: key)
         }
-        do {
-            let data = try encoder.encode(obj)
-            try self.save(data, forKey: key)
-        } catch let error {
-            throw error
-        }
+        #endif
+        try self.cache(object, forKey: key, encoder: encoder, expire: expire)
     }
-    
+   
     public func object<T: Decodable>(forKey key: String, decoder: JSONDecoder = JSONDecoder()) -> T? {
+        #if DEBUG
+        if let value: T = self.memoryObject(for: key) {
+            return value
+        }
+        #endif
         if let data = self.read(for: key) {
             var obj: T?
             do {
@@ -101,6 +116,30 @@ public class WQCache {
     }
 }
 
+// MARK: - -- memory
+#if DEBUG
+private extension WQCache {
+    func cacheMemory<Element>(_ object: Element?, for key: String) {
+        if let obj = object {
+            self.setMemory(obj, for: key)
+        } else {
+            self.removeMemory(for: key)
+        }
+    }
+    func setMemory<Element>(_ object: Element, for key: String)  {
+        self.memory.setObject(object, forKey: key)
+    }
+    func memoryObject<Element>(for key: String) -> Element? {
+       return self.memory.object(forKey: key) as? Element
+    }
+    func removeMemory(for key: String) {
+        self.memory.removeObject(forKey: key)
+    }
+    func removeAllMemory() {
+        self.memory.removeAllObjects()
+    }
+}
+#endif
 // MARK: - -- Disk
 public extension WQCache {
     var totalSize: Int {
@@ -131,6 +170,22 @@ public extension WQCache {
     }
 }
 public extension WQCache {
+     func cache<T: Encodable>(_ object: T?,
+                                     forKey key: String,
+                                     encoder: JSONEncoder = JSONEncoder(),
+                                     expire: WQCacheExpiry = .never) throws {
+        guard let obj = object else {
+            try? self.delete(forKey: key)//为空的时候移除
+            return
+        }
+        do {
+            let data = try encoder.encode(obj)
+            try self.save(data, forKey: key, expire: expire)
+        } catch let error {
+            throw error
+        }
+    }
+    
     func save(_ data: Data,
               forKey key: String,
               options: Data.WritingOptions = .atomic,
@@ -191,6 +246,9 @@ public extension WQCache {
         }
     }
    func delete(forKey key: String) throws {
+    #if DEBUG
+    self.memory.removeObject(forKey: key)
+    #endif
         pthread_rwlock_wrlock(&lock)
         defer {
             pthread_rwlock_unlock(&lock)
@@ -205,6 +263,9 @@ public extension WQCache {
     ///   - completion: 清除完成
     func clear(_ isOnlyExpired: Bool = false, completion: ((Error?) -> Void)? = nil) {
         ioQueue.async {
+            #if DEBUG
+            self.memory.removeAllObjects()
+            #endif
             pthread_rwlock_wrlock(&self.lock)
             var err: Error?
             if !isOnlyExpired {

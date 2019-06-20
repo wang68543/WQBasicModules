@@ -6,16 +6,6 @@
 //
 
 import Foundation
-//class MemeoryObject: NSObject {
-//    let value: Any
-//    let expiryTime: Double
-//
-//    init(_ value: Any, expiry: WQCacheExpiry ) {
-//        self.value = value
-//        self.expiryTime = expiry.expiryTime()
-//        super.init()
-//    }
-//}
 class WQCacheEntry<KeyType: Hashable, ValueType: Any> {
     var key: KeyType
     var value: ValueType
@@ -81,7 +71,7 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
     
 //    open weak var delegate: NSCacheDelegate?
     
-    open func object(forKey key: KeyType) -> ValueType? {
+    open func object(forKey key: AnyHashable) -> ValueType? {
         var object: ValueType?
         
         let key = WQCacheKey(key)
