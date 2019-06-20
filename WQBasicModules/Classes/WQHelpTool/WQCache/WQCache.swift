@@ -18,7 +18,8 @@ public class WQCache {
     private var lock: pthread_rwlock_t
     private let ioQueue: DispatchQueue
     #if DEBUG
-    public let memory: WQMemoryCache<String, Any>
+    /// 内存缓存
+    public let memory: WQMemoryCache<Any>
     #endif
 //    public let memory: NSCache<NSString, Codable>
     /// 根据路径创建存储实例

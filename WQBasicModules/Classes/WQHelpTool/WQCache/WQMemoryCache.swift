@@ -6,75 +6,44 @@
 //
 
 import Foundation
-class WQCacheEntry<KeyType: Hashable, ValueType: Any> {
-    var key: KeyType
+class WQCacheEntry<ValueType: Any> { 
     var value: ValueType
     var cost: Int
     var prevByCost: WQCacheEntry?
     var nextByCost: WQCacheEntry?
     
-    init(key: KeyType, value: ValueType, cost: Int) {
-        self.key = key
+    init(value: ValueType, cost: Int) {
         self.value = value
         self.cost = cost
     }
 }
-
-class WQCacheKey: NSObject {
-    
-    var value: AnyHashable
-    
-    init(_ value: AnyHashable) {
-        self.value = value
-        super.init()
-    }
-    
-    override var hash: Int {
-        return self.value.hashValue
-//        switch self.value {
-//        case let nsObject as NSObject:
-//            return nsObject.hashValue
-//        case let hashable as AnyHashable:
-//            return hashable.hashValue
-//        default: return 0
-//        }
-    }
-    
-    override func isEqual(_ object: Any?) -> Bool {
-        guard let other = (object as? WQCacheKey) else { return false }
-        return self.value == other.value
-//        if self.value == other.value {
-//            return true
-//        } else {
-//            guard let left = self.value as? NSObject,
-//                let right = other.value as? NSObject else { return false }
-//
-//            return left.isEqual(right)
-//        }
-    }
-}
-
 //参照 NSCache NSCache 不支持协议类型
-open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
-    
+open class WQMemoryCache<ValueType: Any>: NSObject {
+    typealias CacheKeyType = AnyHashable
     open var name: String = ""
     open var totalCostLimit: Int = 0 // limits are imprecise/not strict
     open var countLimit: Int = 0 // limits are imprecise/not strict
     
-    private var _entries = [WQCacheKey: WQCacheEntry<KeyType, ValueType>]()
+    private var _entries = [CacheKeyType: WQCacheEntry<ValueType>]()
     
     private let _lock = NSLock()
     private var _totalCost = 0
-    private var _head: WQCacheEntry<KeyType, ValueType>?
+    private var _head: WQCacheEntry<ValueType>?
     
-    public override init() {}
+    public override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
 //    open weak var delegate: NSCacheDelegate?
-    
+    @objc func didReceiveMemoryWarning() {
+        self.removeAllObjects()
+    }
     open func object(forKey key: AnyHashable) -> ValueType? {
         var object: ValueType?
-        
-        let key = WQCacheKey(key)
         
         _lock.lock()
         if let entry = _entries[key] {
@@ -85,11 +54,11 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
         return object
     }
     
-    open func setObject(_ obj: ValueType, forKey key: KeyType) {
+    open func setObject(_ obj: ValueType, forKey key: AnyHashable) {
         setObject(obj, forKey: key, cost: 0)
     }
     
-    private func remove(_ entry: WQCacheEntry<KeyType, ValueType>) {
+    private func remove(_ entry: WQCacheEntry<ValueType>) {
         let oldPrev = entry.prevByCost
         let oldNext = entry.nextByCost
         
@@ -101,7 +70,7 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
         }
     }
     
-    private func insert(_ entry: WQCacheEntry<KeyType, ValueType>) {
+    private func insert(_ entry: WQCacheEntry<ValueType>) {
         guard var currentElement = _head else {
             // The cache is empty
             entry.prevByCost = nil
@@ -135,10 +104,10 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
         nextElement?.prevByCost = entry
     }
     
-    open func setObject(_ obj: ValueType, forKey key: KeyType, cost gloabalCost: Int) {
+    open func setObject(_ obj: ValueType, forKey key: AnyHashable, cost gloabalCost: Int) {
         let gloabal = max(gloabalCost, 0)
-        let keyRef = WQCacheKey(key)
-        
+//        let keyRef = WQCacheKey(key)
+        let keyRef = key
         _lock.lock()
         
         let costDiff: Int
@@ -154,7 +123,7 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
                 insert(entry)
             }
         } else {
-            let entry = WQCacheEntry(key: key, value: obj, cost: gloabal)
+            let entry = WQCacheEntry(value: obj, cost: gloabal)
             _entries[keyRef] = entry
             insert(entry)
             
@@ -172,7 +141,7 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
                 purgeAmount -= entry.cost
                 
                 remove(entry) // _head will be changed to next entry in remove(_:)
-                _entries[WQCacheKey(entry.key)] = nil
+                _entries[key] = nil
             } else {
                 break
             }
@@ -187,7 +156,7 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
                 purgeCount -= 1
                 
                 remove(entry) // _head will be changed to next entry in remove(_:)
-                _entries[WQCacheKey(entry.key)] = nil
+                _entries[key] = nil
             } else {
                 break
             }
@@ -196,11 +165,9 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
         _lock.unlock()
     }
     
-    open func removeObject(forKey key: KeyType) {
-        let keyRef = WQCacheKey(key)
-        
+    open func removeObject(forKey key: AnyHashable) {
         _lock.lock()
-        if let entry = _entries.removeValue(forKey: keyRef) {
+        if let entry = _entries.removeValue(forKey: key) {
             _totalCost -= entry.cost
             remove(entry)
         }
@@ -223,8 +190,23 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
         _totalCost = 0
         _lock.unlock()
     }
+    
+    subscript(key: AnyHashable) -> ValueType? {
+        set {
+            if let value = newValue {
+               self.setObject(value, forKey: key)
+            } else {
+                self.removeObject(forKey: key)
+            }
+        }
+        get {
+            return self.object(forKey: key)
+        }
+    }
 }
-
+//extension WQMemoryCache {
+//
+//}
 //public protocol NSCacheDelegate : NSObjectProtocol {
 //    func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any)
 //}
@@ -233,19 +215,4 @@ open class WQMemoryCache<KeyType: Hashable, ValueType: Any>: NSObject {
 //    func cache(_ cache: NSCache<AnyObject, AnyObject>, willEvictObject obj: Any) {
 //        // Default implementation does nothing
 //    }
-//}
-//public extension WQMemoryCache {
-//    subscript<T>(key: String) -> T? {
-//        set {
-//            self.set(newValue, forKey: key)
-//        }
-//        get {
-//            return self.object(forKey: key)
-//        }
-//    }
-//}
-//extension WQMemoryCache {
-//    private func cacheKey(forKey key: String) -> NSString {
-//        return NSString(string: key)
-//    }
-//}
+//} 
