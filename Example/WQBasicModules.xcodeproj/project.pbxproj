@@ -37,6 +37,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		82054F407ECFEAF8D8040DCF /* Pods_WQBasicModules_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D44262AD1043BDC2147E7F5 /* Pods_WQBasicModules_Example.framework */; };
 		8715328A22AE68AC00634ABE /* FlexBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8715328922AE68AB00634ABE /* FlexBoxViewController.swift */; };
+		871B9B9A22BCCA3E00E562F1 /* URLExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		607FACE51AFB9204008FA782 /* WQBasicModules_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WQBasicModules_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8715328922AE68AB00634ABE /* FlexBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexBoxViewController.swift; sourceTree = "<group>"; };
+		871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensionsTest.swift; sourceTree = "<group>"; };
 		92EC84B15A305381F4719D4E /* Pods-WQBasicModules_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQBasicModules_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WQBasicModules_Tests/Pods-WQBasicModules_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		974C5BCF4AA794D88D741F60 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D6CCD2968D5F5CAD6789AC6F /* Pods-WQBasicModules_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQBasicModules_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-WQBasicModules_Example/Pods-WQBasicModules_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -206,6 +208,7 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				871B9B9822BCC9F900E562F1 /* FoundationTests */,
 				2D61CD172088864300C0279A /* NSDate+UtilitiesTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -228,6 +231,14 @@
 				974C5BCF4AA794D88D741F60 /* LICENSE */,
 			);
 			name = "Podspec Metadata";
+			sourceTree = "<group>";
+		};
+		871B9B9822BCC9F900E562F1 /* FoundationTests */ = {
+			isa = PBXGroup;
+			children = (
+				871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */,
+			);
+			name = FoundationTests;
 			sourceTree = "<group>";
 		};
 		B086EDA977CE45A9CBCD3423 /* Pods */ = {
@@ -473,6 +484,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D61CD182088864300C0279A /* NSDate+UtilitiesTests.swift in Sources */,
+				871B9B9A22BCCA3E00E562F1 /* URLExtensionsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

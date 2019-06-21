@@ -20,6 +20,7 @@ class WQCacheEntry<ValueType: Any> {
 //参照 NSCache NSCache 不支持协议类型
 open class WQMemoryCache<ValueType: Any>: NSObject {
     typealias CacheKeyType = AnyHashable
+    
     open var name: String = ""
     open var totalCostLimit: Int = 0 // limits are imprecise/not strict
     open var countLimit: Int = 0 // limits are imprecise/not strict
@@ -32,14 +33,18 @@ open class WQMemoryCache<ValueType: Any>: NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveMemoryWarning), name: UIApplication.didReceiveMemoryWarningNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didReceiveMemoryWarning),
+                                               name: UIApplication.didReceiveMemoryWarningNotification,
+                                               object: nil)
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
     
 //    open weak var delegate: NSCacheDelegate?
-    @objc func didReceiveMemoryWarning() {
+    @objc
+    func didReceiveMemoryWarning() {
         self.removeAllObjects()
     }
     open func object(forKey key: AnyHashable) -> ValueType? {

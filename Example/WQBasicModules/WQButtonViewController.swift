@@ -11,8 +11,7 @@ import WQBasicModules
 class WQButtonViewController: UIViewController {
 
     override func viewDidLoad() {
-        super.viewDidLoad()
- 
+        super.viewDidLoad() 
         self.setupButtons() 
         self.setupMultiButtons()
     }
@@ -67,5 +66,13 @@ class WQButtonViewController: UIViewController {
         btn3.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 5)
         btn3.contentEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 5)
         self.view.addSubview(btn3)
+    }
+}
+public extension Calendar {
+    func numberOfDaysInMonth(for date: Date) -> Int {
+        return range(of: .day, in: .month, for: date)!.count
+    }
+    func numberOfDaysInYear(for date: Date) -> Int {
+        return range(of: .day, in: .year, for: date)!.count
     }
 }

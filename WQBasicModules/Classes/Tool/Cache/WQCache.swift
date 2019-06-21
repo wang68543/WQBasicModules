@@ -47,7 +47,11 @@ public class WQCache {
             }
         }
         lock = pthread_rwlock_t()
-        ioQueue = DispatchQueue(label: "rwOptions", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: .inherit, target: nil  )
+        ioQueue = DispatchQueue(label: "rwOptions",
+                                qos: DispatchQoS.background,
+                                attributes: DispatchQueue.Attributes.concurrent,
+                                autoreleaseFrequency: .inherit,
+                                target: nil )
     }
     
     public func fileExists(_ key: String) -> Bool {
@@ -127,7 +131,7 @@ private extension WQCache {
             self.removeMemory(for: key)
         }
     }
-    func setMemory<Element>(_ object: Element, for key: String)  {
+    func setMemory<Element>(_ object: Element, for key: String) {
         self.memory.setObject(object, forKey: key)
     }
     func memoryObject<Element>(for key: String) -> Element? {
@@ -172,9 +176,9 @@ public extension WQCache {
 }
 public extension WQCache {
      func cache<T: Encodable>(_ object: T?,
-                                     forKey key: String,
-                                     encoder: JSONEncoder = JSONEncoder(),
-                                     expire: WQCacheExpiry = .never) throws {
+                              forKey key: String,
+                              encoder: JSONEncoder = JSONEncoder(),
+                              expire: WQCacheExpiry = .never) throws {
         guard let obj = object else {
             try? self.delete(forKey: key)//为空的时候移除
             return

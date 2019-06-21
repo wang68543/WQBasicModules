@@ -31,69 +31,65 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
   #  s.swift_versions = ['3.0', '4.0', '4.2', '5.0']
-  s.swift_version = '4.2'
-    s.subspec 'WQExtensionModule' do |ss|
-        ss.source_files = 'WQBasicModules/Classes/WQExtensionModule/*.swift'
-    end
-
-    s.subspec 'WQAnimation' do |ss|
+  # s.swift_version = '4.2'
+    s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Layer/*.swift'
+            sss.source_files = 'WQBasicModules/Classes/Animation/Layer/*.swift'
         end
         ss.subspec 'Views' do |sss|
-            sss.dependency 'WQBasicModules/WQAnimation/Layer'
-            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Views/*.swift'
+            sss.dependency 'WQBasicModules/Animation/Layer'
+            sss.source_files = 'WQBasicModules/Classes/Animation/Views/*.swift'
         end
         ss.subspec 'Transitioning' do |sss|
-            sss.dependency 'WQBasicModules/WQExtensionModule'
-            sss.dependency 'WQBasicModules/WQUI/Help'
-            sss.source_files = 'WQBasicModules/Classes/WQAnimation/Transitioning/*.swift'
+            sss.dependency 'WQBasicModules/Extensions/Module'
+            sss.dependency 'WQBasicModules/UI/Help'
+            sss.source_files = 'WQBasicModules/Classes/Animation/Transitioning/*.swift'
         end
     end
 
-    s.subspec 'WQExtensions' do |ss|
-        ss.subspec 'WQUIKit' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift'
+    s.subspec 'Extensions' do |ss|
+        ss.subspec 'Module' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/Extensions/Module/*.swift'
         end
-        ss.subspec 'WQFoundation' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQFoundation/*.{swift,h,m}'
+        ss.subspec 'UIKit' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/Extensions/UIKit/*.swift'
         end
-        ss.subspec 'WQDate' do |sss|
-            sss.dependency 'WQBasicModules/WQExtensions/WQFoundation'
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQDate/*.swift'
+        ss.subspec 'Foundation' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/Extensions/Foundation/*.{swift,h,m}'
         end
-        ss.subspec 'WQString' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQExtensions/WQString/*.{swift,h,m}'
+        ss.subspec 'Date' do |sss|
+            sss.dependency 'WQBasicModules/Extensions/Foundation'
+            sss.source_files = 'WQBasicModules/Classes/Extensions/Date/*.swift'
+        end
+        ss.subspec 'String' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/Extensions/String/*.{swift,h,m}'
         end
     end
     
-     s.subspec 'WQHelpTool' do |ss|
-         ss.subspec 'WQCache' do |sss|
-             sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQCache/*.swift'
+     s.subspec 'Tool' do |ss|
+         ss.subspec 'Cache' do |sss|
+             sss.source_files = 'WQBasicModules/Classes/Tool/Cache/*.swift'
          end
-         ss.subspec 'WQJsonCodable' do |sss|
-            sss.source_files = 'WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift'
+         ss.subspec 'JsonCodable' do |sss|
+            sss.source_files = 'WQBasicModules/Classes/Tool/JsonCodable/*.swift'
          end
      end
      
-     s.subspec 'WQUI' do |ss|
+     s.subspec 'UI' do |ss|
          ss.subspec 'Custom' do |sss|
-             sss.dependency 'WQBasicModules/WQExtensionModule'
-             sss.source_files = 'WQBasicModules/Classes/WQUI/Custom/*.swift'
+             sss.dependency 'WQBasicModules/Extensions/Module'
+             sss.source_files = 'WQBasicModules/Classes/UI/Custom/*.swift'
          end
          ss.subspec 'Function' do |sss|
-             sss.source_files = 'WQBasicModules/Classes/WQUI/Function/*.swift'
+             sss.source_files = 'WQBasicModules/Classes/UI/Function/*.swift'
          end
          ss.subspec 'Help' do |sss|
-             sss.dependency 'WQBasicModules/WQExtensionModule'
-             ss.resource = 'WQBasicModules/Classes/WQUI/Help/WQUIBundle.bundle'
-             sss.source_files = 'WQBasicModules/Classes/WQUI/Help/*.swift'
+             sss.dependency 'WQBasicModules/Extensions/Module'
+             ss.resource = 'WQBasicModules/Classes/Resources/WQUIBundle.bundle'
+             sss.source_files = 'WQBasicModules/Classes/UI/Help/*.swift'
          end
          ss.subspec 'FlowLayout' do |sss|
-             sss.source_files = 'WQBasicModules/Classes/WQUI/FlowLayout/*.swift'
-         end
-         ss.subspec 'Extensions' do |sss|
-             sss.source_files = 'WQBasicModules/Classes/WQUI/Extensions/*.swift'
+             sss.source_files = 'WQBasicModules/Classes/UI/FlowLayout/*.swift'
          end
      end
 end

@@ -11,6 +11,6 @@ final public class WQUIHelp {
         if let rootViewController = UIApplication.shared.delegate?.window??.rootViewController {
             return rootViewController.topVisible()
         }
-        return nil
+        return UIApplication.shared.keyWindow?.rootViewController
     } 
 }

@@ -19,117 +19,111 @@
     "ios": "8.0"
   },
   "source_files": "WQBasicModules/Classes/WQBasicModules.h",
-  "swift_versions": "4.2",
   "subspecs": [
     {
-      "name": "WQExtensionModule",
-      "source_files": "WQBasicModules/Classes/WQExtensionModule/*.swift"
-    },
-    {
-      "name": "WQAnimation",
+      "name": "Animation",
       "subspecs": [
         {
           "name": "Layer",
-          "source_files": "WQBasicModules/Classes/WQAnimation/Layer/*.swift"
+          "source_files": "WQBasicModules/Classes/Animation/Layer/*.swift"
         },
         {
           "name": "Views",
           "dependencies": {
-            "WQBasicModules/WQAnimation/Layer": [
+            "WQBasicModules/Animation/Layer": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQAnimation/Views/*.swift"
+          "source_files": "WQBasicModules/Classes/Animation/Views/*.swift"
         },
         {
           "name": "Transitioning",
           "dependencies": {
-            "WQBasicModules/WQExtensionModule": [
+            "WQBasicModules/Extensions/Module": [
 
             ],
-            "WQBasicModules/WQUI/Help": [
+            "WQBasicModules/UI/Help": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQAnimation/Transitioning/*.swift"
+          "source_files": "WQBasicModules/Classes/Animation/Transitioning/*.swift"
         }
       ]
     },
     {
-      "name": "WQExtensions",
+      "name": "Extensions",
       "subspecs": [
         {
-          "name": "WQUIKit",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQUIKit/*.swift"
+          "name": "Module",
+          "source_files": "WQBasicModules/Classes/Extensions/Module/*.swift"
         },
         {
-          "name": "WQFoundation",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQFoundation/*.{swift,h,m}"
+          "name": "UIKit",
+          "source_files": "WQBasicModules/Classes/Extensions/UIKit/*.swift"
         },
         {
-          "name": "WQDate",
+          "name": "Foundation",
+          "source_files": "WQBasicModules/Classes/Extensions/Foundation/*.{swift,h,m}"
+        },
+        {
+          "name": "Date",
           "dependencies": {
-            "WQBasicModules/WQExtensions/WQFoundation": [
+            "WQBasicModules/Extensions/Foundation": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQDate/*.swift"
+          "source_files": "WQBasicModules/Classes/Extensions/Date/*.swift"
         },
         {
-          "name": "WQString",
-          "source_files": "WQBasicModules/Classes/WQExtensions/WQString/*.{swift,h,m}"
+          "name": "String",
+          "source_files": "WQBasicModules/Classes/Extensions/String/*.{swift,h,m}"
         }
       ]
     },
     {
-      "name": "WQHelpTool",
+      "name": "Tool",
       "subspecs": [
         {
-          "name": "WQCache",
-          "source_files": "WQBasicModules/Classes/WQHelpTool/WQCache/*.swift"
+          "name": "Cache",
+          "source_files": "WQBasicModules/Classes/Tool/Cache/*.swift"
         },
         {
-          "name": "WQJsonCodable",
-          "source_files": "WQBasicModules/Classes/WQHelpTool/WQJsonCodable/*.swift"
+          "name": "JsonCodable",
+          "source_files": "WQBasicModules/Classes/Tool/JsonCodable/*.swift"
         }
       ]
     },
     {
-      "name": "WQUI",
-      "resources": "WQBasicModules/Classes/WQUI/Help/WQUIBundle.bundle",
+      "name": "UI",
+      "resources": "WQBasicModules/Classes/Resources/WQUIBundle.bundle",
       "subspecs": [
         {
           "name": "Custom",
           "dependencies": {
-            "WQBasicModules/WQExtensionModule": [
+            "WQBasicModules/Extensions/Module": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQUI/Custom/*.swift"
+          "source_files": "WQBasicModules/Classes/UI/Custom/*.swift"
         },
         {
           "name": "Function",
-          "source_files": "WQBasicModules/Classes/WQUI/Function/*.swift"
+          "source_files": "WQBasicModules/Classes/UI/Function/*.swift"
         },
         {
           "name": "Help",
           "dependencies": {
-            "WQBasicModules/WQExtensionModule": [
+            "WQBasicModules/Extensions/Module": [
 
             ]
           },
-          "source_files": "WQBasicModules/Classes/WQUI/Help/*.swift"
+          "source_files": "WQBasicModules/Classes/UI/Help/*.swift"
         },
         {
           "name": "FlowLayout",
-          "source_files": "WQBasicModules/Classes/WQUI/FlowLayout/*.swift"
-        },
-        {
-          "name": "Extensions",
-          "source_files": "WQBasicModules/Classes/WQUI/Extensions/*.swift"
+          "source_files": "WQBasicModules/Classes/UI/FlowLayout/*.swift"
         }
       ]
     }
-  ],
-  "swift_version": "4.2"
+  ]
 }
