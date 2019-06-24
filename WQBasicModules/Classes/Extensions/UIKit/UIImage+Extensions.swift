@@ -10,7 +10,7 @@ import Foundation
 // MARK: - -- convenience init
 public extension UIImage {
     
-    /// SwifterSwift: Create UIImage from color and size.
+    /// 根据颜色创建图片
     ///
     /// - Parameters:
     ///   - color: image fill color.
@@ -33,6 +33,12 @@ public extension UIImage {
         self.init(cgImage: aCgImage)
     }
     
+    
+    /// 根据文字创建二维码
+    ///
+    /// - Parameters:
+    ///   - text: 文字内容
+    ///   - size: 图片尺寸
     convenience init(text: String, size: CGSize = CGSize(width: 100, height: 100)) {
         guard let filter = CIFilter(name: "CIQRCodeGenerator") else {
             self.init()
@@ -52,7 +58,13 @@ public extension UIImage {
         let height = Int(extent.height * scale)
         let spaceGray = CGColorSpaceCreateDeviceGray()
         let alpha = CGImageAlphaInfo.none.rawValue
-        let bitmap = CGContext(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0, space: spaceGray, bitmapInfo: alpha)
+        let bitmap = CGContext(data: nil,
+                               width: width,
+                               height: height,
+                               bitsPerComponent: 8,
+                               bytesPerRow: 0,
+                               space: spaceGray,
+                               bitmapInfo: alpha)
         // 创建 bitmap
         guard let bitmapRef = bitmap else {
                self.init()

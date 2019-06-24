@@ -115,8 +115,8 @@ public extension String {
             0xE0020...0xE007F, // Tags
             0xFE00...0xFE0F, // Variation Selectors
             0x1F900...0x1F9FF, // Supplemental Symbols and Pictographs
-            127000...127600, // Various asian characters
-            65024...65039, // Variation selector
+            127_000...127_600, // Various asian characters
+            65_024...65_039, // Variation selector
             9100...9300, // Misc items
             8400...8447: // Combining Diacritical Marks for Symbols
                 return true
@@ -166,7 +166,7 @@ public extension String {
         let hasLetters = rangeOfCharacter(from: .letters, options: .numeric, range: nil) != nil
         let hasNumbers = rangeOfCharacter(from: .decimalDigits, options: .literal, range: nil) != nil
         let comps = components(separatedBy: .alphanumerics)
-        return comps.joined(separator: "").count == 0 && hasLetters && hasNumbers
+        return comps.joined().isEmpty && hasLetters && hasNumbers
     }
     
     /// SwifterSwift: Check if string is palindrome.
@@ -244,8 +244,8 @@ public extension String {
     var isSpelledCorrectly: Bool {
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: utf16.count)
-        
-        let misspelledRange = checker.rangeOfMisspelledWord(in: self, range: range, startingAt: 0, wrap: false, language: Locale.preferredLanguages.first ?? "en")
+        let language = Locale.preferredLanguages.first ?? "en"
+        let misspelledRange = checker.rangeOfMisspelledWord(in: self, range: range, startingAt: 0, wrap: false, language: language)
         return misspelledRange.location == NSNotFound
     }
     

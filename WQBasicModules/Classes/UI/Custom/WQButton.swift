@@ -208,7 +208,7 @@ open class WQButton: UIButton {
         self.addTitleLabelFontObservation()
     }
     deinit {
-       
+       self.invalidate()
     }
 }
 
