@@ -19,6 +19,7 @@ open class WQWebController: UIViewController {
         }
     }
     public private(set) var progressView: UIProgressView?
+    private var titleObservation: NSKeyValueObservation?
     /// item 图标
     public var closeActionItemIcon: UIImage = {
         let frameworkBundle = Bundle(for: WQWebController.self)
@@ -71,11 +72,23 @@ open class WQWebController: UIViewController {
         self.progressView?.progress = 0
         
     }
+    func configObservation() {
+        let keyPath = \WKWebView.title 
+        titleObservation = self.webView.observe(keyPath, options: .new, changeHandler: { [weak self] _, change in
+            guard let weakSelf = self,
+                let newValue = change.newValue else {
+                    return
+            }
+            weakSelf.navigationItem.title = newValue
+        })
+    }
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView)
         //只能用此方法监听 否则在iOS13 或者iOS9下面都有问题
-        webView.addObserver(self, forKeyPath: "title", options: .new, context: nil)
+//        webView.addObserver(self, forKeyPath: "title", options: .new, context: nil)
+        self.configObservation()
         self.navigationItem.hidesBackButton = true
         configLeftItems(false)
     }
@@ -149,8 +162,19 @@ open class WQWebController: UIViewController {
         self.progressView?.frame = CGRect(x: 0, y: topY, width: self.webView.frame.width, height: 3)
     }
     deinit {
-        webView.removeObserver(self, forKeyPath: "title")
+//        webView.removeObserver(self, forKeyPath: "title")
+        self.invalidate()
         debugPrint(#function)
+    }
+    func invalidate() {
+        if #available(iOS 11.0, *) {
+            titleObservation = nil
+        } else {
+            if let observer = titleObservation {
+                self.webView.removeObserver(observer, forKeyPath: "title")
+                titleObservation = nil
+            }
+        }
     }
 }
 
