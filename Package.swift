@@ -7,3 +7,18 @@
 //
 
 import PackageDescription
+
+let package = Package(
+    name: "WQBasicModules",
+    products: [
+        .library(
+            name: "WQBasicModules",
+            targets: ["WQBasicModules"])
+    ],
+    targets: [
+        .target(
+            name: "WQBasicModules",
+            path: "WQBasicModules/Class")
+    ],
+    swiftLanguageVersions: [.v4, .v5]
+)
