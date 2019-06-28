@@ -11,6 +11,16 @@ open class WQWebView: WKWebView {
     public var isAttachProgressTop: Bool = true
     public var progressHeight: CGFloat = 5
     
+    public var titleDidChange: ((String?) -> Void)? {
+        didSet {
+            if titleDidChange == nil {
+                self.invalidateTitleObservation()
+            } else {
+                self.configTitleObservation()
+            }
+        }
+    }
+    
     public lazy var progressView: UIProgressView = {
         let progressView = UIProgressView()
         progressView.progressViewStyle = .default
@@ -22,6 +32,7 @@ open class WQWebView: WKWebView {
     /// KVO
     private var progressObservation: NSKeyValueObservation?
     private var isLoadingObservation: NSKeyValueObservation?
+    private var titleObservation: NSKeyValueObservation?
     
     open override func layoutSubviews() {
         super.layoutSubviews()
@@ -41,8 +52,10 @@ open class WQWebView: WKWebView {
         super.tintColorDidChange()
         self.progressView.progressTintColor = tintColor
     }
-    deinit { 
+    deinit {
+        debugPrint("浏览器销毁了")
         self.invalidate()
+        self.invalidateTitleObservation()
     }
    
 }
@@ -64,6 +77,30 @@ extension WQWebView {
         }
     }
    
+    func configTitleObservation() {
+        guard self.titleObservation == nil else {
+            return
+        }
+        let keyPath = \WQWebView.title
+        titleObservation = self.observe(keyPath, options: .new, changeHandler: { [weak self] _, change in
+            guard let weakSelf = self,
+                let newValue = change.newValue else {
+                    return
+            }
+            weakSelf.titleDidChange?(newValue)
+        })
+    }
+    
+    func invalidateTitleObservation() {
+        if #available(iOS 11.0, *) {
+            titleObservation = nil
+        } else {
+            if let observer = titleObservation {
+                self.removeObserver(observer, forKeyPath: "title")
+                titleObservation = nil
+            }
+        }
+    }
     func configObservation() {
         let progress = \WQWebView.estimatedProgress
         progressObservation = self.observe(progress, options: .new, changeHandler: { [weak self] _, change in

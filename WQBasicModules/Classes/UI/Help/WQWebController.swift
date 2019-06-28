@@ -162,19 +162,12 @@ open class WQWebController: UIViewController {
         self.progressView?.frame = CGRect(x: 0, y: topY, width: self.webView.frame.width, height: 3)
     }
     deinit {
-//        webView.removeObserver(self, forKeyPath: "title")
         self.invalidate()
         debugPrint(#function)
     }
     func invalidate() {
-        if #available(iOS 11.0, *) {
-            titleObservation = nil
-        } else {
-            if let observer = titleObservation {
-                self.webView.removeObserver(observer, forKeyPath: "title")
-                titleObservation = nil
-            }
-        }
+        // TODO: -- 这里iOS 11.0以下系统不需要自行移除监听 (与WQWebView监听自身移除有所不同)
+        titleObservation = nil
     }
 }
 
