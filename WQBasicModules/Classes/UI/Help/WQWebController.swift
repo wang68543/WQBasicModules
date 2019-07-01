@@ -126,30 +126,30 @@ open class WQWebController: UIViewController {
         
     }
     //添加观察者方法
-    override open func observeValue(forKeyPath keyPath: String?,
-                                    of object: Any?,
-                                    change: [NSKeyValueChangeKey: Any]?,
-                                    context: UnsafeMutableRawPointer?) {
-        
-//        //设置进度条
-//        if keyPath == "estimatedProgress"{
-//            progressView.alpha = 1.0
-//            progressView.setProgress(Float(webView.estimatedProgress), animated: true)
-//            if webView.estimatedProgress >= 1.0 {
-//                UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseOut, animations: {
-//                    self.progressView.alpha = 0
-//                }, completion: { (finish) in
-//                    self.progressView.setProgress(0.0, animated: false)
-//                })
-//            }
+//    override open func observeValue(forKeyPath keyPath: String?,
+//                                    of object: Any?,
+//                                    change: [NSKeyValueChangeKey: Any]?,
+//                                    context: UnsafeMutableRawPointer?) {
+//
+////        //设置进度条
+////        if keyPath == "estimatedProgress"{
+////            progressView.alpha = 1.0
+////            progressView.setProgress(Float(webView.estimatedProgress), animated: true)
+////            if webView.estimatedProgress >= 1.0 {
+////                UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseOut, animations: {
+////                    self.progressView.alpha = 0
+////                }, completion: { (finish) in
+////                    self.progressView.setProgress(0.0, animated: false)
+////                })
+////            }
+////        }
+//
+//            //重设标题
+////        else
+//        if keyPath == "title" {
+//            self.navigationItem.title = self.webView.title
 //        }
-        
-            //重设标题
-//        else
-        if keyPath == "title" {
-            self.navigationItem.title = self.webView.title
-        }
-    }
+//    }
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.webView.frame = self.view.bounds
@@ -166,7 +166,7 @@ open class WQWebController: UIViewController {
         debugPrint(#function)
     }
     func invalidate() {
-        // TODO: -- 这里iOS 11.0以下系统不需要自行移除监听 (与WQWebView监听自身移除有所不同)
+        // todo: -- 这里iOS 11.0以下系统不需要自行移除监听 (与WQWebView监听自身移除有所不同)
         titleObservation = nil
     }
 }
