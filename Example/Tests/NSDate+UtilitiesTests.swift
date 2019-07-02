@@ -7,7 +7,7 @@
 //
 
 import XCTest
-//@testable import WQBasicModules
+@testable import WQBasicModules
 class NSDate_UtilitiesTests: XCTestCase {
     
     override func setUp() {
@@ -20,6 +20,11 @@ class NSDate_UtilitiesTests: XCTestCase {
         super.tearDown()
     }
  
+    func test_add_date_with_unit_in_day() {
+        let date = Date().dateByAdding(1, unit: .day)
+        let expect = "2019-07-03".toDate(format: .kAMMAdd)
+        XCTAssertEqual(date, expect) 
+    }
 //    func test_create_date_with_week_in_year()  {
 //        let date = Date.date(of: 1, in: 2018)!
 //        let expect = Date(timeIntervalSince1970: 1514649600)

@@ -74,41 +74,30 @@ public extension Date {
                   with calendar: Calendar = .current) -> Int {
         var startComp = calendar.dateComponents(Date.commentFlags, from: self)
         var endComp = calendar.dateComponents(Date.commentFlags, from: endDate)
-        // swiftlint:disable fallthrough
+        var clearCmps:[Calendar.Component] = []
         switch unit {
         case .era:
-            startComp.year = 0
-            endComp.year = 0
-            fallthrough
+            clearCmps = [.year, .month, .day, .hour, .minute, .second, .nanosecond]
         case .year:
-            startComp.month = 1
-            endComp.month = 1
-            fallthrough
+            clearCmps = [.month, .day, .hour, .minute, .second, .nanosecond]
         case .month:
-            startComp.day = 1
-            endComp.day = 1
-            fallthrough
+            clearCmps = [.day, .hour, .minute, .second, .nanosecond]
         case .day:
-            startComp.hour = 0
-            endComp.hour = 0
-            fallthrough
+            clearCmps = [.hour, .minute, .second, .nanosecond]
         case .hour:
-            startComp.minute = 0
-            endComp.minute = 0
-            fallthrough
+            clearCmps = [.minute, .second, .nanosecond]
         case .minute:
-            startComp.second = 0
-            endComp.second = 0
-            fallthrough
+            clearCmps = [.second, .nanosecond]
         case .second:
-            startComp.nanosecond = 0
-            endComp.nanosecond = 0
-            fallthrough
+            clearCmps = [.nanosecond]
         default:
-            break
+            clearCmps = []
+        }
+        for cmp in clearCmps {
+            startComp.setValue(0, for: cmp)
+            endComp.setValue(0, for: cmp)
         }
         let deltComponments = calendar.dateComponents([unit], from: startComp, to: endComp)
-       
         guard let value = deltComponments.value(for: unit) else {
             return 0
         }
@@ -272,24 +261,7 @@ public extension Date {
     /// - Returns: calculated date
     func dateByAdding(_ counts: Int, unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         var components = DateComponents()
-        switch unit {
-        case .second:
-            components.second = counts
-        case .minute:
-            components.minute = counts
-        case .hour:
-            components.hour = counts
-        case .weekOfYear:
-            components.weekOfYear = counts
-        case .day:
-            components.day = counts
-        case .month:
-            components.month = counts
-        case .year:
-            components.year = counts
-        default:
-            break
-        }
+        components.setValue(counts, for: unit)
         return calendar.date(byAdding: components, to: self)!
     }
 }
@@ -401,56 +373,4 @@ public extension Date {
         }
         return units
     }
-    //swiftlint:disable function_body_length
-//    func isSame(_ otherDate: Date, unit: Calendar.Component = .day, calendar: Calendar = Calendar.current) -> Bool {
-//        let cmps = calendar.dateComponents(in: calendar.timeZone, from: self)
-//        let otherCmps = calendar.dateComponents(in: calendar.timeZone, from: otherDate)
-//        var isSame: Bool = true
-//        switch unit {
-//        case .nanosecond:
-//            if cmps.nanosecond != otherCmps.nanosecond { return false }
-//            fallthrough
-//        case .second:
-//            if cmps.second != otherCmps.second { return false }
-//            fallthrough
-//        case .minute:
-//            if cmps.minute != otherCmps.minute { return false }
-//            fallthrough
-//        case .hour:
-//            if cmps.hour != otherCmps.hour { return false }
-//            fallthrough
-//        case .day:
-//            if cmps.day != otherCmps.day { return false }
-//            fallthrough
-//        case .month:
-//            if cmps.month != otherCmps.month { return false }
-//            fallthrough
-//        case .year:
-//            if cmps.year != otherCmps.year { return false }
-//            fallthrough
-//        case .era:
-//            isSame = cmps.era == otherCmps.era
-//        case .weekday:
-//            isSame = cmps.weekday == otherCmps.weekday
-//                    && self.isSame(otherDate, unit: .day, calendar: calendar)
-//        case .weekdayOrdinal:
-//            isSame = cmps.weekdayOrdinal == otherCmps.weekdayOrdinal
-//                    && self.isSame(otherDate, unit: .day, calendar: calendar)
-//        case .quarter:
-//            isSame = cmps.quarter == otherCmps.quarter
-//                    && self.isSame(otherDate, unit: .day, calendar: calendar)
-//        case .weekOfMonth:
-//            isSame = cmps.weekOfMonth == otherCmps.weekOfMonth
-//                    && self.isSame(otherDate, unit: .month, calendar: calendar)
-//        case .weekOfYear:
-//            isSame = cmps.weekOfYear == otherCmps.weekOfYear
-//                    && self.isSame(otherDate, unit: .year, calendar: calendar)
-//        case .yearForWeekOfYear:
-//            isSame = cmps.yearForWeekOfYear == otherCmps.yearForWeekOfYear
-//                    && self.isSame(otherDate, unit: .year, calendar: calendar)
-//        default:
-//            isSame = false
-//        }
-//        return isSame
-//    }
 }
