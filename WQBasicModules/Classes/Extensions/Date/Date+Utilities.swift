@@ -74,7 +74,7 @@ public extension Date {
                   with calendar: Calendar = .current) -> Int {
         var startComp = calendar.dateComponents(Date.commentFlags, from: self)
         var endComp = calendar.dateComponents(Date.commentFlags, from: endDate)
-        var clearCmps:[Calendar.Component] = []
+        var clearCmps: [Calendar.Component] = []
         switch unit {
         case .era:
             clearCmps = [.year, .month, .day, .hour, .minute, .second, .nanosecond]
@@ -368,8 +368,7 @@ public extension Date {
         case .yearForWeekOfYear: // let comps = DateComponents(weekday: 6, weekOfYear: 1, yearForWeekOfYear: 2016)
            units = []
         default:
-            units = []
-            break;
+            units = [] 
         }
         return units
     }

@@ -8,8 +8,27 @@
 import UIKit
 
 public class WQTextView: UITextView {
-    public let placeholderLabel: UILabel = UILabel()
-    public var placeholderInsets: UIEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
+
+    public var placeholder: String? {
+        didSet {
+            self.placeholderLabel.text = placeholder
+            self.hasPlaceholder = true
+            refreshPlaceholder()
+        }
+    }
+    public var attributedPlaceholder: NSAttributedString? {
+        didSet {
+            self.placeholderLabel.attributedText = attributedPlaceholder
+            self.hasPlaceholder = true
+            refreshPlaceholder()
+        }
+    }
+    
+    public var placeholderInsets: UIEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7) {
+        didSet {
+            refreshPlaceholder()
+        }
+    }
     
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
@@ -21,15 +40,6 @@ public class WQTextView: UITextView {
         commonInit()
     }
     private func commonInit() {
-        placeholderLabel.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-        placeholderLabel.lineBreakMode = .byWordWrapping
-        placeholderLabel.numberOfLines = 0
-        placeholderLabel.font = self.font
-        placeholderLabel.backgroundColor = .clear
-        //swiftlint:disable object_literal
-        placeholderLabel.textColor = UIColor(white: 0.7, alpha: 1.0)
-        placeholderLabel.alpha = 0
-        self.addSubview(placeholderLabel)
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(textViewTextDidChange(_:)),
@@ -62,12 +72,18 @@ public class WQTextView: UITextView {
     }
     
     private func refreshPlaceholder() {
+        guard self.hasPlaceholder else {
+            return
+        }
         placeholderLabel.alpha = self.text.isEmpty ? 1 : 0
         self.setNeedsLayout()
         self.layoutIfNeeded()
     }
     override public func layoutSubviews() {
         super.layoutSubviews()
+        guard self.hasPlaceholder else {
+            return
+        }
         let insets = placeholderInsets
         placeholderLabel.sizeToFit()
         placeholderLabel.frame = CGRect(x: insets.left,
@@ -75,6 +91,22 @@ public class WQTextView: UITextView {
                                         width: self.frame.width - insets.left - insets.right,
                                         height: placeholderLabel.frame.height)
     }
+    
+    private var hasPlaceholder: Bool = false
+    private lazy var placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = UIColor.clear
+        label.autoresizingMask = [.flexibleHeight, .flexibleWidth]
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.font = self.font
+        let value: CGFloat = 0.7
+        label.textColor = UIColor(white: value, alpha: 1.0)
+        label.alpha = 0
+        self.addSubview(label)
+        return label
+    }()
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
