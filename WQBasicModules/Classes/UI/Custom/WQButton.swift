@@ -259,6 +259,7 @@ private extension WQButton {
             size = attributeString.boundingRect(with: maxSize, options: options, context: nil).size
         } else if let title = self.currentTitle {
             let text = NSString(string: title)
+            // 这里 如果计算有偏差的话  稍微调大下button的尺寸
             //notaTODO: 如果当maxSize不够的时候 就会缩减多余的字符以..代替并返回缩减之后的尺寸
             size = text.boundingRect(with: maxSize, options: options, attributes: [.font: titleFont], context: nil).size
         }
