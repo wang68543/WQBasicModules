@@ -49,6 +49,12 @@ public class WQTextView: UITextView {
     
     @objc
     func textViewTextDidChange(_ note: Notification) {
+        guard self.hasPlaceholder else {
+            return
+        }
+        if (placeholderLabel.alpha == 1.0 && self.text.isEmpty) || (placeholderLabel.alpha == 0.0 && !self.text.isEmpty) {
+            return
+        }
         self.refreshPlaceholder()
     }
     
