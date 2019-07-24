@@ -170,7 +170,7 @@ open class WQWebController: UIViewController {
         titleObservation = nil
     }
 }
-
+@available(*, deprecated, message: "WQWebController is deprecated")
 @objc extension WQWebController {
     open func arrowAction() {
         if self.webView.canGoBack {

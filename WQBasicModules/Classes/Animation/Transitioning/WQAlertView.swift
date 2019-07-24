@@ -144,6 +144,7 @@ public class WQAlertView: UIView {
     }
 }
 
+@available(*, deprecated, message: "WQAlertView is deprecated")
 // MARK: - button
 extension WQAlertView {
     open class Button: UIButton {
@@ -210,4 +211,4 @@ extension WQAlertView {
             action.handler?(action)
         }
     }
-}
+} 
