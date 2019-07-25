@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '8.0'
   s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
-  #  s.swift_versions = ['3.0', '4.0', '4.2', '5.0']
+  s.swift_versions = ['4.0', '4.2', '5.0']
   # s.swift_version = '4.2'
     s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
