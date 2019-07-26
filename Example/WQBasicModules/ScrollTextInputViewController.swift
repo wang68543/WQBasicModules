@@ -18,8 +18,7 @@ class ScrollTextInputViewController: UIViewController {
         keyboardMangaer.shouldResignOnTouchOutside = true
         if #available(iOS 11.0, *) {
             self.scrollView.contentInsetAdjustmentBehavior = .never
-        }
-        // Do any additional setup after loading the view.
+        } 
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -27,15 +26,5 @@ class ScrollTextInputViewController: UIViewController {
         textFiled.backgroundColor = UIColor.red
         self.scrollView.addSubview(textFiled)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

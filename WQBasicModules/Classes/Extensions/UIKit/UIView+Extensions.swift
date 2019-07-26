@@ -14,20 +14,27 @@ public extension UIView {
     /// - Parameters:
     ///   - radius: 圆角半径
     ///   - corners: 圆角位置
-    func maskCorners(_ radius: CGFloat, corners: UIRectCorner = .allCorners) {
-        if corners.contains(.allCorners) {
-            layer.cornerRadius = radius
-            layer.masksToBounds = true
-        } else {
-            guard self.bounds.size != .zero else {
-                fatalError("设置不规则圆角必须先有尺寸")
-            }
-           makeRectangleCorners(CGSize(width: radius, height: radius), react: self.bounds, corners: corners)
-        }
+    func maskCorners(_ radius: CGFloat) {
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
     }
-    
-    /// 设置方形边框
-    func makeRectangleCorners(_ cornerSize: CGSize, react: CGRect, corners: UIRectCorner = .allCorners) {
+    /// 设置顶部的圆角
+    func makeTopCorners(_ radius: CGFloat) {
+        makeShapeCorners(CGSize(width: radius, height: radius), corners: [.topLeft, .topRight])
+    }
+    /// 可选位置圆角设置
+    /// 可以使用 DispatchQueue.main.async { makeShapeCorners.. } 来调用此方法 (待主线程闲时调用以保证view已刷新)
+    /// - Parameters:
+    ///   - cornerSize: 圆角大小
+    ///   - corners: 圆角位置
+    func makeShapeCorners(_ cornerSize: CGSize, corners: UIRectCorner = .allCorners) {
+        if self.bounds.size == .zero {
+            self.layoutIfNeeded()
+        }
+        
+        guard self.bounds.size != .zero else {
+            fatalError("设置不规则圆角必须先有尺寸")
+        }
         let bounds = self.bounds
         let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
         let shapeLayer = CAShapeLayer()
@@ -35,7 +42,6 @@ public extension UIView {
         shapeLayer.path = bezierPath.cgPath
         layer.mask = shapeLayer
     }
-    
     /// 截屏
     func snapshot(_ size: CGSize = .zero) -> UIImage? {
         let drawSize = (size == .zero) ? self.bounds.size : size
