@@ -76,9 +76,9 @@ open class WQPresentationable: UIViewController {
         }
     }
     /// 是否支持点击背景消失
-    open var isEnableTabBackgroundDismiss: Bool = false {
+    open var tapDimmingViewDismissable: Bool = false {
         didSet {
-            if isEnableTabBackgroundDismiss {
+            if tapDimmingViewDismissable {
                 self.addTapGesture()
             } else {
                 self.removeTapGesture()
@@ -219,38 +219,6 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate { // 转场�
     }
 }
 
-// MARK: - -- UIViewControllerAnimatedTransitioning
-//extension WQPresentationable: UIViewControllerAnimatedTransitioning {
-//    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-//        return self.animator.duration
-//    }
-//    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-//        guard let fromVC = transitionContext.viewController(forKey: .from),
-//            let toVC = transitionContext.viewController(forKey: .to) else {
-//                return
-//        }
-//        let vcFinalFrame = transitionContext.finalFrame(for: toVC)
-//        let isPresented = toVC.presentingViewController === fromVC
-//        let toVCView = transitionContext.view(forKey: .to)
-//        let transitionView = transitionContext.containerView
-//        if let toView = toVCView {
-//            toView.frame = vcFinalFrame
-//            transitionView.addSubview(toView)
-//        }
-//        let animateCompletion: WQAnimateCompletion = { flag -> Void in
-//            let success = !transitionContext.transitionWasCancelled
-//            if (isPresented && !success) || (!isPresented && success) {
-//                toVCView?.removeFromSuperview()
-//            }
-//            transitionContext.completeTransition(success)
-//        }
-//        if isPresented {
-//            self.animator.animated(presented: fromVC, presenting: toVC, isShow: true, completion: animateCompletion)
-//        } else {
-//            self.animator.animated(presented: toVC, presenting: fromVC, isShow: false, completion: animateCompletion)
-//        }
-//    }
-//}
 // MARK: - -- Gesture Handle
 extension WQPresentationable {
     @objc
@@ -279,7 +247,6 @@ extension WQPresentationable {
         self.tapGesture = nil
     }
 }
-
 // MARK: - -- UIGestureRecognizerDelegate
 extension WQPresentationable: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

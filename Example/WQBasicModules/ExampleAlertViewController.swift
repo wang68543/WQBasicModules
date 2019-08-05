@@ -47,8 +47,8 @@ class ExampleAlertViewController: BaseExampleViewController {
         
         let presention = WQPresentationable(subView: alertView, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
-        
-         presention.isEnableTabBackgroundDismiss = true
+        presention.interactionDissmissDirection = .down
+         presention.tapDimmingViewDismissable = true
         
 //        let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")
 //        alertView.addAction(WQAlertAction(title: "取消", handler: { action in
