@@ -7,7 +7,7 @@
 import UIKit
 
 /// 专职于显示Alert的Window
-class WQPresentationWindow: UIWindow { }
+class WQTransitionWindow: UIWindow { }
 
 public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
 /// 解决 iOS10之前以及非Modal形式的动画无法手势驱动问题
@@ -36,43 +36,21 @@ public class WQVectorView: UIView {
         subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height) 
     }
 }
-open class WQPresentationable: UIViewController {
+open class WQTransitionable: UIViewController {
     /// 容器View 所有的View都需要成为当前View的子View
     public let containerView: WQVectorView = {
         let view = WQVectorView()
         view.backgroundColor = UIColor.clear
         return view
     }()
-    public let animator: WQTransitioningAnimator
+    public let animator: WQTransitionAnimator
     // 显示的时候的交互动画 暂时只支持present动画
-    public var showInteractive: Drivenable?
+    public var showDriven: Drivenable?
     public var hidenDriven: Drivenable?
     /// 滑动交互消失的方向
-    public var interactionDissmissDirection: DrivenDirection? {
+    public var interactionDismissDirection: DrivenDirection? {
         didSet {
-            if #available(iOS 10.0, *) {
-                if let direction = interactionDissmissDirection {
-                    let panGR = UIPanGestureRecognizer()
-                    let driven = WQPropertyDriven(panGR, items: self.animator.items, direction: direction, isShow: false)
-                    self.view.addGestureRecognizer(panGR)
-                    panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
-                    panGR.delegate = self
-                    self.hidenDriven = driven
-                } else {
-                    self.hidenDriven = nil
-                }
-            } else {
-                if let direction = interactionDissmissDirection {
-                    let panGR = UIPanGestureRecognizer()
-                    let driven = WQTransitionDriven(gesture: panGR, direction: direction)
-                    self.view.addGestureRecognizer(panGR)
-                    panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
-                    panGR.delegate = self
-                    self.hidenDriven = driven
-                } else {
-                    self.hidenDriven = nil
-                }
-            }
+           self.configDismissInteractive(for: interactionDismissDirection)
         }
     }
     /// 是否支持点击背景消失
@@ -86,9 +64,9 @@ open class WQPresentationable: UIViewController {
         }
     }
     /// 是否开启键盘输入框监听 (用于自动上移输入框遮挡)
-    open var isEnableKeyboardObserver: Bool = false {
+    open var enableKeyboardObserver: Bool = false {
         didSet {
-            if isEnableKeyboardObserver {
+            if enableKeyboardObserver {
                 self.keyboardManager = WQKeyboardManager(self.containerView) 
             } else {
                 self.keyboardManager = nil
@@ -96,7 +74,7 @@ open class WQPresentationable: UIViewController {
         }
     }
     /// 是否是Modal出来的
-    public internal(set) var shownMode: WQShownMode = .present 
+    public internal(set) var showMode: WQShowMode = .present 
     ///containerView上的子View 用于转场动画切换
     public internal(set) var childViews: [UIView] = []
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
@@ -106,10 +84,10 @@ open class WQPresentationable: UIViewController {
     /// shownInWindow的时候 记录的属性 用于消失之后恢复
     internal weak var previousKeyWindow: UIWindow?
     //用于容纳当前控制器的window窗口
-    internal var containerWindow: WQPresentationWindow?
+    internal var containerWindow: WQTransitionWindow?
     
     /// 非present的时候 用于动画管理器里面的转场动画
-    internal weak var shouldUsingPresentionAnimatedController: UIViewController?
+    internal weak var usingTransitionAnimatedController: UIViewController?
     
     /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
     public var shouldViewWillApperance: Bool = false
@@ -121,7 +99,7 @@ open class WQPresentationable: UIViewController {
     ///   - containerFrme: 初始化设置的container的frame
     ///   - presentedFrame: 弹出框的frame
     public init(subView: UIView,
-                animator: WQTransitioningAnimator,
+                animator: WQTransitionAnimator,
                 containerFrame: CGRect? = nil,
                 presentedFrame: CGRect? = nil) {
         self.animator = animator
@@ -158,7 +136,7 @@ open class WQPresentationable: UIViewController {
         }
     }
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        switch shownMode {
+        switch showMode {
         case .childController:
             self.hideFromController(animated: flag, completion: completion)
         case .present:
@@ -198,7 +176,7 @@ open class WQPresentationable: UIViewController {
     }
 }
 // MARK: - -- UIViewControllerTransitioningDelegate
-extension WQPresentationable: UIViewControllerTransitioningDelegate { // 转场管理
+extension WQTransitionable: UIViewControllerTransitioningDelegate { // 转场管理
     public func animationController(forPresented presented: UIViewController,
                                     presenting: UIViewController,
                                     source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -214,13 +192,12 @@ extension WQPresentationable: UIViewControllerTransitioningDelegate { // 转场�
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-            guard let interactive = self.showInteractive else { return nil }
+            guard let interactive = self.showDriven else { return nil }
             return interactive.isInteractive ? interactive : nil
     }
 }
-
 // MARK: - -- Gesture Handle
-extension WQPresentationable {
+extension WQTransitionable {
     @objc
     func handleDismissPanGesture(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
@@ -247,8 +224,27 @@ extension WQPresentationable {
         self.tapGesture = nil
     }
 }
+private extension WQTransitionable {
+    func configDismissInteractive(for dismissDirection: DrivenDirection?) {
+        guard let direction = dismissDirection else {
+            self.hidenDriven = nil
+            return
+        }
+        let panGR = UIPanGestureRecognizer()
+        if #available(iOS 10.0, *) {
+            let driven = WQPropertyDriven(panGR, items: self.animator.items, direction: direction, isShow: false)
+            self.hidenDriven = driven
+        } else {
+            let driven = WQTransitionDriven(gesture: panGR, direction: direction)
+            self.hidenDriven = driven
+        }
+        self.view.addGestureRecognizer(panGR)
+        panGR.addTarget(self, action: #selector(handleDismissPanGesture(_:)))
+        panGR.delegate = self
+    }
+}
 // MARK: - -- UIGestureRecognizerDelegate
-extension WQPresentationable: UIGestureRecognizerDelegate {
+extension WQTransitionable: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if let tapGR = gestureRecognizer as? UITapGestureRecognizer,
             tapGR === self.tapGesture {

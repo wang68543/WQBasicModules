@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         switch sender.state {
         case .began:
             let presentionView = WQPresentionView()
-            let keyPath = \WQPresentationable.containerView.frame
+            let keyPath = \WQTransitionable.containerView.frame
             let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
             let color = WQAnimatedItem.defaultViewBackground()
 //            presentionView.wm.show(items: [item,color,TestPresent()])
@@ -56,8 +56,8 @@ class ViewController: UIViewController {
             //        }
 //            presentionView.wm.presentation?.interactionDissmissDirection = .down
 //            presentionView.wm.presentation?.isEnableSlideDismiss = true
-            let animator: WQTransitioningAnimator = WQTransitioningAnimator(items: [item,color,TestPresent()])
-            let present = WQPresentationable(subView: presentionView, animator: animator)
+            let animator: WQTransitionAnimator = WQTransitionAnimator(items: [item,color,TestPresent()])
+            let present = WQTransitionable(subView: presentionView, animator: animator)
 //            present.showInteractive =  WQPropertyDriven
 //            present.showInteractive?.completionWidth = 200
 //             present.showInteractive?.isInteracting = true
@@ -225,7 +225,7 @@ class ViewController: UIViewController {
 //        self.navigationController?.pushViewController(second, animated: true)
 //        return
         let presentionView = WQPresentionView()
-        let keyPath = \WQPresentationable.containerView.frame
+        let keyPath = \WQTransitionable.containerView.frame
         let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width, height: 500)))
         let color = WQAnimatedItem.defaultViewBackground()
 //        presentionView.wm.show(items: [item,color,TestPresent()])
@@ -238,11 +238,11 @@ class ViewController: UIViewController {
 //        }
 //        let itemFrame = WQAnimatedItem.defaultViewShowFrame()
         let showFrame = CGRect(x: 0, y: UIScreen.main.bounds.height - 500, width: UIScreen.main.bounds.width, height: 500)
-        let navkey = \WQPresentationable.view.frame
-        let viewItem = WQPresentedAnimatedItem(navkey, initial:showFrame, show:showFrame)
-        let animator = WQTransitioningAnimator(items: [item, color,viewItem ])
-        let presentation = WQPresentationable(subView: presentionView, animator: animator)
-        presentation.interactionDissmissDirection = .down
+        let navkey = \WQTransitionable.view.frame
+        let viewItem = WQTransitionAnimatedItem(navkey, initial:showFrame, show:showFrame)
+        let animator = WQTransitionAnimator(items: [item, color,viewItem ])
+        let presentation = WQTransitionable(subView: presentionView, animator: animator)
+        presentation.interactionDismissDirection = .down
         presentation.showInController(self.tabBarController!, animated: true, completion: nil)
 //        presentation.isEnableTabBackgroundDismiss = true
         

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public enum WQShownMode {
+public enum WQShowMode {
     /// 系统的present的形式呈现的
     case present
     /// 直接加在当前或者当前可见控制器的子控制器
@@ -17,7 +17,7 @@ public enum WQShownMode {
     case windowRootController
 }
 // 预处理
-public enum WQPresentationOption {
+public enum WQTransitionOption {
     public enum Position {
         case none
         case left
@@ -43,7 +43,7 @@ public enum WQPresentationOption {
         case actionSheet
     }
 }
-public extension WQPresentationOption.Position {
+public extension WQTransitionOption.Position {
     /// 根据TransitionType计算尺寸
     ///
     /// - Parameters:
@@ -115,7 +115,7 @@ public extension WQPresentationOption.Position {
         return position
     }
 }
-public extension WQPresentationOption.Bounce {
+public extension WQTransitionOption.Bounce {
     func estimateInitialFrame(_ position: CGPoint,
                               anchorPoint: CGPoint,
                               size: CGSize,

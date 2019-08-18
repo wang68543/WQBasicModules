@@ -8,14 +8,14 @@
 import UIKit
 
 public protocol WQTransitioningAnimatorable: NSObjectProtocol {
-    func transition(shouldAnimated animator: WQTransitioningAnimator,
+    func transition(shouldAnimated animator: WQTransitionAnimator,
                     presented: UIViewController?, //当以独立window的形式显示的时候 这里为空
                     presenting: UIViewController?,
                     isShow: Bool,
                     completion: @escaping WQAnimateCompletion)
 }
 public typealias WQAnimateCompletion = ((Bool) -> Void)
-open class WQTransitioningAnimator: NSObject {
+open class WQTransitionAnimator: NSObject {
     public struct Options {
         public var duration: TimeInterval
         public var delay: TimeInterval
@@ -67,7 +67,7 @@ open class WQTransitioningAnimator: NSObject {
 }
  
 // MARK: - --UIViewControllerAnimatedTransitioning
-extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
+extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         if self.willTransitionStyle == .dismissal {
             return self.dismissOptions.duration
@@ -108,7 +108,7 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
         }
     }
 }
-public extension WQTransitioningAnimator {
+public extension WQTransitionAnimator {
     /// 执行动画
     ///
     /// - Parameters:
@@ -158,7 +158,7 @@ public extension WQTransitioningAnimator {
 
 // 若有代理但是没有实现动画就用代理里面的默认动画
 extension WQTransitioningAnimatorable {
-    func transition(shouldAnimated animator: WQTransitioningAnimator,
+    func transition(shouldAnimated animator: WQTransitionAnimator,
                     presented: UIViewController?,
                     presenting: UIViewController?,
                     isShow: Bool,
@@ -167,23 +167,23 @@ extension WQTransitioningAnimatorable {
     }
 }
 
-public extension WQTransitioningAnimator.Options {
-    static let normalPresent = WQTransitioningAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
-    static let normalDismiss = WQTransitioningAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseInOut])
+public extension WQTransitionAnimator.Options {
+    static let normalPresent = WQTransitionAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
+    static let normalDismiss = WQTransitionAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseInOut])
     
-    static let actionSheetPresent = WQTransitioningAnimator.Options(0.25, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
-    static let actionSheetDismiss = WQTransitioningAnimator.Options(0.15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
+    static let actionSheetPresent = WQTransitionAnimator.Options(0.25, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
+    static let actionSheetDismiss = WQTransitionAnimator.Options(0.15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     
-    static let alertPresent = WQTransitioningAnimator.Options(0.15,
-                                                              delay: 0,
-                                                              damping: 3,
-                                                              velocity: 15,
-                                                              options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
-    static let alertDismiss = WQTransitioningAnimator.Options(0.15,
-                                                              delay: 0,
-                                                              damping: 0,
-                                                              velocity: 0,
-                                                              options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
+    static let alertPresent = WQTransitionAnimator.Options(0.15,
+                                                           delay: 0,
+                                                           damping: 3,
+                                                           velocity: 15,
+                                                           options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
+    static let alertDismiss = WQTransitionAnimator.Options(0.15,
+                                                           delay: 0,
+                                                           damping: 0,
+                                                           velocity: 0,
+                                                           options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     /// 是否是spring 动画
     var isSpringAnimate: Bool {
         return self.initialVelocity * self.damping != 0

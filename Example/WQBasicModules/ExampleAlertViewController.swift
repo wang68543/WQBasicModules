@@ -43,11 +43,11 @@ class ExampleAlertViewController: BaseExampleViewController {
         let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
         
         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
-        let animator = WQTransitioningAnimator(items: items)
+        let animator = WQTransitionAnimator(items: items)
         
-        let presention = WQPresentationable(subView: alertView, animator: animator)
+        let presention = WQTransitionable(subView: alertView, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
-        presention.interactionDissmissDirection = .down
+        presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
         
 //        let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")

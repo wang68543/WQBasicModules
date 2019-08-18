@@ -59,7 +59,7 @@ public extension CALayer {
         self._remove(forKey: AnimationKeys.transition)
     }
     
-    private func _add(_ animate: CAAnimation, forKey key: String) {
+    private func _add(_ animate: CAAnimation, forKey key: String) { 
         if self.animation(forKey: key) != nil {
            self.removeAnimation(forKey: key)
         }

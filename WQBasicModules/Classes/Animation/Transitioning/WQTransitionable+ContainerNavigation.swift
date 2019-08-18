@@ -7,7 +7,7 @@
 
 import Foundation
 // MARK: - -- transition between sibling containerView childViews
-extension WQPresentationable {
+extension WQTransitionable {
     private var defaultDuration: TimeInterval {
         return 0.15
     }
