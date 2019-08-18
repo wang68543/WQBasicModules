@@ -35,12 +35,12 @@ public extension CALayer {
         animate.repeatCount = isRepeat ? MAXFLOAT : 1
         animate.duration = duration
         animate.isRemovedOnCompletion = false
-        self.interal_add(animate, forKey: AnimationKeys.rotation)
+        self._add(animate, forKey: AnimationKeys.rotation)
         return animate
     }
      
     func stopRotation() {
-        self.interal_remove(forKey: AnimationKeys.rotation)
+        self._remove(forKey: AnimationKeys.rotation)
     }
     
     @discardableResult
@@ -51,22 +51,22 @@ public extension CALayer {
         transtion.duration = duration
         transtion.timingFunction = timing
         transtion.type = type
-        self.interal_add(transtion, forKey: AnimationKeys.transition)
+        self._add(transtion, forKey: AnimationKeys.transition)
         return transtion
     }
     
     func stopTransition() {
-        self.interal_remove(forKey: AnimationKeys.transition)
+        self._remove(forKey: AnimationKeys.transition)
     }
     
-    private func interal_add(_ animate: CAAnimation, forKey key: String) {
+    private func _add(_ animate: CAAnimation, forKey key: String) {
         if self.animation(forKey: key) != nil {
            self.removeAnimation(forKey: key)
         }
         animate.delegate = self
         self.add(animate, forKey: key)
     }
-    private func interal_remove(forKey key: String) {
+    private func _remove(forKey key: String) {
         self.removeAnimation(forKey: key)
     }
 }
