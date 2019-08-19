@@ -8,10 +8,10 @@
 import Foundation
 public typealias TransitionCompleted = (() -> Void)
 // MARK: - -- 提供给外部使用的接口
-extension WQPresentationable {
+extension WQTransitionable {
     /// modal 形式显示当前控制器
     public func presentSelf(in controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
-        self.shownMode = .present
+        self.showMode = .present
         controller.modalPresentationStyle = .custom
         controller.transitioningDelegate = self
         self.modalPresentationStyle = .custom
@@ -26,7 +26,7 @@ extension WQPresentationable {
     ///   - flag: 是否动画
     ///   - completion: 显示完成
     public func shownInParent(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
-        self.shownMode = .superChildController
+        self.showMode = .superChildController
         var topVC: UIViewController
         var animatedVC: UIViewController?
         // 尽量确保层级是navigationController的子控制器 并动画的是navigationController的子控制器
@@ -43,7 +43,7 @@ extension WQPresentationable {
             animatedVC = controller.topVisible()
         }
         //这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
-        shouldUsingPresentionAnimatedController = animatedVC
+        usingTransitionAnimatedController = animatedVC
         let isAppearanceTransition = self.shouldViewWillApperance
         if isAppearanceTransition {
             topVC.beginAppearanceTransition(false, animated: flag)
@@ -72,16 +72,16 @@ extension WQPresentationable {
     
     /// 被弹出的控制器以新建keyWindow的根控制器的形式显示
     public func shownInWindow(animated flag: Bool, completion: TransitionCompleted?) {
-        self.shownMode = .windowRootController
+        self.showMode = .windowRootController
         let preRootViewController = UIApplication.shared.delegate?.window??.rootViewController
-        self.shouldUsingPresentionAnimatedController = preRootViewController
+        self.usingTransitionAnimatedController = preRootViewController
         let isAppearanceTransition = self.shouldViewWillApperance
         if isAppearanceTransition {
             preRootViewController?.beginAppearanceTransition(false, animated: flag) // 当前控制器会直接调用viewAppear
         }
         self.previousKeyWindow = UIApplication.shared.keyWindow
         if self.containerWindow == nil {
-            self.containerWindow = WQPresentationWindow(frame: UIScreen.main.bounds)
+            self.containerWindow = WQTransitionWindow(frame: UIScreen.main.bounds)
             self.containerWindow?.windowLevel = WQContainerWindowLevel
             self.containerWindow?.backgroundColor = .clear;// 避免横竖屏旋转时出现黑色
         }
@@ -100,9 +100,9 @@ extension WQPresentationable {
     } 
     /// 直接以当前控制器的子控制器的形式显示(与当前控制器的界面显示同步)
     public func showInController(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
-        self.shownMode = .childController
+        self.showMode = .childController
         let isAppearanceTransition = self.shouldViewWillApperance
-        shouldUsingPresentionAnimatedController = controller
+        usingTransitionAnimatedController = controller
         if isAppearanceTransition {
             self.beginAppearanceTransition(true, animated: flag)
         }
@@ -126,7 +126,7 @@ extension WQPresentationable {
         self.showAnimated(flag, presented: controller, completion: animateFinshed(_:))
     }
     internal func hideFromParent(animated flag: Bool, completion: TransitionCompleted? ) {
-        let other = self.shouldUsingPresentionAnimatedController
+        let other = self.usingTransitionAnimatedController
         let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
@@ -147,7 +147,7 @@ extension WQPresentationable {
         self.hideAnimated(flag, other: other, completion: animateFinshed(_:))
     }
     internal func hideFromWindow(animated flag: Bool, completion: TransitionCompleted?) {
-        let other = self.shouldUsingPresentionAnimatedController
+        let other = self.usingTransitionAnimatedController
         let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
@@ -165,7 +165,7 @@ extension WQPresentationable {
     }
    
     internal func hideFromController(animated flag: Bool, completion: TransitionCompleted?) {
-        let other = self.shouldUsingPresentionAnimatedController
+        let other = self.usingTransitionAnimatedController
         let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
@@ -187,7 +187,7 @@ extension WQPresentationable {
     }
 }
 
-private extension WQPresentationable {
+private extension WQTransitionable {
     func clearShowWindow() {
         if UIApplication.shared.keyWindow === self.containerWindow {
             if let isPreviousHidden = self.previousKeyWindow?.isHidden,
@@ -219,7 +219,7 @@ private extension WQPresentationable {
     func showAnimated(_ flag: Bool, presented inVC: UIViewController?, completion: @escaping ((Bool) -> Void)) {
         if flag {
             if #available(iOS 10.0, *),
-                let driven = self.showInteractive as? WQPropertyDriven {
+                let driven = self.showDriven as? WQPropertyDriven {
                 driven.startIneractive(presented: inVC, presenting: self) { completion($0 == .end) }
             } else {
                 self.animator.animated(presented: inVC, presenting: self, isShow: true) { completion($0) }
@@ -229,6 +229,6 @@ private extension WQPresentationable {
             completion(true)
         }
         // 10以下 不支持手势驱动
-        if #available(iOS 10.0, *) { } else { interactionDissmissDirection = nil }
+        if #available(iOS 10.0, *) { } else { interactionDismissDirection = nil }
     }
 }

@@ -7,16 +7,16 @@
 
 // MARK: - common
 public extension WQModules where Base: UIView {
-    var presentation: WQPresentationable? {
+    var presentation: WQTransitionable? {
         return self.base.presentation
     }
     //显示
-    func show(animator: WQTransitioningAnimator,
+    func show(animator: WQTransitionAnimator,
               frame container: CGRect? = nil,
               presented: CGRect? = nil,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
-        let presention = WQPresentationable(subView: self.base, animator: animator, containerFrame: container, presentedFrame: presented)
+        let presention = WQTransitionable(subView: self.base, animator: animator, containerFrame: container, presentedFrame: presented)
         presention.show(animated: true, in: inController, completion: completion)
     }
     
@@ -51,9 +51,9 @@ public extension WQModules where Base: UIView {
         self.show(items: items, inController: inController, completion: completion)
     }
     /// 采用默认的动画风格展示
-    func show(from: WQPresentationOption.Position,
-              show: WQPresentationOption.Position,
-              dismiss: WQPresentationOption.Position? = nil,
+    func show(from: WQTransitionOption.Position,
+              show: WQTransitionOption.Position,
+              dismiss: WQTransitionOption.Position? = nil,
               isDimming: Bool = true,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
@@ -104,15 +104,15 @@ public extension WQModules where Base: UIView {
     func show(items: WQAnimatedConfigItems,
               inController: UIViewController? = nil,
               completion: (() -> Void)? = nil) {
-        let animator = WQTransitioningAnimator(items: items)
+        let animator = WQTransitionAnimator(items: items)
        self.show(animator: animator, inController: inController, completion: completion)
     }
 }
 
 // MARK: - alert
 public extension WQModules where Base: UIView {
-    func alert(options present: WQTransitioningAnimator.Options = .alertPresent,
-               dismiss: WQTransitioningAnimator.Options = .alertDismiss,
+    func alert(options present: WQTransitionAnimator.Options = .alertPresent,
+               dismiss: WQTransitionAnimator.Options = .alertDismiss,
                isDimming: Bool = true,
                containerSize: CGSize? = nil,
                inController: UIViewController? = nil,
@@ -144,11 +144,11 @@ public extension WQModules where Base: UIView {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        let animator = WQTransitioningAnimator(items: items, options: present, dismiss: dismiss)
+        let animator = WQTransitionAnimator(items: items, options: present, dismiss: dismiss)
         self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     }
-    func actionSheet(options present: WQTransitioningAnimator.Options = .actionSheetPresent,
-                     dismiss: WQTransitioningAnimator.Options = .actionSheetDismiss,
+    func actionSheet(options present: WQTransitionAnimator.Options = .actionSheetPresent,
+                     dismiss: WQTransitionAnimator.Options = .actionSheetDismiss,
                      isDimming: Bool = true,
                      containerSize: CGSize? = nil,
                      inController: UIViewController? = nil,
@@ -175,7 +175,7 @@ public extension WQModules where Base: UIView {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        let animator = WQTransitioningAnimator(items: items, options: present, dismiss: dismiss)
+        let animator = WQTransitionAnimator(items: items, options: present, dismiss: dismiss)
         self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     } 
     
@@ -184,13 +184,13 @@ public extension WQModules where Base: UIView {
 private var presenterKey: Void?
 
 internal extension UIView {
-    var presentation: WQPresentationable? {
+    var presentation: WQTransitionable? {
         set {
             //这里内存由外部管理
             objc_setAssociatedObject(self, &presenterKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return objc_getAssociatedObject(self, &presenterKey) as? WQPresentationable
+            return objc_getAssociatedObject(self, &presenterKey) as? WQTransitionable
         }
     }
 }

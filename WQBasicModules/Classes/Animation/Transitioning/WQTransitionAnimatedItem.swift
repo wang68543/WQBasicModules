@@ -1,5 +1,5 @@
 //
-//  WQPresentedAnimatedItem.swift
+//  WQTransitionAnimatedItem.swift
 //  Pods
 //
 //  Created by WangQiang on 2019/1/14.
@@ -41,7 +41,7 @@ public extension WQAnimatedConfigAble {
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
 
 /// 动画属性配置 (主要配置参与动画的两个ccontroller的属性变化)
-public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedConfigAble { 
+public class WQTransitionAnimatedItem<ViewControllerType, Element>: WQAnimatedConfigAble { 
     public typealias Value = Element
     public typealias Root = ReferenceWritableKeyPath<ViewControllerType, Value>
     public let keyPath: Root
@@ -77,14 +77,14 @@ public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedCon
 }
 
 /// 显示其他控制器的viewController的动画配置
-public final class WQViewControllerAnimatedItem<Element>: WQPresentedAnimatedItem<UIViewController, Element> { }
+public final class WQViewControllerAnimatedItem<Element>: WQTransitionAnimatedItem<UIViewController, Element> { }
 
 /// 被present出来的viewController的动画配置
-public final class WQAnimatedItem<Element>: WQPresentedAnimatedItem<WQPresentationable, Element> { }
+public final class WQAnimatedItem<Element>: WQTransitionAnimatedItem<WQTransitionable, Element> { }
 public extension WQAnimatedItem where Element == UIColor? {
     class func defaultViewBackground(_ show: UIColor = UIColor.black.withAlphaComponent(0.6),
                                      initial: UIColor = UIColor.clear) -> WQAnimatedItem {
-        let keyPath = \WQPresentationable.view.backgroundColor
+        let keyPath = \WQTransitionable.view.backgroundColor
         return WQAnimatedItem(keyPath, initial: initial, show: show)
     }
 }
@@ -93,13 +93,13 @@ public extension WQAnimatedItem where Element == CGRect {
     /// VC view的背景动画 
     class func defaultViewShowFrame(_ show: CGRect = UIScreen.main.bounds,
                                     initial: CGRect = UIScreen.main.bounds) -> WQAnimatedItem {
-        let keyPath = \WQPresentationable.view.frame
+        let keyPath = \WQTransitionable.view.frame
         return WQAnimatedItem(keyPath, initial: initial, show: show)
     }
     convenience init(container size: CGSize,
-                     initial: WQPresentationOption.Position,
-                     show: WQPresentationOption.Position,
-                     dismiss: WQPresentationOption.Position? = nil,
+                     initial: WQTransitionOption.Position,
+                     show: WQTransitionOption.Position,
+                     dismiss: WQTransitionOption.Position? = nil,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let initialFrame = initial.frame(size, presentedFrame: presentedFrame, isInside: false)
         let showFrame = show.frame(size, presentedFrame: presentedFrame, isInside: true)
@@ -109,7 +109,7 @@ public extension WQAnimatedItem where Element == CGRect {
     convenience init(container position: CGPoint,
                      anchor point: CGPoint,
                      size: CGSize,
-                     bounceStyle: WQPresentationOption.Bounce,
+                     bounceStyle: WQTransitionOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let origin = CGPoint(x: position.x + point.x * size.width, y: position.y + point.y * size.height)
         let showFrame = CGRect(origin: position, size: size)
@@ -117,22 +117,22 @@ public extension WQAnimatedItem where Element == CGRect {
         self.init(containerFrame: initialFrame, show: showFrame)
     }
     convenience init(container size: CGSize,
-                     postionStyle: WQPresentationOption.Position,
-                     bounceStyle: WQPresentationOption.Bounce,
+                     postionStyle: WQTransitionOption.Position,
+                     bounceStyle: WQTransitionOption.Bounce,
                      presentedFrame: CGRect = UIScreen.main.bounds) {
         let anchorPoint = CGPoint(x: 0.5, y: 0.5)
         let postion = postionStyle.positionPoint(size, anchorPoint: anchorPoint, viewFrame: presentedFrame)
         self.init(container: postion, anchor: anchorPoint, size: size, bounceStyle: bounceStyle, presentedFrame: presentedFrame)
     }
     convenience init(containerFrame initial: CGRect, show: CGRect, dismiss: CGRect? = nil) {
-        let keyPath = \WQPresentationable.containerView.frame
+        let keyPath = \WQTransitionable.containerView.frame
         self.init(keyPath, initial: initial, show: show, dismiss: dismiss ?? initial)
     }
 }
 
 public extension WQAnimatedItem where Element == CGAffineTransform {
     convenience init(containerTransform initial: CGAffineTransform, show: CGAffineTransform, dismiss: CGAffineTransform? = nil) {
-        let keyPath = \WQPresentationable.containerView.transform
+        let keyPath = \WQTransitionable.containerView.transform
         self.init(keyPath, initial: initial, show: show, dismiss: dismiss ?? initial)
     }
 }
