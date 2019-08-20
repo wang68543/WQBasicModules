@@ -43,7 +43,6 @@ open class WQTransitionAnimator: NSObject {
     @available(*, deprecated, message: "use Options.duration")
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
-//    public var preferredStyle: Style = .default
     public var items: WQAnimatedConfigItems
     /// 当设置代理之后 所有的动画 以及初始化都有代理完成
     public weak var delegate: WQTransitioningAnimatorable?
@@ -63,6 +62,10 @@ open class WQTransitionAnimator: NSObject {
                             options present: Options = .normalPresent,
                             dismiss: Options? = .normalDismiss) {
         self.init(items: items, options: present, dismiss: dismiss)
+    }
+    
+    public func append(_ config: WQAnimatedConfigAble) {
+        self.items.append(config)
     }
 }
  
