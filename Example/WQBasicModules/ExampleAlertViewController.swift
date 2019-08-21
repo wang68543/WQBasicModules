@@ -21,6 +21,8 @@ class ExampleAlertViewController: BaseExampleViewController {
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
         imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
         self.view.addSubview(imageView)
+//        imageView.image = UIImage(linearGradient: [UIColor.red.cgColor, UIColor.green.cgColor], size: CGSize(width: 60, height: 60), startPoint: CGPoint(x: 1, y: 1), endPoint: CGPoint(x: 0, y: 1), locations: nil)
+        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.green.cgColor], size: CGSize(width: 60, height: 60), startCenter: CGPoint(x: 0.5, y: 0.5), startRaidus: 0, endCenter: CGPoint(x: 0.5, y: 0.5), endRaidus: 60, options: .drawsAfterEndLocation)
     }
  
     @objc func alertAction(_ sender: UIButton) {
