@@ -72,7 +72,7 @@ public extension UIImage {
         self.init(cgImage: aCgImage)
     }
     
-    /// 绘制线性渐变
+    /// 绘制线性渐变  https://www.jianshu.com/p/cd2d1f374a39
     ///
     /// - Parameters:
     ///   - colors: 颜色
@@ -89,7 +89,7 @@ public extension UIImage {
                      endCenter end: CGPoint = CGPoint(x: 0.5, y: 0.5),
                      endRaidus eRadius: CGFloat,
                      options: CGGradientDrawingOptions) {
-        UIGraphicsBeginImageContextWithOptions(size, true, 1)
+        UIGraphicsBeginImageContextWithOptions(size, false, 1)
         defer {
             UIGraphicsEndImageContext()
         }

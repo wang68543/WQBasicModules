@@ -26,7 +26,6 @@ public extension WQModules where Base: UIView {
         self.presentation?.dismiss(animated: true, completion: completion)
     }
     
-    
 }
 
 // MARK: - normal animate api
