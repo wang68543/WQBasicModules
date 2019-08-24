@@ -8,5 +8,9 @@
 import UIKit
 
 public class WQDateFormatter: DateFormatter {
-    public static let shared = WQDateFormatter()
+    public static let shared: WQDateFormatter = {
+        let formatter = WQDateFormatter()
+        formatter.timeZone = .current
+        return formatter
+    }()
 }
