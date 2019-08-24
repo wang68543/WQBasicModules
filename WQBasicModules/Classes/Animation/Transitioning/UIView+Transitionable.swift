@@ -11,18 +11,21 @@ public extension WQModules where Base: UIView {
         return self.base.presentation
     }
     //显示
+    @discardableResult
     func show(animator: WQTransitionAnimator,
               frame container: CGRect? = nil,
               presented: CGRect? = nil,
               inController: UIViewController? = nil,
-              completion: (() -> Void)? = nil) {
+              completion: (() -> Void)? = nil) -> WQTransitionable {
         let presention = WQTransitionable(subView: self.base, animator: animator, containerFrame: container, presentedFrame: presented)
         presention.show(animated: true, in: inController, completion: completion)
+        return presention
     }
     
     func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
         self.presentation?.dismiss(animated: true, completion: completion)
     }
+    
 }
 
 // MARK: - normal animate api
@@ -35,12 +38,13 @@ public extension WQModules where Base: UIView {
         }
     }
     /// 自己直接设置动画尺寸
+    @discardableResult
     func show(from: CGRect,
               show: CGRect,
               dismiss: CGRect? = nil,
               isDimming: Bool = true,
               inController: UIViewController? = nil,
-              completion: (() -> Void)? = nil) {
+              completion: (() -> Void)? = nil) -> WQTransitionable {
         let item = WQAnimatedItem(containerFrame: from, show: show, dismiss: dismiss)
         var items: [WQAnimatedConfigAble] = []
         items.append(item)
@@ -48,21 +52,17 @@ public extension WQModules where Base: UIView {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        self.show(items: items, inController: inController, completion: completion)
+       return self.show(items: items, inController: inController, completion: completion)
     }
     /// 采用默认的动画风格展示
+    @discardableResult
     func show(from: WQTransitionOption.Position,
               show: WQTransitionOption.Position,
               dismiss: WQTransitionOption.Position? = nil,
               isDimming: Bool = true,
               inController: UIViewController? = nil,
-              completion: (() -> Void)? = nil) {
-        if self.base.bounds.size == .zero {
-            self.base.setNeedsUpdateConstraints()
-            self.base.layoutIfNeeded()
-        }
-        assert(self.base.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
-        let viewSize = self.base.frame.size
+              completion: (() -> Void)? = nil) -> WQTransitionable {
+        let viewSize = self.base.layoutUpdates()
         let item = WQAnimatedItem(container: viewSize,
                                   initial: from,
                                   show: show,
@@ -74,7 +74,7 @@ public extension WQModules where Base: UIView {
            let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        self.show(items: items, inController: inController, completion: completion)
+        return self.show(items: items, inController: inController, completion: completion)
     }
     //    func shake(direction: ShakeDirection = .horizontal, duration: TimeInterval = 1, animationType: ShakeAnimationType = .easeOut, completion:(() -> Void)? = nil) {
     //        CATransaction.begin()
@@ -101,22 +101,22 @@ public extension WQModules where Base: UIView {
     //        layer.add(animation, forKey: "shake")
     //        CATransaction.commit()
     //    }
+    @discardableResult
     func show(items: WQAnimatedConfigItems,
               inController: UIViewController? = nil,
-              completion: (() -> Void)? = nil) {
+              completion: (() -> Void)? = nil) -> WQTransitionable {
         let animator = WQTransitionAnimator(items: items)
-       self.show(animator: animator, inController: inController, completion: completion)
+       return self.show(animator: animator, inController: inController, completion: completion)
     }
 }
 
 // MARK: - alert
 public extension WQModules where Base: UIView {
-    func alert(options present: WQTransitionAnimator.Options = .alertPresent,
-               dismiss: WQTransitionAnimator.Options = .alertDismiss,
-               isDimming: Bool = true,
+    @discardableResult
+    func alert(_ isDimming: Bool = true,
                containerSize: CGSize? = nil,
                inController: UIViewController? = nil,
-               completion: (() -> Void)? = nil) {
+               completion: (() -> Void)? = nil) -> WQTransitionable {
         let presentedFrame = UIScreen.main.bounds
         let viewW = presentedFrame.width
         let viewH = presentedFrame.height
@@ -124,11 +124,7 @@ public extension WQModules where Base: UIView {
         if let vectorSize = containerSize {
             size = vectorSize
         } else {
-            if self.base.bounds.size == .zero {
-                self.base.setNeedsUpdateConstraints()
-                self.base.layoutIfNeeded()
-            }
-            size = self.base.bounds.size
+            size = self.base.layoutUpdates()
         }
         let frame = CGRect(x: (viewW - size.width) * 0.5,
                            y: (viewH - size.height) * 0.5,
@@ -144,15 +140,14 @@ public extension WQModules where Base: UIView {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        let animator = WQTransitionAnimator(items: items, options: present, dismiss: dismiss)
-        self.show(animator: animator, frame: frame, inController: inController, completion: completion)
+        let animator = WQTransitionAnimator(items: items, options: .alertPresent, dismiss: .alertDismiss)
+        return self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     }
-    func actionSheet(options present: WQTransitionAnimator.Options = .actionSheetPresent,
-                     dismiss: WQTransitionAnimator.Options = .actionSheetDismiss,
-                     isDimming: Bool = true,
+    @discardableResult
+    func actionSheet(_ isDimming: Bool = true,
                      containerSize: CGSize? = nil,
                      inController: UIViewController? = nil,
-                     completion: (() -> Void)? = nil) {
+                     completion: (() -> Void)? = nil) -> WQTransitionable {
         let presentedFrame = UIScreen.main.bounds
         let viewW = presentedFrame.width
         let viewH = presentedFrame.height
@@ -160,11 +155,7 @@ public extension WQModules where Base: UIView {
         if let vectorSize = containerSize {
             size = vectorSize
         } else {
-            if self.base.bounds.size == .zero {
-                self.base.setNeedsUpdateConstraints()
-                self.base.layoutIfNeeded()
-            }
-            size = self.base.bounds.size
+            size = self.base.layoutUpdates()
         }
         var items: [WQAnimatedConfigAble] = []
         let frame = CGRect(x: (viewW - size.width) * 0.5, y: viewH - size.height, width: size.width, height: size.height)
@@ -175,8 +166,8 @@ public extension WQModules where Base: UIView {
             let dimmingBakcground = WQAnimatedItem.defaultViewBackground()
             items.append(dimmingBakcground)
         }
-        let animator = WQTransitionAnimator(items: items, options: present, dismiss: dismiss)
-        self.show(animator: animator, frame: frame, inController: inController, completion: completion)
+        let animator = WQTransitionAnimator(items: items, options: .actionSheetPresent, dismiss: .actionSheetDismiss)
+        return self.show(animator: animator, frame: frame, inController: inController, completion: completion)
     } 
     
 }
@@ -192,5 +183,17 @@ internal extension UIView {
         get {
             return objc_getAssociatedObject(self, &presenterKey) as? WQTransitionable
         }
+    }
+    
+    func layoutUpdates() -> CGSize {
+        guard self.bounds.size == .zero else {
+            return self.bounds.size
+        }
+        UIView.performWithoutAnimation {
+            self.setNeedsUpdateConstraints()
+            self.layoutIfNeeded()
+        }
+        assert(self.bounds.size != .zero, "view必须size不为0才能显示,便于动画")
+        return self.bounds.size
     }
 }

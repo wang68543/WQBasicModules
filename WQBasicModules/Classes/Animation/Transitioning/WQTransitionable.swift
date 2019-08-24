@@ -104,24 +104,25 @@ open class WQTransitionable: UIViewController {
                 presentedFrame: CGRect? = nil) {
         self.animator = animator
         super.init(nibName: nil, bundle: nil)
-        self.childViews.append(subView)
-        if let frame = containerFrame {
-            self.containerView.frame = frame
-        }
-        self.addContainerSubview(subView)
-        if let viewFrame = presentedFrame {
-            self.view.frame = viewFrame
+        UIView.performWithoutAnimation {
+            self.childViews.append(subView)
+            if let frame = containerFrame {
+                self.containerView.frame = frame
+            }
+            self.addContainerSubview(subView)
+            if let viewFrame = presentedFrame {
+                self.view.frame = viewFrame
+            }
         }
     } 
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
-        CATransaction.begin()
-        CATransaction.setDisableActions(true)
-        self.animator.items.initial(nil, presenting: self)
-        self.view.addSubview(containerView)
-        containerView.layoutIfNeeded() // 提前刷新 用于动画准备
-        CATransaction.commit()
+        UIView.performWithoutAnimation {
+            self.animator.items.initial(nil, presenting: self)
+            self.view.addSubview(containerView)
+            containerView.layoutIfNeeded() // 提前刷新 用于动画准备
+        }
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
@@ -169,6 +170,7 @@ open class WQTransitionable: UIViewController {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
         self.containerWindow = nil
+        debugPrint(#function + "♻️")
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {

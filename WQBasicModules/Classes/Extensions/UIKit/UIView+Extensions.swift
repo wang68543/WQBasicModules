@@ -35,12 +35,14 @@ public extension UIView {
         guard self.bounds.size != .zero else {
             fatalError("设置不规则圆角必须先有尺寸")
         }
-        let bounds = self.bounds
-        let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.frame = bounds
-        shapeLayer.path = bezierPath.cgPath
-        layer.mask = shapeLayer
+        DispatchQueue.main.async {
+            let bounds = self.bounds
+            let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.frame = bounds
+            shapeLayer.path = bezierPath.cgPath
+            self.layer.mask = shapeLayer
+        } 
     }
     /// 截屏
     func snapshot(_ size: CGSize = .zero) -> UIImage? {

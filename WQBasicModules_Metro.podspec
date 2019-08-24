@@ -25,10 +25,10 @@ Pod::Spec.new do |s|
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'wang68543' => 'wang68543@163.com' }
-  s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git'}
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.source_files  = 'WQBasicModules/Classes/WQBasicModules.h'
   s.swift_version = '4.2'
   s.swift_versions = ['4.0', '4.2', '5.0']
