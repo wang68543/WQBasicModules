@@ -194,9 +194,13 @@ public extension Double {
     /// - Parameter format: dd天HH小时mm分钟sss秒
     /// - Returns: 格式化之后的时长
     func toDuration(_ format: String, timeZone: TimeZone = .current) -> String {
-       let date = Date(timeIntervalSince1970: self)
-       let interval = TimeInterval(timeZone.secondsFromGMT(for: date))
-       return date.addingTimeInterval(-interval).toString(format)
+       return self.toDate(timeZone).toString(format)
+    }
+    /// 将时间秒数转成UTC时间
+    func toDate(_ timeZone: TimeZone = .current) -> Date {
+        let date = Date(timeIntervalSince1970: self)
+        let interval = TimeInterval(timeZone.secondsFromGMT(for: date))
+        return date.addingTimeInterval(-interval)
     }
 }
 
