@@ -46,8 +46,8 @@ open class WQTransitionAnimator: NSObject {
     public var items: WQAnimatedConfigItems
     /// 当设置代理之后 所有的动画 以及初始化都有代理完成
     public weak var delegate: WQTransitioningAnimatorable?
-    public let presentOptions: Options
-    public let dismissOptions: Options
+    public var presentOptions: Options
+    public var dismissOptions: Options
     private var willTransitionStyle: TransitionStyle = .presentation
     
     public init(items: WQAnimatedConfigItems = [],

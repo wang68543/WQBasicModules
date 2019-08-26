@@ -9,7 +9,7 @@ import UIKit
 /// 专职于显示Alert的Window
 class WQTransitionWindow: UIWindow { }
 
-public let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
+internal let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
 /// 解决 iOS10之前以及非Modal形式的动画无法手势驱动问题
 public protocol DrivenableProtocol: NSObjectProtocol {
     var isInteractive: Bool { get set }
