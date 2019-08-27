@@ -8,8 +8,8 @@
 import UIKit
 
 public extension UIImageView {
-    func fadeImage(_ fade: UIImage?) {
-        if let fadeImage = fade {
+    func fade(_ img: UIImage?) {
+        if let fadeImage = img {
             layer.transition(timing: CAMediaTimingFunction(name: .easeIn),
                              type: .fade,
                              duration: 0.2)

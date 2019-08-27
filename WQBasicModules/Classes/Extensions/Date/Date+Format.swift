@@ -204,6 +204,12 @@ public extension Double {
     }
 }
 
+public extension Int {
+    /// 将时间秒数转成UTC时间
+    func toDate(_ timeZone: TimeZone = .current) -> Date {
+        return TimeInterval(self).toDate(timeZone)
+    }
+}
 private extension Int {
     var toDurationCompments: [Int] {
         var value = self
