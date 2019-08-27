@@ -83,7 +83,7 @@ extension WQTransitionable {
         if self.containerWindow == nil {
             self.containerWindow = WQTransitionWindow(frame: UIScreen.main.bounds)
             self.containerWindow?.windowLevel = WQContainerWindowLevel
-            self.containerWindow?.backgroundColor = .clear;// 避免横竖屏旋转时出现黑色
+            self.containerWindow?.backgroundColor = .clear // 避免横竖屏旋转时出现黑色
         }
         self.containerWindow?.rootViewController = self
         self.containerWindow?.makeKeyAndVisible()
