@@ -174,7 +174,7 @@ internal struct WQFlexSectionAttributes {
     ///   - viewWidth: 非主轴方向的 view的内容长度 (不包含insets 、header/footer)
     ///   - alignContent: lines整体排列方式(以collectionView的size为参照 sections 为1的时候 并且内容小于size的时候才起作用)
     ///   - lineSpace:  (item 之间的间距) //最小的line 间距
-    mutating func config(viewWidth: CGFloat, alignContent: WQAlignContent, lineSpace: CGFloat, sections: Int) {
+    mutating func config(_ viewWidth: CGFloat, alignContent: WQAlignContent, lineSpace: CGFloat, sections: Int, isHorizonal: Bool) {
         var fixAlign: WQAlignContent = alignContent
         let lineCount = CGFloat(lines.count)
         let linesTotalWidth = self.lines.totalWidth()
@@ -219,23 +219,35 @@ internal struct WQFlexSectionAttributes {
             } else {
                 space = (viewWidth - linesTotalWidth) / (lineCount - 1)
             }
-        }
-       
+        } 
         edge = WQFlexSectionSpace(lineSpace: space, lineHeader: lineHeader, lineFooter: lineFooter)
-    }
-    mutating func config(_ isHorizonal: Bool) {
-        let lineCount = CGFloat(lines.count)
-        let realWidth = self.lines.totalWidth() + self.edge.lineSpace * (lineCount - 1) + self.edge.lineFooter + self.edge.lineHeader
+
+//        let realWidth = self.lines.totalWidth() + self.edge.lineSpace * (lineCount - 1) + self.edge.lineFooter + self.edge.lineHeader
         let realLength = lines.first?.length ?? 0
         var contentLength = self.insets.left + self.insets.right
         var contentHeight = self.insets.top + self.insets.bottom + self.headerSize.height + self.footerSize.height
         if isHorizonal {
             contentLength += realLength
-            contentHeight += realWidth
+            contentHeight += linesTotalWidth
         } else {
-            contentLength += realWidth
+            contentLength += linesTotalWidth
             contentHeight += realLength
         }
         self.bounds = CGRect(x: 0, y: 0, width: contentLength, height: contentHeight)
     }
+//    mutating func config(_ isHorizonal: Bool) {
+//        let lineCount = CGFloat(lines.count)
+//        let realWidth = self.lines.totalWidth() + self.edge.lineSpace * (lineCount - 1) + self.edge.lineFooter + self.edge.lineHeader
+//        let realLength = lines.first?.length ?? 0
+//        var contentLength = self.insets.left + self.insets.right
+//        var contentHeight = self.insets.top + self.insets.bottom + self.headerSize.height + self.footerSize.height
+//        if isHorizonal {
+//            contentLength += realLength
+//            contentHeight += realWidth
+//        } else {
+//            contentLength += realWidth
+//            contentHeight += realLength
+//        }
+//        self.bounds = CGRect(x: 0, y: 0, width: contentLength, height: contentHeight)
+//    }
 }

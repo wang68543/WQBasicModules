@@ -28,7 +28,7 @@ class ExampleAlertViewController: BaseExampleViewController {
     }
  
     @objc func alertAction(_ sender: UIButton) {
-        imageView.fadeImage(UIImage(named: "loud_speaker"))
+        imageView.fade(UIImage(named: "loud_speaker"))
         let alertView = UIView()
         let size = CGSize(width: 200, height: 300)
 //        alertView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)

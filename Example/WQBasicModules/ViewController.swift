@@ -157,7 +157,7 @@ class ViewController: UIViewController {
 //        button.frame = CGRect(x: 100, y: 100, width: 100, height: 50);
 //        self.view.addSubview(button)
         let imageView = UIImageView()
-        imageView.fadeImage(UIImage(named: "003"))
+        imageView.fade(UIImage(named: "003"))
         self.view.addSubview(imageView)
 //         let strs = "1234567890".split(separator: Character("5"))
         let star = WQStarControl()

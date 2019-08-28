@@ -186,8 +186,7 @@ private extension WQFlexbox {
                 totalLineMaxWidth = collectionView.frame.width - contentClip - sectionClip
             }
             var sectionAttr = WQFlexSectionAttributes(section, header: header, footer: footer, insets: insets, lines: lineAttrs)
-            sectionAttr.config(viewWidth: totalLineMaxWidth, alignContent: self.alignContent, lineSpace: lineSpace, sections: sections)
-            sectionAttr.config(isHorizontal)
+            sectionAttr.config(totalLineMaxWidth, alignContent: self.alignContent, lineSpace: lineSpace, sections: sections, isHorizonal: isHorizontal) 
             sectionAttrs.append(sectionAttr)
         }
         return sectionAttrs
@@ -251,8 +250,8 @@ private extension WQFlexbox {
         } else {
             originX += sectionAttr.edge.lineHeader
         }
-        var sectionX = originX
-        var sectionY = originY
+        var sectionX = originX + sectionAttr.insets.left
+        var sectionY = originY + sectionAttr.insets.top
         let sectionItems = sectionAttr.lines.flatMap({ lineAttr -> [UICollectionViewLayoutAttributes] in
             let lineOrgin = CGPoint(x: sectionX, y: sectionY)
             let lineitems = self.lineItemsAttributes(forLine: sectionAttr.section,
@@ -372,9 +371,6 @@ private extension WQFlexbox {
                                  with: inLine,
                                  in: indexPath) ?? self.alignItems
     }
-//    func limitWidth(for section: Int, isHorizontal: Bool) -> CGFloat {
-//
-//    }
 }
 // MARK: - -- FlowLayout Data Source
 private extension WQFlexbox {
