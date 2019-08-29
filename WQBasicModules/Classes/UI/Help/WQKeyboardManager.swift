@@ -221,7 +221,7 @@ private extension WQKeyboardManager {
         if self.textFieldViews.firstIndex(of: inputView) == nil { //刷新新增的textFiled
             self.reloadTextFieldViews()
         }
-        guard textFieldViews.firstIndex(of: inputView) != nil else { return }
+        guard textFieldViews.contains(where: { $0 == inputView }) else { return }
         if let textField = inputView as? UITextField {
             textFieldDelegate = textField.delegate
             textField.delegate = self
@@ -412,7 +412,7 @@ extension WQKeyboardManager: UIGestureRecognizerDelegate {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldReceive touch: UITouch) -> Bool {
         guard let touchView = touch.view else { return false }
-        if self.touchResignedGestureIgnoreClasses.firstIndex(where: { touchView.isKind(of: $0) }) != nil {
+        if self.touchResignedGestureIgnoreClasses.contains(where: { touchView.isKind(of: $0) }) {
             return false
         }
         return true

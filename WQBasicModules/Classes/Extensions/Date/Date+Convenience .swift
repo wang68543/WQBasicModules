@@ -6,6 +6,9 @@
 //
 
 import Foundation
+public extension Date {
+    
+}
 public extension Int {
 //    var secondsDate: Date {
 //        return Date
