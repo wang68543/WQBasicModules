@@ -5,10 +5,6 @@
 //  Created by WangQiang on 2018/12/12.
 //
 import UIKit
-
-/// 专职于显示Alert的Window
-class WQTransitionWindow: UIWindow { }
-
 internal let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
 /// 解决 iOS10之前以及非Modal形式的动画无法手势驱动问题
 public protocol DrivenableProtocol: NSObjectProtocol {
@@ -81,8 +77,6 @@ open class WQTransitionable: UIViewController {
     internal var contentViewInputs: [TextFieldView] = []
     internal var tapGesture: UITapGestureRecognizer?
     
-    /// shownInWindow的时候 记录的属性 用于消失之后恢复
-    internal weak var previousKeyWindow: UIWindow?
     //用于容纳当前控制器的window窗口
     internal var containerWindow: WQTransitionWindow?
     

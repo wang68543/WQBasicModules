@@ -50,7 +50,8 @@ class ExampleAlertViewController: BaseExampleViewController {
         let animator = WQTransitionAnimator(items: items)
         
         let presention = WQTransitionable(subView: alertView, animator: animator)
-        presention.show(animated: true, in: nil, completion: nil)
+        presention.shownInWindow(animated: true, completion: nil)
+//        presention.show(animated: true, in: nil, completion: nil)
         presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
         

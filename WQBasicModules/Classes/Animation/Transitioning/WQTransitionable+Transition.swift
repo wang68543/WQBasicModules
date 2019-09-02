@@ -79,17 +79,19 @@ extension WQTransitionable {
         if isAppearanceTransition {
             preRootViewController?.beginAppearanceTransition(false, animated: flag) // 当前控制器会直接调用viewAppear
         }
-        self.previousKeyWindow = UIApplication.shared.keyWindow
+//        self.previousKeyWindow = UIApplication.shared.keyWindow
         if self.containerWindow == nil {
             self.containerWindow = WQTransitionWindow(frame: UIScreen.main.bounds)
             self.containerWindow?.windowLevel = WQContainerWindowLevel
-            self.containerWindow?.backgroundColor = .clear // 避免横竖屏旋转时出现黑色
+//            self.containerWindow?.backgroundColor = .clear // 避免横竖屏旋转时出现黑色
         }
-        self.containerWindow?.rootViewController = self
-        self.containerWindow?.makeKeyAndVisible()
+        self.containerWindow?.addVisible(root: self)
+//        self.containerWindow?.rootViewController = self
+//        self.containerWindow?.makeKeyAndVisible()
         func animateFinshed(_ flag: Bool) {
             if !flag {
-                self.clearShowWindow()
+//                self.clearShowWindow()
+                self.containerWindow?.remove()
             }
             if isAppearanceTransition {
                 preRootViewController?.endAppearanceTransition()
@@ -151,7 +153,7 @@ extension WQTransitionable {
         let isAppearanceTransition = self.shouldViewWillApperance
         func animateFinshed(_ flag: Bool) {
             if flag {
-                self.clearShowWindow()
+                self.containerWindow?.remove()
             }
             if isAppearanceTransition {
                 other?.endAppearanceTransition()
@@ -188,20 +190,7 @@ extension WQTransitionable {
 }
 
 private extension WQTransitionable {
-    func clearShowWindow() {
-        if UIApplication.shared.keyWindow === self.containerWindow {
-            if let isPreviousHidden = self.previousKeyWindow?.isHidden,
-                isPreviousHidden {
-                UIApplication.shared.delegate?.window??.makeKey()
-            } else {
-                self.previousKeyWindow?.makeKey()
-            }
-        }
-        self.containerWindow?.isHidden = true
-        self.containerWindow?.rootViewController = nil
-        self.previousKeyWindow = nil
-    }
-    
+
     func hideAnimated(_ flag: Bool, other: UIViewController?, completion: @escaping ((Bool) -> Void)) {
         if flag {
             if #available(iOS 10.0, *),
