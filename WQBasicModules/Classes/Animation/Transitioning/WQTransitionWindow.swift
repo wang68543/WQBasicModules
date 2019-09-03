@@ -22,7 +22,14 @@ public class WQTransitionWindow: UIWindow {
     }
     
     deinit {
-        self.remove()
+        if let preKey = self.previousKeyWindow,
+            UIApplication.shared.keyWindow === self {
+            if preKey.isHidden {
+                UIApplication.shared.delegate?.window??.makeKey()
+            } else {
+                preKey.makeKey()
+            }
+        }
     }
 }
 

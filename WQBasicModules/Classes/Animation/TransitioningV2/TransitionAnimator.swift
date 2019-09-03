@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@available(iOS 10.0, *)
 open class TransitionAnimator: NSObject {
     /// newWindowRoot的时候 记录的属性 用于消失之后恢复
     internal weak var previousKeyWindow: UIWindow?
@@ -14,12 +15,23 @@ open class TransitionAnimator: NSObject {
     
     public internal(set) var fractionComplete: CGFloat = 0.0
     
-    /// 动画时长 
-    open var duration: TimeInterval = 0.25
+    /// 动画时长
+    open var propertyAnimator: UIViewPropertyAnimator
+    
+    open var animationBlock:(()->(Void))?
+    open var completionBlock:((Bool)->(Void))?
+    //UISpringTimingParameters UICubicTimingParameters
+    public init(_ duration: TimeInterval, timingParameters parameters: UITimingCurveProvider) {
+        self.propertyAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: parameters)
+        super.init()
+    }
+//    open var timingParameters: UITimingCurveProvider?
+    
+    
     
 }
+@available(iOS 10.0, *)
 extension TransitionAnimator {
-    @available(iOS 10.0, *)
     func pause() {
         
     }

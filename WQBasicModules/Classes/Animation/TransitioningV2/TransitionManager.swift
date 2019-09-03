@@ -44,6 +44,4 @@ open class TransitionManager: NSObject {
 //    public weak var fromViewController: UIViewController?
 //    public weak var toViewController: UIViewController?
     
-    
 }
-

@@ -25,7 +25,11 @@ public extension WQModules where Base: UIView {
     func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
         self.presentation?.dismiss(animated: true, completion: completion)
     }
-    
+    /// 直接添加到当前控制器 成为父子控制器 
+    func show(inParent parent: UIViewController, animator: WQTransitionAnimator, completion: (() -> Void)? = nil) {
+        let presention = WQTransitionable(subView: self.base, animator: animator)
+        presention.showInController(parent, animated: true, completion: completion)
+    }
 }
 
 // MARK: - normal animate api
