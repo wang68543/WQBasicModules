@@ -16,6 +16,7 @@ public protocol TransitionManagerDelegate: NSObjectProtocol {
 }
 public enum TransitionStyle {
 //    case none //使用系统自带的 动画方式
+    case auto // 没有动画不做任何处理
     /// 使用自定义的 转场动画
     case customModal
     /// 直接添加到父控制器上
@@ -41,7 +42,7 @@ extension UIViewController {
 open class TransitionManager: NSObject {
     /// interaction progress
 //    public internal(set) var fractionComplete: CGFloat = 0.0
-    public typealias Completion = ((Bool) -> Void)
+    public typealias Completion = (() -> Void)
     public weak var delegate: TransitionManagerDelegate?
     /// 当前是否正在 显示
     public internal(set) var isShow: Bool = true
@@ -55,55 +56,31 @@ open class TransitionManager: NSObject {
     
     weak var fromViewController: UIViewController?
 //    weak var toViewController: UIViewController?
+    public internal(set) var containerWindow: WQTransitionWindow?
     
-    public var showViewController: UIViewController
+    var transitionStyle: TransitionStyle = .auto
+    public unowned let showViewController: UIViewController
     init(_ viewController: UIViewController) {
         self.showViewController = viewController
         super.init()
     }
-    /// 转场上下文 
-    var transitionContext: UIViewControllerContextTransitioning?
-    
-    func test() {
-        self.prepare {
-            
-        }
-        .show {
-                
-        }
-        .hide {
-                
-            }
-        .completion {
-                
-        }
-    }
-    func prepare(_ block:(() -> Void)) -> TransitionManager {
-        block()
-       
-        return self
-    }
-    
-    func show(_ block:(() -> Void)) -> TransitionManager {
-        block()
-        return self
-    }
-    func hide(_ block:(() -> Void)) -> TransitionManager {
-        block()
-        
-        return self
-    }
-    @discardableResult
-    func completion(_ block:(() -> Void)) -> TransitionManager {
-        block()
-        return self
-    }
-    
-    func show(in viewController: UIViewController) {
+     
+    func show(in viewController: UIViewController, animated flag: Bool, completion: Completion?) {
         self.fromViewController = viewController
-        
+       
     }
-    func present(by viewController: UIViewController?) {
+    func present(by viewController: UIViewController?, animated flag: Bool, completion: Completion?) {
+        self.fromViewController = viewController ?? UIApplication.shared.delegate?.window??.rootViewController
+        self.transitionStyle = .customModal
+        self.showViewController.modalPresentationStyle = .custom
+        self.fromViewController?.transitioningDelegate = self
+        self.showViewController.modalPresentationStyle = .custom
+        self.showViewController.transitioningDelegate = self
+        self.fromViewController?.present(self.showViewController, animated: flag, completion: completion)
+    }
+    /// 默认为一个全屏的透明的window
+    func show(with window: WQTransitionWindow? = nil) {
+        self.containerWindow = window ?? WQTransitionWindow(frame: UIScreen.main.bounds)
         
     }
     
