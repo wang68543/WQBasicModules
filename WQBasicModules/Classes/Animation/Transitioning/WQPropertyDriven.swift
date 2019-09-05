@@ -9,7 +9,8 @@ import UIKit
 @available(iOS 10.0, *)
 public typealias PropertyAnimateCompletion = ((UIViewAnimatingPosition) -> Void)
 @available(iOS 10.0, *)
-public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitioning, DrivenableProtocol {
+public class WQPropertyDriven: NSObject, TransitionContext {
+  
     var isShow: Bool = false
     public var panGesture: UIPanGestureRecognizer
     public var direction: DrivenDirection
@@ -126,65 +127,5 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
     
     public var wantsInteractiveStart: Bool {
         return self.isInteractive
-    }
-}
-public extension DrivenableProtocol {
-    func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard !self.isInteractive,
-            let panGR = gestureRecognizer as? UIPanGestureRecognizer,
-            panGR === self.panGesture else {
-                return false
-        }
-        return panGR.isSameDirection(self.direction)
-    }
-    func progress(for translate: CGPoint) -> CGFloat {
-        var percentage: CGFloat
-        switch self.direction {
-        case .down: //向下为正
-            if translate.y <= 0 {
-                percentage = 0.0
-            } else {
-                percentage = translate.y / completionWidth
-            }
-        case .upwards:
-            if translate.y >= 0 {
-                percentage = 0.0
-            } else {
-                percentage = -translate.y / completionWidth
-            }
-        case .left:
-            if translate.x >= 0 {
-                percentage = 0.0
-            } else {
-                percentage = -translate.x / completionWidth
-            }
-        case .right:
-            if translate.x <= 0 {
-                percentage = 0.0
-            } else {
-                percentage = translate.x / completionWidth
-            }
-        }
-        return percentage
-    }
-    func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
-        var isFinished: Bool = false
-        let progress = self.progress(for: translate)
-        if progress > shouldCompletionProgress {
-            isFinished = true
-        } else {
-            let speed = shouldCompletionSpeed
-            switch self.direction {
-            case .down:
-               isFinished = velocity.y > speed
-            case .upwards:
-               isFinished = -velocity.y > speed
-            case .left:
-                isFinished = -velocity.x > speed
-            case .right:
-                isFinished = velocity.x > speed
-            }
-        } 
-        return isFinished
     }
 }

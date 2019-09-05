@@ -6,21 +6,6 @@
 //
 import UIKit
 internal let WQContainerWindowLevel: UIWindow.Level = .alert - 4.0
-/// 解决 iOS10之前以及非Modal形式的动画无法手势驱动问题
-public protocol DrivenableProtocol: NSObjectProtocol {
-    var isInteractive: Bool { get set }
-    var completionWidth: CGFloat { get set }
-    var panGesture: UIPanGestureRecognizer { get set }
-    var shouldCompletionSpeed: CGFloat { get set }
-    var shouldCompletionProgress: CGFloat { get set }
-    var direction: DrivenDirection { get set }
-    
-    func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool
-    func progress(for translate: CGPoint) -> CGFloat
-    func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool
-}
-
-public typealias Drivenable = NSObject & UIViewControllerInteractiveTransitioning & DrivenableProtocol
 
 public class WQVectorView: UIView {
     /// center 与 point 布局解决transform属性动画问题
@@ -41,8 +26,8 @@ open class WQTransitionable: UIViewController {
     }()
     public let animator: WQTransitionAnimator
     // 显示的时候的交互动画 暂时只支持present动画
-    public var showDriven: Drivenable?
-    public var hidenDriven: Drivenable?
+    public var showDriven: TransitionContext?
+    public var hidenDriven: TransitionContext?
     /// 滑动交互消失的方向
     public var interactionDismissDirection: DrivenDirection? {
         didSet {

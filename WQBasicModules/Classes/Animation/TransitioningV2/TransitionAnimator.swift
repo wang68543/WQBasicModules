@@ -13,21 +13,34 @@ open class TransitionAnimator: NSObject {
     //用于容纳当前控制器的window窗口
     internal var window: WQTransitionWindow?
     
-    public internal(set) var fractionComplete: CGFloat = 0.0
+//    public internal(set) var fractionComplete: CGFloat = 0.0
     
     /// 动画时长
-    open var propertyAnimator: UIViewPropertyAnimator
+//    open var propertyAnimator: UIViewPropertyAnimator
     
-    open var animationBlock:(()->(Void))?
-    open var completionBlock:((Bool)->(Void))?
+//    open var showAnimationBlock: ()
+    
+//    open var animationBlock: (() -> Void)? {
+//        didSet {
+//            if let block = animationBlock {
+//                self.propertyAnimator.addAnimations(block)
+//            }
+//        }
+//    }
+    
+//    open var completionBlock: ((Bool) -> Void)? {
+//        didSet {
+//            if let block =  completionBlock {
+//                self.propertyAnimator.addCompletion(<#T##completion: (UIViewAnimatingPosition) -> Void##(UIViewAnimatingPosition) -> Void#>)
+//            }
+//        }
+//    }
+    
     //UISpringTimingParameters UICubicTimingParameters
-    public init(_ duration: TimeInterval, timingParameters parameters: UITimingCurveProvider) {
-        self.propertyAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: parameters)
-        super.init()
-    }
-//    open var timingParameters: UITimingCurveProvider?
-    
-    
+//    public init(_ duration: TimeInterval, timingParameters parameters: UITimingCurveProvider) {
+//        self.propertyAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: parameters)
+//        super.init()
+//    }
     
 }
 @available(iOS 10.0, *)

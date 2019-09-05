@@ -50,6 +50,10 @@ open class WQTransitionAnimator: NSObject {
     public var dismissOptions: Options
     private var willTransitionStyle: TransitionStyle = .presentation
     
+//    public var isInteractive: Bool = false
+//    
+//    public internal(set) var context: TransitionContext?
+//    
     public init(items: WQAnimatedConfigItems = [],
                 options present: Options = .normalPresent,
                 dismiss: Options? = .normalDismiss) {

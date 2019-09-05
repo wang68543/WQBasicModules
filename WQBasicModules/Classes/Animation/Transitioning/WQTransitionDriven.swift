@@ -6,13 +6,7 @@
 //
 
 import UIKit
-public enum DrivenDirection {
-    case left
-    case right
-    case upwards
-    case down
-}
-open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableProtocol { 
+open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, TransitionContext {
     open var direction: DrivenDirection
     ///交互的时候  手势完成长度 (用于动画完成百分比计算)
     public var completionWidth: CGFloat = 0
@@ -69,24 +63,4 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, DrivenableP
             break
         }
     } 
-}
-public extension UIPanGestureRecognizer {
-    func isSameDirection(_ direction: DrivenDirection) -> Bool {
-        let velocity = self.velocity(in: self.view)
-        guard velocity != .zero else {
-            return false
-        }
-        var isSame: Bool = false
-        switch direction {
-        case .upwards:
-            isSame = velocity.y < 0 && abs(velocity.y) > abs(velocity.x)
-        case .down:
-            isSame = velocity.y > 0 && abs(velocity.y) > abs(velocity.x)
-        case .left:
-            isSame = velocity.x < 0 && abs(velocity.y) < abs(velocity.x)
-        case .right:
-            isSame = velocity.x > 0 && abs(velocity.y) < abs(velocity.x)
-        }
-        return isSame
-    }
 }
