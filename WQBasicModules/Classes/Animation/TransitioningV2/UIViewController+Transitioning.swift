@@ -6,14 +6,16 @@
 //
 
 import Foundation
+
+private var transitionManagerKey: Void?
 public extension UIViewController {
-    
-    func show(_ fromViewController: UIViewController?, style: TransitionStyle = .customModal) {
-        
-    }
-    
-    func hide() {
-        
-    }
-    
-} 
+//    var transition: TransitionManager {
+//        set {
+//            objc_setAssociatedObject(self, &transitionManagerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+//        }
+//        get {
+//            return (objc_getAssociatedObject(self, &transitionManagerKey) as? TransitionManager) ?? TransitionManager(self)
+//        }
+//    }
+//    func transition(_ items: [WQAnimatedConfigAble])
+}

@@ -6,11 +6,11 @@
 //
 
 import UIKit
-
-public class TransitionModalContext: UIPercentDrivenInteractiveTransition, TransitionAnimateContext  {
-    var transitionContext: UIViewControllerContextTransitioning?
-    
+/// 控制器之间的转场都用这个  手势驱动也用这个
+public class TransitionModalContext: UIPercentDrivenInteractiveTransition, TransitionAnimateContext {
+    var transitionContext: UIViewControllerContextTransitioning? 
 }
+
 public extension TransitionModalContext {
     func transitionPause() {
         if #available(iOS 10.0, *) {
@@ -22,22 +22,22 @@ public extension TransitionModalContext {
         self.update(percentComplete)
     }
     
-    func transitionCancel(_ isInteractive: Bool) {
-        if isInteractive {
-            self.cancel()
-//            transitionContext?.cancelInteractiveTransition()
-        } else {
-//            self.finish()
-            transitionContext?.completeTransition(false)
-        }
+    func transitionCancel() {
+//        if isInteractive {
+//            self.cancel()
+////            transitionContext?.cancelInteractiveTransition()
+//        } else {
+////            self.finish()
+//            transitionContext?.completeTransition(false)
+//        }
     }
     
-     func transitionFinish(_ isInteractive: Bool) {
-        if isInteractive {
-            self.finish()
-//            transitionContext?.finishInteractiveTransition()
-        } else {
-            transitionContext?.completeTransition(true)
-        }
+     func transitionFinish() {
+//        if isInteractive {
+//            self.finish()
+////            transitionContext?.finishInteractiveTransition()
+//        } else {
+//            transitionContext?.completeTransition(true)
+//        }
     }
 }

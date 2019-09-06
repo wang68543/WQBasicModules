@@ -6,17 +6,24 @@
 //  swiftlint:disable line_length
 
 import Foundation
-public protocol TransitionManagerDelegate: NSObjectProtocol {
-    func transitionManager(prepare manager: TransitionManager)
-    /// 手势交互弹出
-    func transitionManager(shouldShowController manager: TransitionManager) -> UIViewController
-    
-    func transitionManager(willTransition manager: TransitionManager, fromViewController: UIViewController?, toViewController: UIViewController?)
-    
-}
+
+//public protocol TransitionManagerDelegate: NSObjectProtocol {
+//    func transitionManager(prepare manager: TransitionManager)
+//
+//    /// from to 始终是相对于
+//    func transitionManager(willTransition manager: TransitionManager, completion: TransitionManager.Completion)
+//
+////    func transitionManager(willHide manager: TransitionManager, completion: TransitionManager.Completion )
+//
+//    /// 手势交互弹出
+//    func transitionManager(shouldShowController manager: TransitionManager) -> UIViewController
+//}
+
 public enum TransitionStyle {
 //    case none //使用系统自带的 动画方式
     case auto // 没有动画不做任何处理
+    /// 自定义push动画
+    case push
     /// 使用自定义的 转场动画
     case customModal
     /// 直接添加到父控制器上
@@ -24,27 +31,16 @@ public enum TransitionStyle {
     /// 创建新窗口并且成为新窗口的根控制器
     case newWindowRoot
 }
-extension UIView {
-    
-}
-
-fileprivate var transitionManagerKey: Void?
-extension UIViewController {
-    var transition: TransitionManager {
-        set {
-            objc_setAssociatedObject(self, &transitionManagerKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-        get {
-            return (objc_getAssociatedObject(self, &transitionManagerKey) as? TransitionManager) ?? TransitionManager(self)
-        }
-    }
+public enum TransitionPanDirection {
+    case leftToRight
+    case rightToLeft
+    case topToBottom
+    case bottomToTop
 }
 open class TransitionManager: NSObject {
-    /// interaction progress
-//    public internal(set) var fractionComplete: CGFloat = 0.0
-    public typealias Completion = (() -> Void)
-    public weak var delegate: TransitionManagerDelegate?
-    /// 当前是否正在 显示
+    public typealias Completion = ((Bool) -> Void)
+//    public weak var delegate: TransitionManagerDelegate?
+    /// 动画前将要进行的动作
     public internal(set) var isShow: Bool = true
     /// 是否需要管理VC的生命周期
     public var shouldViewControllerLifeCycle: Bool = false
@@ -54,40 +50,82 @@ open class TransitionManager: NSObject {
     /// 动画时长
     public var duration: TimeInterval = 0.25
     
-    weak var fromViewController: UIViewController?
-//    weak var toViewController: UIViewController?
+    weak var showFromViewController: UIViewController?
+    
     public internal(set) var containerWindow: WQTransitionWindow?
     
     var transitionStyle: TransitionStyle = .auto
     public unowned let showViewController: UIViewController
-    init(_ viewController: UIViewController) {
+    
+    public var context: TransitionAnimateContext?
+    public let preprocessor: TransitionAnimationPreprocessor
+    
+    var width: CGFloat = .nan
+    
+    public init(_ viewController: UIViewController, preprocessor: TransitionAnimationPreprocessor) {
         self.showViewController = viewController
+        self.preprocessor = preprocessor
         super.init()
     }
-     
-    func show(in viewController: UIViewController, animated flag: Bool, completion: Completion?) {
-        self.fromViewController = viewController
-       
-    }
-    func present(by viewController: UIViewController?, animated flag: Bool, completion: Completion?) {
-        self.fromViewController = viewController ?? UIApplication.shared.delegate?.window??.rootViewController
-        self.transitionStyle = .customModal
-        self.showViewController.modalPresentationStyle = .custom
-        self.fromViewController?.transitioningDelegate = self
-        self.showViewController.modalPresentationStyle = .custom
-        self.showViewController.transitioningDelegate = self
-        self.fromViewController?.present(self.showViewController, animated: flag, completion: completion)
-    }
-    /// 默认为一个全屏的透明的window
-    func show(with window: WQTransitionWindow? = nil) {
-        self.containerWindow = window ?? WQTransitionWindow(frame: UIScreen.main.bounds)
-        
+    
+    /// 默认为View的宽度
+    public func setPanGesture(_ pan: UIPanGestureRecognizer, direction: DrivenDirection, moveWidth: CGFloat? = nil) {
+        pan.addTarget(self, action: #selector(handlePanGesture(_:)))
+    } 
+}
+public extension TransitionManager {
+    @objc
+    func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        guard let view = sender.view else {
+            return
+        }
+        if width == .nan {
+            width = view.frame.width //待确认
+        }
+        switch sender.state {
+        case .began:
+            sender.setTranslation(.zero, in: view)
+            if !isShow {
+                switch self.transitionStyle {
+                case .customModal:
+                     self.showViewController.dismiss(animated: true, completion: nil)
+                default:
+                    if #available(iOS 11.0, *) {
+                        let propertyContext = TransitionPropertyContext()
+                        propertyContext.animator.addAnimations { [weak self] in
+                            guard let `self` = self else { return }
+                        
+                            self.preprocessor.preprocessor(willTransition: self, completion: { flag in
+                                
+                            })
+                            
+                        }
+                    }
+                }
+            } 
+        case .changed:
+            self.context?.transitionUpdate(0.1)
+        case .ended:
+            self.context?.transitionFinish()
+        default:
+            self.context?.transitionCancel()
+        }
     }
     
-//    @available(iOS 10.0, *)
-//    var propertyAnimator: UIViewPropertyAnimator?
-    
-//    public weak var fromViewController: UIViewController?
-//    public weak var toViewController: UIViewController?
-    
+//    func prepareAnimate() {
+//        switch self.transitionStyle {
+//        case .customModal:
+//
+//        default:
+//            <#code#>
+//        }
+//    }
+//    func handleAnimateCompletion(_ isSuccess: Bool) {
+//        switch self.transitionStyle {
+//        case .customModal:
+//            if self
+//        default:
+//            break
+//        }
+//    }
 }

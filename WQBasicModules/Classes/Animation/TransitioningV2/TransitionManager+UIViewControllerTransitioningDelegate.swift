@@ -16,12 +16,22 @@ extension TransitionManager: UIViewControllerTransitioningDelegate {
         return self
     }
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard self.isInteractive else {
+            return nil
+        }
         self.isShow = true
-        return nil
+        let drivenContext = TransitionModalDrivenContext()
+        self.context = drivenContext
+        return drivenContext
     }
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        guard self.isInteractive else {
+            return nil
+        }
         self.isShow = false
-        return nil
+        let drivenContext = TransitionModalDrivenContext()
+        self.context = drivenContext
+        return drivenContext
     }  
     //    @available(iOS 8.0, *)
     //    optional func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController?
