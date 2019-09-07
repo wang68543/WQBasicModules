@@ -28,14 +28,14 @@ public extension UIView {
     ///   - cornerSize: 圆角大小
     ///   - corners: 圆角位置
     func makeShapeCorners(_ cornerSize: CGSize, corners: UIRectCorner = .allCorners) {
-        if self.bounds.size == .zero {
-            self.layoutIfNeeded()
-        }
-        
-        guard self.bounds.size != .zero else {
-            fatalError("设置不规则圆角必须先有尺寸")
-        }
         DispatchQueue.main.async {
+            if self.bounds.size == .zero {
+                self.layoutIfNeeded()
+            }
+            
+            guard self.bounds.size != .zero else {
+                fatalError("设置不规则圆角必须先有尺寸")
+            }
             let bounds = self.bounds
             let bezierPath = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: cornerSize)
             let shapeLayer = CAShapeLayer()
