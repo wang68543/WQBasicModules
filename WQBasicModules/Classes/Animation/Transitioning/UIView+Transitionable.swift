@@ -23,7 +23,7 @@ public extension WQModules where Base: UIView {
     }
     
     func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
-        self.presentation?.dismiss(animated: true, completion: completion)
+        self.presentation?.dismiss(animated: animated, completion: completion)
     }
     /// 直接添加到当前控制器 成为父子控制器 
     func show(inParent parent: UIViewController, animator: WQTransitionAnimator, completion: (() -> Void)? = nil) {

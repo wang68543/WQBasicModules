@@ -18,6 +18,7 @@ public enum WQShowMode {
 }
 // 预处理
 public enum WQTransitionOption {
+    ///到时候需要区分屏幕内外
     public enum Position {
         case none
         case left
