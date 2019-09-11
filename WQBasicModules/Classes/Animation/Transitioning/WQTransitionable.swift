@@ -97,11 +97,13 @@ open class WQTransitionable: UIViewController {
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
-//        UIView.performWithoutAnimation { // 这里 会时不时崩溃
+        UIView.performWithoutAnimation {  
             self.animator.items.initial(nil, presenting: self)
             self.view.addSubview(containerView)
+            containerView.updateConstraints()
+            containerView.setNeedsLayout()
             containerView.layoutIfNeeded() // 提前刷新 用于动画准备
-//        }
+        }
     }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
