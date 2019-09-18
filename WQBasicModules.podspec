@@ -46,9 +46,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'WQBasicModules/Classes/Animation/Transitioning/*.swift'
         end
-         ss.subspec 'TransitioningV2' do |sss| 
-            sss.source_files = 'WQBasicModules/Classes/Animation/TransitioningV2/*.swift'
-        end
+         #  ss.subspec 'TransitioningV2' do |sss|
+          #    sss.source_files = 'WQBasicModules/Classes/Animation/TransitioningV2/*.swift'
+        #  end
     end
 
     s.subspec 'Extensions' do |ss|
