@@ -222,7 +222,7 @@ internal struct WQFlexSectionAttributes {
                 space = (viewWidth - linesTotalWidth) / (lineCount - 1)
             }
         } 
-        edge = WQFlexSectionSpace(lineSpace: space, lineHeader: lineHeader, lineFooter: lineFooter)
+        edge = WQFlexSectionSpace(lineSpace: floor(space), lineHeader: lineHeader, lineFooter: lineFooter)
         self.config(linesTotalWidth, isHorizonal: isHorizonal)
     }
     
