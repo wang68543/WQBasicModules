@@ -99,8 +99,7 @@ open class WQTransitionable: UIViewController {
         //延迟加载View
         UIView.performWithoutAnimation {  
             self.animator.items.initial(nil, presenting: self)
-            self.view.addSubview(containerView)
-            containerView.updateConstraints()
+            self.view.addSubview(containerView) 
             containerView.setNeedsLayout()
             containerView.layoutIfNeeded() // 提前刷新 用于动画准备
         }

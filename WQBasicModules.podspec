@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.2.8'
+  s.version          = '0.3.0'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
 
 # This description is used to generate tags and improve search results.
@@ -46,9 +46,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'WQBasicModules/Classes/Animation/Transitioning/*.swift'
         end
-         ss.subspec 'TransitioningV2' do |sss| 
-            sss.source_files = 'WQBasicModules/Classes/Animation/TransitioningV2/*.swift'
-        end
+         #  ss.subspec 'TransitioningV2' do |sss|
+          #    sss.source_files = 'WQBasicModules/Classes/Animation/TransitioningV2/*.swift'
+        #  end
     end
 
     s.subspec 'Extensions' do |ss|
