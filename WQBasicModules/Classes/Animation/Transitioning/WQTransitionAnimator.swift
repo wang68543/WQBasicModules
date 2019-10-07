@@ -93,7 +93,9 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
         let transitionView = transitionContext.containerView
         if let toView = toVCView {
             toView.frame = vcFinalFrame
-            transitionView.addSubview(toView)
+            if transitionView !== toView {
+               transitionView.addSubview(toView)
+            } 
         }
         let animateCompletion: WQAnimateCompletion = { [weak self] flag -> Void in
             guard let weakSelf = self else {

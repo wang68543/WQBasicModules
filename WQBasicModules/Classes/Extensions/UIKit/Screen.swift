@@ -22,9 +22,14 @@ public struct Screen {
     public static let safeAreaInsets: UIEdgeInsets = {
         var instets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, *),
-          let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.first,
-         window.safeAreaInsets != .zero {
+          let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
             instets = window.safeAreaInsets
+            if window.safeAreaInsets.top == 0 || window.safeAreaInsets.bottom == 0 {
+                if UIScreen.main.bounds.height >= 812 {
+                    if instets.top == 0 { instets.top = 44 }
+                    if instets.bottom == 0 { instets.bottom = 34 }
+                }
+            }
         }
         return instets
     }()
