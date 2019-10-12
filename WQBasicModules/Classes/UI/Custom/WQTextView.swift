@@ -7,16 +7,16 @@
 
 import UIKit
 
-public class WQTextView: UITextView {
+open class WQTextView: UITextView {
 
-    public var placeholder: String? {
+    open var placeholder: String? {
         didSet {
             self.placeholderLabel.text = placeholder
             self.hasPlaceholder = true
             refreshPlaceholder()
         }
     }
-    public var attributedPlaceholder: NSAttributedString? {
+    open var attributedPlaceholder: NSAttributedString? {
         didSet {
             self.placeholderLabel.attributedText = attributedPlaceholder
             self.hasPlaceholder = true
@@ -24,7 +24,7 @@ public class WQTextView: UITextView {
         }
     }
     
-    public var placeholderInsets: UIEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7) {
+    open var placeholderInsets: UIEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7) {
         didSet {
             refreshPlaceholder()
         }
@@ -35,7 +35,7 @@ public class WQTextView: UITextView {
         commonInit()
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
@@ -48,7 +48,7 @@ public class WQTextView: UITextView {
     }
     
     @objc
-    func textViewTextDidChange(_ note: Notification) {
+    public func textViewTextDidChange(_ note: Notification) {
         guard self.hasPlaceholder else {
             return
         }
