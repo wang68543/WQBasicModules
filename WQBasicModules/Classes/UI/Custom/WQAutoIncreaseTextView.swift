@@ -8,56 +8,95 @@
 import UIKit
 
 open class WQAutoIncreaseTextView: WQTextView {
-    open var maxHeight: CGFloat = CGFloat.nan
-    open var minHeight: CGFloat = CGFloat.nan
     
-    open var preferredHeight: CGFloat = 0 {
+    
+    open var maxLimit = CGFloat.nan
+    open var minLimit = CGFloat.nan
+    
+    /// 是否支持自增长
+    open var isIncreaseHeight: Bool = false
+    
+    open var preferredValue = CGFloat.nan {
         didSet {
-            if cacheHeight.isNaN {
-                cacheHeight = preferredHeight
-            }
+            cacheValue = preferredValue
         }
     }
-    public private(set) var cacheHeight: CGFloat = CGFloat.nan
+    public private(set) var cacheValue: CGFloat = CGFloat.nan
+    
+    public override func commonInit() {
+        super.commonInit()
+        self.isScrollEnabled = false
+    }
     
     public override func textViewTextDidChange(_ note: Notification) {
         super.textViewTextDidChange(note)
-        let size = self.sizeThatFits(CGSize(width: self.frame.width, height: CGFloat.greatestFiniteMagnitude))
-        var height = size.height
-        if !self.minHeight.isNaN {
-            height = max(self.minHeight, height)
-        }
-        if !self.maxHeight.isNaN {
-            height = min(height, self.maxHeight)
-        }
-        guard height != cacheHeight else { return }
+        let size = self.sizeThatFits(CGSize(width: self.maxContentWidth, height: CGFloat.greatestFiniteMagnitude))
+        let height = fixTextHeight(size.height)
+        guard height != cacheValue else { return }
+        cacheValue = height
         
-        cacheHeight = height
-        if !self.maxHeight.isNaN {
-            if height < self.maxHeight {
-                self.isScrollEnabled = false
-            } else {
-                self.isScrollEnabled = true
-                self.scrollToBottom()
-            }
-        }
-        self.invalidateIntrinsicContentSize()
-        self.textContainer.heightTracksTextView = true
+        scrollEnabled(height)
+        
+        NotificationCenter.default.post(name: WQAutoIncreaseTextView.heightDidChangeNotification, object: self)
     }
     
     override open var intrinsicContentSize: CGSize {
-        if cacheHeight.isNaN {
+        if cacheValue.isNaN {
             return .zero
         } else {
-            return CGSize(width: self.frame.width, height: cacheHeight)
+            return CGSize(width: self.frame.width, height: cacheValue)
         } 
-       }
+    }
+    
     override public func layoutSubviews() {
         super.layoutSubviews()
-        if cacheHeight.isNaN {
-            self.cacheHeight = self.bounds.height
+        if self.preferredValue.isNaN {
+            self.preferredValue = self.bounds.height
         }
     }
-           
-          
+}
+
+public extension WQAutoIncreaseTextView {
+    static let heightDidChangeNotification = Notification.Name("heightDidChangeNotification")
+}
+private extension WQAutoIncreaseTextView {
+    var maxContentWidth: CGFloat {
+        return self.frame.width - self.contentInset.left - self.contentInset.right
+    }
+    
+    @inline(__always)
+    func fixTextHeight(_ height: CGFloat) -> CGFloat {
+        var value = height
+        if !self.minLimit.isNaN {
+            value = max(self.minLimit, height)
+        }
+        if !self.maxLimit.isNaN {
+            value = min(value, self.maxLimit)
+        }
+        return value
+    }
+    @inline(__always)
+    func scrollEnabled(_ height: CGFloat) {
+        guard !self.maxLimit.isNaN else {
+            self.isScrollEnabled = false
+            return
+        }
+        if height < self.maxLimit {
+            self.isScrollEnabled = false
+        } else {
+            if !self.isScrollEnabled {
+                self.isScrollEnabled = true
+                DispatchQueue.main.async {
+                    self.scrollBottom()
+                }
+            }
+        }
+    }
+    
+    func scrollBottom() {
+        UIView.performWithoutAnimation {
+//            let height = self.frame.height - self.contentInset.top - self.contentInset.bottom
+            self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentSize.height - self.maxLimit)
+        }
+    }
 }

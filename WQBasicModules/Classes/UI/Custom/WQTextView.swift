@@ -39,7 +39,7 @@ open class WQTextView: UITextView {
         super.init(coder: aDecoder)
         commonInit()
     }
-    private func commonInit() {
+    public func commonInit() {
         NotificationCenter.default
             .addObserver(self,
                          selector: #selector(textViewTextDidChange(_:)),

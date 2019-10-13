@@ -15,7 +15,7 @@ class ExampleViewController: UITableViewController {
         [["浏览器控件": "TestWebViewController"],
          ["多布局风格按钮": "WQButtonViewController"],
          ["flexbox": "FlexBoxViewController"]], // WQUI
-        [["自定义评分控件": "WQStarViewController"],
+        [["自定义评分控件": "WQStarViewController"],["自增长TextView": "AutoHeightTableViewController"],
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"]]
     ]
