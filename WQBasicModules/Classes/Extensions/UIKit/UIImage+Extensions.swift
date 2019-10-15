@@ -196,4 +196,77 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
+    
+    /**
+     拉伸两端，保留中间
+     
+     @param image 需要拉伸的图片
+     @param desSize 目标大小
+     @param stretchLeftBorder 拉伸图片距离左边的距离
+     @param top inset.top
+     @param bottom inset.bottom
+     @return 拉伸收缩后的图片
+     */
+    func stretchBothSides(_ destSize: CGSize, padding leading: CGFloat, top: CGFloat, bottom: CGFloat) -> UIImage? {
+        guard destSize.width != 0 else { return nil }
+        var imageSize = self.size
+        var desSize = destSize
+        guard abs(desSize.width - imageSize.width) > 4 else { return self }
+        
+        imageSize.width = floor(imageSize.width)
+        
+        desSize.width   = floor(desSize.width)
+        let desSizeThan = desSize.width > imageSize.width
+        
+        //各需要拉伸的宽度
+        let needWidth = (desSize.width - imageSize.width) / 2.0
+        
+        //先拉取左边
+        var left = leading
+        var right = desSizeThan ? (imageSize.width - left - 1) : (imageSize.width - abs(needWidth) - left)
+        
+        //画图， 生成拉伸的左边后的图片
+        var tempStrecthWith = imageSize.width + needWidth
+        
+        //生成拉伸后的图片-》左
+        let height = imageSize.height
+        var strectedImage = self.resizableImage(withCapInsets: UIEdgeInsets(top: 0, left: left, bottom: 0, right: right))
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: tempStrecthWith, height: height), false, self.scale)
+        strectedImage.draw(in: CGRect(x: 0, y: 0, width: tempStrecthWith, height: height))
+        
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        guard let getImg = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+        strectedImage = getImg
+        //拉伸右边
+        right = leading
+        left  = desSizeThan ? (strectedImage.size.width - right - 1) : (strectedImage.size.width - right - abs(needWidth))
+        //生成拉伸后的图片-》右
+        tempStrecthWith = desSize.width
+        strectedImage = strectedImage.resizableImage(withCapInsets: UIEdgeInsets(top: 0, left: left, bottom: 0, right: right))
+         UIGraphicsBeginImageContextWithOptions(CGSize(width: tempStrecthWith, height: height), false, self.scale)
+        strectedImage.draw(in: CGRect(x: 0, y: 0, width: tempStrecthWith, height: height))
+        guard let getRightImg = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
+        strectedImage = getRightImg
+        return strectedImage.resizableImage(withCapInsets: UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0))
+    }
+    
+     /**
+      根据坐标获取图片中的像素颜色值
+      */
+     subscript (x: Int, y: Int) -> UIColor? {
+        guard x >= 0 && x <= Int(size.width) && y >= 0 && y <= Int(size.height) else { return nil }
+        guard let provider = self.cgImage?.dataProvider,
+        let data = CFDataGetBytePtr(provider.data) else {
+            return nil
+        }
+        let numberOfComponents = 4
+        let pixelData = ((Int(size.width) * y) + x) * numberOfComponents
+        let r = CGFloat(data[pixelData]) / 255.0
+        let g = CGFloat(data[pixelData + 1]) / 255.0
+        let b = CGFloat(data[pixelData + 2]) / 255.0
+        let a = CGFloat(data[pixelData + 3]) / 255.0
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+     }
 }

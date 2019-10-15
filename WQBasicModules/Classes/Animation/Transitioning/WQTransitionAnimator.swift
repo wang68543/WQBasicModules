@@ -93,14 +93,12 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
         let transitionView = transitionContext.containerView
         if let toView = toVCView {
             toView.frame = vcFinalFrame
-            if transitionView !== toView {
+            if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
                transitionView.addSubview(toView)
             } 
         }
         let animateCompletion: WQAnimateCompletion = { [weak self] flag -> Void in
-            guard let weakSelf = self else {
-                return
-            }
+            guard let weakSelf = self else { return }
             let success = !transitionContext.transitionWasCancelled
             if (isPresented && !success) || (!isPresented && success) {
                 toVCView?.removeFromSuperview()
