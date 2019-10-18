@@ -12,7 +12,10 @@ import Dispatch
 public func dispatch_main_after(_ interval: TimeInterval, execute: @escaping (() -> Void)) {
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + interval, execute: execute)
 }
-
+/// 主线程执行
+public func dispatch_main_async(execute: @escaping (() -> Void)) {
+    DispatchQueue.main.async(execute: execute)
+}
 public extension DispatchQueue {
     /// 简化延迟方法执行
     func after(_ interval: TimeInterval, execute: @escaping (() -> Void)) {
