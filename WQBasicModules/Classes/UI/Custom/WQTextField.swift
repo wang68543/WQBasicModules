@@ -34,3 +34,22 @@ open class WQTextField: UITextField {
         }
     }
 }
+
+public extension WQTextField {
+    func left(padding: CGFloat) {
+        let view = UIView()
+        left(view, width: padding)
+    }
+    
+    func left(_ icon: UIImage?, width: CGFloat) {
+        let imageView = UIImageView(image: icon)
+        imageView.contentMode = .center
+        self.left(imageView, width: width)
+    }
+    
+    func left(_ view: UIView, width: CGFloat) {
+        leftView = view
+        leftWidth = width
+        leftViewMode = .always
+    }
+}

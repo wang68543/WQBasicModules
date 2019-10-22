@@ -39,6 +39,7 @@
 		82054F407ECFEAF8D8040DCF /* Pods_WQBasicModules_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D44262AD1043BDC2147E7F5 /* Pods_WQBasicModules_Example.framework */; };
 		8715328A22AE68AC00634ABE /* FlexBoxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8715328922AE68AB00634ABE /* FlexBoxViewController.swift */; };
 		871B9B9A22BCCA3E00E562F1 /* URLExtensionsTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */; };
+		875A87A0235D83D50061B3D1 /* douYin.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 875A879F235D83D50061B3D1 /* douYin.mp4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +92,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8715328922AE68AB00634ABE /* FlexBoxViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexBoxViewController.swift; sourceTree = "<group>"; };
 		871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLExtensionsTest.swift; sourceTree = "<group>"; };
+		875A879F235D83D50061B3D1 /* douYin.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = douYin.mp4; sourceTree = "<group>"; };
 		87B1F3E922C2FD1500D8FFF3 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = "<group>"; };
 		92EC84B15A305381F4719D4E /* Pods-WQBasicModules_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQBasicModules_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WQBasicModules_Tests/Pods-WQBasicModules_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		974C5BCF4AA794D88D741F60 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 		607FACD21AFB9204008FA782 /* Example for WQBasicModules */ = {
 			isa = PBXGroup;
 			children = (
+				875A879E235D83BB0061B3D1 /* Resources */,
 				06A9D04922125CD100A16354 /* Views */,
 				06A9D04822125CB800A16354 /* ViewControllers */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
@@ -244,6 +247,14 @@
 				871B9B9922BCCA3E00E562F1 /* URLExtensionsTest.swift */,
 			);
 			name = FoundationTests;
+			sourceTree = "<group>";
+		};
+		875A879E235D83BB0061B3D1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				875A879F235D83D50061B3D1 /* douYin.mp4 */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		B086EDA977CE45A9CBCD3423 /* Pods */ = {
@@ -353,6 +364,7 @@
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 				0602870E2240BECA00CBD968 /* WQButtonViewController.xib in Resources */,
+				875A87A0235D83D50061B3D1 /* douYin.mp4 in Resources */,
 				5EECD18B21ECD0410033608D /* TestTransition.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

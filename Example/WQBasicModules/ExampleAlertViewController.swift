@@ -25,6 +25,11 @@ class ExampleAlertViewController: BaseExampleViewController {
         imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor], size: CGSize(width: 60, height: 60), startCenter: CGPoint(x: 0.5, y: 0.5), startRaidus: 0, endCenter: CGPoint(x: 0.5, y: 0.5), endRaidus: 60, options: .drawsAfterEndLocation)
         imageView.layer.cornerRadius = 30
         imageView.layer.masksToBounds = true
+        if let path = Bundle.main.path(forResource: "douYin", ofType: "mp4")  {
+            let img = UIImage(fromVideoURL: URL(string: "http://129.204.89.248:9301/busvod/观光1路/1.mp4".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")!, size: CGSize(width: 100, height: 100), isFirstFrame: false)
+            imageView.image = img
+        }
+        
     }
  
     @objc func alertAction(_ sender: UIButton) {
@@ -38,7 +43,7 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        alertView.wm.presentation?.interactionDissmissDirection = .down
 //        alertView.wm.show(from: .bottom, show: .center)
         
-//        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
+        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
 //        let item = WQAnimatedItem(container: alertView.frame.size, postionStyle: .left, bounceStyle: .bounceCenter)
 //        let animator = WQTransitioningAnimator(items: [item, initailItem])
         let presentedFrame = UIScreen.main.bounds
@@ -49,7 +54,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
         let animator = WQTransitionAnimator(items: items)
         
-        let presention = WQTransitionable(subView: alertView, animator: animator)
+        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
         presention.shownInWindow(animated: true, completion: nil)
 //        presention.show(animated: true, in: nil, completion: nil)
         presention.interactionDismissDirection = .down

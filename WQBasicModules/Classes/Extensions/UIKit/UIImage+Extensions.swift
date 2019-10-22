@@ -6,6 +6,10 @@
 //
 
 import Foundation
+import UIKit
+import AVFoundation.AVAsset
+import AVFoundation.AVTime
+import AVFoundation.AVAssetImageGenerator
 
 // MARK: - -- convenience init
 public extension UIImage {
@@ -215,7 +219,7 @@ public extension UIImage {
         
         imageSize.width = floor(imageSize.width)
         
-        desSize.width   = floor(desSize.width)
+        desSize.width = floor(desSize.width)
         let desSizeThan = desSize.width > imageSize.width
         
         //各需要拉伸的宽度
@@ -241,7 +245,7 @@ public extension UIImage {
         strectedImage = getImg
         //拉伸右边
         right = leading
-        left  = desSizeThan ? (strectedImage.size.width - right - 1) : (strectedImage.size.width - right - abs(needWidth))
+        left = desSizeThan ? (strectedImage.size.width - right - 1) : (strectedImage.size.width - right - abs(needWidth))
         //生成拉伸后的图片-》右
         tempStrecthWith = desSize.width
         strectedImage = strectedImage.resizableImage(withCapInsets: UIEdgeInsets(top: 0, left: left, bottom: 0, right: right))
@@ -255,18 +259,58 @@ public extension UIImage {
      /**
       根据坐标获取图片中的像素颜色值
       */
-     subscript (x: Int, y: Int) -> UIColor? {
-        guard x >= 0 && x <= Int(size.width) && y >= 0 && y <= Int(size.height) else { return nil }
+     subscript (point ptX: Int, _ ptY: Int) -> UIColor? {
+        guard ptX >= 0 && ptX <= Int(size.width) && ptY >= 0 && ptY <= Int(size.height) else { return nil }
         guard let provider = self.cgImage?.dataProvider,
         let data = CFDataGetBytePtr(provider.data) else {
             return nil
         }
         let numberOfComponents = 4
-        let pixelData = ((Int(size.width) * y) + x) * numberOfComponents
-        let r = CGFloat(data[pixelData]) / 255.0
-        let g = CGFloat(data[pixelData + 1]) / 255.0
-        let b = CGFloat(data[pixelData + 2]) / 255.0
-        let a = CGFloat(data[pixelData + 3]) / 255.0
-        return UIColor(red: r, green: g, blue: b, alpha: a)
+        let pixelData = ((Int(size.width) * ptY) + ptX) * numberOfComponents
+        let red = CGFloat(data[pixelData]) / 255.0
+        let green = CGFloat(data[pixelData + 1]) / 255.0
+        let blue = CGFloat(data[pixelData + 2]) / 255.0
+        let alpha = CGFloat(data[pixelData + 3]) / 255.0
+        return UIColor(red: red, green: green, blue: blue, alpha: alpha)
      }
+}
+
+public extension UIImage {
+    
+    /// 获取视频的某一帧的图片
+    /// - Parameter videoURL: 视频地址
+    /// - Parameter size: 要获取的图片的尺寸
+    /// - Parameter time: 获取哪一帧的图片
+    convenience init?(fromVideoURL videoURL: URL, size: CGSize, isFirstFrame first: Bool = false) {
+        /// 不需要精确的时间只需要一个预估的时间
+        let asset = AVURLAsset(url: videoURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: false]) //
+        var time: CMTime
+        if first {
+            time = .zero
+        } else {
+            let value = CMTimeValue(asset.duration.seconds * Double(asset.duration.timescale))
+            time = CMTime(value: value, timescale: asset.duration.timescale)
+        }
+        self.init(fromAsset: asset, size: size, time: time)
+    }
+    
+    convenience init?(fromAsset asset: AVURLAsset, size: CGSize, time: CMTime = CMTime.zero) {
+        let generator = AVAssetImageGenerator(asset: asset)
+        /// 按正确方向对视频进行截图,关键点是将AVAssetImageGrnerator对象的appliesPreferredTrackTransform属性设置为YES。
+        generator.appliesPreferredTrackTransform = true
+        generator.apertureMode = .encodedPixels
+        generator.requestedTimeToleranceAfter = .zero
+        generator.requestedTimeToleranceBefore = .zero
+        generator.maximumSize = size
+        do {
+            //actualTime: 实际的截图的时间
+            var actualTime: CMTime = .invalid
+            let ref = try generator.copyCGImage(at: time, actualTime: &actualTime)
+//            debugPrint("time:\(time)====\(actualTime)")
+            self.init(cgImage: ref)
+        } catch let error {
+            debugPrint("=======", error.localizedDescription)
+            return nil
+        }
+    }
 }

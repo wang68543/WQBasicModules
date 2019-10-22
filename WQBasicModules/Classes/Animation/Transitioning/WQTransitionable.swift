@@ -71,6 +71,8 @@ open class WQTransitionable: UIViewController {
     /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
     public var shouldViewWillApperance: Bool = false
  
+    /// 控制器初始frame
+    internal let initialFrame: CGRect
     /// 初始化
     ///
     /// - Parameters:
@@ -82,6 +84,7 @@ open class WQTransitionable: UIViewController {
                 containerFrame: CGRect? = nil,
                 presentedFrame: CGRect? = nil) {
         self.animator = animator
+        initialFrame = presentedFrame ?? UIScreen.main.bounds
         super.init(nibName: nil, bundle: nil)
         UIView.performWithoutAnimation {
             self.childViews.append(subView)
@@ -191,6 +194,7 @@ extension WQTransitionable {
     }
     @objc
     func handleTapGesture(_ sender: UITapGestureRecognizer) {
+        debugPrint("======\(#function)")
         self.dismiss(animated: true)
     }
     func addTapGesture() {

@@ -91,8 +91,12 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
         let isPresented = toVC.presentingViewController === fromVC
         let toVCView = transitionContext.view(forKey: .to)
         let transitionView = transitionContext.containerView
-        if let toView = toVCView {
-            toView.frame = vcFinalFrame
+        if let toView = toVCView { 
+            if let able = toVC as? WQTransitionable {
+                toView.frame = able.initialFrame
+            } else {
+              toView.frame = vcFinalFrame
+            }
             if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
                transitionView.addSubview(toView)
             } 
