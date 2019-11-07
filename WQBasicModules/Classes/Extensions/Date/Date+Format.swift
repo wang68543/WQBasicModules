@@ -160,17 +160,14 @@ public extension String { // MARK: 字符串转日期
     ///
     /// - Parameter dateFormat: enum dateFormatString
     /// - Returns: if error return now date
-    func toDate(format dateFormat: DateFormatEnum, in calendar: Calendar = .current) -> Date {
+    func toDate(format dateFormat: DateFormatEnum, in calendar: Calendar = .current) -> Date? {
        return toDate(dateFormat.formatString, in: calendar)
     }
-    func toDate(_ format: String, in calendar: Calendar = .current) -> Date {
+    func toDate(_ format: String, in calendar: Calendar = .current) -> Date? {
         let fortmatter = WQDateFormatter.shared
         fortmatter.dateFormat = format
         fortmatter.calendar = calendar
-        guard let date = fortmatter.date(from: self) else {
-            return Date()
-        }
-        return date
+        return fortmatter.date(from: self)
     }
 }
 public extension Double {
