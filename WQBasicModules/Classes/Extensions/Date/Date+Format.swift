@@ -206,6 +206,10 @@ public extension Int {
     func toDate(_ timeZone: TimeZone = .current) -> Date {
         return TimeInterval(self).toDate(timeZone)
     }
+    /// 将UTC的时间秒数
+    var toUTCDate: Date {
+        return Date(timeIntervalSince1970: TimeInterval(self))
+    }
 }
 
 private extension Int {
