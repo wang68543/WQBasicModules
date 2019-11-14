@@ -28,7 +28,7 @@ open class WQTextField: UITextField {
         if rightFrame != .zero {
             return rightFrame
         } else if !rightWidth.isNaN {
-            return CGRect(x: bounds.minX, y: bounds.minY, width: rightWidth, height: bounds.height)
+            return CGRect(x: bounds.maxX - rightWidth, y: bounds.minY, width: rightWidth, height: bounds.height)
         } else {
             return super.rightViewRect(forBounds: bounds)
         }
