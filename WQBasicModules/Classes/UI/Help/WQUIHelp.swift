@@ -7,7 +7,7 @@
 
 import Foundation
 final public class WQUIHelp {
-    public class func topVisibleViewController() -> UIViewController? {
+  public class func topVisibleViewController() -> UIViewController? {
         if let rootViewController = UIApplication.shared.delegate?.window??.rootViewController {
             return rootViewController.topVisible()
         }

@@ -19,24 +19,20 @@ public struct Screen {
     public static let lineAdjustOffset = (1 / UIScreen.main.scale) / 2
     
     /// 屏幕的 周边限制显示区域
-    public static var safeAreaInsets: UIEdgeInsets = {
+    public static let safeAreaInsets: UIEdgeInsets = {
         var instets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, *),
           let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
             instets = window.safeAreaInsets
+            if instets.top == 0 {  instets.top = 20 }
             if window.safeAreaInsets.top == 0 || window.safeAreaInsets.bottom == 0 {
                 if UIScreen.main.bounds.height >= 812 {
                     if instets.top == 0 { instets.top = 44 }
                     if instets.bottom == 0 { instets.bottom = 34 }
                 }
             }
-//            UIApplication.didChangeStatusBarFrameNotification
-//            UIApplicationDidChangeStatusBarFrameNotification
         }
         return instets
     }()
-    
-    func didChangeStatusBarFrame(_ note: Notification) {
-        
-    }
+     
 }
