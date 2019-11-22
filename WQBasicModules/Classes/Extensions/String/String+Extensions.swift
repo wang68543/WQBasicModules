@@ -228,17 +228,47 @@ public extension String {
     ///
     ///        "it's%20easy%20to%20decode%20strings".urlDecoded -> "it's easy to decode strings"
     ///
-    var urlDecoded: String {
-        return removingPercentEncoding ?? self
-    }
-    
-    /// SwifterSwift: URL escaped string.
+    #if canImport(Foundation)
+    /// SwifterSwift: Convert URL string to readable string.
     ///
-    ///        "it's easy to encode strings".urlEncoded -> "it's%20easy%20to%20encode%20strings"
+    ///        var str = "it's%20easy%20to%20decode%20strings"
+    ///        str.urlDecode()
+    ///        print(str) // prints "it's easy to decode strings"
     ///
-    var urlEncoded: String {
-        return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+    @discardableResult
+    mutating func urlDecode() -> String {
+        if let decoded = removingPercentEncoding {
+            self = decoded
+        }
+        return self
     }
+    #endif
+
+    #if canImport(Foundation)
+    /// SwifterSwift: Escape string.
+    ///
+    ///        var str = "it's easy to encode strings"
+    ///        str.urlEncode()
+    ///        print(str) // prints "it's%20easy%20to%20encode%20strings"
+    ///
+    @discardableResult
+    mutating func urlEncode() -> String {
+        if let encoded = addingPercentEncoding(withAllowedCharacters: .urlHostAllowed) {
+            self = encoded
+        }
+        return self
+    }
+    #endif
+
+    #if canImport(Foundation)
+    /// SwifterSwift: Verify if string matches the regex pattern.
+    ///
+    /// - Parameter pattern: Pattern to verify.
+    /// - Returns: true if string matches the pattern.
+    func matches(pattern: String) -> Bool {
+        return range(of: pattern, options: .regularExpression, range: nil, locale: nil) != nil
+    }
+    #endif
     
     /// SwifterSwift: Check if the given string spelled correctly
     var isSpelledCorrectly: Bool {
