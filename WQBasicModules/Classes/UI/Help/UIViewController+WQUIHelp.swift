@@ -10,6 +10,9 @@ public extension WQModules where Base: UIViewController {
     func topVisible() -> UIViewController? {
         return self.base.topVisible()
     }
+    func topNavigationController() -> UINavigationController? {
+        return self.base.topNavigationController()
+    }
 }
 
 private var keyboardManagerKey: Void?
@@ -58,5 +61,18 @@ extension UIViewController {
              return self
         }
         return nil
+    }
+    
+    func topNavigationController() -> UINavigationController? {
+        if self.presentedViewController != nil {
+           return self.presentedViewController?.topNavigationController()
+       }
+       if let tabBarController = self as? UITabBarController {
+           return tabBarController.selectedViewController?.topNavigationController()
+       }
+       if let navgationController = self as? UINavigationController {
+            return navgationController
+       }
+       return nil
     }
 }
