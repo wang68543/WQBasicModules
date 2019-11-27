@@ -32,8 +32,7 @@ platform :ios do
 	  	 # UI.success "Successfully finished #{export_method} upload_to_app_store "
 	  	 #app-store, ad-hoc, package, enterprise, development, developer-id
 	  	 build_app( 
-	   	  export_method: export_method,
-	   	  scheme: "CarWePlay",
+	   	  export_method: export_method, 
 		  silent: true,
 		  clean: true,
 		  output_directory: "./archive",

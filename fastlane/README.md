@@ -16,11 +16,31 @@ or alternatively using `brew cask install fastlane`
 
 # Available Actions
 ## iOS
+### ios pgy
+```
+fastlane ios pgy
+```
+
+### ios wq_app
+```
+fastlane ios wq_app
+```
+
+### ios wq_store
+```
+fastlane ios wq_store
+```
+
+### ios wq_push
+```
+fastlane ios wq_push
+```
+
 ### ios trunk
 ```
 fastlane ios trunk
 ```
-自动Pod更新库
+
 
 ----
 
