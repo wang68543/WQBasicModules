@@ -5,56 +5,78 @@
 #
 #     https://docs.fastlane.tools/actions
 #
-# fastlane init 换了环境之后需要初始化
-# 使用 1. fastlane lanes
-#     2. fastlane FastLaneLib tag:0.1.0 target:WQBasicModules # `FastLaneLib` 是自己的定义的名称 
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
-# app_identifier "[[APP_IDENTIFIER]]" # The bundle identifier of your app
-default_platform(:ios)
-# fastlane [lane] key:value key2:value2
-platform :ios do
-  desc "自动Pod更新库"
-  lane :trunk do |options|
-  	#自增tag 
-  	carry = true
-  	tagName = options[:tag] #这个参数是跟在BasicModulesLib 后面的  
-  	# tagName =  last_git_tag.split('.', 3).reverse.map { |e| 
-  	# 		tag = e.to_i
-  	# 		if carry
-  	# 			tag += 1
-  	# 			carry = false 
-  	# 		end
-  	# 		if tag >= 10
-  	# 			carry = true
-  	# 			tag = 0
-  	# 		end
-  	# 	 tag 
-  	#   }.reverse.join('.') 
-  	  UI.message("#{tagName}")
-  	# targetName = options[:target]
-    targetName = "WQBasicModules"
 
-    # add actions here: https://docs.fastlane.tools/actions
+default_platform(:ios) 
+platform :ios do
+#   desc "Description of what the lane does"
+# 上传到蒲公英
+	  lane :pgy do 
+	  wq_app(method: "ad-hoc")
+	# UI.success "Successfully finished build_app"
+	   pgyer(api_key: "b6d181114edd694008067a8abfa073d2", user_key: "3ca463fa27d0f925a0c8019a2b8201f1")
+	  end
+	  
+	  #打包
+	  lane :wq_app do |options|
+	  	  
+	  	 # cocoapods(clean_install: true, use_bundle_exec: false)
+
+	  	 export_method = options[:method]
+	  	 # UI.success "Successfully finished #{export_method} upload_to_app_store "
+	  	 #app-store, ad-hoc, package, enterprise, development, developer-id
+	  	 build_app( 
+	   	  export_method: export_method,
+	   	  scheme: "CarWePlay",
+		  silent: true,
+		  clean: true,
+		  output_directory: "./archive",
+		  export_xcargs: "-allowProvisioningUpdates") 
+	   UI.message "Successfully finished build_app"
+	  end
+
+
+	  lane :wq_store do 
+	  	# increment_version_number
+	  increment_build_number
+	  wq_app(method: "app-store")
+	  UI.message "Successfully finished build_app"
+	  upload_to_app_store
+	  UI.success "Successfully finished upload_to_app_store"
+	  wq_push(tag: get_version_number())
+	  end	 
+	 
+	 # 提交git 并打tag
+	lane :wq_push do |options|
+		tagName = options[:tag]
+		UI.message("开始提交#{tagName}")
+		if git_tag_exists(tag: tagName)
+	    UI.message("版本号已经存在 #{tagName} ,即将删除")
+	    remove_tag(tag: tagName)
+	    end
+	   #2. git add . 
+		 git_add(path: ".")
+	   	 git_commit(path: ".", message: "#{tagName}")
+	     push_to_git_remote  
+		 add_git_tag(tag: tagName)
+		 push_git_tags 
+	end
+
+
+	lane :trunk do |options| 
+  	tagName = options[:tag] 
+    targetName = "WQBasicModules" 
    #1. pod install 
    	cocoapods(use_bundle_exec: false,
                 clean: true,
                 podfile: "./Example/Podfile")
-
-   if git_tag_exists(tag: tagName)
-    UI.message("版本号已经存在 #{tagName} ,即将删除")
-    remove_tag(tag: tagName)
-    end
-   #2. git add . 
-	git_add(path: ".")
-   	 git_commit(path: ".", message: "pod trunk 版本 #{tagName}")
-     push_to_git_remote # simple version. pushes "master" branch to "origin" remote
-    #3. git tag 
-    		# Alternatively, you can specify your own tag. Note that if you do specify a tag, all other arguments are ignored.
-	 # 这里如果 出错了 需要删除 之前提交的tag  # 1. git tag -d 0.1.0   2. git push origin:0.1.0
-	  add_git_tag(tag: tagName)
-	 push_git_tags 
-
+   wq_push(tag: tagName)
    spec = "./#{targetName}.podspec"
    UI.message("路径#{spec}")
     #4. pod spec lint 
@@ -68,4 +90,6 @@ platform :ios do
    end
    
   end
+
+
 end
