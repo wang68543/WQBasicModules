@@ -117,7 +117,7 @@ class ViewController: UIViewController {
         debugPrint(Bundle.main.infoDictionary?["CFBundleName"] ?? "没有选项")
         debugPrint("1133445566".isLegalPhone())
         let date = Date()
-        let otherDate = "2017-04-21".toDate(format: .kAMMAdd)
+        let otherDate = "2017-04-21".toDate(format: .kAMMAdd) ?? Date()
         debugPrint(date.distance(otherDate, at: .month))
        debugPrint (otherDate.counts(.weekOfMonth))
         

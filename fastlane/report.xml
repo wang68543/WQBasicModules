@@ -5,64 +5,59 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.010854">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.091298">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: cocoapods" time="2.238752">
+      <testcase classname="fastlane.lanes" name="01: cocoapods" time="3.175594">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: Switch to ios wq_push lane" time="0.001162">
+      <testcase classname="fastlane.lanes" name="02: Switch to ios wq_push lane" time="0.00138">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: git_tag_exists" time="0.013426">
+      <testcase classname="fastlane.lanes" name="03: git_tag_exists" time="0.058339">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: remove_tag" time="5.528967">
+      <testcase classname="fastlane.lanes" name="04: git_add" time="0.125561">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: git_add" time="0.108672">
+      <testcase classname="fastlane.lanes" name="05: git_commit" time="0.454908">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: git_commit" time="0.244655">
+      <testcase classname="fastlane.lanes" name="06: push_to_git_remote" time="8.087681">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: push_to_git_remote" time="5.60545">
+      <testcase classname="fastlane.lanes" name="07: add_git_tag" time="0.027144">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: add_git_tag" time="0.057184">
+      <testcase classname="fastlane.lanes" name="08: push_git_tags" time="6.43709">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: push_git_tags" time="5.65365">
+      <testcase classname="fastlane.lanes" name="09: pod_lib_lint" time="331.657128">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: pod_lib_lint" time="277.386896">
+      <testcase classname="fastlane.lanes" name="10: pod_push" time="425.990935">
         
-      </testcase>
-    
-      
-      <testcase classname="fastlane.lanes" name="11: pod_push" time="366.510373">
-        
-          <failure message="/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:235:in `block in execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:227:in `chdir'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:227:in `execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:84:in `block (2 levels) in parsing_binding'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:349:in `run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/fastlane:23:in `load'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/fastlane:23:in `&lt;main&gt;'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/ruby_executable_hooks:24:in `eval'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/ruby_executable_hooks:24:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod trunk push 'WQBasicModules.podspec' --allow-warnings' was 1 instead of 0.&#10;Updating spec repo `trunk`&#10;Validating podspec&#10; -&gt; WQBasicModules -&gt; WQBasicModules (0.3.1)&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Using new build system&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Planning build&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Constructing build description&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  warning: Skipping code signing because the target does not have an Info.plist file and one is not being generated automatically. (in target 'App' from project 'App')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'WQBasicModules' from project 'Pods')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'Pods-App' from project 'Pods')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'App' from project 'App')&#10;&#10;[!] Unable to accept duplicate entry for: WQBasicModules (0.3.1)&#10;" />
+          <failure message="/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:235:in `block in execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:227:in `chdir'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:227:in `execute_action'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:84:in `block (2 levels) in parsing_binding'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:349:in `run'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/gems/fastlane-2.137.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/fastlane:23:in `load'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/fastlane:23:in `&lt;main&gt;'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/ruby_executable_hooks:24:in `eval'&#10;/Users/huasheng/.rvm/gems/ruby-2.7.0-preview1/bin/ruby_executable_hooks:24:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod trunk push 'WQBasicModules.podspec' --allow-warnings' was 1 instead of 0.&#10;Updating spec repo `trunk`&#10;Validating podspec&#10; -&gt; WQBasicModules -&gt; WQBasicModules (0.3.2)&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Using new build system&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Planning build&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Constructing build description&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  warning: Skipping code signing because the target does not have an Info.plist file and one is not being generated automatically. (in target 'App' from project 'App')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'WQBasicModules' from project 'Pods')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'Pods-App' from project 'Pods')&#10;    - NOTE  | [WQBasicModules/Animation, WQBasicModules/Animation/Layer, WQBasicModules/Animation/Views, and more...] xcodebuild:  note: Execution policy exception registration failed and was skipped: Error Domain=NSPOSIXErrorDomain Code=1 &quot;Operation not permitted&quot; (in target 'App' from project 'App')&#10;&#10;[!] There was an error pushing a new version to trunk: execution expired&#10;" />
         
       </testcase>
     

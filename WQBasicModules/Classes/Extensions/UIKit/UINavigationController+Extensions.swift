@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public extension UINavigationController {
+extension UINavigationController {
     /// SwifterSwift: Pop ViewController with completion handler.
     ///
     /// - Parameters:
@@ -43,4 +43,15 @@ public extension UINavigationController {
         navigationBar.tintColor = tint
         navigationBar.titleTextAttributes = [.foregroundColor: tint]
     }
+}
+
+
+public extension WQModules where Base: UINavigationController {
+     func popViewController(animated: Bool = true, _ completion: (() -> Void)? = nil) {
+        self.base.popViewController(animated: animated, completion)
+     }
+     
+     func pushViewController(_ viewController: UIViewController, completion: (() -> Void)? = nil) {
+        self.base.pushViewController(viewController, completion: completion)
+     }
 }
