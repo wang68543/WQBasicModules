@@ -36,9 +36,12 @@ public extension UIButton {
         var state: UIControl.State
         if !self.isEnabled {
             state = .disabled
-        } else if self.isHighlighted {
-            state = .highlighted
-        } else if self.isSelected {
+        }
+           // 按下的时候 会是高亮状态 而这个状态被保存之后 恢复的时候 恢复成高亮的就会出问题
+//        else if self.isHighlighted {
+//            state = .highlighted
+//        }
+        else if self.isSelected {
             state = .selected
         } else {
             state = .normal
@@ -233,8 +236,11 @@ fileprivate extension UIButton {
         let state = status.state
         self.setImage(status.image, for: state)
         self.setBackgroundImage(status.backgroundImage, for: state)
-        self.setAttributedTitle(status.attributedTitle, for: state)
-        self.setTitle(status.title, for: state)
+        if let attibutedTitle = status.attributedTitle {
+            self.setAttributedTitle(status.attributedTitle, for: state)
+        } else {
+            self.setTitle(status.title, for: state)
+        }
         self.setTitleColor(status.titleColor, for: state)
         self.setTitleShadowColor(status.titleShadowColor, for: state)
         self.backgroundColor = status.backgroundColor
@@ -259,7 +265,7 @@ fileprivate extension UIButton {
         self.status = nil
         if let source = self.source,
             !source.isCancelled {
-            source.cancel()
+                source.cancel()
         }
         self.source = nil
         self.execute = nil
