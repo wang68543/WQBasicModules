@@ -24,13 +24,14 @@ public struct Screen {
         if #available(iOS 11.0, *),
           let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
             instets = window.safeAreaInsets
-            if instets.top == 0 {  instets.top = 20 }
-            if window.safeAreaInsets.top == 0 || window.safeAreaInsets.bottom == 0 {
-                if UIScreen.main.bounds.height >= 812 {
-                    if instets.top == 0 { instets.top = 44 }
-                    if instets.bottom == 0 { instets.bottom = 34 }
+            if instets.top == 0 {
+                if instets.bottom > 0 { //刘海屏
+                    instets.top = 44
+                } else {
+                    instets.top = 20
                 }
-            }
+            } 
+            // 不处理 insets.bottom
         }
         return instets
     }()

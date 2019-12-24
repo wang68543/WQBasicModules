@@ -127,6 +127,7 @@ class ViewController: UIViewController {
 //        WQCache.default["test"] = "123"
         let atrr = NSMutableAttributedString()
         let queuen = DispatchQueue(label: "test", qos: DispatchQoS.default, attributes: DispatchQueue.Attributes.concurrent, autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit, target: nil)
+        self.addChild(<#T##childController: UIViewController##UIViewController#>)
 //        for idx  in 0 ..< 50 {
 ////            queuen.async {
 //            let model:TestModel? = WQCache.default["test"]
