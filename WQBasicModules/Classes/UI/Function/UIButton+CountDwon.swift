@@ -237,7 +237,7 @@ fileprivate extension UIButton {
         self.setImage(status.image, for: state)
         self.setBackgroundImage(status.backgroundImage, for: state)
         if let attibutedTitle = status.attributedTitle {
-            self.setAttributedTitle(status.attributedTitle, for: state)
+            self.setAttributedTitle(attibutedTitle, for: state)
         } else {
             self.setTitle(status.title, for: state)
         }

@@ -11,12 +11,13 @@ public extension UISearchBar {
        var textField: UITextField? {
            if #available(iOS 13.0, *) {
                return searchTextField
-           }
-           let subViews = subviews.flatMap { $0.subviews }
-           guard let textField = (subViews.filter { $0 is UITextField }).first as? UITextField else {
-               return nil
-           }
-           return textField
+           } else {
+            let subViews = subviews.flatMap { $0.subviews }
+            guard let textField = subViews.first(where: { $0 is UITextField }) as? UITextField else {
+                return nil
+            }
+            return textField
+          } 
        }
 
        /// SwifterSwift: Text with no spaces or new lines in beginning and end (if applicable).

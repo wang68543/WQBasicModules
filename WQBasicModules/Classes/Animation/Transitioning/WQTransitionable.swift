@@ -61,7 +61,12 @@ open class WQTransitionable: UIViewController {
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     internal var contentViewInputs: [TextFieldView] = []
     internal var tapGesture: UITapGestureRecognizer?
-    
+    /// 遮挡View (Debug...)
+    internal lazy var dimmingView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
+    }()
     //用于容纳当前控制器的window窗口
     internal var containerWindow: WQTransitionWindow?
     
@@ -96,7 +101,8 @@ open class WQTransitionable: UIViewController {
                 self.view.frame = viewFrame
             }
         }
-    } 
+    }
+    
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
@@ -110,7 +116,7 @@ open class WQTransitionable: UIViewController {
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-        if presnetVC?.presentingViewController != nil {
+        if presnetVC?.presentedViewController != nil { //如果ViewController已经present过则无法再modal
             self.shownInParent(presnetVC!, animated: flag, completion: completion)
         } else if let topVC = presnetVC {
             //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
@@ -119,17 +125,22 @@ open class WQTransitionable: UIViewController {
             self.shownInWindow(animated: flag, completion: completion)
         }
     }
+    /// 被显示
     open override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        switch showMode {
-        case .childController:
-            self.hideFromController(animated: flag, completion: completion)
-        case .present:
+        if self.presentingViewController != nil {
             super.dismiss(animated: flag, completion: completion)
-        case .windowRootController:
-            self.hideFromWindow(animated: flag, completion: completion)
-        case .superChildController:
-            self.hideFromParent(animated: flag, completion: completion)
-        } 
+        } else {
+            switch showMode {
+            case .childController:
+                self.hideFromController(animated: flag, completion: completion)
+            case .present:
+                super.dismiss(animated: flag, completion: completion)
+            case .windowRootController:
+                self.hideFromWindow(animated: flag, completion: completion)
+            case .superChildController:
+                self.hideFromParent(animated: flag, completion: completion)
+            }
+        }
     }
     #if DEBUG
     open override func viewWillAppear(_ animated: Bool) {

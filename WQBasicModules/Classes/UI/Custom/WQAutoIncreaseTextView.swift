@@ -9,7 +9,6 @@ import UIKit
 
 open class WQAutoIncreaseTextView: WQTextView {
     
-    
     open var maxLimit = CGFloat.nan
     open var minLimit = CGFloat.nan
     
@@ -59,6 +58,7 @@ open class WQAutoIncreaseTextView: WQTextView {
 public extension WQAutoIncreaseTextView {
     static let heightDidChangeNotification = Notification.Name("heightDidChangeNotification")
 }
+
 private extension WQAutoIncreaseTextView {
     var maxContentWidth: CGFloat {
         return self.frame.width - self.contentInset.left - self.contentInset.right
@@ -94,8 +94,7 @@ private extension WQAutoIncreaseTextView {
     }
     
     func scrollBottom() {
-        UIView.performWithoutAnimation {
-//            let height = self.frame.height - self.contentInset.top - self.contentInset.bottom
+        UIView.performWithoutAnimation { 
             self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentSize.height - self.maxLimit)
         }
     }

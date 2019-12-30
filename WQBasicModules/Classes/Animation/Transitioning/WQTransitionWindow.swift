@@ -53,7 +53,7 @@ public extension WQTransitionWindow {
         }
         self.isHidden = true
         if #available(iOS 13.0, *) { } else {
-            // TODO: - 这里在iOS13下 设置rootViewController为nil 会自动调用 rootViewController 的dismiss
+            // todo: - 这里在iOS13下 设置rootViewController为nil 会自动调用 rootViewController 的dismiss
             self.rootViewController = nil
         }
         self.previousKeyWindow = nil

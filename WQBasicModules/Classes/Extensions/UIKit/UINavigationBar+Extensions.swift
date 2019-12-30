@@ -7,6 +7,7 @@
 
 import Foundation
 public extension UINavigationBar {
+    /// 隐藏导航栏 
     var isHiddenShadow: Bool {
         set {
             self.setValue(newValue, forKey: "hidesShadow")

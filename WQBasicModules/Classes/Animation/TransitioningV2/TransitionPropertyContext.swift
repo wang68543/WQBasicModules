@@ -10,7 +10,6 @@ import UIKit
 public class TransitionPropertyContext: NSObject, TransitionAnimateContext {
     var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 0.25, timingParameters: UICubicTimingParameters(animationCurve: .easeOut))
     
-    
     public func transitionCancel() {
         self.animator.stopAnimation(true)
     }

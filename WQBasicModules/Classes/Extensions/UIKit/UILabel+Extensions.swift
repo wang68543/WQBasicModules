@@ -9,5 +9,4 @@ import class UIKit.UILabel
 
 public extension UILabel {
     
-    
 }

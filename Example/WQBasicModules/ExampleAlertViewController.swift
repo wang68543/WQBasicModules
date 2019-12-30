@@ -30,9 +30,21 @@ class ExampleAlertViewController: BaseExampleViewController {
             imageView.image = img
         }
         
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
+                    let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")
+                    alertView.addAction(WQAlertAction(title: "取消", handler: { action in
+            
+                    }))
+                    alertView.addAction(WQAlertAction(title: "确认", handler: { action in
+            
+                    }))
+            alertView.backgroundColor = .green
+                    alertView.show()
+        }
     }
  
     @objc func alertAction(_ sender: UIButton) {
+        
         imageView.fade(UIImage(named: "loud_speaker"))
         let alertView = UIView()
         let size = CGSize(width: 200, height: 300)
@@ -55,19 +67,11 @@ class ExampleAlertViewController: BaseExampleViewController {
         let animator = WQTransitionAnimator(items: items)
         
         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-        presention.shownInWindow(animated: true, completion: nil)
-//        presention.show(animated: true, in: nil, completion: nil)
+//        presention.shownInWindow(animated: true, completion: nil)
+        presention.show(animated: true, in: nil, completion: nil)
         presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
         
-//        let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")
-//        alertView.addAction(WQAlertAction(title: "取消", handler: { action in
-//
-//        }))
-//        alertView.addAction(WQAlertAction(title: "确认", handler: { action in
-//
-//        }))
-//        alertView.show()
     }
 
 }

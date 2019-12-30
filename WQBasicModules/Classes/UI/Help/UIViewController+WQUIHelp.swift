@@ -26,6 +26,10 @@ extension UIViewController {
            return objc_getAssociatedObject(self, &keyboardManagerKey) as? WQKeyboardManager
         }
     }
+    /// 当前View是否可见
+    var isViewVisible: Bool {
+        return self.isViewLoaded && !self.view.isHidden && self.view.alpha > 0.01 && self.view.window != nil
+    }
     
     @discardableResult
     public func enableKeyboardManager(_ enable: Bool) -> WQKeyboardManager? {
@@ -45,34 +49,35 @@ extension UIViewController {
     }
     
     func topVisible() -> UIViewController? {
-        if self.presentedViewController != nil {
-            return self.presentedViewController?.topVisible()
+        if let presented = self.presentedViewController,
+        presented.isViewVisible {
+            return presented.topVisible()
         }
-        if let navgationController = self as? UINavigationController {
+        if let navgationController = self as? UINavigationController,
+        navgationController.isViewVisible {
             return navgationController.visibleViewController?.topVisible()
         }
-        if let tabBarController = self as? UITabBarController {
+        if let tabBarController = self as? UITabBarController,
+        tabBarController.isViewVisible {
             return tabBarController.selectedViewController?.topVisible()
         }
-        if !self.isViewLoaded {
-            return nil
-        }
-        if !self.view.isHidden && self.view.alpha > 0.01 && self.view.window != nil {
-             return self
-        }
-        return nil
+        return self.isViewVisible ? self : nil
     }
     
     func topNavigationController() -> UINavigationController? {
-        if self.presentedViewController != nil {
-           return self.presentedViewController?.topNavigationController()
-       }
-       if let tabBarController = self as? UITabBarController {
+        if let presented = self.presentedViewController,
+        presented.isViewVisible {
+            return presented.topNavigationController()
+        }
+        if let tabBarController = self as? UITabBarController,
+        tabBarController.isViewVisible {
            return tabBarController.selectedViewController?.topNavigationController()
-       }
-       if let navgationController = self as? UINavigationController {
+        }
+        if let navgationController = self as? UINavigationController,
+        navgationController.isViewVisible {
             return navgationController
-       }
-       return nil
+        }
+        return nil
     }
+ 
 }

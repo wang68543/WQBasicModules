@@ -5,10 +5,10 @@
 //  Created by iMacHuaSheng on 2019/5/7.
 //
 
-import Foundation
 import UIKit
-import AVFoundation.AVAsset
-import AVFoundation.AVTime
+//import Foundation
+//import AVFoundation.AVTime
+//import AVFoundation.AVAsset
 import AVFoundation.AVAssetImageGenerator
 
 // MARK: - -- convenience init

@@ -83,6 +83,7 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
         }
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        debugPrint("==================\(transitionContext)")
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
                 return

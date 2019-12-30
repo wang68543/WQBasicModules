@@ -23,7 +23,5 @@ public class TransitionModalDrivenContext: UIPercentDrivenInteractiveTransition,
     
     public func transitionFinish() {
         self.finish()
-    }
-    
-    
+    } 
 }

@@ -11,9 +11,7 @@ public typealias TransitionCompleted = (() -> Void)
 extension WQTransitionable {
     /// modal 形式显示当前控制器
     public func presentSelf(in controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
-        self.showMode = .present
-        controller.modalPresentationStyle = .custom
-        controller.transitioningDelegate = self
+        self.showMode = .present 
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
         controller.present(self, animated: flag, completion: completion)

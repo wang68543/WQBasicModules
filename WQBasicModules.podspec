@@ -41,6 +41,10 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/Animation/Layer'
             sss.source_files = 'WQBasicModules/Classes/Animation/Views/*.swift'
         end
+        ss.subspec 'Alert' do |sss|
+            sss.dependency 'WQBasicModules/Animation/Transitioning'
+            sss.source_files = 'WQBasicModules/Classes/Animation/Alert/*.swift'
+        end
         ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.dependency 'WQBasicModules/UI/Help'
