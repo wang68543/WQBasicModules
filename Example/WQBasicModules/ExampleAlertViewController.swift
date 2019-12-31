@@ -31,33 +31,28 @@ class ExampleAlertViewController: BaseExampleViewController {
         }
         
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
-                    let alertView = WQAlertView("测试", message: "测试内ring我问问无萨达")
-                    alertView.addAction(WQAlertAction(title: "取消", handler: { action in
-            
-                    }))
-                    alertView.addAction(WQAlertAction(title: "确认", handler: { action in
-            
-                    }))
+            let alertView = UIView()
+                   let size = CGSize(width: 80, height: 600)
             alertView.backgroundColor = .green
-                    alertView.show()
+            alertView.wm.alert(true, containerSize: size)
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+                let star = WQStarViewController()
+                star.view.backgroundColor = .white
+                self.navigationController?.pushViewController(star, animated: true)
+            }
+            
+//               DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4) {
+//                    alertView.wm.dismiss(true)
+//                }
         }
     }
  
     @objc func alertAction(_ sender: UIButton) {
         
-        imageView.fade(UIImage(named: "loud_speaker"))
+//        imageView.fade(UIImage(named: "loud_speaker"))
         let alertView = UIView()
-        let size = CGSize(width: 200, height: 300)
-//        alertView.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        let size = CGSize(width: 200, height: 200)
         alertView.backgroundColor = UIColor.red
-//        alertView.wm.alert()
-//        alertView.wm.presentation?.isEnableTabBackgroundDismiss = true
-//        alertView.wm.presentation?.interactionDissmissDirection = .down
-//        alertView.wm.show(from: .bottom, show: .center)
-        
-        let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
-//        let item = WQAnimatedItem(container: alertView.frame.size, postionStyle: .left, bounceStyle: .bounceCenter)
-//        let animator = WQTransitioningAnimator(items: [item, initailItem])
         let presentedFrame = UIScreen.main.bounds
         let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: presentedFrame.height * 0.5, width: size.width, height: 0)
        
@@ -65,13 +60,23 @@ class ExampleAlertViewController: BaseExampleViewController {
         
         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
         let animator = WQTransitionAnimator(items: items)
-        
+        let alertSubView = UIView()
+        alertSubView.backgroundColor = UIColor.blue
+        alertView.addSubview(alertSubView)
+        alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-//        presention.shownInWindow(animated: true, completion: nil)
         presention.show(animated: true, in: nil, completion: nil)
         presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
-        
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
+//            let star = WQStarViewController()
+//            star.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+//            star.modalPresentationStyle = .custom
+//            presention.present(star, animated: true, completion: nil)
+//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
+//                star.dismiss(animated: true, completion: nil)
+//            }
+//        }
     }
 
 }

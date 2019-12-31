@@ -42,26 +42,7 @@ class ViewController: UIViewController {
     @objc func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         switch sender.state {
         case .began:
-            let presentionView = WQPresentionView()
-            let keyPath = \WQTransitionable.containerView.frame
-            let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
-            let color = WQAnimatedItem.defaultViewBackground()
-//            presentionView.wm.show(items: [item,color,TestPresent()])
-            //        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
-            presentionView.backgroundColor = UIColor.red
-            //        presentionView.wm.show(reverse: .center, from: .bottom)
-            //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            //            debugPrint(self.children)
-            //            presentionView.wm.dismiss(true)
-            //        }
-//            presentionView.wm.presentation?.interactionDissmissDirection = .down
-//            presentionView.wm.presentation?.isEnableSlideDismiss = true
-            let animator: WQTransitionAnimator = WQTransitionAnimator(items: [item,color,TestPresent()])
-            let present = WQTransitionable(subView: presentionView, animator: animator)
-//            present.showInteractive =  WQPropertyDriven
-//            present.showInteractive?.completionWidth = 200
-//             present.showInteractive?.isInteracting = true
-//            present.show(animated: true, in: self, completion: nil)
+            break
         default:
             break;
         }
@@ -215,55 +196,7 @@ class ViewController: UIViewController {
         let value: CGFloat = 200
         func testFuns() {
             debugPrint("=====",value)
-        }
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            testFuns()
-        }
-//        self.view.frame = self.view.frame.offsetBy(dx: 300, dy: 0)
-//        return
-//        let second = SecondViewController()
-//        second.view.backgroundColor = UIColor.white
-//        self.navigationController?.pushViewController(second, animated: true)
-//        return
-        let presentionView = WQPresentionView()
-        let keyPath = \WQTransitionable.containerView.frame
-        let item = WQAnimatedItem(keyPath, initial: CGRect.zero, show: CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width, height: 500)))
-        let color = WQAnimatedItem.defaultViewBackground()
-//        presentionView.wm.show(items: [item,color,TestPresent()])
-//        presentionView.bounds = CGRect(origin: .zero, size: CGSize(width: 400, height: 400))
-        presentionView.backgroundColor = UIColor.red
-//        presentionView.wm.show(reverse: .center, from: .bottom)
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-//            debugPrint(self.children)
-//            presentionView.wm.dismiss(true)
-//        }
-//        let itemFrame = WQAnimatedItem.defaultViewShowFrame()
-        let showFrame = CGRect(x: 0, y: UIScreen.main.bounds.height - 500, width: UIScreen.main.bounds.width, height: 500)
-        let navkey = \WQTransitionable.view.frame
-        let viewItem = WQTransitionAnimatedItem(navkey, initial:showFrame, show:showFrame)
-        let animator = WQTransitionAnimator(items: [item, color,viewItem ])
-        let presentation = WQTransitionable(subView: presentionView, animator: animator)
-        presentation.interactionDismissDirection = .down
-        presentation.showInController(self.tabBarController!, animated: true, completion: nil)
-//        presentation.isEnableTabBackgroundDismiss = true
-        
-//        presentation.shownInWindow(animated: true, completion: nil)
- 
-//        presentation.shownInParent(self, animated: true, completion: nil)
-//        presentation.shownInWindow(animated: true, completion: nil)
-//        presentation.presentSelf(in: self, animated: true, completion: nil)
-        
-//        presentionView.wm.presentation?.interactionDissmissDirection = .down
-       
-//        presentionView.wm.presentation?.shownInWindow(true, completion: nil)
-        
-//        let presnetion = WQPresentationable(UIView(), frame: .zero, dismiss: .zero, initial: .zero)
-//        let keypath = \WQPresentationable.containerView.frame
-//        let item = WQTransitioningAnimatedItem(keypath, initial: CGRect(x: 0, y: 0, width: 100, height: 100), show: UIScreen.main.bounds, dismiss: CGRect.zero)
-//
-//        presnetion[keyPath: item.keyPath] = item.initial
-//        presnetion.view.backgroundColor = UIColor.red
-//        self.view.addSubview(presnetion.view)
+        }  
     }
     
 }

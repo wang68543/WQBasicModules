@@ -11,7 +11,9 @@ public typealias TransitionCompleted = (() -> Void)
 extension WQTransitionable {
     /// modal 形式显示当前控制器
     public func presentSelf(in controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
-        self.showMode = .present 
+        self.showMode = .present
+//        controller.modalPresentationStyle = .custom
+//        controller.transitioningDelegate = self 
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
         controller.present(self, animated: flag, completion: completion)
@@ -77,18 +79,13 @@ extension WQTransitionable {
         if isAppearanceTransition {
             preRootViewController?.beginAppearanceTransition(false, animated: flag) // 当前控制器会直接调用viewAppear
         }
-//        self.previousKeyWindow = UIApplication.shared.keyWindow
         if self.containerWindow == nil {
             self.containerWindow = WQTransitionWindow(frame: UIScreen.main.bounds)
             self.containerWindow?.windowLevel = WQContainerWindowLevel
-//            self.containerWindow?.backgroundColor = .clear // 避免横竖屏旋转时出现黑色
         }
         self.containerWindow?.addVisible(root: self)
-//        self.containerWindow?.rootViewController = self
-//        self.containerWindow?.makeKeyAndVisible()
         func animateFinshed(_ flag: Bool) {
-            if !flag {
-//                self.clearShowWindow()
+            if !flag { 
                 self.containerWindow?.remove()
             }
             if isAppearanceTransition {

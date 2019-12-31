@@ -105,7 +105,6 @@ public class WQAlertView: UIView {
         let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
         let item = WQAnimatedItem(container: size, postionStyle: .center, bounceStyle: .bounceCenter)
         let animator = WQTransitionAnimator(items: [item, initailItem], options: .alertPresent, dismiss: .alertDismiss)
-//        let animator = WQTransitioningAnimator(items: [initailItem], preferredStyle: .alert(size: size))
         let presention = WQTransitionable(subView: self, animator: animator)
         presention.show(animated: true, in: nil, completion: nil)
     }

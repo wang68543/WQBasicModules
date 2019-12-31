@@ -91,15 +91,13 @@ open class WQTransitionable: UIViewController {
         self.animator = animator
         initialFrame = presentedFrame ?? UIScreen.main.bounds
         super.init(nibName: nil, bundle: nil)
-        UIView.performWithoutAnimation {
-            self.childViews.append(subView)
-            if let frame = containerFrame {
-                self.containerView.frame = frame
-            }
-            self.addContainerSubview(subView)
-            if let viewFrame = presentedFrame {
-                self.view.frame = viewFrame
-            }
+        self.childViews.append(subView)
+        if let frame = containerFrame {
+            self.containerView.frame = frame
+        }
+        self.addContainerSubview(subView)
+        if let viewFrame = presentedFrame {
+            self.view.frame = viewFrame
         }
     }
     
@@ -142,29 +140,29 @@ open class WQTransitionable: UIViewController {
             }
         }
     }
-    #if DEBUG
-    open override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    open override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        debugPrint("WQPresentionable:", #function)
-    }
-    #endif
+//    #if DEBUG
+//    open override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    open override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(animated)
+//        debugPrint("WQPresentionable:", #function)
+//    }
+//    #endif
     deinit {
         //手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
         self.containerWindow = nil
-        debugPrint(#function + "♻️")
+        debugPrint("\(self):" + #function + "♻️")
     }
     @available(*, unavailable, message: "loading this view from nib not supported" )
     required public init?(coder aDecoder: NSCoder) {
