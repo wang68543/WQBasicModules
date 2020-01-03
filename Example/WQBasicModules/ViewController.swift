@@ -51,6 +51,7 @@ class ViewController: UIViewController {
     var textField: UITextField?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.textField = UITextField()
         self.textField?.delegate = self
         self.view.addGestureRecognizer(panGR)
@@ -205,12 +206,4 @@ extension ViewController: UITextFieldDelegate {
         debugPrint(#function)
         return true
     }
-}
-class TestPresent: WQAnimatedConfigAble {
-    func config(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) {
-        guard state != .initial else {
-            return
-        }
-        presenting?.view.backgroundColor = state == .show ? UIColor.white : UIColor.green
-    }
-}
+} 

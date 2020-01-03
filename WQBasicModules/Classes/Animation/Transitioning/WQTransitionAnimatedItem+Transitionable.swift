@@ -72,9 +72,16 @@ public extension Array where Element == WQAnimatedConfigAble {
         self.setup(presented, presenting: presenting, state: isShow ? .show : .dismiss)
     }
     func setup(_ presented: UIViewController?, presenting: UIViewController?, state: WQTransitionState) {
-        debugPrint("aaaaaaaBBBBBBBB====presented:\(presented), presenting:\(presenting)")
         self.forEach { item in
-            item.config(presented, presenting: presenting, present: state)
+            if item.isPresentingConfig {
+                if let viewController = presenting {
+                   item.config(viewController, present: state)
+                }
+            } else {
+                if let viewController = presented {
+                   item.config(viewController, present: state)
+                }
+            } 
         }
     }
     /// 创建一个包含 View frame 跟 view 默认Color 动画

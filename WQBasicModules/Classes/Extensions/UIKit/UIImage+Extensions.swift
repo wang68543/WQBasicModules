@@ -6,9 +6,6 @@
 //
 
 import UIKit
-//import Foundation
-//import AVFoundation.AVTime
-//import AVFoundation.AVAsset
 import AVFoundation.AVAssetImageGenerator
 
 // MARK: - -- convenience init

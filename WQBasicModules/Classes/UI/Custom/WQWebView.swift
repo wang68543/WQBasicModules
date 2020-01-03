@@ -9,7 +9,12 @@ import UIKit
 import WebKit
 open class WQWebView: WKWebView {
     public var isAttachProgressTop: Bool = true
-    public var progressHeight: CGFloat = 5
+    public var progressHeight: CGFloat = 5 {
+        didSet {
+            self.setNeedsLayout()
+            self.layoutIfNeeded()
+        }
+    }
     
     public var titleDidChange: ((String?) -> Void)? {
         didSet {
