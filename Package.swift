@@ -11,7 +11,7 @@ import PackageDescription
 let package = Package(
     name: "WQBasicModules",
     platforms: [
-        .iOS(.v8) 
+        .iOS(.v8)
     ],
     products: [
         .library(
@@ -21,7 +21,7 @@ let package = Package(
     targets: [
         .target(
             name: "WQBasicModules",
-            path: "WQBasicModules/Class")
+            path: "Sources/Class")
     ],
     swiftLanguageVersions: [.v4, .v5]
 )
