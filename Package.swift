@@ -10,6 +10,9 @@ import PackageDescription
 
 let package = Package(
     name: "WQBasicModules",
+    platforms: [
+        .iOS(.v8) 
+    ],
     products: [
         .library(
             name: "WQBasicModules",
