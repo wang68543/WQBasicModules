@@ -18,8 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         example.view.backgroundColor = UIColor.white
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
-        window?.makeKeyAndVisible() 
-        
+        window?.makeKeyAndVisible()  
         return true
     }
 

@@ -60,4 +60,7 @@ public extension UIApplication {
     var version: String? {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     }
+    var bundleIdentifier: String {
+        return Bundle.main.bundleIdentifier ?? String() 
+    }
 }
