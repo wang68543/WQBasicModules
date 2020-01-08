@@ -21,7 +21,7 @@ let package = Package(
     targets: [
         .target(
             name: "WQBasicModules",
-            path: "Sources/Class")
+            path: "Sources/Classes")
     ],
     swiftLanguageVersions: [.v4, .v5]
 )
