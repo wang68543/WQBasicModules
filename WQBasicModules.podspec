@@ -41,18 +41,18 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/Animation/Layer'
             sss.source_files = 'Sources/Classes/Animation/Views/*.swift'
         end
-        ss.subspec 'Alert' do |sss|
-            sss.dependency 'WQBasicModules/Animation/Transitioning'
-            sss.source_files = 'Sources/Classes/Animation/Alert/*.swift'
-        end
+#        ss.subspec 'Alert' do |sss|
+#            sss.dependency 'WQBasicModules/Animation/Transitioning'
+#            sss.source_files = 'Sources/Classes/Animation/Alert/*.swift'
+#        end
         ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Classes/Animation/Transitioning/*.swift'
         end
-        ss.subspec 'TransitioningV2' do |sss|
-            sss.source_files = 'Sources/Classes/Animation/TransitioningV2/*.swift'
-        end
+#        ss.subspec 'TransitioningV2' do |sss|
+#            sss.source_files = 'Sources/Classes/Animation/TransitioningV2/*.swift'
+#        end
     end
 
     s.subspec 'Extensions' do |ss|
@@ -60,6 +60,7 @@ Pod::Spec.new do |s|
             sss.source_files = 'Sources/Classes/Extensions/Module/*.swift'
         end
         ss.subspec 'UIKit' do |sss|
+            sss.dependency 'WQBasicModules/Extensions/Module'
             sss.source_files = 'Sources/Classes/Extensions/UIKit/*.swift'
         end
         ss.subspec 'Foundation' do |sss|
@@ -93,7 +94,7 @@ Pod::Spec.new do |s|
          end
          ss.subspec 'Help' do |sss|
              sss.dependency 'WQBasicModules/Extensions/Module'
-             ss.resource = 'WQBasicModules/Classes/Resources/WQUIBundle.bundle'
+             ss.resource = 'Sources/Classes/Resources/WQUIBundle.bundle'
              sss.source_files = 'Sources/Classes/UI/Help/*.swift'
          end
          ss.subspec 'FlowLayout' do |sss|

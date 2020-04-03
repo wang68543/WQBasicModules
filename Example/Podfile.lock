@@ -5,18 +5,13 @@ PODS:
     - WQBasicModules/Tool (= 0.3.3)
     - WQBasicModules/UI (= 0.3.3)
   - WQBasicModules/Animation (0.3.3):
-    - WQBasicModules/Animation/Alert (= 0.3.3)
     - WQBasicModules/Animation/Layer (= 0.3.3)
     - WQBasicModules/Animation/Transitioning (= 0.3.3)
-    - WQBasicModules/Animation/TransitioningV2 (= 0.3.3)
     - WQBasicModules/Animation/Views (= 0.3.3)
-  - WQBasicModules/Animation/Alert (0.3.3):
-    - WQBasicModules/Animation/Transitioning
   - WQBasicModules/Animation/Layer (0.3.3)
   - WQBasicModules/Animation/Transitioning (0.3.3):
     - WQBasicModules/Extensions/Module
     - WQBasicModules/UI/Help
-  - WQBasicModules/Animation/TransitioningV2 (0.3.3)
   - WQBasicModules/Animation/Views (0.3.3):
     - WQBasicModules/Animation/Layer
   - WQBasicModules/Extensions (0.3.3):
@@ -30,7 +25,8 @@ PODS:
   - WQBasicModules/Extensions/Foundation (0.3.3)
   - WQBasicModules/Extensions/Module (0.3.3)
   - WQBasicModules/Extensions/String (0.3.3)
-  - WQBasicModules/Extensions/UIKit (0.3.3)
+  - WQBasicModules/Extensions/UIKit (0.3.3):
+    - WQBasicModules/Extensions/Module
   - WQBasicModules/Tool (0.3.3):
     - WQBasicModules/Tool/Cache (= 0.3.3)
     - WQBasicModules/Tool/JsonCodable (= 0.3.3)
@@ -56,7 +52,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 5253da00a81210b92585c1d86151bf171bb99989
+  WQBasicModules: f7117ac431ea231fcea3884098c26dfa982f2886
 
 PODFILE CHECKSUM: 847dc8c144242caaf0f9af9c2af8f4cc5561bacc
 

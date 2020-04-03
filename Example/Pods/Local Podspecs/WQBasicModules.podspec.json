@@ -42,15 +42,6 @@
           "source_files": "Sources/Classes/Animation/Views/*.swift"
         },
         {
-          "name": "Alert",
-          "dependencies": {
-            "WQBasicModules/Animation/Transitioning": [
-
-            ]
-          },
-          "source_files": "Sources/Classes/Animation/Alert/*.swift"
-        },
-        {
           "name": "Transitioning",
           "dependencies": {
             "WQBasicModules/Extensions/Module": [
@@ -61,10 +52,6 @@
             ]
           },
           "source_files": "Sources/Classes/Animation/Transitioning/*.swift"
-        },
-        {
-          "name": "TransitioningV2",
-          "source_files": "Sources/Classes/Animation/TransitioningV2/*.swift"
         }
       ]
     },
@@ -77,6 +64,11 @@
         },
         {
           "name": "UIKit",
+          "dependencies": {
+            "WQBasicModules/Extensions/Module": [
+
+            ]
+          },
           "source_files": "Sources/Classes/Extensions/UIKit/*.swift"
         },
         {
@@ -113,7 +105,7 @@
     },
     {
       "name": "UI",
-      "resources": "WQBasicModules/Classes/Resources/WQUIBundle.bundle",
+      "resources": "Sources/Classes/Resources/WQUIBundle.bundle",
       "subspecs": [
         {
           "name": "Custom",
