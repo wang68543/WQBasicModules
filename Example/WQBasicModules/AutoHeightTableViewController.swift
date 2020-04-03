@@ -22,10 +22,9 @@ class AutoHeightTableViewController: BaseExampleViewController {
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor),
             textView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            textView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
         textView.font = UIFont.systemFont(ofSize: 30)
-        
         let subView = UIView()
         subView.backgroundColor = .yellow
         subView.translatesAutoresizingMaskIntoConstraints = false

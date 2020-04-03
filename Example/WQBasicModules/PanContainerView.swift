@@ -48,11 +48,13 @@ extension PanContainerView: UIScrollViewDelegate {
             return
         }
         // 没有到达顶点无法滚动 大于0向上滚动 小于0向下滚动
-        let offset = CGPoint(x: scrollView.contentOffset.x - self.lastPosition.x, y: scrollView.contentOffset.y - self.lastPosition.y)
+//        let offset = CGPoint(x: scrollView.contentOffset.x - self.lastPosition.x,
+//        y: scrollView.contentOffset.y - self.lastPosition.y)
        
 //        let top = self.targetPoints.first!
 //        let bottom = self.targetPoints.last!
-//        guard !(position.y >= top.y && offset.y > 0) || !(position.y <= bottom.y && offset.y < 0) else { //在底部向下以及顶部向上之后都不处理
+//        guard !(position.y >= top.y && offset.y > 0)
+//            || !(position.y <= bottom.y && offset.y < 0) else { //在底部向下以及顶部向上之后都不处理
 //            return
 //        }
 //        scrollView.contentOffset = .zero

@@ -13,7 +13,10 @@ class FlexBoxViewController: UIViewController {
     let timesView: UICollectionView = {
         let flex = WQFlexbox()
         let viewH: CGFloat = 44
-        let view = UICollectionView(frame: CGRect(origin: CGPoint(x: 0, y: 100), size: CGSize(width: Screen.width, height: viewH)), collectionViewLayout: flex)
+        let size = CGSize(width: Screen.width, height: viewH)
+        let frame = CGRect(origin: CGPoint(x: 0, y: 100), size: size)
+        let view = UICollectionView(frame: frame,
+                                    collectionViewLayout: flex)
         flex.itemSize = CGSize(width: viewH - 8, height: viewH - 8)
         view.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         flex.direction = .row
@@ -21,7 +24,6 @@ class FlexBoxViewController: UIViewController {
         flex.isSingleLine = true
         view.backgroundColor = UIColor.white
         view.contentInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
-        
         return view
     }()
     override func viewDidLoad() {

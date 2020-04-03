@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import WQBasicModules
-class NSDate_UtilitiesTests: XCTestCase {
+class NSDate_Tests: XCTestCase {
     
     override func setUp() {
         super.setUp()

@@ -2,6 +2,7 @@ platform :ios, 8.0
 use_frameworks!
 target 'WQBasicModules_Example' do
   pod 'WQBasicModules', :path => '../'
+#  pod 'SwiftLint'
 
   target 'WQBasicModules_Tests' do
     inherit! :search_paths

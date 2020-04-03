@@ -25,7 +25,6 @@ class ExampleViewCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
 }
 
 // MARK: - -- cell reuse
@@ -36,18 +35,9 @@ extension ExampleViewCell {
         tableView.register(UINib(nibName: String(describing: self), bundle: bundle), forCellReuseIdentifier: identifier)
     }
     public class func cell(for tableView: UITableView, with indexPath: IndexPath) -> ExampleViewCell {
-        return tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ExampleViewCell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ExampleViewCell {
+            return cell
+        }
+        return ExampleViewCell() 
     }
 }
-
-//// MARK: - -- cell reuse
-//extension <#type#> {
-//    static let identifier = "reuse"
-//    public class func register(for collectionView: UICollectionView, bundle: Bundle? = nil) {
-//        //collectionView.register(UINib(nibName: String(describing: self), bundle: bundle), forCellWithReuseIdentifier: identifier)
-//        collectionView.register(self, forCellWithReuseIdentifier: identifier)
-//    }
-//    public class func cell(for collectionView: UICollectionView, with indexPath: IndexPath) -> <#type#> {
-//        return collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! <#type#>
-//    }
-//}

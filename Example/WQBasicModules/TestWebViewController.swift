@@ -10,7 +10,6 @@ import UIKit
 import WQBasicModules
 class TestWebViewController: WQWebController {
 //    let webView = WQWebView()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 //        self.view.addSubview(webView)

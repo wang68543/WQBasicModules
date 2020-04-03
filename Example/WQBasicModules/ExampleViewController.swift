@@ -37,9 +37,7 @@ class ExampleViewController: UITableViewController {
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
-        ExampleViewCell.register(for: self.tableView)
-        let test = ViewController.TestModel("12345")
-        WQCache.default["test"] = test
+        ExampleViewCell.register(for: self.tableView)  
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
 //         let model:ViewCåontroller.TestModel? = WQCache.default["test"]
         if "13898768609".isLegalPhone() {
@@ -110,13 +108,16 @@ class ExampleViewController: UITableViewController {
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let values = sources[indexPath.section][indexPath.row]
-        let namespace = Bundle.main.infoDictionary!["CFBundleExecutable"] as! String
-        let clsStr = namespace + "." + values.values.first!
-        let cls = NSClassFromString(clsStr) as! UIViewController.Type
-        let viewController = cls.init()
-        viewController.view.backgroundColor = UIColor.white 
-        self.navigationController?.pushViewController(viewController, animated: true)
-        tableView.deselectRow(at: indexPath, animated: true)
+        if let namespace = Bundle.main.infoDictionary?["CFBundleExecutable"] as? String {
+            let clsStr = namespace + "." + values.values.first!
+            if let cls = NSClassFromString(clsStr) as? UIViewController.Type {
+                let viewController = cls.init()
+                viewController.view.backgroundColor = UIColor.white
+                self.navigationController?.pushViewController(viewController, animated: true)
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
+        }
+        
     }
 
 }

@@ -111,16 +111,35 @@ open class WQTransitionable: UIViewController {
             containerView.layoutIfNeeded() // 提前刷新 用于动画准备
         }
     }
+    /// 可用来承载动画的父View
+    private func topEnableParentViewController(_ viewController: UIViewController?) -> UIViewController? {
+       guard let visible = viewController else { return nil }
+       if visible.isBeingDismissed {
+           return visible.presentingViewController ?? visible.parent
+       } else if visible.isMovingFromParent {
+           return visible.parent
+       } else {
+           return visible
+       }
+   }
     /// 优先Modal 其次addChildController 最后new Window
     open func show(animated flag: Bool, in controller: UIViewController? = nil, completion: (() -> Void)? = nil) {
         let presnetVC: UIViewController? = controller ?? WQUIHelp.topVisibleViewController()
-        if presnetVC?.presentedViewController != nil { //如果ViewController已经present过则无法再modal
-            self.shownInParent(presnetVC!, animated: flag, completion: completion)
-        } else if let topVC = presnetVC {
-            //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
-            self.presentSelf(in: topVC, animated: flag, completion: completion)
-        } else {
-            self.shownInWindow(animated: flag, completion: completion)
+        if let parentController = topEnableParentViewController(presnetVC) {
+            if parentController.presentedViewController != nil {
+                 self.shownInParent(parentController, animated: flag, completion: completion)
+            } else {
+                var fixFlag: Bool = flag
+                if #available(iOS 13.0, *) {
+                    if parentController.isModalInPresentation { fixFlag = false }
+                } else {
+                    if parentController.isBeingPresented { fixFlag = false }
+                }
+                //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
+                self.presentSelf(in: parentController, animated: fixFlag, completion: completion)
+            }
+        } else { 
+           self.shownInWindow(animated: flag, completion: completion)
         }
     }
     /// 被显示
