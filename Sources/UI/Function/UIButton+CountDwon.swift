@@ -72,7 +72,12 @@ public extension UIButton {
         let currentState = self.currentControlState
         let excute: IntervalExecute = { sender, secs in
             let title = formater.string(from: NSNumber(value: secs))
-            sender.setTitle(title, for: currentState)
+            if sender.currentAttributedTitle != nil {
+                assert(true, "请使用自定义标题设置")
+            } else {
+              sender.setTitle(title, for: currentState)
+            }
+            
         }
         self.countDown(total, interval: 1, execute: excute, completion: completion)
         self.setTitleColor(titleColor, for: currentState)
