@@ -18,7 +18,7 @@
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "Sources/Classes/WQBasicModules.h",
+  "source_files": "Sources/WQBasicModules.h",
   "swift_versions": [
     "4.0",
     "4.2",
@@ -30,7 +30,7 @@
       "subspecs": [
         {
           "name": "Layer",
-          "source_files": "Sources/Classes/Animation/Layer/*.swift"
+          "source_files": "Sources/Animation/Layer/*.swift"
         },
         {
           "name": "Views",
@@ -39,7 +39,7 @@
 
             ]
           },
-          "source_files": "Sources/Classes/Animation/Views/*.swift"
+          "source_files": "Sources/Animation/Views/*.swift"
         },
         {
           "name": "Transitioning",
@@ -51,7 +51,7 @@
 
             ]
           },
-          "source_files": "Sources/Classes/Animation/Transitioning/*.swift"
+          "source_files": "Sources/Animation/Transitioning/*.swift"
         }
       ]
     },
@@ -60,7 +60,7 @@
       "subspecs": [
         {
           "name": "Module",
-          "source_files": "Sources/Classes/Extensions/Module/*.swift"
+          "source_files": "Sources/Extensions/Module/*.swift"
         },
         {
           "name": "UIKit",
@@ -69,11 +69,11 @@
 
             ]
           },
-          "source_files": "Sources/Classes/Extensions/UIKit/*.swift"
+          "source_files": "Sources/Extensions/UIKit/*.swift"
         },
         {
           "name": "Foundation",
-          "source_files": "Sources/Classes/Extensions/Foundation/*.{swift,h,m}"
+          "source_files": "Sources/Extensions/Foundation/*.{swift,h,m}"
         },
         {
           "name": "Date",
@@ -82,11 +82,11 @@
 
             ]
           },
-          "source_files": "Sources/Classes/Extensions/Date/*.swift"
+          "source_files": "Sources/Extensions/Date/*.swift"
         },
         {
           "name": "String",
-          "source_files": "Sources/Classes/Extensions/String/*.{swift,h,m}"
+          "source_files": "Sources/Extensions/String/*.{swift,h,m}"
         }
       ]
     },
@@ -95,17 +95,17 @@
       "subspecs": [
         {
           "name": "Cache",
-          "source_files": "Sources/Classes/Tool/Cache/*.swift"
+          "source_files": "Sources/Tool/Cache/*.swift"
         },
         {
           "name": "JsonCodable",
-          "source_files": "Sources/Classes/Tool/JsonCodable/*.swift"
+          "source_files": "Sources/Tool/JsonCodable/*.swift"
         }
       ]
     },
     {
       "name": "UI",
-      "resources": "Sources/Classes/Resources/WQUIBundle.bundle",
+      "resources": "Sources/Resources/WQUIBundle.bundle",
       "subspecs": [
         {
           "name": "Custom",
@@ -114,11 +114,11 @@
 
             ]
           },
-          "source_files": "Sources/Classes/UI/Custom/*.swift"
+          "source_files": "Sources/UI/Custom/*.swift"
         },
         {
           "name": "Function",
-          "source_files": "Sources/Classes/UI/Function/*.swift"
+          "source_files": "Sources/UI/Function/*.swift"
         },
         {
           "name": "Help",
@@ -127,11 +127,11 @@
 
             ]
           },
-          "source_files": "Sources/Classes/UI/Help/*.swift"
+          "source_files": "Sources/UI/Help/*.swift"
         },
         {
           "name": "FlowLayout",
-          "source_files": "Sources/Classes/UI/FlowLayout/*.swift"
+          "source_files": "Sources/UI/FlowLayout/*.swift"
         }
       ]
     }

@@ -29,76 +29,76 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
-  s.source_files  = 'Sources/Classes/WQBasicModules.h'
+  s.source_files  = 'Sources/WQBasicModules.h'
   s.swift_version = '4.2'
   s.swift_versions = ['4.0', '4.2', '5.0']
   
     s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
-            sss.source_files = 'Sources/Classes/Animation/Layer/*.swift'
+            sss.source_files = 'Sources/Animation/Layer/*.swift'
         end
         ss.subspec 'Views' do |sss|
             sss.dependency 'WQBasicModules/Animation/Layer'
-            sss.source_files = 'Sources/Classes/Animation/Views/*.swift'
+            sss.source_files = 'Sources/Animation/Views/*.swift'
         end
 #        ss.subspec 'Alert' do |sss|
 #            sss.dependency 'WQBasicModules/Animation/Transitioning'
-#            sss.source_files = 'Sources/Classes/Animation/Alert/*.swift'
+#            sss.source_files = 'Sources/Animation/Alert/*.swift'
 #        end
         ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.dependency 'WQBasicModules/UI/Help'
-            sss.source_files = 'Sources/Classes/Animation/Transitioning/*.swift'
+            sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
 #        ss.subspec 'TransitioningV2' do |sss|
-#            sss.source_files = 'Sources/Classes/Animation/TransitioningV2/*.swift'
+#            sss.source_files = 'Sources/Animation/TransitioningV2/*.swift'
 #        end
     end
 
     s.subspec 'Extensions' do |ss|
         ss.subspec 'Module' do |sss|
-            sss.source_files = 'Sources/Classes/Extensions/Module/*.swift'
+            sss.source_files = 'Sources/Extensions/Module/*.swift'
         end
         ss.subspec 'UIKit' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
-            sss.source_files = 'Sources/Classes/Extensions/UIKit/*.swift'
+            sss.source_files = 'Sources/Extensions/UIKit/*.swift'
         end
         ss.subspec 'Foundation' do |sss|
-            sss.source_files = 'Sources/Classes/Extensions/Foundation/*.{swift,h,m}'
+            sss.source_files = 'Sources/Extensions/Foundation/*.{swift,h,m}'
         end
         ss.subspec 'Date' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Foundation'
-            sss.source_files = 'Sources/Classes/Extensions/Date/*.swift'
+            sss.source_files = 'Sources/Extensions/Date/*.swift'
         end
         ss.subspec 'String' do |sss|
-            sss.source_files = 'Sources/Classes/Extensions/String/*.{swift,h,m}'
+            sss.source_files = 'Sources/Extensions/String/*.{swift,h,m}'
         end
     end
     
      s.subspec 'Tool' do |ss|
          ss.subspec 'Cache' do |sss|
-             sss.source_files = 'Sources/Classes/Tool/Cache/*.swift'
+             sss.source_files = 'Sources/Tool/Cache/*.swift'
          end
          ss.subspec 'JsonCodable' do |sss|
-            sss.source_files = 'Sources/Classes/Tool/JsonCodable/*.swift'
+            sss.source_files = 'Sources/Tool/JsonCodable/*.swift'
          end
      end
      
      s.subspec 'UI' do |ss|
          ss.subspec 'Custom' do |sss|
              sss.dependency 'WQBasicModules/Extensions/Module'
-             sss.source_files = 'Sources/Classes/UI/Custom/*.swift'
+             sss.source_files = 'Sources/UI/Custom/*.swift'
          end
          ss.subspec 'Function' do |sss|
-             sss.source_files = 'Sources/Classes/UI/Function/*.swift'
+             sss.source_files = 'Sources/UI/Function/*.swift'
          end
          ss.subspec 'Help' do |sss|
              sss.dependency 'WQBasicModules/Extensions/Module'
-             ss.resource = 'Sources/Classes/Resources/WQUIBundle.bundle'
-             sss.source_files = 'Sources/Classes/UI/Help/*.swift'
+             ss.resource = 'Sources/Resources/WQUIBundle.bundle'
+             sss.source_files = 'Sources/UI/Help/*.swift'
          end
          ss.subspec 'FlowLayout' do |sss|
-             sss.source_files = 'Sources/Classes/UI/FlowLayout/*.swift'
+             sss.source_files = 'Sources/UI/FlowLayout/*.swift'
          end
      end
 end
