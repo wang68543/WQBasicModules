@@ -8,15 +8,15 @@
 
 import UIKit
 import WQBasicModules
-class TestWebViewController: WQWebController {
-//    let webView = WQWebView()
+class TestWebViewController: UIViewController {
+    let webView = WQWebView()
     override func viewDidLoad() {
         super.viewDidLoad()
-//        self.view.addSubview(webView)
+        self.view.addSubview(webView)
         self.webView.load(URLRequest(url: URL(string: "https://www.baidu.com/")!))
-//        self.webView.titleDidChange = { [weak self] webTitle in
-//            self?.navigationItem.title = webTitle
-//        }
+        self.webView.titleDidChange = { [weak self] webTitle in
+            self?.navigationItem.title = webTitle
+        }
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

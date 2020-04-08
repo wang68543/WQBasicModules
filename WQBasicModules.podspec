@@ -33,6 +33,11 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
   s.swift_versions = ['4.0', '4.2', '5.0']
   
+  s.subspec 'Function' do |ss|
+      ss.subspec 'PageViewController' do |sss|
+          sss.source_files = 'Sources/Function/PageViewController/*.swift'
+      end
+  end
     s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'Sources/Animation/Layer/*.swift'
@@ -41,18 +46,18 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/Animation/Layer'
             sss.source_files = 'Sources/Animation/Views/*.swift'
         end
-#        ss.subspec 'Alert' do |sss|
-#            sss.dependency 'WQBasicModules/Animation/Transitioning'
-#            sss.source_files = 'Sources/Animation/Alert/*.swift'
-#        end
+    #        ss.subspec 'Alert' do |sss|
+    #            sss.dependency 'WQBasicModules/Animation/Transitioning'
+    #            sss.source_files = 'Sources/Animation/Alert/*.swift'
+    #        end
         ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
-#        ss.subspec 'TransitioningV2' do |sss|
-#            sss.source_files = 'Sources/Animation/TransitioningV2/*.swift'
-#        end
+    #        ss.subspec 'TransitioningV2' do |sss|
+    #            sss.source_files = 'Sources/Animation/TransitioningV2/*.swift'
+    #        end
     end
 
     s.subspec 'Extensions' do |ss|
