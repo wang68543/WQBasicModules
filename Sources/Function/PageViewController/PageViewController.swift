@@ -28,7 +28,6 @@ open class PageViewController: UIViewController {
     var lastControllerScrollViewContentOffset : CGFloat = 0.0
  
     var startingPageForScroll : Int = 0
-//    var didTapMenuItemToScroll : Bool = false
 
     // 用户主动点击切换
     var didUserSelectedIndexToScroll: Bool = false
@@ -99,8 +98,13 @@ open class PageViewController: UIViewController {
         
         self.view.addConstraints(controllerScrollView_constraint_H)
         self.view.addConstraints(controllerScrollView_constraint_V)
-        controllerScrollView.backgroundColor = .red
-     
+        controllerScrollView.backgroundColor = .yellow
+        if #available(iOS 11.0, *) {
+            controllerScrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            self.automaticallyAdjustsScrollViewInsets = false
+        }
+        self.automaticallyAdjustsScrollViewInsets = false
         controllerScrollView.showsHorizontalScrollIndicator = false
         controllerScrollView.showsVerticalScrollIndicator = false
     }
@@ -116,6 +120,9 @@ open class PageViewController: UIViewController {
         // Disable scrollsToTop for menu and controller scroll views so that iOS finds scroll views within our pages on status bar tap gesture.
         controllerScrollView.scrollsToTop = false
         
+        controllerScrollView.alwaysBounceHorizontal = true
+        
+        controllerScrollView.bounces = true
 //        controllerScrollView.isDirectionalLockEnabled = true
         
         // Configure controller scroll view content size
@@ -132,18 +139,14 @@ open class PageViewController: UIViewController {
 extension PageViewController {
     // MARK: - Remove/Add Page
     func addPageAtIndex(_ index : Int) {
-        // Call didMoveToPage delegate function
-        guard index >= 0 && index < controllerArray.count else {
-            return
-        }
-        let currentController = controllerArray[index]
+        guard let newVC = self.safeIndexOfArrayController(index) else { return }
+    
+        guard !self.children.contains(newVC) else { return }
+        debugPrint("\(#function):\(index)")
+        delegate?.willMoveToPage?(newVC, index: index) 
         
-        guard !self.children.contains(currentController) else { return }
-        
-        delegate?.willMoveToPage?(currentController, index: index)
-        
-        let newVC = controllerArray[index]
-        
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
         newVC.willMove(toParent: self)
         
         newVC.view.frame =  self.view.frame.offsetBy(dx: self.view.frame.width * CGFloat(index), dy: 0)
@@ -151,17 +154,17 @@ extension PageViewController {
         self.addChild(newVC)
         self.controllerScrollView.addSubview(newVC.view)
         newVC.didMove(toParent: self)
+        
+        CATransaction.commit()
     }
     
     func removePageAtIndex(_ index : Int) {
-        let oldVC = controllerArray[index]
-        
-        oldVC.willMove(toParent: nil)
-        
-        oldVC.view.removeFromSuperview()
-        oldVC.removeFromParent()
-        
-        oldVC.didMove(toParent: nil)
+        guard let oldVC = self.safeIndexOfArrayController(index) else { return }
+        debugPrint("\(#function):\(index)")
+        removePageController(oldVC)
+    }
+    func indexOfControllerInArray(_ controller: UIViewController) -> Int? {
+        return controllerArray.firstIndex(of: controller)
     }
     
     func removePageController(_ controller: UIViewController) {
@@ -182,30 +185,32 @@ extension PageViewController {
        - parameter index: Index of the page to move to
        */
       open func moveToPage(_ index: Int) {
-          if index >= 0 && index < controllerArray.count {
-              // Update page if changed
-              if index != currentPageIndex {
-                  startingPageForScroll = index
-                  lastPageIndex = currentPageIndex
-                  currentPageIndex = index
-                  
-                  // Add pages in between current and tapped page if necessary
-                  let smallerIndex : Int = lastPageIndex < currentPageIndex ? lastPageIndex : currentPageIndex
-                  let largerIndex : Int = lastPageIndex > currentPageIndex ? lastPageIndex : currentPageIndex
-                  
-                  if smallerIndex + 1 != largerIndex {
-                      for i in (smallerIndex + 1)...(largerIndex - 1) {
-                            addPageAtIndex(i)
-                      }
-                  }
-                  addPageAtIndex(index)
-              }
-               
+        guard index >= 0 && index < controllerArray.count else { return }
+          // Update page if changed
+          if index != currentPageIndex {
+              startingPageForScroll = index
+              lastPageIndex = currentPageIndex
+              currentPageIndex = index
               
-             UIView.animate(withDuration: 0.25, animations: { () -> Void in
-                  let xOffset = CGFloat(index) * self.controllerScrollView.frame.width
-                  self.controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: self.controllerScrollView.contentOffset.y), animated: false)
-              })
+              // Add pages in between current and tapped page if necessary
+              let smallerIndex : Int = lastPageIndex < currentPageIndex ? lastPageIndex : currentPageIndex
+              let largerIndex : Int = lastPageIndex > currentPageIndex ? lastPageIndex : currentPageIndex
+              
+              if smallerIndex + 1 != largerIndex {
+                  for i in (smallerIndex + 1)...(largerIndex - 1) {
+                        addPageAtIndex(i)
+                  }
+              }
+              addPageAtIndex(index)
           }
+         UIView.animate(withDuration: 0.25, animations: { () -> Void in
+              let xOffset = CGFloat(index) * self.controllerScrollView.frame.width
+              self.controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: self.controllerScrollView.contentOffset.y), animated: false)
+          })
       }
+    
+    private func safeIndexOfArrayController(_ index: Int) -> UIViewController? {
+        guard index >= 0 && index < controllerArray.count else { return nil }
+        return controllerArray[index]
+    }
 }
