@@ -5,59 +5,62 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.006303">
+      <testcase classname="fastlane.lanes" name="00: default_platform" time="0.013888">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: cocoapods" time="1.117313">
+      <testcase classname="fastlane.lanes" name="01: cocoapods" time="5.153725">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: Switch to ios wq_push lane" time="0.001285">
+      <testcase classname="fastlane.lanes" name="02: Switch to ios wq_push lane" time="0.001371">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: git_tag_exists" time="0.010326">
+      <testcase classname="fastlane.lanes" name="03: git_tag_exists" time="0.012662">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: git_add" time="0.016246">
+      <testcase classname="fastlane.lanes" name="04: remove_tag" time="6.04772">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: git_commit" time="0.034897">
+      <testcase classname="fastlane.lanes" name="05: git_add" time="0.037502">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: push_to_git_remote" time="8.224174">
+      <testcase classname="fastlane.lanes" name="06: git_commit" time="0.038708">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: add_git_tag" time="0.018422">
+      <testcase classname="fastlane.lanes" name="07: push_to_git_remote" time="6.037831">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: push_git_tags" time="6.053182">
+      <testcase classname="fastlane.lanes" name="08: add_git_tag" time="0.01845">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: pod_lib_lint" time="145.235489">
+      <testcase classname="fastlane.lanes" name="09: push_git_tags" time="6.230522">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: pod_push" time="68.341804">
+      <testcase classname="fastlane.lanes" name="10: pod_lib_lint" time="134.134581">
         
-          <failure message="/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:253:in `block in execute_action'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:227:in `chdir'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:227:in `execute_action'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/fast_file.rb:159:in `method_missing'&#10;Fastfile:84:in `block (2 levels) in parsing_binding'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/commands_generator.rb:349:in `run'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/fastlane/lib/fastlane/cli_tools_distributor.rb:119:in `take_off'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/gems/fastlane-2.144.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/bin/fastlane:23:in `load'&#10;/usr/local/Cellar/fastlane/2.144.0/libexec/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod trunk push 'WQBasicModules.podspec' --allow-warnings' was 1 instead of 0.&#10;Updating spec repo `trunk`&#10;[!] CDN: trunk Repo update failed - 3 error(s):&#10;CDN: trunk URL couldn't be downloaded: https://raw.githubusercontent.com/CocoaPods/Specs/master/Specs/a/a/a/GDTMobSDK/4.7.0/GDTMobSDK.podspec.json Response: Couldn't connect to server&#10;CDN: trunk URL couldn't be downloaded: https://raw.githubusercontent.com/CocoaPods/Specs/master/Specs/a/a/a/GDTMobSDK/4.7.1/GDTMobSDK.podspec.json Response: Couldn't connect to server&#10;CDN: trunk URL couldn't be downloaded: https://raw.githubusercontent.com/CocoaPods/Specs/master/Specs/a/a/a/GDTMobSDK/4.7.2/GDTMobSDK.podspec.json Response: Couldn't connect to server&#10;" />
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="11: pod_push" time="252.366385">
         
       </testcase>
     

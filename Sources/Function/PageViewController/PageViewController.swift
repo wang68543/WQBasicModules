@@ -74,11 +74,13 @@ open class PageViewController: UIViewController {
         super.viewDidLayoutSubviews()
         let viewW = self.view.frame.width
         controllerScrollView.contentSize = CGSize(width: viewW * CGFloat(controllerArray.count), height: self.view.frame.height)
-        for view in controllerScrollView.subviews {
-            view.frame = self.view.bounds.offsetBy(dx: viewW * CGFloat(currentPageIndex), dy: 0)
-        }
-        let xOffset = CGFloat(self.currentPageIndex) * viewW
-        controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: controllerScrollView.contentOffset.y), animated: false)
+//        for view in controllerScrollView.subviews {
+//            view.frame = self.view.bounds.offsetBy(dx: viewW * CGFloat(currentPageIndex), dy: 0)
+//        }
+//        let xOffset = CGFloat(self.currentPageIndex) * viewW
+//        controllerScrollView.setContentOffset(CGPoint(x: xOffset, y: controllerScrollView.contentOffset.y), animated: false)
+        self.view.layoutIfNeeded()
+        debugPrint(#function)
     }
     
     func setUpUserInterface() {
@@ -141,6 +143,8 @@ extension PageViewController {
         newVC.view.frame =  self.view.bounds.offsetBy(dx: self.view.frame.width * CGFloat(index), dy: 0)
         
         self.addChild(newVC)
+        
+        debugPrint("\(#function):index-\(index)")
         self.controllerScrollView.addSubview(newVC.view)
         newVC.didMove(toParent: self)
     }
