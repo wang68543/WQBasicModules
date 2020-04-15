@@ -11,7 +11,7 @@ public extension Date {
        return self.nextUnit(.day, with: calendar)
     }
     func nextWeek(with calendar: Calendar = .current) -> Date {
-       return self.nextUnit(.weekdayOrdinal, with: calendar)
+       return self.nextUnit(.weekOfYear, with: calendar)
     }
     func nextMonth(with calendar: Calendar = .current) -> Date {
        return self.nextUnit(.month, with: calendar)
@@ -23,7 +23,7 @@ public extension Date {
         return self.previousUnit(.day, with: calendar)
     }
     func previousWeek(with calendar: Calendar = .current) -> Date {
-        return self.previousUnit(.weekdayOrdinal, with: calendar)
+        return self.previousUnit(.weekOfYear, with: calendar)
     }
     func previousMonth(with calendar: Calendar = .current) -> Date {
         return self.previousUnit(.month, with: calendar)

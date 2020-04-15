@@ -161,12 +161,14 @@ public extension Date {
         return (begin:startDate, length:interval)
     }
     /// min seconds in date unit
+    /// 计算一周的开始以及结束时间点用weekOfYear
     ///
     /// - Returns: min date in unit
     func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         return range(unit, with: calendar).begin
     }
     /// max seconds in date unit
+    /// 计算一周的开始以及结束时间点用weekOfYear
     ///
     /// - Returns: max date in unit
     func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
