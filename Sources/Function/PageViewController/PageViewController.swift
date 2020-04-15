@@ -11,7 +11,7 @@ import UIKit
     @objc optional func didMoveToPage(_ controller: UIViewController, index: Int)
 }
 open class PageViewController: UIViewController {
-    
+    // 参考 https://github.com/PageMenu/PageMenu.git
     // MARK: - Properties
     let controllerScrollView = UIScrollView()
     var controllerArray : [UIViewController] = []

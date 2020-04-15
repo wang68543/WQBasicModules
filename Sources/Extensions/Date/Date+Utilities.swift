@@ -176,7 +176,14 @@ public extension Date {
     /// forward a date unit time
     ///
     /// - Returns: before time min date
+    @available(*, deprecated, message: "use previousDate(:,with:)")
     func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let beforeDate = dateStart(unit, with: calendar)
+        let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
+        return beforeDate - interval
+    }
+    /// 前一个日期
+    func previousDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         let beforeDate = dateStart(unit, with: calendar)
         let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
         return beforeDate - interval
@@ -252,7 +259,7 @@ public extension Date {
         }
         return days
     }
-    /// Calculate the date in unit
+    /// Calculate the date in unit(每个日历单元都可相加相减会自动向大一个位的日历单元进1或减1)
     ///
     /// - Parameters:
     ///   - counts: calculate count , may be negative
