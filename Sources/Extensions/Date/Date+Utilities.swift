@@ -133,7 +133,8 @@ public extension Date {
                 components.month = 1; endComponents.month = 12
                 fallthrough
             case .month:
-                let days = daysInMonth(endComponents.year!, at: endComponents.month!)
+//                let days = daysInMonth(endComponents.year!, at: endComponents.month!)
+                let days = calendar.numberOfDaysInMonth(for: self)
                 components.day = 1; endComponents.day = days
                 fallthrough
             case .day, .weekday:
@@ -229,38 +230,38 @@ public extension Date {
         return counts.upperBound - counts.lowerBound
     }
     
-    func daysInMonth(_ year: Int, at month: Int) -> Int {
-        var days: Int = 30
-        if month == 2 {
-            if  year % 4 == 0 {
-                days = 28
-            } else {
-                days = 29
-            }
-        } else if month == 4 || month == 6
-            || month == 9 || month == 11 {
-            days = 30
-        } else {
-            days = 31
-        }
-        return days
-    }
-    func daysInYear(_ year: Int, at month: Int) -> Int {
-        var days: Int = 30
-        if month == 2 {
-            if  year % 4 == 0 {
-                days = 28
-            } else {
-                days = 29
-            }
-        } else if month == 4 || month == 6
-            || month == 9 || month == 11 {
-            days = 30
-        } else {
-            days = 31
-        }
-        return days
-    }
+//    func daysInMonth(_ year: Int, at month: Int) -> Int {
+//        var days: Int = 30
+//        if month == 2 {
+//            if  year % 4 == 0 {
+//                days = 28
+//            } else {
+//                days = 29
+//            }
+//        } else if month == 4 || month == 6
+//            || month == 9 || month == 11 {
+//            days = 30
+//        } else {
+//            days = 31
+//        }
+//        return days
+//    }
+//    func daysInYear(_ year: Int, at month: Int) -> Int {
+//        var days: Int = 30
+//        if month == 2 {
+//            if  year % 4 == 0 {
+//                days = 28
+//            } else {
+//                days = 29
+//            }
+//        } else if month == 4 || month == 6
+//            || month == 9 || month == 11 {
+//            days = 30
+//        } else {
+//            days = 31
+//        }
+//        return days
+//    }
     /// Calculate the date in unit(每个日历单元都可相加相减会自动向大一个位的日历单元进1或减1)
     ///
     /// - Parameters:
