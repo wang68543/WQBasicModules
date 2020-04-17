@@ -62,10 +62,12 @@ public extension UIButton {
     ///
     /// - Parameters:
     ///   - formater: 倒计时的时候格式化标题
+    ///   - timeKey: 存储上次倒计时的时间
     ///   - color: 倒计时时候的标题颜色 (为空的时候使用.normal标题色)
     ///   - completion: 倒计时完成回调
     func countDown(total: UInt,
                    formater: NumberFormatter,
+                   timeKey: String? = nil,
                    color: UIColor? = nil,
                    completion: CountDownCompletion? = nil) {
         let titleColor = color ?? self.titleColor(for: .normal)
@@ -77,9 +79,8 @@ public extension UIButton {
             } else {
               sender.setTitle(title, for: currentState)
             }
-            
         }
-        self.countDown(total, interval: 1, execute: excute, completion: completion)
+        self.countDown(total, interval: 1, timeKey: timeKey, execute: excute, completion: completion)
         self.setTitleColor(titleColor, for: currentState)
     }
     /// 倒计时按钮
@@ -87,17 +88,24 @@ public extension UIButton {
     /// - Parameters:
     ///   - count: 开始倒计时的数量
     ///   - interval: 重复的间隔,单位时间秒数
+    ///   - timeKey: 用于存储上次倒计时的时间
     ///   - execute: 间隔回调
     ///   - completion: 终止或者总数小于0就倒计时终止
     func countDown(_ count: UInt,
                    interval: Double = 1,
+                   timeKey: String? = nil,
                    execute: @escaping IntervalExecute,
                    completion: CountDownCompletion?) { //末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
         self.countDownCompletion = completion
+        self.timeKey = timeKey
         if self.source != nil {
             stopCountDown(false)
         } else {
-            self.totalCount = count - 1 //先减一
+            if let remindValue = previousRemindTime() {
+                self.totalCount = UInt(remindValue)
+            } else {
+               self.totalCount = count - 1 //先减一
+            }
             self.execute = execute
             self.saveCurrentStatues()
             startTimer(interval)
@@ -136,6 +144,12 @@ public extension UIButton {
         }
         clearAssociatedObjects()
     }
+    
+    private func previousRemindTime() -> Int? {
+        guard let key = self.timeKey else { return nil }
+        let time = UserDefaults.standard.integer(forKey: key)
+        return time > 0 ? time : nil
+    }
 }
 // MARK: - -- Associated Objects
 private extension UIButton {
@@ -155,6 +169,10 @@ private extension UIButton {
             #else
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
+            if let key = timeKey {
+                UserDefaults.standard.set(newValue, forKey: key)
+                UserDefaults.standard.synchronize()
+            }
         }
         get { 
            return objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt ?? 0
@@ -177,6 +195,19 @@ private extension UIButton {
             return objc_getAssociatedObject(self, CountDownKeys.execute) as? IntervalExecute
         }
     }
+    
+    var timeKey: String? {
+        set {
+            if let value = newValue {
+                objc_setAssociatedObject(self, CountDownKeys.timeKey, "CountDown_\(value)", .OBJC_ASSOCIATION_COPY)
+            } else {
+                objc_setAssociatedObject(self, CountDownKeys.timeKey, nil, .OBJC_ASSOCIATION_COPY)
+            }
+        }
+        get {
+            return objc_getAssociatedObject(self, CountDownKeys.timeKey) as? String
+        }
+    }
 }
 // MARK: - -- Before CountDown Status
 fileprivate extension UIButton {
@@ -187,6 +218,7 @@ fileprivate extension UIButton {
         static let execute = UnsafeRawPointer(bitPattern: "wq.button.countDown.execute".hashValue)!
         static let isCanCancel = UnsafeRawPointer(bitPattern: "wq.button.countDown.isCanCancel".hashValue)!
         static let beforeStatus = UnsafeRawPointer(bitPattern: "wq.button.countDown.beforeStatus".hashValue)!
+        static let timeKey = UnsafeRawPointer(bitPattern: "wq.button.countDown.timeKey".hashValue)!
     }
     
     final class StoredStatus {
@@ -275,6 +307,10 @@ fileprivate extension UIButton {
         self.source = nil
         self.execute = nil
         self.countDownCompletion = nil
+        if let key = self.timeKey {
+            UserDefaults.standard.removeObject(forKey: key)
+        }
+        self.timeKey = nil
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
