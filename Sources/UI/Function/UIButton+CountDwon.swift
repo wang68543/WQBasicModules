@@ -58,6 +58,14 @@ public extension UIButton {
             return objc_getAssociatedObject(self, CountDownKeys.isCanCancel) as? Bool ?? false
         }
     }
+    /// 是否需要继续倒计时(用于离开页面之后再回来)
+    func shouldResumeCountDown(_ timeKey: String) -> Bool {
+        self.timeKey = timeKey
+        if let time = previousRemindTime() {
+            return time > 0
+        }
+        return false
+    }
     /// 倒计时
     ///
     /// - Parameters:
