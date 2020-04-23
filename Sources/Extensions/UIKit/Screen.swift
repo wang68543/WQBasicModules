@@ -18,22 +18,23 @@ public struct Screen {
     /// 绘制1像素线条时候的偏移
     public static let lineAdjustOffset = (1 / UIScreen.main.scale) / 2
     
-    /// 屏幕的 周边限制显示区域
+    /// 屏幕的 周边限制显示区域 (因为这里在非刘海屏上面首次)
     public static let safeAreaInsets: UIEdgeInsets = {
-        var instets: UIEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *),
-          let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
-            instets = window.safeAreaInsets
-            if instets.top == 0 {
-                if instets.bottom > 0 { //刘海屏
-                    instets.top = 44
-                } else {
-                    instets.top = 20
+        var instets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
+        if #available(iOS 11.0, *) {
+            if let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
+                instets = window.safeAreaInsets
+                if instets.top == 0 {
+                    if instets.bottom > 0 { //刘海屏
+                        instets.top = 44.0
+                    } else {
+                        instets.top = 20.0
+                    }
                 }
-            } 
-            // 不处理 insets.bottom
+            }
+        } else {
+            instets.top = 20.0
         }
         return instets
     }()
-     
 }
