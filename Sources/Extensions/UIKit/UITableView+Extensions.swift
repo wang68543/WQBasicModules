@@ -38,7 +38,7 @@ public extension UITableView {
         footerView.addSubview(line)
         NSLayoutConstraint.activate([
 //            line.topAnchor.constraint(equalTo: )
-            line.topAnchor.constraint(equalTo: footerView.topAnchor)
+//            line.topAnchor.constraint(equalTo: footerView.topAnchor)
 //                          subView.topAnchor.constraint(equalTo: textView.bottomAnchor),
 //                          subView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
 //                          subView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
