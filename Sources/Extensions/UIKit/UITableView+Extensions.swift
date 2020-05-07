@@ -29,4 +29,22 @@ public extension UITableView {
     func hideFooterSeparator() {
         self.tableFooterView = UIView()
     }
+    /// 设置最后一个cell的分割线
+    func lastSeparatorSingleLine(lineColor: UIColor?, edge: UIEdgeInsets = .zero) {
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 0.5))
+        let color = lineColor ?? self.separatorColor ?? UIColor.groupTableViewBackground
+        let line = UIView()
+        line.backgroundColor = color
+        footerView.addSubview(line)
+        NSLayoutConstraint.activate([
+//            line.topAnchor.constraint(equalTo: )
+            line.topAnchor.constraint(equalTo: footerView.topAnchor)
+//                          subView.topAnchor.constraint(equalTo: textView.bottomAnchor),
+//                          subView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//                          subView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+//                          subView.heightAnchor.constraint(equalToConstant: 80)
+                      ])
+        self.tableFooterView = footerView
+        
+    }
 }
