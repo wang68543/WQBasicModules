@@ -36,14 +36,23 @@ public extension UITableView {
         let line = UIView()
         line.backgroundColor = color
         footerView.addSubview(line)
-        NSLayoutConstraint.activate([
-//            line.topAnchor.constraint(equalTo: )
-//            line.topAnchor.constraint(equalTo: footerView.topAnchor)
-//                          subView.topAnchor.constraint(equalTo: textView.bottomAnchor),
-//                          subView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-//                          subView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-//                          subView.heightAnchor.constraint(equalToConstant: 80)
-                      ])
+        var layoutConstraints: [NSLayoutConstraint] = []
+        if #available(iOS 9.0, *) {
+            layoutConstraints.append(line.topAnchor.constraint(equalTo: footerView.topAnchor))
+            layoutConstraints.append(line.bottomAnchor.constraint(equalTo: footerView.bottomAnchor))
+            layoutConstraints.append(line.leadingAnchor.constraint(equalTo: footerView.leadingAnchor, constant: edge.left))
+            layoutConstraints.append(line.trailingAnchor.constraint(equalTo: footerView.trailingAnchor, constant: -edge.right))
+        } else {
+            let left = NSLayoutConstraint(item: line, attribute: .left, relatedBy: .equal, toItem: footerView, attribute: .left, multiplier: 1.0, constant: edge.left)
+            let right = NSLayoutConstraint(item: line, attribute: .right, relatedBy: .equal, toItem: footerView, attribute: .right, multiplier: 1.0, constant: -edge.right)
+            let top = NSLayoutConstraint(item: line, attribute: .top, relatedBy: .equal, toItem: footerView, attribute: .top, multiplier: 1.0, constant: 0)
+            let bottom = NSLayoutConstraint(item: line, attribute: .bottom, relatedBy: .equal, toItem: footerView, attribute: .bottom, multiplier: 1.0, constant: 0)
+            layoutConstraints.append(left)
+            layoutConstraints.append(right)
+            layoutConstraints.append(top)
+            layoutConstraints.append(bottom)
+        }
+        NSLayoutConstraint.activate(layoutConstraints)
         self.tableFooterView = footerView
         
     }
