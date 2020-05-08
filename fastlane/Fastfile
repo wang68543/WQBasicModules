@@ -73,7 +73,7 @@ platform :ios do
     targetName = "WQBasicModules" 
    #1. pod install 
    	cocoapods(use_bundle_exec: false,
-                clean: true,
+              clean_install: true,
                 podfile: "./Example/Podfile")
    wq_push(tag: tagName)
    spec = "./#{targetName}.podspec"
