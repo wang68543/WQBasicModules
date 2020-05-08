@@ -6,10 +6,7 @@ osx_image: xcode11.4
 language: swift 
 install:
   - bundle install
-env:
-  global:
-    - username="wang68543@163.com"
-    - password="Asdfghjkl#!#22"
+  
 script:
   - fastlane trunk tag:0.3.4
 # cache: cocoapods
