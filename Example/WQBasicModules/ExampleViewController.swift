@@ -79,7 +79,7 @@ class ExampleViewController: UITableViewController {
             print(address)
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
-        self.view.addSubview(button)
+//        self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
        self.btn = button
@@ -89,10 +89,12 @@ class ExampleViewController: UITableViewController {
 //            self.sources = self.sources2
 //            self.tableView.reloadData()
 //        }
+        self.tableView.test_lastSeparatorSingleLine(lineColor: UIColor.red, edge: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
     }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

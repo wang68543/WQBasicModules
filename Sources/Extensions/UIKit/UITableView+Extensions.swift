@@ -31,10 +31,13 @@ public extension UITableView {
     }
     /// 设置最后一个cell的分割线
     func lastSeparatorSingleLine(lineColor: UIColor?, edge: UIEdgeInsets = .zero) {
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: 320, height: 0.5))
+        let width = self.frame.width == 0 ? UIScreen.main.bounds.width : self.frame.width
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 0.5))
         let color = lineColor ?? self.separatorColor ?? UIColor.groupTableViewBackground
         let line = UIView()
         line.backgroundColor = color
+        footerView.autoresizingMask = .flexibleWidth
+        line.translatesAutoresizingMaskIntoConstraints = false
         footerView.addSubview(line)
         var layoutConstraints: [NSLayoutConstraint] = []
         if #available(iOS 9.0, *) {
