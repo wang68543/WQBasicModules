@@ -1,9 +1,6 @@
 os: osx
 osx_image: xcode11.4
 language: swift
-# branches:
-#   only:
-#   - master
 before_install:
 - openssl aes-256-cbc -K $encrypted_d7555cc223fe_key -iv $encrypted_d7555cc223fe_iv
   -in profiles/id_rsa.enc -out ~\/.ssh/id_rsa -d
