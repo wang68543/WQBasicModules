@@ -21,12 +21,10 @@ Pod::Spec.new do |s|
 日常常用的功能集合, 持续优化更新(包含扩展，工具类以及一些基础框架)
                        DESC
 
-  s.homepage         = 'https://github.com/wang68543/WQBasicModules'
-  # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  s.homepage         = 'https://github.com/wang68543/WQBasicModules' 
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'wang68543' => 'wang68543@163.com' }
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
   s.source_files  = 'Sources/WQBasicModules.h'
@@ -46,18 +44,14 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/Animation/Layer'
             sss.source_files = 'Sources/Animation/Views/*.swift'
         end
-    #        ss.subspec 'Alert' do |sss|
-    #            sss.dependency 'WQBasicModules/Animation/Transitioning'
-    #            sss.source_files = 'Sources/Animation/Alert/*.swift'
-    #        end
         ss.subspec 'Transitioning' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
-    #        ss.subspec 'TransitioningV2' do |sss|
-    #            sss.source_files = 'Sources/Animation/TransitioningV2/*.swift'
-    #        end
+        ss.subspec 'TransitioningV2' do |sss|
+            sss.source_files = 'Sources/Animation/TransitioningV2/*.swift'
+        end
     end
 
     s.subspec 'Extensions' do |ss|
