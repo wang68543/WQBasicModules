@@ -21,9 +21,9 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
  
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '9.0'
   s.source_files  = 'Sources/WQBasicModules.h'
-  s.swift_version = '4.2'
+#  s.swift_version = '4.2'
   s.swift_versions = ['4.0', '4.2', '5.0']
   
   s.subspec 'Function' do |ss|

@@ -18,13 +18,11 @@ public extension NumberFormatter {
 }
 // MARK: - -- Count Down
 public extension UIButton {
-    
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
     ///   - UIButton: 当前对象
     ///   - UInt: 剩余数量
     typealias IntervalExecute = (UIButton, UInt) -> Void
-    
     /// 根据设定的参数每隔一段时间执行一次
     /// - Parameters:
     ///   - UIButton: 当前对象
@@ -48,7 +46,6 @@ public extension UIButton {
         }
         return state
     }
-    
     /// 倒计时是否可以中途中断 Default `false`
     var isCanCancel: Bool {
         set {
@@ -194,7 +191,6 @@ private extension UIButton {
             return objc_getAssociatedObject(self, CountDownKeys.completion) as? CountDownCompletion
         }
     }
-    
     var execute: IntervalExecute? {
         set {
             objc_setAssociatedObject(self, CountDownKeys.execute, newValue, .OBJC_ASSOCIATION_COPY)
@@ -203,7 +199,6 @@ private extension UIButton {
             return objc_getAssociatedObject(self, CountDownKeys.execute) as? IntervalExecute
         }
     }
-    
     var timeKey: String? {
         set {
             if let value = newValue {
@@ -228,7 +223,6 @@ fileprivate extension UIButton {
         static let beforeStatus = UnsafeRawPointer(bitPattern: "wq.button.countDown.beforeStatus".hashValue)!
         static let timeKey = UnsafeRawPointer(bitPattern: "wq.button.countDown.timeKey".hashValue)!
     }
-    
     final class StoredStatus {
         var state: UIControl.State = .normal
         var backgroundColor: UIColor?
@@ -242,7 +236,6 @@ fileprivate extension UIButton {
         var borderColor: CGColor?
         var cornerRadius: CGFloat = 0
     }
-    
     private var status: StoredStatus? {
         set {
             objc_setAssociatedObject(self, CountDownKeys.beforeStatus, newValue, .OBJC_ASSOCIATION_RETAIN)
@@ -322,23 +315,4 @@ fileprivate extension UIButton {
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-}  
-//fileprivate extension UIButton {
-//    static let keyCopyButton = UnsafeRawPointer(bitPattern: "wq.button.countDown.copyButton".hashValue)!
-//    var copyButton: UIButton? {
-//        set {
-//            objc_setAssociatedObject(self, UIButton.keyCopyButton, newValue, .OBJC_ASSOCIATION_RETAIN)
-//        }
-//        get {
-//            if let copyBtn = objc_getAssociatedObject(self, UIButton.keyCopyButton) as? UIButton {
-//                return copyBtn
-//            } else {
-//                let archivedData = NSKeyedArchiver.archivedData(withRootObject: self)
-//                let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? UIButton
-//                copyView?.isUserInteractionEnabled = false
-//                self.copyButton = copyView
-//                return copyView
-//            }
-//        }
-//    }
-//}
+}   

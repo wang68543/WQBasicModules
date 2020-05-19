@@ -14,7 +14,6 @@ class TableTextInputViewController: UIViewController {
         static let reuseIdentifier: String = "TestCell"
         let textFiled: UITextField
         let line = UIView()
-        
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             textFiled = UITextField()
             super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -28,6 +27,7 @@ class TableTextInputViewController: UIViewController {
         }
     override func layoutSubviews() {
         super.layoutSubviews()
+//        let width =
         textFiled.frame = CGRect(x: 10, y: 10, width: self.contentView.bounds.width - 30, height: self.contentView.bounds.height - 15)
         self.line.bounds = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 1)
         self.line.center = self.textFiled.center
