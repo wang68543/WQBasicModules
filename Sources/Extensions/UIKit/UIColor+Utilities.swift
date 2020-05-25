@@ -154,7 +154,13 @@ public extension Array where Element: UIColor {
 
 // MARK: - Components
 public extension UIColor {
-    
+    /// SwifterSwift: Random color.
+    static var random: UIColor {
+        let red = Int.random(in: 0...255)
+        let green = Int.random(in: 0...255)
+        let blue = Int.random(in: 0...255)
+        return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: 1.0)
+    }
     var redComponent: CGFloat {
         var red: CGFloat = 0
         getRed(&red, green: nil, blue: nil, alpha: nil)

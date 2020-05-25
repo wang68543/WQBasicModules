@@ -13,9 +13,9 @@
 -(NSString *)encryptUseDESInkey:(NSString *)key;
 /** DES解密 */
 - (NSString *)decryptUseDESInkey:(NSString*)key;
-/** md5加密 大写 */
--(NSString *)md5String;
-/**小写 md5 加密 */
--(NSString *)md5LowercaseString;
+///** md5加密 大写 */
+//-(NSString *)md5String;
+///**小写 md5 加密 */
+//-(NSString *)md5LowercaseString;
 -(NSString *)sha1;
 @end

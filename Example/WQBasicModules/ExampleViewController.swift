@@ -50,7 +50,7 @@ class ExampleViewController: UITableViewController {
             let days = Calendar.current.numberOfDaysInYear(for: date)
             debugPrint(days)
         }
-        
+        "123456".md5(lower: true)
 //        let preDate = date?.previousWeek()
 //        debugPrint(preDate?.toString(.kMMddHHmm))
 //        let str = #"SELF MATCHES "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1]\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx]))$""#
