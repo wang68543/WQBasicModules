@@ -11,7 +11,7 @@ import WQBasicModules
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
-
+    // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let example = ExampleViewController() 
         let nav = UINavigationController(rootViewController: example)

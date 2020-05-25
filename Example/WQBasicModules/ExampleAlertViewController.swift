@@ -8,6 +8,7 @@
 
 import UIKit
 import WQBasicModules
+import SnapKit
 class ExampleAlertViewController: BaseExampleViewController {
     let alertView = UIView()
     let imageView: UIImageView = UIImageView(image: UIImage(named: "首页8"))
@@ -56,9 +57,17 @@ class ExampleAlertViewController: BaseExampleViewController {
     }
  
     @objc func alertAction(_ sender: UIButton) {
-        
-//        imageView.fade(UIImage(named: "loud_speaker"))
+         
         let alertView = UIView()
+        
+        let subView = UIView()
+        alertView.addSubview(subView)
+        subView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+            make.left.equalToSuperview().offset(25)
+            make.right.equalToSuperview().offset(-25)
+            make.top.bottom.equalToSuperview()
+        }
         let size = CGSize(width: 200, height: 200)
         alertView.backgroundColor = UIColor.red
         let presentedFrame = UIScreen.main.bounds
@@ -77,19 +86,10 @@ class ExampleAlertViewController: BaseExampleViewController {
         presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-//            self.show()
+ 
             alertView.wm.dismiss(true)
             self.show()
         }
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
-//            let star = WQStarViewController()
-//            star.view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-//            star.modalPresentationStyle = .custom
-//            presention.present(star, animated: true, completion: nil)
-//            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
-//                star.dismiss(animated: true, completion: nil)
-//            }
-//        }
     }
 
     func show() {
