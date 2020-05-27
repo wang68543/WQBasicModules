@@ -6,9 +6,18 @@
 //
 
 import Foundation
+import CommonCrypto
+import CryptoKit
 public extension Data {
     var md5: String {
-        return  (self as NSData).md5()
+        let len = Int(CC_MD5_DIGEST_LENGTH)
+        let bytes = self.bytes
+        let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
+        CC_MD5(bytes, CC_LONG(bytes.count - 1), digest)
+        var result = String()
+        for i in 0..<len { result = result.appendingFormat("%02X", digest[i]) }
+        digest.deallocate()
+        return result
     }
     func DES(encodeWithKey key: String) -> Data? {
         return (self as NSData).desEncode(key)
