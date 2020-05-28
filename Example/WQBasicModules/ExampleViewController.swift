@@ -52,7 +52,7 @@ class ExampleViewController: UITableViewController {
             debugPrint(days)
         }
 //        "123456".md5(lower: true)
-        debugPrint("123456".hmac(algorithm: CCHmacAlgorithm(kCCHmacAlgMD5), key: ""))
+//        debugPrint("123456".hmac(algorithm: CCHmacAlgorithm(kCCHmacAlgMD5), key: ""))
 //        let preDate = date?.previousWeek()
 //        debugPrint(preDate?.toString(.kMMddHHmm))
 //        let str = #"SELF MATCHES "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1]\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx]))$""#
@@ -65,6 +65,22 @@ class ExampleViewController: UITableViewController {
         if "421281199010135718".isLegalIDCard   {
             debugPrint("正确的身份证号码")
         }
+        let dic:[String: Any] = ["key1":"value1","key2":"value2"]
+        if let data = try? JSONSerialization.data(withJSONObject: dic, options: []) {
+            //as12456
+//            debugPrint(data.DES(decodeWithKey:"ac12456b")?.base64EncodedString())
+            if let aesdata = try? data.encodedDES("ac12456b") {
+                debugPrint(aesdata.base64EncodedString())
+                if let value = try? aesdata.decodedDES("ac12456b") {
+                    if let result = try? JSONSerialization.jsonObject(with: value, options: []) {
+                        debugPrint(result)
+                    }
+                    
+                }
+            }
+            
+        }
+     
         if "https://www.jianshu.com".evaluate(predicate: "SELF MATCHES \"\(WQRegex.link.rawValue)\"") {
             debugPrint("正确的网站")
         }

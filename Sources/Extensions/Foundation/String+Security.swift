@@ -47,39 +47,39 @@ fileprivate func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, le
 }
 public extension String {
     /// md5加密 默认小写
-    func md5(lower: Bool = true) -> String {
+    func md5String(lower: Bool = true) -> String {
         guard let utf8 = cString(using: .utf8) else { return String() }
         let len = Int(CC_MD5_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
-        CC_MD5(utf8, CC_LONG(utf8.count - 1), digest)
+        CC_MD5(utf8, CC_LONG(strlen(utf8)), digest)
         let result = string(fromBytes: digest, length: len)
         return lower ? result.lowercased() : result
     }
-    func sha1(lower: Bool = true) -> String {
-        guard let utf8 = cString(using: .utf8) else { return String() }
+    func sha1String(lower: Bool = true) -> String {
+        guard let utf8 = cString(using: .utf8) else { return String() } //cString(using: .utf8) 转换之后 会自带一个\0 就是长度加长了1个
         let len = Int(CC_SHA1_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
-        CC_SHA1(utf8, CC_LONG(utf8.count), digest)
+        CC_SHA1(utf8, CC_LONG(strlen(utf8)), digest)
         let result = string(fromBytes: digest, length: len)
         return lower ? result.lowercased() : result
     }
-    func sha256(lower: Bool = true) -> String {
+    func sha256String(lower: Bool = true) -> String {
       guard let utf8 = cString(using: .utf8) else { return String() }
       let len = Int(CC_SHA256_DIGEST_LENGTH)
       let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
-      CC_SHA256(utf8, CC_LONG(utf8.count), digest)
+      CC_SHA256(utf8, CC_LONG(strlen(utf8)), digest)
       let result = string(fromBytes: digest, length: len)
       return lower ? result.lowercased() : result
     }
-    func sha512(lower: Bool = true) -> String {
+    func sha512String(lower: Bool = true) -> String {
         guard let utf8 = cString(using: .utf8) else { return String() }
         let len = Int(CC_SHA512_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
-        CC_SHA512(utf8, CC_LONG(utf8.count), digest)
+        CC_SHA512(utf8, CC_LONG(strlen(utf8)), digest)
         let result = string(fromBytes: digest, length: len)
         return lower ? result.lowercased() : result
     }
-    func hmac(_ algorithm: CCAlgorithmType, key: String) -> String {
+    func hmacString(_ algorithm: CCAlgorithmType, key: String) -> String {
         guard let cKey = cString(using: .utf8),
             let cData = self.cString(using: .utf8) else {
             return ""
@@ -90,4 +90,8 @@ public extension String {
         let hmacData = Data(bytes: result, count: len)
         return hmacData.base64EncodedString(options: .lineLength76Characters)
        }
+    @available(*, deprecated, message: "use sha1String")
+    func oc_sha1() -> String {
+        return (self as NSString).sha1()
+    }
 }

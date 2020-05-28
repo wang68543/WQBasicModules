@@ -54,6 +54,7 @@
         NSData *data = [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)numBytesEncrypted];
         return data;
     }
+    free(buffer);
     return nil;
 }
 
@@ -80,6 +81,7 @@
         NSData* data = [NSData dataWithBytesNoCopy:buffer length:(NSUInteger)numBytesDecrypted];
         return data;
     }
+    free(buffer);
     return nil;
 }
 //  加密
