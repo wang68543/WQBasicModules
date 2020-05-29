@@ -26,9 +26,9 @@ public struct Screen {
                 instets = window.safeAreaInsets
                 if instets.top == 0 {
                     if instets.bottom > 0 { //刘海屏
-                        instets.top = 44.0
+                        instets.top = max(44.0, UIApplication.shared.statusBarFrame.height)
                     } else {
-                        instets.top = 20.0
+                        instets.top = max(20.0, UIApplication.shared.statusBarFrame.height)
                     }
                 }
             }

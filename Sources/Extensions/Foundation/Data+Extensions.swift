@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import CommonCrypto
-import CryptoKit
+import CommonCrypto 
 public extension Data {
     var md5: String {
         let len = Int(CC_MD5_DIGEST_LENGTH)
