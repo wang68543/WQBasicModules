@@ -2,7 +2,7 @@
 //  DispatchQueue+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/10/16.
+//  Created by WQ on 2019/10/16.
 //
 
 #if canImport(Dispatch)

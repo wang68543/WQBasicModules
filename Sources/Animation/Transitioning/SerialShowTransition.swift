@@ -2,7 +2,7 @@
 //  SerialShowTransition.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/4/15.
+//  Created by WQ on 2020/4/15.
 //
 
 import Foundation

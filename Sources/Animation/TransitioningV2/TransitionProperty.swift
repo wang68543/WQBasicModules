@@ -2,7 +2,7 @@
 //  TransitionProperty.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/9/4.
+//  Created by WQ on 2019/9/4.
 //
 
 import Foundation

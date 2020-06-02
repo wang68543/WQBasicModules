@@ -2,7 +2,7 @@
 //  UIImage+Extension.swift
 //  Pods-WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2019/5/7.
+//  Created by WQ on 2019/5/7.
 //
 
 import UIKit

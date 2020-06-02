@@ -2,7 +2,7 @@
 //  WQTransitionAnimator+Style.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/8/27.
+//  Created by WQ on 2019/8/27.
 //
 
 import Foundation

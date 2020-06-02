@@ -2,7 +2,7 @@
 //  NSAttributedString+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/12/30.
+//  Created by WQ on 2019/12/30.
 //
 
 import Foundation

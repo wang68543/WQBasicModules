@@ -2,7 +2,7 @@
 //  UINavigationBar+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/11/28.
+//  Created by WQ on 2019/11/28.
 //
 
 import Foundation

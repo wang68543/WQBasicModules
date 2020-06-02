@@ -2,7 +2,7 @@
 //  UIButton+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/5/15.
+//  Created by WQ on 2020/5/15.
 //
 
 import UIKit

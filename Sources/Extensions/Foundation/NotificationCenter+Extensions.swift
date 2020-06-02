@@ -2,7 +2,7 @@
 //  NotificationCenter+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/5/25.
+//  Created by WQ on 2020/5/25.
 //
 
 #if canImport(Foundation)

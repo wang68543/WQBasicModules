@@ -2,7 +2,7 @@
 //  WQTransitionAnimator+Convenience.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/9/3.
+//  Created by WQ on 2019/9/3.
 //
 
 import Foundation

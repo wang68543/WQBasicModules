@@ -2,7 +2,7 @@
 //  UITableViewCell+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/12/25.
+//  Created by WQ on 2019/12/25.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  UIDevice+Extensions.swift
 //  HandMetroSwift
 //
-//  Created by iMacHuaSheng on 2019/6/11.
+//  Created by WQ on 2019/6/11.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  UISearchBar+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/10/22.
+//  Created by WQ on 2019/10/22.
 //
 
 import Foundation

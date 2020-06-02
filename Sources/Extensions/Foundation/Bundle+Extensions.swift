@@ -2,7 +2,7 @@
 //  Bundle+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/1/8.
+//  Created by WQ on 2020/1/8.
 //
 
 import Foundation

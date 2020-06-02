@@ -2,7 +2,7 @@
 //  UITableView+Extensions.swift
 //  Pods-WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2019/12/30.
+//  Created by WQ on 2019/12/30.
 //
 
 import UIKit
