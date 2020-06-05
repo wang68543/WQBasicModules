@@ -9,8 +9,8 @@ import UIKit
 public extension UIImage {
     
     /// 指定区域重绘图片
-    func reDraw(_ rect: CGRect) -> UIImage? {
-        UIGraphicsBeginImageContext(rect.size)
+    func reDraw(_ rect: CGRect, opaque: Bool = false, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, scale)
         self.draw(in: rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -39,6 +39,31 @@ public extension UIImage {
         return image
     }
     
+    /// 裁剪图片(解决textView里面的文字用cgimage 无法截取)
+    func clip(toRect cropRect: CGRect, viewSize: CGSize? = nil) -> UIImage? {
+        var imgViewScale: CGFloat = 1.0
+        if let vSize = viewSize {
+            imgViewScale = max(self.size.width / vSize.width,
+                               self.size.height / vSize.height)
+        }
+        /**
+         * // Perform cropping in Core Graphics
+         guard let cutImageRef = self.cgImage?.cropping(to:cropZone) else {
+             return nil
+         }
+         */
+        // Scale cropRect to handle images larger than shown-on-screen size
+        let cropZone = CGRect(x:cropRect.origin.x * imgViewScale,
+                              y:cropRect.origin.y * imgViewScale,
+                              width:cropRect.size.width * imgViewScale,
+                              height:cropRect.size.height * imgViewScale)
+       UIGraphicsBeginImageContextWithOptions(cropZone.size, false, UIScreen.main.scale)
+       self.draw(in: CGRect(x: -cropRect.minX, y: -cropRect.minY, width: self.size.width, height: self.size.height))
+       let image = UIGraphicsGetImageFromCurrentImageContext()
+       UIGraphicsEndImageContext()
+       return image
+        
+    }
     /// 绘制圆或椭圆图片
     func drawInCircle(_ size: CGSize) -> UIImage? {
         let rect = CGRect(origin: .zero, size: size)

@@ -53,6 +53,7 @@ open class WQAutoIncreaseTextView: WQTextView {
             self.preferredValue = self.bounds.height
         }
     }
+    
 }
 
 public extension WQAutoIncreaseTextView {
