@@ -45,6 +45,7 @@ class ExampleViewController: UITableViewController {
         if "13898768609".isLegalPhone() {
             debugPrint("正确的手机号码")
         }
+        self.tableView.rowHeight = 70.0
         let format: DateFormatEnum = .k1MM1ddCHHBmm
         debugPrint(format.formatString)
         if let date = "20190101 0234".toDate(format: .kMMddHHmm) {
@@ -107,7 +108,7 @@ class ExampleViewController: UITableViewController {
 //            self.sources = self.sources2
 //            self.tableView.reloadData()
 //        }
-        self.tableView.test_lastSeparatorSingleLine(lineColor: UIColor.red, edge: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+//        self.tableView.test_lastSeparatorSingleLine(lineColor: UIColor.red, edge: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
     }
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
