@@ -47,8 +47,8 @@ public extension UIApplication {
         #endif
     }
     /// SwifterSwift: Application name (if applicable).
-    var displayName: String? {
-        return Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
+    var displayName: String? { 
+        return Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String
     }
     
     /// SwifterSwift: App current build number (if applicable).
