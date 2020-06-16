@@ -29,7 +29,6 @@ public extension WQAlertAction {
         self.init(attributedText: NSAttributedString(string: title, attributes: attrs), handler: handler)
     }
 }
-@available(*, deprecated, message: "use WQPresentedAnimatedItem")
 public class WQAlertView: UIView {
     public let titleLabel: UILabel
     public let messageLabel: UILabel
@@ -70,6 +69,7 @@ public class WQAlertView: UIView {
         self.addSubview(titleLabel)
         self.addSubview(messageLabel)
         titleLabel.textAlignment = .center
+//        self.systemLayoutSizeFitting(<#T##targetSize: CGSize##CGSize#>, withHorizontalFittingPriority: <#T##UILayoutPriority#>, verticalFittingPriority: <#T##UILayoutPriority#>)
         self.titleLabel.attributedText = attributedTitle
         self.messageLabel.attributedText = attributedMessage
     }
@@ -142,8 +142,7 @@ public class WQAlertView: UIView {
         debugPrint("销毁了")
     }
 }
-
-@available(*, deprecated, message: "WQAlertView is deprecated")
+ 
 // MARK: - button
 extension WQAlertView {
     open class Button: UIButton {

@@ -52,6 +52,7 @@ class ExampleViewController: UITableViewController {
             let days = Calendar.current.numberOfDaysInYear(for: date)
             debugPrint(days)
         }
+        debugPrint("123456".md5String())
 //        "123456".md5(lower: true)
 //        debugPrint("123456".hmac(algorithm: CCHmacAlgorithm(kCCHmacAlgMD5), key: ""))
 //        let preDate = date?.previousWeek()
