@@ -30,9 +30,9 @@ public extension UITableView {
         self.tableFooterView = UIView()
     }
     /// 设置最后一个cell的分割线
-    func lastSeparatorSingleLine(lineColor: UIColor?, edge: UIEdgeInsets = .zero) {
+    func lastSeparatorSingleLine(lineColor: UIColor?, lineHeight: CGFloat = 1.0, edge: UIEdgeInsets = .zero) {
         let width = self.frame.width == 0 ? UIScreen.main.bounds.width : self.frame.width
-        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 0.5))
+        let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: lineHeight))
         let color = lineColor ?? self.separatorColor ?? UIColor.groupTableViewBackground
         let line = UIView()
         line.backgroundColor = color
