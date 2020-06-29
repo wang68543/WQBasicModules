@@ -286,7 +286,7 @@ public extension String {
     ///
     /// - Returns: Strings separated by new lines.
     func lines() -> [String] {
-        var result = [String]()
+        var result: [String] = []
         enumerateLines { line, _ in
             result.append(line)
         }

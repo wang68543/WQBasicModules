@@ -12,6 +12,6 @@
  import ModuleName
  public typealias ClassName = ModuleName.ClassName
  */
-#import "NSString+WQHash.h" //解决 swift 无法使用MD5的问题
+//#import "NSString+WQHash.h" //解决 swift 无法使用MD5的问题
 #import "NSData+Utilies.h"
 #endif /* WQBasicModules_h */
