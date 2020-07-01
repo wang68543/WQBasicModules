@@ -8,18 +8,24 @@
 import Foundation
 
 final public class WQUIHelp {
-    public class func topVisibleViewController() -> UIViewController? {
-        if let rootViewController = UIApplication.shared.delegate?.window??.rootViewController {
-            return rootViewController.topVisible()
+    class func topNormalWindow() -> UIWindow? {
+        let app = UIApplication.shared
+        var topWindow: UIWindow?
+        if let mainWindow = app.delegate?.window {
+            topWindow = mainWindow
         }
-    return UIApplication.shared.keyWindow?.rootViewController?.topVisible()
+        if topWindow == nil {
+            topWindow = app.windows.last(where: { $0.windowLevel == .normal })
+        }
+        return topWindow
+    }
+     
+    public class func topVisibleViewController() -> UIViewController? {
+        return topNormalWindow()?.rootViewController?.topVisible()
     }
     
     public class func topNavigationController() -> UINavigationController? {
-        if let rootViewController = UIApplication.shared.delegate?.window??.rootViewController {
-            return rootViewController.topNavigationController()
-        }
-        return UIApplication.shared.keyWindow?.rootViewController?.topNavigationController()
+        return topNormalWindow()?.rootViewController?.topNavigationController()
     }
 }
 
