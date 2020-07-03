@@ -90,8 +90,8 @@ public extension String {
         let hmacData = Data(bytes: result, count: len)
         return hmacData.base64EncodedString(options: .lineLength76Characters)
        }
-    @available(*, deprecated, message: "use sha1String")
-    func oc_sha1() -> String {
-        return (self as NSString).sha1()
-    }
+//    @available(*, deprecated, message: "use sha1String")
+//    func oc_sha1() -> String {
+//        return (self as NSString).sha1()
+//    }
 }

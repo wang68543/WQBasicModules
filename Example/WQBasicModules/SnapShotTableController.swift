@@ -22,7 +22,7 @@ class SnapShotTableController: UIViewController {
         tableView.estimatedSectionFooterHeight = 0
 //        self.navigationController.
        
-        let btn = UIButton(frame: CGRect(x: 100, y: 2500, width: 200, height: 100))
+        let btn = UIButton(frame: CGRect(x: 100.rpx(), y: 2500, width: 200, height: 100))
         btn.backgroundColor = UIColor.red
         scrollView.addSubview(btn)
         scrollView.backgroundColor = UIColor.white
