@@ -12,16 +12,17 @@ import CommonCrypto
 class ExampleViewController: UITableViewController {
 
     var sections: [String] = ["WQUI", "Transitioning"]
-    var sources:[[[String: String]]] = [
+    var sources: [[[String: String]]] = [
         [["浏览器控件": "TestWebViewController"],
          ["多布局风格按钮": "WQButtonViewController"],
          ["flexbox": "FlexBoxViewController"]], // WQUI
-        [["自定义评分控件": "WQStarViewController"],["自增长TextView": "AutoHeightTableViewController"],
+        [["自定义评分控件": "WQStarViewController"],
+         ["自增长TextView": "AutoHeightTableViewController"],
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"],
-         ["页面分栏":"PageScrollViewController"]]
+         ["页面分栏": "PageScrollViewController"]]
     ]
-    
+
 //    let sections2: [String] = ["WQUI", "Transitioning","WQUI", "Transitioning"]
 //    let sources2:[[[String: String]]] = [
 //        [["浏览器控件": "TestWebViewController"],
@@ -39,7 +40,7 @@ class ExampleViewController: UITableViewController {
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
-        ExampleViewCell.register(for: self.tableView)  
+        ExampleViewCell.register(for: self.tableView)
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
 //         let model:ViewCåontroller.TestModel? = WQCache.default["test"]
         if "13898768609".isLegalPhone() {
@@ -64,10 +65,10 @@ class ExampleViewController: UITableViewController {
 //        if predicate.evaluate(with: "421281199010135718")  {
 //            debugPrint("正确的身份证号码")
 //        }
-        if "421281199010135718".isLegalIDCard   {
+        if "421281199010135718".isLegalIDCard {
             debugPrint("正确的身份证号码")
         }
-        let dic:[String: Any] = ["key1":"value1","key2":"value2"]
+        let dic: [String: Any] = ["key1": "value1", "key2": "value2"]
         if let data = try? JSONSerialization.data(withJSONObject: dic, options: []) {
             //as12456
 //            debugPrint(data.DES(decodeWithKey:"ac12456b")?.base64EncodedString())
@@ -77,31 +78,30 @@ class ExampleViewController: UITableViewController {
                     if let result = try? JSONSerialization.jsonObject(with: value, options: []) {
                         debugPrint(result)
                     }
-                    
+
                 }
             }
-            
+
         }
-     
+
         if "https://www.jianshu.com".evaluate(predicate: "SELF MATCHES \"\(WQRegex.link.rawValue)\"") {
             debugPrint("正确的网站")
         }
-        
+
         let button = SecondViewController.DownButton()
         button.frame = CGRect(x: 100, y: 100, width: 100, height: 40)
         button.setTitle("测试倒计时", for: .normal)
         button.setTitleColor(UIColor.red, for: .normal)
         button.backgroundColor = UIColor.yellow
-       
+
         let cancel = false
-        
+
             let address = String(format: "%p", cancel)
             print(address)
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
         let appName = UIApplication.shared.displayName
-        
-        
+
 //        self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
@@ -117,7 +117,7 @@ class ExampleViewController: UITableViewController {
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
 //    }
-    
+
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -127,7 +127,7 @@ class ExampleViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sources[section].count
     }
- 
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ExampleViewCell.cell(for: tableView, with: indexPath)
         let values = sources[indexPath.section][indexPath.row]
@@ -150,7 +150,6 @@ class ExampleViewController: UITableViewController {
                 tableView.deselectRow(at: indexPath, animated: true)
             }
         }
-        
     }
 
 }

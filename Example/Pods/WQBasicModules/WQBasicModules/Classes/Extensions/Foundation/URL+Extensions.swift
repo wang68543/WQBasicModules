@@ -13,13 +13,13 @@ public extension URL {
     var queryParameters: [String: String]? {
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false),
             let queryItems = components.queryItems else { return nil }
-        
+
         var items: [String: String] = [:]
-        
+
         for queryItem in queryItems {
             items[queryItem.name] = queryItem.value
         }
-        
+
         return items
     }
     /// SwifterSwift: Get value of a query key.
@@ -34,7 +34,7 @@ public extension URL {
             .first(where: { $0.name == key })?
             .value
     }
-    
+
     /// SwifterSwift: Generates new URL that does not have scheme.
     ///
     ///        let url = URL(string: "https://domain.com")!
@@ -44,9 +44,9 @@ public extension URL {
             let droppedScheme = String(absoluteString.dropFirst(scheme.count + 3))
             return URL(string: droppedScheme)
         }
-        
+
         guard host != nil else { return self }
-        
+
         let droppedScheme = String(absoluteString.dropFirst(2))
         return URL(string: droppedScheme)
     }
@@ -70,7 +70,7 @@ public extension URL {
         let imageGenerator = AVAssetImageGenerator(asset: AVAsset(url: self))
         let time = CMTimeMakeWithSeconds(time, preferredTimescale: 1)
         var actualTime = CMTimeMake(value: 0, timescale: 0)
-        
+
         guard let cgImage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime) else {
             return nil
         }

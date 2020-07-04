@@ -22,7 +22,7 @@ public extension UserDefaults {
     func float(forKey key: String) -> Float? {
         return object(forKey: key) as? Float
     }
-    
+
     /// SwifterSwift: Date from UserDefaults.
     ///
     /// - Parameter forKey: key to find date for.
@@ -30,7 +30,7 @@ public extension UserDefaults {
     func date(forKey key: String) -> Date? {
         return object(forKey: key) as? Date
     }
-    
+
     /// SwifterSwift: Retrieves a Codable object from UserDefaults.
     ///
     /// - Parameters:
@@ -41,7 +41,7 @@ public extension UserDefaults {
         guard let data = value(forKey: key) as? Data else { return nil }
         return try? decoder.decode(T.self, from: data)
     }
-    
+
     /// SwifterSwift: Allows storing of Codable objects to UserDefaults.
     ///
     /// - Parameters:

@@ -15,7 +15,7 @@ class TabBarViewController: UITabBarController {
 
         // Do any additional setup after loading the view.
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         debugPrint("重新布局了")

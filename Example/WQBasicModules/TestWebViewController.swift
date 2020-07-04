@@ -21,5 +21,5 @@ class TestWebViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         webView.frame = self.view.bounds
-    } 
+    }
 }

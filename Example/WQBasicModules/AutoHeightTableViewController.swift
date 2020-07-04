@@ -38,7 +38,5 @@ class AutoHeightTableViewController: BaseExampleViewController {
 //        textView.constraints.
         // Do any additional setup after loading the view.
     }
-    
- 
 
 }

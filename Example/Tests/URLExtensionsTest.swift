@@ -13,7 +13,7 @@ class URLExtensionsTest: XCTestCase {
     var url = URL(string: "https://www.google.com")!
     let params = ["q": "swifter swift"]
     let queryUrl = URL(string: "https://www.google.com?q=swifter%20swift")!
-    
+
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -29,7 +29,6 @@ class URLExtensionsTest: XCTestCase {
             return
         }
         debugPrint(parameters)
-        
 //        XCTAssertEqual(parameters.count, 2)
 //        XCTAssertEqual(parameters["q"], "swifter swift")
 //        XCTAssertEqual(parameters["steve"], "jobs")

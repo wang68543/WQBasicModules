@@ -15,7 +15,7 @@ public extension Data {
     func DES(encodeWithKey key: String) -> Data? {
         return (self as NSData).desEncode(key)
     }
-    
+
     func DES(decodeWithKey key: String) -> Data? {
          return (self as NSData).desDecode(key)
     }

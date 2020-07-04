@@ -11,30 +11,30 @@ import WQBasicModules
 class WQButtonViewController: UIViewController {
 
     override func viewDidLoad() {
-        super.viewDidLoad() 
-        self.setupButtons() 
+        super.viewDidLoad()
+        self.setupButtons()
         self.setupMultiButtons()
     }
-    
+
     func setupButtons() {
         let btn1 = WQButton("标题在左", image: UIImage(named: "首页6"), alignment: .left, state: .normal)
         btn1.backgroundColor = UIColor.red
         btn1.setTitleColor(UIColor.black, for: .normal)
         btn1.frame = CGRect(x: 50, y: 90, width: 120, height: 100)
         self.view.addSubview(btn1)
-        
+
         let btn2 = WQButton("标题在右", image: UIImage(named: "首页6"), alignment: .right, state: .normal)
         btn2.backgroundColor = UIColor.red
         btn2.setTitleColor(UIColor.black, for: .normal)
         btn2.frame = CGRect(x: 250, y: 90, width: 120, height: 100)
         self.view.addSubview(btn2)
-        
+
         let btn3 = WQButton("标题在上", image: UIImage(named: "首页6"), alignment: .top, state: .normal)
         btn3.backgroundColor = UIColor.red
         btn3.setTitleColor(UIColor.black, for: .normal)
         btn3.frame = CGRect(x: 50, y: 200, width: 120, height: 100)
         self.view.addSubview(btn3)
-        
+
         let btn4 = WQButton("标题在下", image: UIImage(named: "首页6"), alignment: .bottom, state: .normal)
         btn4.backgroundColor = UIColor.red
         btn4.setTitleColor(UIColor.black, for: .normal)
@@ -48,14 +48,14 @@ class WQButtonViewController: UIViewController {
         btn1.setTitleColor(UIColor.black, for: .normal)
         btn1.frame = CGRect(x: 50, y: 310, width: 150, height: 100)
         self.view.addSubview(btn1)
-        
+
         let btn2 = WQButton("标题支持多行显示", image: UIImage(named: "首页6"), alignment: .right, state: .normal)
         btn2.backgroundColor = UIColor.green
         btn2.isAllowWrap = true
         btn2.setTitleColor(UIColor.black, for: .normal)
         btn2.frame = CGRect(x: 250, y: 310, width: 100, height: 100)
         self.view.addSubview(btn2)
-        
+
         let btn3 = WQButton("支持Button原有属性设置", image: UIImage(named: "首页6"), alignment: .right, state: .normal)
         btn3.backgroundColor = UIColor.red
         btn3.setTitleColor(UIColor.black, for: .normal)

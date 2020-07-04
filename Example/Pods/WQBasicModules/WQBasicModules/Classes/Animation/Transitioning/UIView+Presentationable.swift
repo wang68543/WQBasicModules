@@ -19,7 +19,7 @@ public extension WQModules where Base: UIView {
         let presention = WQPresentationable(subView: self.base, animator: animator, containerFrame: container, presentedFrame: presented)
         presention.show(animated: true, in: inController, completion: completion)
     }
-    
+
     func dismiss(_ animated: Bool, completion: (() -> Void)? = nil) {
         self.presentation?.dismiss(animated: true, completion: completion)
     }
@@ -177,10 +177,10 @@ public extension WQModules where Base: UIView {
         }
         let animator = WQTransitioningAnimator(items: items, options: present, dismiss: dismiss)
         self.show(animator: animator, frame: frame, inController: inController, completion: completion)
-    } 
-    
+    }
+
 }
- 
+
 private var presenterKey: Void?
 
 internal extension UIView {

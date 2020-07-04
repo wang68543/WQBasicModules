@@ -13,12 +13,12 @@ class ScrollTextInputViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     var keyboardMangaer: WQKeyboardManager!
     override func viewDidLoad() {
-        super.viewDidLoad() 
+        super.viewDidLoad()
         keyboardMangaer = WQKeyboardManager(self.scrollView)
         keyboardMangaer.shouldResignOnTouchOutside = true
         if #available(iOS 11.0, *) {
             self.scrollView.contentInsetAdjustmentBehavior = .never
-        } 
+        }
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

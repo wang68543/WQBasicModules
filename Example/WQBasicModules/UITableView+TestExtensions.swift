@@ -13,7 +13,7 @@ extension UITableView {
         let footerView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: 0.5))
           let color = lineColor ?? self.separatorColor ?? UIColor.groupTableViewBackground
           let line = UIView()
-          line.backgroundColor = color 
+          line.backgroundColor = color
             footerView.autoresizingMask = .flexibleWidth
           line.translatesAutoresizingMaskIntoConstraints = false
           footerView.addSubview(line)
@@ -35,6 +35,6 @@ extension UITableView {
           }
           NSLayoutConstraint.activate(layoutConstraints)
           self.tableFooterView = footerView
-          
+
       }
 }

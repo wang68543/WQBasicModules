@@ -18,7 +18,7 @@ extension WQPresentationable {
         self.transitioningDelegate = self
         controller.present(self, animated: flag, completion: completion)
     }
-    
+
     /// 让被弹出的控制器与当前控制器成为兄弟控制器(即以当前父控制器的子控制器显示(当当前是根控制器的时候以当前的子控制器形式显示))
     ///
     /// - Parameters:
@@ -69,7 +69,7 @@ extension WQPresentationable {
         }
         self.showAnimated(flag, presented: topVC, completion: animateFinshed(_:))
     }
-    
+
     /// 被弹出的控制器以新建keyWindow的根控制器的形式显示
     public func shownInWindow(animated flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .windowRootController
@@ -97,7 +97,7 @@ extension WQPresentationable {
             completion?()
         }
         self.showAnimated(flag, presented: preRootViewController, completion: animateFinshed(_:))
-    } 
+    }
     /// 直接以当前控制器的子控制器的形式显示(与当前控制器的界面显示同步)
     public func showInController(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.shownMode = .childController
@@ -163,7 +163,7 @@ extension WQPresentationable {
         }
         self.hideAnimated(flag, other: other, completion: animateFinshed(_:))
     }
-   
+
     internal func hideFromController(animated flag: Bool, completion: TransitionCompleted?) {
         let other = self.shouldUsingPresentionAnimatedController
         let isAppearanceTransition = self.shouldViewWillApperance
@@ -201,7 +201,7 @@ private extension WQPresentationable {
         self.containerWindow?.rootViewController = nil
         self.previousKeyWindow = nil
     }
-    
+
     func hideAnimated(_ flag: Bool, other: UIViewController?, completion: @escaping ((Bool) -> Void)) {
         if flag {
             if #available(iOS 10.0, *),
@@ -215,7 +215,7 @@ private extension WQPresentationable {
             completion(true)
         }
     }
-    
+
     func showAnimated(_ flag: Bool, presented inVC: UIViewController?, completion: @escaping ((Bool) -> Void)) {
         if flag {
             if #available(iOS 10.0, *),

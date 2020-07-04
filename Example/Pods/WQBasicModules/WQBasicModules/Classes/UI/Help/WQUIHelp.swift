@@ -12,5 +12,5 @@ final public class WQUIHelp {
             return rootViewController.topVisible()
         }
         return UIApplication.shared.keyWindow?.rootViewController
-    } 
+    }
 }

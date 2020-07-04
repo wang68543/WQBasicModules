@@ -5,7 +5,7 @@
 //  Created by HuaShengiOS on 2018/11/14.
 //  参考此处 http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html?utm_source=tuicool
 
-import UIKit 
+import UIKit
 public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
     func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, justifyContentFor linePath: WQFlexLinePath) -> WQJustifyContent
     func flexbox(_ collectionView: UICollectionView,
@@ -16,7 +16,7 @@ public protocol WQFlexboxDelegateLayout: UICollectionViewDelegateFlowLayout {
 }
 /// 布局主要是针对每个Section里面的Cell 其他的正常布局
 public class WQFlexbox: UICollectionViewFlowLayout {
-    
+
     public var direction: WQFlexDirection = .row
     /// 整个line主轴方向在section中的排列方式 (每个items之间的间隔)
     public var justifyContent: WQJustifyContent = .flexStart
@@ -34,9 +34,9 @@ public class WQFlexbox: UICollectionViewFlowLayout {
     private var supplementary: [UICollectionViewLayoutAttributes] = []
     /// 不包含contentInset
     private var contentSize: CGSize = .zero
-    
+
     private var limitLength: CGFloat = 0
-    
+
     override public
     func prepare() {
         super.prepare()
@@ -56,13 +56,13 @@ public class WQFlexbox: UICollectionViewFlowLayout {
             self.limitLength = frame.height - contentInset.top - contentInset.bottom
         }
         let sections = collectionView.numberOfSections
-        
+
         let groupItems: [[[WQFlexItemAttributes]]] = self.groupItems(isHorizontal, limitValue: self.limitLength, sections: sections)
-        
+
         let sectionAttrs: [WQFlexSectionAttributes] = self.sectionsAttrbutes(isHorizontal, sections: sections, groupItems: groupItems)
-        
+
         attrs = self.layoutSectionsItems(isHorizontal, sectionAttributes: sectionAttrs)
-        
+
         supplementary = self.layoutSupplementaries(isHorizontal, sectionAttrs: sectionAttrs)
         if isHorizontal {
             let length = sectionAttrs.reduce(0, { $0 + $1.bounds.height })
@@ -72,12 +72,12 @@ public class WQFlexbox: UICollectionViewFlowLayout {
             contentSize = CGSize(width: length, height: collectionView.frame.height - contentInset.top - contentInset.bottom)
         }
     }
-    
+
     public override
     var collectionViewContentSize: CGSize {
         return contentSize
     }
-    
+
     public override
     func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         guard let collectionView = self.collectionView else {
@@ -85,20 +85,20 @@ public class WQFlexbox: UICollectionViewFlowLayout {
         }
         return collectionView.bounds.size != newBounds.size
     }
-    
+
     public override
     func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attr = attrs.first(where: { $0.indexPath == indexPath })
         return attr
     }
-    
+
     public override
     func layoutAttributesForSupplementaryView(ofKind elementKind: String,
                                               at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attr = supplementary.first(where: { $0.indexPath == indexPath && $0.representedElementKind == elementKind })
         return attr
     }
-    
+
     public override
     func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         return attrs + supplementary
@@ -308,7 +308,7 @@ private extension WQFlexbox {
     })
     return lineItems
     }
-    
+
     /// 所有的header/footer的 attributes
     func layoutSupplementaries(_ isHorizontal: Bool,
                                sectionAttrs: [WQFlexSectionAttributes]) -> [UICollectionViewLayoutAttributes] {
@@ -343,7 +343,7 @@ private extension WQFlexbox {
                                 height: attributes.headerSize.height)
             supplements.append(attr)
         }
-        
+
         if attributes.footerSize != .zero {
             let attr = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
                                                         with: indexPath)
@@ -361,7 +361,7 @@ private extension WQFlexbox {
     var delegate: WQFlexboxDelegateLayout? {
         return self.collectionView?.delegate as? WQFlexboxDelegateLayout
     }
-    
+
     func justifyContent(for line: WQFlexLinePath) -> WQJustifyContent {
         return delegate?.flexbox(collectionView!, flexbox: self, justifyContentFor: line) ?? self.justifyContent
     }
@@ -381,7 +381,7 @@ private extension WQFlexbox {
     var collectionViewLayout: UICollectionViewDelegateFlowLayout? {
         return self.collectionView?.delegate as? UICollectionViewDelegateFlowLayout
     }
-    
+
     func sizeForItem(at indexPath: IndexPath) -> CGSize {
         if let collectionView = self.collectionView {
             return collectionViewLayout?.collectionView?(collectionView, layout: self, sizeForItemAt: indexPath) ?? self.itemSize
@@ -394,7 +394,7 @@ private extension WQFlexbox {
         }
         return self.sectionInset
     }
-    
+
     func minimumLineSpacingForSection(at section: Int) -> CGFloat {
         if let collectionView = self.collectionView {
             return collectionViewLayout?
@@ -414,7 +414,7 @@ private extension WQFlexbox {
         }
         return self.minimumInteritemSpacing
     }
-    
+
     func referenceSizeForHeaderInSection(_ section: Int) -> CGSize {
         if let collectionView = self.collectionView {
             return collectionViewLayout?
@@ -424,7 +424,7 @@ private extension WQFlexbox {
         }
         return self.headerReferenceSize
     }
-    
+
     func referenceSizeForFooterInSection(_ section: Int) -> CGSize {
         if let collectionView = self.collectionView {
             return delegate?.collectionView?(collectionView,

@@ -7,7 +7,7 @@
 
 import Foundation
 public extension String {
-    
+
     /// 序列化URL的查询参数 (可处理包含=)
     ///
     /// - Returns: 键值对 (由于URLString 都是字符串所有这里的键值对类型就是[String: String])
@@ -32,12 +32,12 @@ public extension String {
         }
         return parameters
     }
-    
+
     /// 创建二维码
     ///
     /// - Parameter size: 二维码图片尺寸
     /// - Returns: UIImage
-    
+
     @available(*, deprecated, message: "use UIImage.create")
     func QRCode(_ size: CGSize) -> UIImage? {
         let filter = CIFilter(name: "CIQRCodeGenerator")
@@ -73,7 +73,7 @@ public extension String {
         } else {
             return nil
         }
-        
+
     }
 }
 
@@ -87,7 +87,7 @@ public extension String {
         guard let decodedData = Data(base64Encoded: self) else { return nil }
         return String(data: decodedData, encoding: .utf8)
     }
-    
+
     /// SwifterSwift: String encoded in base64 (if applicable).
     ///
     ///        "Hello World!".base64Encoded -> Optional("SGVsbG8gV29ybGQh")
@@ -126,7 +126,7 @@ public extension String {
         }
         return false
     }
-    
+
     /// SwifterSwift: Check if string contains one or more letters.
     ///
     ///        "123abc".hasLetters -> true
@@ -135,7 +135,7 @@ public extension String {
     var hasLetters: Bool {
         return rangeOfCharacter(from: .letters, options: .numeric, range: nil) != nil
     }
-    
+
     /// SwifterSwift: Check if string contains one or more numbers.
     ///
     ///        "abcd".hasNumbers -> false
@@ -144,7 +144,7 @@ public extension String {
     var hasNumbers: Bool {
         return rangeOfCharacter(from: .decimalDigits, options: .literal, range: nil) != nil
     }
-    
+
     /// SwifterSwift: Check if string contains only letters.
     ///
     ///        "abc".isAlphabetic -> true
@@ -155,7 +155,7 @@ public extension String {
         let hasNumbers = rangeOfCharacter(from: .decimalDigits, options: .literal, range: nil) != nil
         return hasLetters && !hasNumbers
     }
-    
+
     /// SwifterSwift: Check if string contains at least one letter and one number.
     ///
     ///        // useful for passwords
@@ -168,7 +168,7 @@ public extension String {
         let comps = components(separatedBy: .alphanumerics)
         return comps.joined().isEmpty && hasLetters && hasNumbers
     }
-    
+
     /// SwifterSwift: Check if string is palindrome.
     ///
     ///     "abcdcba".isPalindrome -> true
@@ -184,7 +184,7 @@ public extension String {
         let secondHalf = letters[midIndex..<letters.endIndex].reversed()
         return !zip(firstHalf, secondHalf).contains(where: { $0.lowercased() != $1.lowercased() })
     }
-    
+
     /// SwifterSwift: Check if string is a valid Swift number.
     ///
     /// Note:
@@ -205,7 +205,7 @@ public extension String {
         return scanner.scanDecimal(nil) && scanner.isAtEnd
         #endif
     }
-    
+
     /// SwifterSwift: Check if string only contains digits.
     ///
     ///     "123".isDigits -> true
@@ -215,7 +215,7 @@ public extension String {
     var isDigits: Bool {
         return CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: self))
     }
-    
+
     /// SwifterSwift: String with no spaces or new lines in beginning and end.
     ///
     ///        "   hello  \n".trimmed -> "hello"
@@ -223,7 +223,7 @@ public extension String {
     var trimmed: String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
-    
+
     /// SwifterSwift: Readable string from a URL string.
     ///
     ///        "it's%20easy%20to%20decode%20strings".urlDecoded -> "it's easy to decode strings"
@@ -231,7 +231,7 @@ public extension String {
     var urlDecoded: String {
         return removingPercentEncoding ?? self
     }
-    
+
     /// SwifterSwift: URL escaped string.
     ///
     ///        "it's easy to encode strings".urlEncoded -> "it's%20easy%20to%20encode%20strings"
@@ -239,7 +239,7 @@ public extension String {
     var urlEncoded: String {
         return addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
     }
-    
+
     /// SwifterSwift: Check if the given string spelled correctly
     var isSpelledCorrectly: Bool {
         let checker = UITextChecker()
@@ -248,7 +248,7 @@ public extension String {
         let misspelledRange = checker.rangeOfMisspelledWord(in: self, range: range, startingAt: 0, wrap: false, language: language)
         return misspelledRange.location == NSNotFound
     }
-    
+
     /// SwifterSwift: Array of strings separated by new lines.
     ///
     ///        "Hello\ntest".lines() -> ["Hello", "test"]
@@ -261,7 +261,7 @@ public extension String {
         }
         return result
     }
-    
+
     /// SwifterSwift: an array of all words in a string
     ///
     ///        "Swift is amazing".words() -> ["Swift", "is", "amazing"]
@@ -273,7 +273,7 @@ public extension String {
         let comps = components(separatedBy: chararacterSet)
         return comps.filter { !$0.isEmpty }
     }
-    
+
     /// SwifterSwift: Count of words in a string.
     ///
     ///        "Swift is amazing".wordsCount() -> 3
@@ -286,7 +286,7 @@ public extension String {
         let words = comps.filter { !$0.isEmpty }
         return words.count
     }
-    
+
     /// SwifterSwift: Copy string to global pasteboard.
     ///
     ///        "SomeText".copyToPasteboard() // copies "SomeText" to pasteboard

@@ -20,7 +20,7 @@ class SecondViewController: UIViewController {
             self.contentView.addSubview(textLabel)
             self.backgroundColor = .red
         }
-        
+
         required init?(coder aDecoder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
@@ -31,11 +31,10 @@ class SecondViewController: UIViewController {
     }
     class HeaderFooterView: UICollectionReusableView {
         static let reuseIdentifier: String = "HeaderFooterView"
-        
+
     }
     class DownButton: UIButton {
-        
-        
+
         deinit {
             debugPrint("销毁了")
         }
@@ -44,8 +43,8 @@ class SecondViewController: UIViewController {
         super.viewDidLoad()
 
         let button = DownButton()
-        button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "s"), color: UIColor.red) { (sender, flag) -> Bool in
-            
+        button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "s"), color: UIColor.red) { (_, _) -> Bool in
+
             return true
         }
 //        button.countDown(60, execute: { (sender, count, state) in
@@ -54,15 +53,15 @@ class SecondViewController: UIViewController {
 //
 //            return true
 //        }
-        button.frame = CGRect(x: 20, y: 100, width: 100, height: 50);
+        button.frame = CGRect(x: 20, y: 100, width: 100, height: 50)
         self.view.addSubview(button)
         let layout = WQFlexbox()
         layout.direction = .columnReverse
         layout.justifyContent = .center
         layout.alignContent = .center
-        
+
         layout.alignItems = .center
-        
+
         collectionView = UICollectionView(frame: CGRect(x: 0, y: 100, width: 300, height: 500), collectionViewLayout: layout)
 //        collectionView.contentInset = UIEdgeInsets(top: 0, left: 10, bottom: 40, right: 40)
         collectionView.dataSource = self
@@ -76,7 +75,7 @@ class SecondViewController: UIViewController {
             self.collectionView.contentInsetAdjustmentBehavior = .never
         }
     }
-    
+
 /**
      (10.0, 0.0, 50.0, 50.0)
      (70.0, 0.0, 50.0, 50.0)
@@ -103,7 +102,7 @@ extension SecondViewController: WQFlexboxDelegateLayout {
     func flexbox(_ collectionView: UICollectionView, flexbox: WQFlexbox, alignItemsFor section: Int, with linePath: WQFlexLinePath, in indexPath: IndexPath) -> WQAlignItems {
         return .center
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.item % 3 == 0 {
             return CGSize(width: 30, height: 80)
@@ -135,12 +134,17 @@ extension SecondViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return 30
     }
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier, for: indexPath) as! Cell
-        cell.textLabel.text = "\(indexPath.item)"
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier,
+                                                      for: indexPath)
+        if let reuseCell = cell as? Cell {
+            reuseCell.textLabel.text = "\(indexPath.item)"
+        }
         if indexPath.section == 1 {
             cell.backgroundColor = UIColor.yellow
         } else {
@@ -148,9 +152,13 @@ extension SecondViewController: UICollectionViewDataSource {
         }
         return cell
     }
-  
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-       let view =  collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HeaderFooterView.reuseIdentifier, for: indexPath) as! HeaderFooterView
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+       let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                  withReuseIdentifier: HeaderFooterView.reuseIdentifier,
+                                                                  for: indexPath)
+
         if kind == UICollectionView.elementKindSectionHeader {
             view.backgroundColor = UIColor.white
         } else {
@@ -175,10 +183,10 @@ extension SecondViewController.DownButton {
             #else //解决非64位 内存优化问题
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
-            
+
         }
         get {
-        
+
             if let count = objc_getAssociatedObject(self, CountDownKeys.totalCount) as? String {
                 return count
             } else {

@@ -16,7 +16,7 @@ import Foundation
   */
 #if swift(>=5.0)
 public enum WQRegex: String {
-    
+
     case int = "^[+-]?[0-9]+$"
     /// 后期考虑添加 附加值限定小数点位数等
     case float = "^[+-]?[0-9]+([.]{0,1}[0-9]+){0,1}$"
@@ -55,17 +55,17 @@ public enum WQRegex: String {
      * 号码：七位或八位
      */
     case chinaTelephone = #"^0(10|2[0-5789]|\\d{3})\\d{7,8}$"#
-    
+
     case email = #"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"#
-    
+
 }
 #else
 public enum WQRegex: String {
-    
+
     case int = "^[+-]?[0-9]+$"
     /// 后期考虑添加 附加值限定小数点位数等
     case float = "^[+-]?[0-9]+([.]{0,1}[0-9]+){0,1}$"
-    
+
     case commonPwd = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"//这里表示 如果密码中不包含数字 就验证不通过;不包含字母也验证不通过 ^(?![0-9]+$)表示从头到尾不包含数字
     case IDCard = "^[1-9]\\\\d{7}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])\\\\d{3}$|^[1-9]\\\\d{5}[1-9]\\\\d{3}((0\\\\d)|(1[0-2]))(([0|1|2]\\\\d)|3[0-1])\\\\d{3}([0-9]|X)$"
     /// 提取网页图片
@@ -74,11 +74,11 @@ public enum WQRegex: String {
     case link = "((?:http|https)://)?(?:www\\\\.)?[\\\\w\\\\d\\\\-_]+\\\\.\\\\w{2,3}(\\\\.\\\\w{2})?(/(?<=/)(?:[\\\\w\\\\d\\\\-\\\\./_]+)?)?"
     /** 中国手机号码 */
     case chinaPhone = "^1[3-9]\\\\d{9}$"
- 
+
     case chinaTelephone = "^0(10|2[0-5789]|\\\\d{3})\\\\d{7,8}$"
-    
+
     case email = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
-    
+
 }
 #endif
 
@@ -87,7 +87,7 @@ public extension String {
     var isPureInt: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegex.int.rawValue)\"")
     }
-     
+
     var isEmail: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegex.email.rawValue)\"")
     }
@@ -95,7 +95,7 @@ public extension String {
     var isLegalPassword: Bool {
         return evaluate(predicate: "SELF MATCHES \"\(WQRegex.commonPwd.rawValue)\"")
     }
-    
+
     /// 校验电话号码
     ///
     /// - Parameter phoneType: 需要校验的电话类型 默认校验中国的手机号
@@ -133,7 +133,7 @@ public extension String {
         let residue = sum % 11
         return parity[residue] == self.last || (residue == 2 && self.last == "x") // 小写x
     }
-    
+
     func evaluate(predicate preStr: String) -> Bool {
         return NSPredicate(format: preStr).evaluate(with: self)
     }

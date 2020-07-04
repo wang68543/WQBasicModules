@@ -22,7 +22,7 @@ open class WQTransitioningAnimator: NSObject {
         public var damping: CGFloat
         public var initialVelocity: CGFloat
         public var options: UIView.AnimationOptions
-        
+
         public init(_ duration: TimeInterval = 0.25,
                     delay: TimeInterval = 0.0,
                     damping: CGFloat = 0,
@@ -39,7 +39,7 @@ open class WQTransitioningAnimator: NSObject {
         case presentation
         case dismissal
     }
-    
+
     @available(*, deprecated, message: "use Options.duration")
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
@@ -50,7 +50,7 @@ open class WQTransitioningAnimator: NSObject {
     public let presentOptions: Options
     public let dismissOptions: Options
     private var willTransitionStyle: TransitionStyle = .presentation
-    
+
     public init(items: WQAnimatedConfigItems = [],
                 options present: Options = .normalPresent,
                 dismiss: Options? = .normalDismiss) {
@@ -58,14 +58,14 @@ open class WQTransitioningAnimator: NSObject {
         self.presentOptions = present
         self.dismissOptions = dismiss ?? present
         super.init()
-    } 
+    }
     public convenience init(_ items: WQAnimatedConfigAble ...,
                             options present: Options = .normalPresent,
                             dismiss: Options? = .normalDismiss) {
         self.init(items: items, options: present, dismiss: dismiss)
     }
 }
- 
+
 // MARK: - --UIViewControllerAnimatedTransitioning
 extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -98,7 +98,7 @@ extension WQTransitioningAnimator: UIViewControllerAnimatedTransitioning {
             }
             if isPresented && success {
                 weakSelf.willTransitionStyle = .dismissal
-            } 
+            }
             transitionContext.completeTransition(success)
         }
         if isPresented {
@@ -145,7 +145,7 @@ public extension WQTransitioningAnimator {
                            options: options.options,
                            animations: animateBlock,
                            completion: completion)
-            
+
         } else {
             UIView.animate(withDuration: duration,
                            delay: options.delay,
@@ -170,10 +170,10 @@ extension WQTransitioningAnimatorable {
 public extension WQTransitioningAnimator.Options {
     static let normalPresent = WQTransitioningAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     static let normalDismiss = WQTransitioningAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseInOut])
-    
+
     static let actionSheetPresent = WQTransitioningAnimator.Options(0.25, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
     static let actionSheetDismiss = WQTransitioningAnimator.Options(0.15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
-    
+
     static let alertPresent = WQTransitioningAnimator.Options(0.15,
                                                               delay: 0,
                                                               damping: 3,

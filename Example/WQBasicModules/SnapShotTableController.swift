@@ -21,7 +21,7 @@ class SnapShotTableController: UIViewController {
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
 //        self.navigationController.
-       
+
         let btn = UIButton(frame: CGRect(x: 100.rpx(), y: 2500, width: 200, height: 100))
         btn.backgroundColor = UIColor.red
         scrollView.addSubview(btn)
@@ -39,7 +39,7 @@ class SnapShotTableController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3.0) {
 //            let images = self.tableView.snapshots()
             if let data = self.tableView.longSnapshot()?.pngData() {
-                try! data.write(to: URL(fileURLWithPath: "/Users/WangQiang/Desktop/1111111111111.png"))
+                try? data.write(to: URL(fileURLWithPath: "/Users/WangQiang/Desktop/1111111111111.png"))
 //            }
             }
 //            if let data = self.scrollView.longSnapshot()?.pngData() {
@@ -58,7 +58,7 @@ class SnapShotTableController: UIViewController {
          scrollView.contentSize = CGSize(width: self.view.frame.width, height: 3000)
     }
 }
-extension SnapShotTableController : UITableViewDelegate, UITableViewDataSource {
+extension SnapShotTableController: UITableViewDelegate, UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 30
     }
@@ -81,5 +81,5 @@ extension SnapShotTableController : UITableViewDelegate, UITableViewDataSource {
         label.text = "======:\(section)"
         return label
     }
-    
+
 }

@@ -12,7 +12,7 @@ class PanView: UIView {
     var panBehavior: WQPanBehavior?
     var animator: UIDynamicAnimator = UIDynamicAnimator()
     var targetFrameMinY: [CGFloat] = []
-    private var targetCenterY:[CGFloat] = []
+    private var targetCenterY: [CGFloat] = []
     weak var panMoveDelegate: WQPanViewable?
     var panBounce: Bool = false // 超过临界值之后是否继续向上滑
     var shouldScrollInScroll: Bool = true
@@ -28,16 +28,15 @@ class PanView: UIView {
         let midH = self.frame.height * 0.5
         self.targetCenterY = targetFrameMinY.map({ $0 + midH}).sorted(by: {$0 < $1})
         if self.shouldScrollInScroll {
-            
+
 //            let scrollViews = self.subviews.flatMap($0.subViews)
         }
     }
-    
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }
 extension PanView {
     func allSubViews() {
@@ -49,7 +48,7 @@ extension PanView {
 //        
 //    }
     func addObserver(for scrollView: UIScrollView) {
-        
+
     }
     @objc func panAction(_ sender: UIPanGestureRecognizer) {
         guard self.targetCenterY.count > 1 else { return }
@@ -83,7 +82,7 @@ extension PanView {
             self.willEndDragging(velocity, targetCenterY: tatgetOffsetY)
         }
     }
-    
+
     func willBeginDragging() {
         self.animator.removeAllBehaviors()
     }

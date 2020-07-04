@@ -21,7 +21,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
     public var completionWidth: CGFloat = 0
     public var shouldCompletionProgress: CGFloat = 0.5
     public var shouldCompletionSpeed: CGFloat = 100
-    
+
     init(_ gesture: UIPanGestureRecognizer,
          items: WQAnimatedConfigItems,
          direction: DrivenDirection,
@@ -32,7 +32,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
         super.init()
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
-    
+
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         guard let view = sender.view else { return }
@@ -44,7 +44,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
             case .left, .right:
                 completionWidth = size.width
             }
-        } 
+        }
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
@@ -67,7 +67,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
                 self.transitionContext?.finishInteractiveTransition()
             } else {
                 self.transitionContext?.cancelInteractiveTransition()
-            } 
+            }
             self.isInteractive = false
             self.transitionContext = nil
             self.transitionAnimator = nil
@@ -112,7 +112,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
                 transitionView.addSubview(toView)
             }
         }
-        self.transitionAnimator?.addCompletion({ position in 
+        self.transitionAnimator?.addCompletion({ position in
             let completed = (position == .end)
             if (self.isShow && !completed) || (!self.isShow && completed) {
                 toVCView?.removeFromSuperview()
@@ -123,7 +123,7 @@ public class WQPropertyDriven: NSObject, UIViewControllerInteractiveTransitionin
             self.transitionAnimator?.startAnimation()
         }
     }
-    
+
     public var wantsInteractiveStart: Bool {
         return self.isInteractive
     }
@@ -184,7 +184,7 @@ public extension DrivenableProtocol {
             case .right:
                 isFinished = velocity.x > speed
             }
-        } 
+        }
         return isFinished
     }
 }

@@ -13,12 +13,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let example = ExampleViewController() 
+        let example = ExampleViewController()
         let nav = UINavigationController(rootViewController: example)
         example.view.backgroundColor = UIColor.white
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
-        window?.makeKeyAndVisible()  
+        window?.makeKeyAndVisible()
         return true
     }
 
@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 //        debugPrint(WQDateFormatter.sharedDateFormater)
-     
+
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

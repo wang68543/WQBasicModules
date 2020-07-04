@@ -25,7 +25,10 @@ class PageScrollViewController: UIViewController {
         viewController3.view.backgroundColor = .purple
         let viewController4 = UIViewController()
         viewController4.view.backgroundColor = .systemPink
-        pageScroll = PageViewController([viewController1,viewController2,viewController3,viewController4,viewController5], frame: CGRect(x: 0, y: 180, width: Screen.width, height: Screen.height - 180), startIndex: 0)
+        let conrollers = [viewController1, viewController2, viewController3, viewController4, viewController5]
+        pageScroll = PageViewController(conrollers,
+                                        frame: CGRect(x: 0, y: 180, width: Screen.width, height: Screen.height - 180),
+                                        startIndex: 0)
         pageScroll?.add(toParent: self)
         let button = UIButton()
         button.setTitle("跳转", for: .normal)

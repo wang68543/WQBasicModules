@@ -14,7 +14,7 @@ public class WQAlertAction: NSObject {
     public var isEnabled: Bool = true
     /// 是否点击之后自动销毁
     public var isDestructive: Bool = true
-    
+
     public init(attributedText: NSAttributedString, handler: Handler? = nil) {
         self.handler = handler
         self.attributedText = attributedText
@@ -50,9 +50,9 @@ public class WQAlertView: UIView {
             self.messageLabel.attributedText = attributedMessage
         }
     }
-    
+
     private var showSize: CGSize = .zero
-    
+
     public init(_ title: String?, message: String) {
         titleLabel = UILabel()
         messageLabel = UILabel()
@@ -79,11 +79,11 @@ public class WQAlertView: UIView {
         }
         self.bottomView.addButton(for: action)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public func size(for width: CGFloat) -> CGSize {
        let limitWidth: CGFloat = width - self.contentEdgeInsets.left - self.contentEdgeInsets.right
         var viewH: CGFloat = self.contentEdgeInsets.top
@@ -99,7 +99,7 @@ public class WQAlertView: UIView {
        viewH += msgSize.height + self.contentEdgeInsets.bottom
        return self.bottomView.btns.isEmpty ? CGSize(width: width, height: viewH ) : CGSize(width: width, height: viewH + self.bottomHeight)
     }
-    
+
     public func show(for width: CGFloat = UIScreen.main.bounds.width - 50) {
         let size = self.size(for: width)
         let initailItem = WQAnimatedItem.defaultViewBackground(UIColor.black.withAlphaComponent(0.5), initial: .clear)
@@ -148,9 +148,9 @@ public class WQAlertView: UIView {
 // MARK: - button
 extension WQAlertView {
     open class Button: UIButton {
-        
+
         public let action: WQAlertAction
-        
+
         public init(_ action: WQAlertAction) {
             self.action = action
             super.init(frame: .zero)
@@ -164,7 +164,7 @@ extension WQAlertView {
         open private(set) var btns: [UIButton] = []
         open private(set) var lines: [CALayer] = []
         open var lineColor: CGColor = UIColor.groupTableViewBackground.cgColor
-    
+
         open func addButton(for action: WQAlertAction) {
             let btn = Button(action)
             self.btns.append(btn)
@@ -174,7 +174,7 @@ extension WQAlertView {
             self.lines.append(line)
             self.layer.addSublayer(line)
         }
-    
+
     override
     open func layoutSubviews() {
             super.layoutSubviews()
@@ -198,7 +198,7 @@ extension WQAlertView {
             }
         }
     }
-   
+
     @objc
     func buttonAction(_ sender: Button) {
         let action = sender.action
@@ -211,4 +211,4 @@ extension WQAlertView {
             action.handler?(action)
         }
     }
-} 
+}

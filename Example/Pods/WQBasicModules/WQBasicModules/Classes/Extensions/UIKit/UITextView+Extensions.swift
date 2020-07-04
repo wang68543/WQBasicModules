@@ -10,7 +10,7 @@ public extension UITextView {
     private struct AssociatedKeys {
         static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textView.maxInputLength".hashValue)!
     }
-    
+
     /// 当textview一次输入的文字过多的时候 前后跳动问题无法解决
     var maxInputLength: Int? {
         set {
@@ -23,13 +23,13 @@ public extension UITextView {
             objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
             #else
             objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_COPY)
-            #endif 
+            #endif
         }
         get {
             return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int
         }
     }
-    
+
     private func addObserver() {
         self.removeObserver()
         NotificationCenter.default.addObserver(self,

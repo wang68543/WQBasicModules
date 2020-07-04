@@ -40,10 +40,10 @@ public final class WQKeyboardManager: NSObject {
     private lazy var safeAreaInsets: UIEdgeInsets = { // 保存初始的safeAreaInsets
         if #available(iOS 11.0, *) { return view.safeAreaInsets } else { return .zero }
     }()
-    
+
     public init(_ view: UIView) {
         self.view = view
-        super.init() 
+        super.init()
         self.registerAllNotifications()
     }
     deinit {
@@ -77,7 +77,7 @@ public extension WQKeyboardManager {
         if index == self.textFieldViews.count - 1 { return false } //最后一个
         return true
     }
-    
+
     /// 移动到下一个输入框
     ///
     /// - Returns: 是否跳转成功
@@ -164,7 +164,7 @@ private extension WQKeyboardManager {
         center.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         center.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
-    
+
     func registertextFieldViewNotification() {
         let center = NotificationCenter.default
         center.addObserver(self,
@@ -184,19 +184,19 @@ private extension WQKeyboardManager {
                            name: UITextView.textDidEndEditingNotification,
                            object: nil)
     }
-    
+
     func unregisterAllNotification() {
         let center = NotificationCenter.default
         center.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
-        
+
         center.removeObserver(self, name: UITextField.textDidBeginEditingNotification, object: nil)
         center.removeObserver(self, name: UITextField.textDidEndEditingNotification, object: nil)
         center.removeObserver(self, name: UITextView.textDidBeginEditingNotification, object: nil)
         center.removeObserver(self, name: UITextView.textDidEndEditingNotification, object: nil)
-        
+
         center.removeObserver(self, name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
 }
