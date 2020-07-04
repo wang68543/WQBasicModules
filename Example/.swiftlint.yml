@@ -3,12 +3,12 @@ disabled_rules: # 禁用指定的规则
 included:
   # - Source
   # - Tests
-  - ../Source
+  - Source
   # - Example/Pods/WQBasicModules
 excluded:
   - Tests/SwiftLintFrameworkTests/Resources
-  - Pods
-  - Tests
+  - Example/Pods
+  - Example/Tests
 opt_in_rules:
   - array_init
   - attributes
