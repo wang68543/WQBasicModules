@@ -29,7 +29,7 @@ public enum iDevice {
 }
 public extension CGFloat {
     func rpx(_ adaptWidth: CGFloat = iDevice.iPhone6_6s_7_8.width) -> CGFloat {
-        return UIScreen.main.bounds.width/adaptWidth*self
+        return UIScreen.main.bounds.width*UIScreen.main.scale/adaptWidth*self
     }
     var px: CGFloat {
         return self/UIScreen.main.scale
