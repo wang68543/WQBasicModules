@@ -11,36 +11,37 @@ public extension UITabBar {
     
     /// 中心点默认显示在右上角
     /// - Parameters:
-    ///   - index: tabBar 按照x坐标排列的下标
+    ///   - index: tabBar 按照x坐标排列的下标 从0开始
     ///   - width: bage的宽度
     ///   - offset: 偏移位置
     func showBadgeOnItem(_ index: Int, width: CGFloat = 4, offset: UIOffset) {
-        self.hideBadgeOnItem(with: index)
-        if  let selItem = selectedItem,
-            let selIndex = self.items?.firstIndex(of: selItem) {
-            if selIndex == index { // 当前正在展示的 不显示红点
-                return
-            }
-        }
-//        guard let cls = NSClassFromString("UITabBarButton") else { return }
-        //.filter({ $0.isKind(of: cls) })
-        let items = self.subviews.sorted(by: { $0.frame.minX < $1.frame.minX })
-        guard items.count > index else { return }
         let badge = BadgeView()
-        badge.tag = 100010 + index
-        self.addSubview(badge)
-        let item = items[index]
-        let bageW: CGFloat = width
-        badge.frame = CGRect(x: item.frame.midX + offset.horizontal - bageW*0.5, y: item.frame.minY-bageW*0.5+offset.vertical, width: bageW, height: bageW)
+        badge.bounds = CGRect(x: 0, y: 0, width: width, height: width)
+        self.showBadgeOnItem(index, bageView: badge, offset: offset)
         }
         
-        func hideBadgeOnItem(with index: Int) {
-            guard let subView = self.viewWithTag(100010+index) else {
-                return
-            }
-            subView.removeFromSuperview()
-            
+    func showBadgeOnItem(_ index: Int, bageView: UIView, offset: UIOffset) {
+        self.hideBadgeOnItem(with: index)
+        guard let cls = NSClassFromString("UITabBarButton") else { return } 
+        let items = self.subviews.filter({ $0.isKind(of: cls) }).sorted(by: { $0.frame.minX < $1.frame.minX })
+        guard items.count > index else { return }
+        
+        bageView.tag = 100010 + index
+        self.addSubview(bageView)
+        let item = items[index]
+        bageView.center = CGPoint(x: item.frame.midX + offset.horizontal, y: item.frame.midY + offset.vertical)
+    }
+    
+    func bageView(for index: Int) -> UIView? {
+        return self.viewWithTag(100010+index)
+    }
+    
+    func hideBadgeOnItem(with index: Int) {
+        guard let subView = bageView(for: index) else {
+            return
         }
+        subView.removeFromSuperview()
+    }
 }
 extension UITabBar {
     class BadgeView: UIView {
