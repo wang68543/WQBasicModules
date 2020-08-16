@@ -7,6 +7,7 @@
 
 import Foundation
 
+//public enum 
 //public protocol TransitionManagerDelegate: NSObjectProtocol {
 //    func transitionManager(prepare manager: TransitionManager)
 //

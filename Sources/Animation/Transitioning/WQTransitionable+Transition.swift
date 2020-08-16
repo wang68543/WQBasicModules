@@ -12,11 +12,10 @@ extension WQTransitionable {
     /// modal 形式显示当前控制器
     public func presentSelf(in controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.showMode = .present
-//        controller.modalPresentationStyle = .custom
-//        controller.transitioningDelegate = self 
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
         controller.present(self, animated: flag, completion: completion)
+        
     }
     
     /// 让被弹出的控制器与当前控制器成为兄弟控制器(即以当前父控制器的子控制器显示(当当前是根控制器的时候以当前的子控制器形式显示))
