@@ -82,7 +82,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertView.addSubview(alertSubView)
         alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-        presention.show(animated: true, in: nil, completion: nil)
+//        presention.show(animated: true, in: nil, completion: nil)
         presention.interactionDismissDirection = .down
          presention.tapDimmingViewDismissable = true
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
@@ -108,8 +108,13 @@ class ExampleAlertViewController: BaseExampleViewController {
          alertView.addSubview(alertSubView)
          alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
          let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-         presention.show(animated: true, in: nil, completion: nil)
+//         presention.show(animated: true, in: nil, completion: nil)
          presention.interactionDismissDirection = .down
           presention.tapDimmingViewDismissable = true
+        let nav = UINavigationController(rootViewController: presention)
+        nav.view.backgroundColor = .clear
+        nav.transitioningDelegate = presention
+        nav.modalPresentationStyle = .custom
+        self.present(nav, animated: true, completion: nil)
     }
 }
