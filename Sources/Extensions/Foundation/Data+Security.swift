@@ -9,7 +9,7 @@ import Foundation
 import CommonCrypto
 
 public extension Data {
-    func encodedAES256(_ key: String, options: CCOptions = CCOptions(kCCOptionPKCS7Padding | kCCOptionECBMode)) throws -> Data {
+    func encodedAES256(_ key: String, options: CCOptions = CCOptions(kCCOptionPKCS7Padding | kCCOptionECBMode), ivString: String? = nil) throws -> Data {
         guard let keyPtr = key.cString(using: .utf8)  else { // kCCKeySizeAES128 + 1 = keyPtr.count
             throw NSError(domain: "AES CCCrypt", code: kCCInvalidKey, userInfo: nil)
         }
@@ -24,12 +24,13 @@ public extension Data {
         var bytesNum: Int = 0
         let operation = CCOperation(kCCEncrypt)
         let aes = CCAlgorithm(kCCAlgorithmAES128)
+        let iv = ivString?.cString(using: .utf8)
         let cryptStatus = CCCrypt(operation,
                                   aes,
                                   options,
                                   keyPtr,
-                                  kCCBlockSizeAES128,
-                                  nil,
+                                  kCCKeySizeAES128,
+                                  iv,
                                   values,
                                   len,
                                   buffer,
@@ -40,7 +41,7 @@ public extension Data {
          }
         throw NSError(domain: "AES CCCrypt", code: kCCParamError, userInfo: nil)
     } 
-    func decodedAES256(_ key: String, options: CCOptions = CCOptions(kCCOptionPKCS7Padding | kCCOptionECBMode)) throws -> Data {
+    func decodedAES256(_ key: String, options: CCOptions = CCOptions(kCCOptionPKCS7Padding | kCCOptionECBMode), ivString: String? = nil) throws -> Data {
         guard let keyPtr = key.cString(using: .utf8)  else { // kCCKeySizeAES128 + 1 = keyPtr.count
             throw NSError(domain: "AES CCCrypt", code: kCCInvalidKey, userInfo: nil)
         }
@@ -54,12 +55,13 @@ public extension Data {
         var bytesNum: Int = 0
         let operation = CCOperation(kCCDecrypt)
         let aes = CCAlgorithm(kCCAlgorithmAES128)
+        let iv = ivString?.cString(using: .utf8)
         let cryptStatus = CCCrypt(operation,
                                   aes,
                                   options,
                                   keyPtr,
-                                  kCCBlockSizeAES128,
-                                  nil,
+                                  kCCKeySizeAES128,
+                                  iv,
                                   values,
                                   len,
                                   buffer,
