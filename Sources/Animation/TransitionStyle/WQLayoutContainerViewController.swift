@@ -77,11 +77,16 @@ public class WQLayoutContainerViewController: UIViewController {
 //    }
 //}
 public class WQContainerView: UIView {
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        guard let subView = self.subviews.first else { return }
-        subView.bounds = self.bounds
-        let anchorPoint = subView.layer.anchorPoint
-        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
+    public override func addSubview(_ view: UIView) {
+        super.addSubview(view)
+        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
+//    public override func layoutSubviews() {
+//        super.layoutSubviews()
+//        guard let subView = self.subviews.first else { return }
+//        subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+////        subView.bounds = self.bounds
+////        let anchorPoint = subView.layer.anchorPoint
+////        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
+//    }
 }
