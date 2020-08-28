@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public protocol TransitionAnimationPreprocessor {
+public protocol TransitionAnimationPreprocessor { 
     func preprocessor(duration manager: TransitionManager) -> TimeInterval
     
     func preprocessor(prepare manager: TransitionManager)

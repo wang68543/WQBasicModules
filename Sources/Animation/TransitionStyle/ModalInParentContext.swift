@@ -8,6 +8,9 @@
 import UIKit
 
 class ModalInParentContext: ModalContext {
-//    let parent: UIViewController
-    
+    let parent: UIViewController
+    init(_ parentViewController: UIViewController) {
+        parent = parentViewController
+        super.init()
+    }
 }

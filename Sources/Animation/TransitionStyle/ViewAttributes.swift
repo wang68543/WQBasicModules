@@ -6,6 +6,4 @@
 //
 
 import Foundation
-//public enum ViewAttributes {
-//    case 
-//}
+ 
