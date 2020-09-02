@@ -7,19 +7,15 @@
 
 import UIKit
 
+
 public class WQLayoutContainerViewController: UIViewController {
     
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var shouldEnableLifecycle: Bool = false
     
     
-    lazy var modalContext: ModalContext = {
-       return ModalContext()
-    }()
-    
-
-  
-    
+    public var modalContext: ModalContext?
+      
     internal func setup() {
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
@@ -31,7 +27,18 @@ public class WQLayoutContainerViewController: UIViewController {
         
     }
     
-    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
     
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -39,10 +46,27 @@ public class WQLayoutContainerViewController: UIViewController {
     }
     
     
-//    public func modal()
+    public func show(in viewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+        var fromViewController: UIViewController?
+        var modalStyle: ModalStyle = .autoModal
+        
+        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: .autoModal) }
+        
+        modalContext?.show(in: viewController, animated: flag, completion: completion)
+    }
+    
+    public func show(withSystemPrensention presenter: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+        
+    }
+    public func show(inWindow fromViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+        
+    }
+    public func show(inParent parentViewController: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+        
+    }
     
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        
+        modalContext?.dismiss(animated: flag, completion: completion)
     }
     // MARK: -- -UI属性
     internal lazy var dimmingView: UIView = {
@@ -67,6 +91,12 @@ public class WQLayoutContainerViewController: UIViewController {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        #if WDEBUG
+        debugPrint("\(self):" + #function + "♻️")
+        #endif
     }
     
 }

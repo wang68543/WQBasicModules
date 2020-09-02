@@ -57,9 +57,3 @@ public enum TransitionShowStyle {
     case custom
 } 
 
-public enum ModalStyle {
-    case modalSystem
-    /// 这里要分
-    case modalInParent
-    case modalInWindow
-}

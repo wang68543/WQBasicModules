@@ -7,43 +7,62 @@
 
 import UIKit
 //https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/CustomizingtheTransitionAnimations.html
-class ModalPresentationContext: ModalContext {
+open class ModalPresentationContext: ModalContext {
     lazy var driven: UIPercentDrivenInteractiveTransition = {
        let driven = UIPercentDrivenInteractiveTransition()
         return driven
     }()
     
     fileprivate var transitionContext: UIViewControllerContextTransitioning?
+    
+//    var presenter: UIViewController?
+    
+    public override init(_ viewController: WQLayoutContainerViewController) {
+        super.init(viewController)
+    }
+    
+    /// 开始当前的ViewController转场动画
+    /// - Parameters:
+    ///   - viewController: 承载present的viewController
+    public override func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
+        super.show(in: viewController, animated: flag, completion: completion)
+        showViewController.transitioningDelegate = self
+        showViewController.modalPresentationStyle = .custom
+        fromViewController?.present(showViewController, animated: flag, completion: completion)
+    }
+    public override func dismiss(animated flag: Bool, completion: ModalContext.Completion? = nil) {
+        showViewController.dismiss(animated: flag, completion: completion)
+    }
 }
 extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
     }
 
-    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
     }
 
       
-    func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return self.isInteracting ? self.driven : nil
     }
     
-    func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return self.isInteracting ? self.driven : nil
     } 
 }
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.duration
     }
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         
     }
 //    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
 //        return
 //    }
-    func animationEnded(_ transitionCompleted: Bool) {
+    public func animationEnded(_ transitionCompleted: Bool) {
         
     }
 }
