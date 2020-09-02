@@ -12,7 +12,7 @@ public enum ModalStyle {
     /// 这里要分
     case modalInParent
     case modalInWindow
-    /// 根据当前场景自动选择
+    /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
     
 }

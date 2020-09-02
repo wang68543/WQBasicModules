@@ -27,6 +27,7 @@ final public class WQUIHelp {
     public class func topNavigationController() -> UINavigationController? {
         return topNormalWindow()?.rootViewController?.topNavigationController()
     }
+    
 }
 
 public func wm_topNavigationController() -> UINavigationController? {

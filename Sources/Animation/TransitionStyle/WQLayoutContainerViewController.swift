@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 public class WQLayoutContainerViewController: UIViewController {
     
     // viewWillAppear viewWillDisappear viewDidDisappear
@@ -45,24 +44,29 @@ public class WQLayoutContainerViewController: UIViewController {
         dimmingView.frame = self.view.bounds
     }
     
-    
+    /// 这里的尺寸是跟随父View的尺寸的 
     public func show(in viewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        var fromViewController: UIViewController?
-        var modalStyle: ModalStyle = .autoModal
         
-        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: .autoModal) }
-        
-        modalContext?.show(in: viewController, animated: flag, completion: completion)
     }
     
     public func show(withSystemPrensention presenter: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        
+        let viewController = presenter ?? wm_topVisibleViewController()
+        self.show(fromViewController: viewController, animated: flag, style: .modalSystem, completion: completion)
     }
     public func show(inWindow fromViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        
+        let viewController = fromViewController ?? wm_topVisibleViewController()
+        self.show(fromViewController: viewController, animated: flag, style: .modalInWindow, completion: completion)
     }
-    public func show(inParent parentViewController: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-        
+    public func show(inParent parentViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+        guard let fromViewController = parentViewController ?? wm_topVisibleViewController() ?? UIApplication.shared.keyWindow?.rootViewController else {
+            fatalError("当前没有可显示的窗口")
+        }
+        self.show(fromViewController: fromViewController, animated: flag, style: .modalInParent, completion: completion)
+    }
+    
+    private func show(fromViewController: UIViewController?, animated flag: Bool, style: ModalStyle, completion: (() -> Void)? = nil) {
+        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: style) }
+        modalContext?.show(in: fromViewController, animated: flag, completion: completion)
     }
     
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
