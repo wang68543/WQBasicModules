@@ -41,26 +41,33 @@ public enum TransitionPanDirection {
 }
 open class TransitionManager: NSObject {
     public typealias Completion = ((Bool) -> Void)
+    
+//    public var readyShowStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+//    public var showingStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+//    public var dismissStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+//    /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
+//    public var snapShotViews: [UIView] = []
+    
 //    public weak var delegate: TransitionManagerDelegate?
     /// 动画前将要进行的动作
-    public internal(set) var isShow: Bool = true
-    /// 是否需要管理VC的生命周期
-    public var shouldViewControllerLifeCycle: Bool = false
-    /// 是否正在交互
-    public var isInteractive: Bool = false
-    
-    /// 动画时长
-    public var duration: TimeInterval = 0.25
-    
-    weak var showFromViewController: UIViewController?
-    
-    public internal(set) var containerWindow: WQTransitionWindow?
-    
-    var transitionStyle: TransitionStyle = .auto
-    public unowned let showViewController: UIViewController
-    
-    public var context: TransitionAnimateContext?
-    public let preprocessor: TransitionAnimationPreprocessor
+//    public internal(set) var isShow: Bool = true
+//    /// 是否需要管理VC的生命周期
+//    public var shouldViewControllerLifeCycle: Bool = false
+//    /// 是否正在交互
+//    public var isInteractive: Bool = false
+//
+//    /// 动画时长
+//    public var duration: TimeInterval = 0.25
+//
+//    weak var showFromViewController: UIViewController?
+//
+//    public internal(set) var containerWindow: WQTransitionWindow?
+//
+//    var transitionStyle: TransitionStyle = .auto
+//    public unowned let showViewController: UIViewController
+//
+//    public var context: TransitionAnimateContext?
+//    public let preprocessor: TransitionAnimationPreprocessor
     
     var width: CGFloat = .nan
     

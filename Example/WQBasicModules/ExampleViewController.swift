@@ -40,6 +40,9 @@ class ExampleViewController: UITableViewController {
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let viewController = WQLayoutContainerViewController()
+         
         ExampleViewCell.register(for: self.tableView)
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
 //         let model:ViewCåontroller.TestModel? = WQCache.default["test"]

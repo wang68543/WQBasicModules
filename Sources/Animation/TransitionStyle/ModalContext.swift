@@ -12,6 +12,8 @@ public enum ModalStyle {
     /// 这里要分
     case modalInParent
     case modalInWindow
+    /// 以Nav rootViewController的形式present
+    case modalPresentWithNavRoot
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
     
@@ -19,6 +21,13 @@ public enum ModalStyle {
 open class ModalContext: NSObject {
     
     public typealias Completion = (() -> Void)
+    
+    public var readyShowStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+     public var showingStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+     public var dismissStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+     /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
+     public var snapShotViews: [UIView] = []
+    
     
     public unowned let showViewController: WQLayoutContainerViewController
     
@@ -31,7 +40,6 @@ open class ModalContext: NSObject {
     open var isInteractiveable: Bool = false
     /// 是否正在交互
     open var isInteracting: Bool = false
-    
     /// 如果使用Spring动画 就禁止交互动画
     open var isSpring: Bool = false
     
@@ -70,6 +78,8 @@ public extension ModalContext {
             return ModalInParentContext(viewController)
         case .modalInWindow:
             return ModalInWindowContext(viewController)
+        case .modalPresentWithNavRoot:
+            return ModalPresentWithNavRootContext(viewController)
         case .autoModal:
             return nil
         }
