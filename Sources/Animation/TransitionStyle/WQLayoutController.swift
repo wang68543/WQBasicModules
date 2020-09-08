@@ -18,6 +18,9 @@ public class WQLayoutController: UIViewController {
     public var shouldEnableLifecycle: Bool = false
     
     
+    public lazy var modalManager: TransitionManager = {
+       return TransitionManager(self)
+    }()
     
     public var modalContext: ModalContext?
       

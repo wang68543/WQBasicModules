@@ -10,6 +10,9 @@ public extension UIView {
     struct AssociatedKeys {
         static let presenter = UnsafeRawPointer(bitPattern: "wq.modal.presenter".hashValue)!
     }
+//    public var modal: TransitionManager {
+//        
+//    }
 //   internal var modal: WQLayoutController? {
 //        set {
 //
