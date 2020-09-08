@@ -10,7 +10,7 @@ import UIKit
 /**
  将当前控制器的View 作为transitionView 
  */
-public class WQLayoutContainerViewController: UIViewController {
+public class WQLayoutController: UIViewController {
     
     
     
@@ -24,7 +24,7 @@ public class WQLayoutContainerViewController: UIViewController {
     internal func setup() {
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
-        self.view.addSubview(self.containerView)
+        self.view.addSubview(self.container)
     }
     
     public override func viewDidLoad() {
@@ -88,7 +88,7 @@ public class WQLayoutContainerViewController: UIViewController {
     }()
     
     /// 转场容器View
-    public lazy var containerView: WQContainerView = {
+    public lazy var container: WQContainerView = {
        let transitionView = WQContainerView()
         transitionView.backgroundColor = UIColor.clear
         return transitionView

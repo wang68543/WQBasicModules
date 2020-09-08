@@ -15,7 +15,7 @@ public class ModalInWindowContext: ModalDrivenContext {
        let win = WQModalContainerWindow()
         return win
     }()
-    override init(_ viewController: WQLayoutContainerViewController) {
+    override init(_ viewController: WQLayoutController) {
         super.init(viewController)
     }
     

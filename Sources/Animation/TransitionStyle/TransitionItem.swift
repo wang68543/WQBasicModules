@@ -16,51 +16,42 @@ import Foundation
 //}
  
 public protocol TSReferenceWriteable {
-    func setup(_ target: Any)
+    func setup(_ target: Any, state: ModalState)
 }
  
 public class TSReference<Root, Value>: TSReferenceWriteable {
-   public private(set) var value: Value
+    public let value: Value
     public let keyPath: ReferenceWritableKeyPath<Root, Value>
-    init(value: Value, keyPath: ReferenceWritableKeyPath<Root, Value>) {
+    public init(value: Value, keyPath: ReferenceWritableKeyPath<Root, Value>) {
        self.value = value
        self.keyPath = keyPath
    }
-   public func setup(_ target: Any) {
+    public func setup(_ target: Any, state: ModalState) {
      guard let item = target as? Root else { return }
      item[keyPath: keyPath] = value
    }
    
 }
-//func setter<Object: AnyObject, Value>(
-//    for object: Object,
-//    keyPath: ReferenceWritableKeyPath<Object, Value>
-//) -> (Value) -> Void {
-//    return { [weak object] value in
-//        object?[keyPath: keyPath] = value
+public class TSReferenceRect: TSReference<WQLayoutController, CGRect> { }
+public class TSReferenceColor: TSReference<WQLayoutController, UIColor> { }
+public class TSReferenceTransform: TSReference<WQLayoutController, CGAffineTransform> { }
+public class TSReferencePosition: TSReference<WQLayoutController, CGPoint> { }
+public class TSReferenceToggle: TSReference<WQLayoutController, Bool> { }
+public class TSReferenceValue: TSReference<WQLayoutController, CGFloat> { }
+//@dynamicMemberLookup
+//public class TSMutableTransformRefrence: TSReference<CGAffineTransform> {
+//    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<CGAffineTransform, T>) -> T {
+//        get { value[keyPath: keyPath] }
+//        set { value[keyPath: keyPath] = newValue }
 //    }
 //}
 //@dynamicMemberLookup
-public class TSRectRefrence<Root>: TSReference<Root,CGRect> {
-    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<CGRect, T>) -> T {
-        get { value[keyPath: keyPath] }
-        set { value[keyPath: keyPath] = newValue }
-    }
-}
-@dynamicMemberLookup
-public class TSMutableTransformRefrence: TSReference<CGAffineTransform> {
-    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<CGAffineTransform, T>) -> T {
-        get { value[keyPath: keyPath] }
-        set { value[keyPath: keyPath] = newValue }
-    }
-}
-@dynamicMemberLookup
-public class TSMutableColorRefrence: TSReference<UIColor> {
-    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<UIColor, T>) -> T {
-        get { value[keyPath: keyPath] }
-        set { value[keyPath: keyPath] = newValue }
-    }
-}
+//public class TSMutableColorRefrence: TSReference<UIColor> {
+//    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<UIColor, T>) -> T {
+//        get { value[keyPath: keyPath] }
+//        set { value[keyPath: keyPath] = newValue }
+//    }
+//}
 
 //func addTarget<Value>(_ target: UIViewController, value: TSReference<Value>) {
 //

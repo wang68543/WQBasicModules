@@ -7,7 +7,7 @@
 
 import UIKit
 @available(iOS 10.0, *)
-public class TransitionPropertyContext: NSObject, TransitionAnimateContext {
+public class TransitionPropertyContext: NSObject {
     var animator: UIViewPropertyAnimator = UIViewPropertyAnimator(duration: 0.25, timingParameters: UICubicTimingParameters(animationCurve: .easeOut))
     
     public func transitionCancel() {

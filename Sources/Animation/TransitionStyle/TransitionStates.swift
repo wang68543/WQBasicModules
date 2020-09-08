@@ -8,6 +8,17 @@
 import Foundation
 
 
+public enum ModalStyle {
+    case modalSystem
+    /// 这里要分
+    case modalInParent
+    case modalInWindow
+    /// 以Nav rootViewController的形式present
+    case modalPresentWithNavRoot
+    /// 根据当前场景自动选择 (优先system 其次parent 再window)
+    case autoModal
+}
+
 /**
  1.封装动画参数 根据不同参数进行不同的动画
  2.封装动画属性变化 alert sheet(转换为custom对应的属性) custom
@@ -15,10 +26,9 @@ import Foundation
  4.可额外安排显示队列 (加唯一标识)
  */
 
-
 /// 处理bottom
 /// 转场的状态
-public enum ShowState {
+public enum ModalState {
     /// 准备显示之前状态
     case readyToShow
     /// 显示
@@ -27,7 +37,7 @@ public enum ShowState {
     case hide
 }
 
-internal extension ShowState {
+internal extension ModalState {
     var isShow: Bool {
         switch self {
         case .showing:
@@ -36,10 +46,7 @@ internal extension ShowState {
             return false
         }
     }
-}
-//struct TransitionAlertStyle {
-//     let
-//}
+} 
 
 /// 需扩展依赖于父控件的尺寸
 public enum TransitionPosition {

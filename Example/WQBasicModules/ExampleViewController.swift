@@ -40,8 +40,13 @@ class ExampleViewController: UITableViewController {
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
+//        let frame: CGRect = .zero
+        let frames = TSReference(value: CGRect.zero, keyPath: \WQLayoutController.container.frame)
+//        let keypath = /WQLayoutContainerViewController.containerView.frame
+        let start = TSReferenceRect(value: .zero, keyPath: \WQLayoutController.container.frame)
         
-        let viewController = WQLayoutContainerViewController()
+        
+        let viewController = WQLayoutController()
          
         ExampleViewCell.register(for: self.tableView)
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")

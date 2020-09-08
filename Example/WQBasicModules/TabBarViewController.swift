@@ -12,10 +12,10 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let frame: ReferenceWritableKeyPath<WQLayoutContainerViewController, CGRect> = \WQLayoutContainerViewController.containerView.frame
+        let frame: ReferenceWritableKeyPath<WQLayoutController, CGRect> = \WQLayoutController.container.frame
         let backgroundColor: ReferenceWritableKeyPath<UIViewController, UIColor?> = \UIViewController.view!.backgroundColor 
         
-        let viewController = WQLayoutContainerViewController()
+        let viewController = WQLayoutController()
         viewController[keyPath: frame] = CGRect.zero
         viewController[keyPath: backgroundColor] = UIColor.clear
         

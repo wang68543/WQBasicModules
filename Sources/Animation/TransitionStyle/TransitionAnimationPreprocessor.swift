@@ -9,13 +9,13 @@ import Foundation
 public protocol TransitionAnimationPreprocessor { 
     func preprocessor(duration manager: TransitionManager) -> TimeInterval
     
-    func preprocessor(prepare manager: TransitionManager)
+    func preprocessor(prepare manager: TransitionManager, readyToShow states: [TSReferenceWriteable])
     
     /// from to 始终是相对于
-    func preprocessor(willTransition manager: TransitionManager, completion: @escaping TransitionManager.Completion)
+    func preprocessor(willShow manager: TransitionManager, to states:[TSReferenceWriteable], completion: @escaping TransitionManager.Completion)
     
-    //    func transitionManager(willHide manager: TransitionManager, completion: TransitionManager.Completion )
+    func preprocessor(willHide manager: TransitionManager, to states:[TSReferenceWriteable], completion: @escaping TransitionManager.Completion)
     
-    /// 手势交互弹出
-//    func preprocessor(shouldShowController manager: TransitionManager) -> UIViewController
+    func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat)
+    
 }

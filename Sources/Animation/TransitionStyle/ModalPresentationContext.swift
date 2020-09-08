@@ -17,7 +17,7 @@ open class ModalPresentationContext: ModalContext {
     
 //    var presenter: UIViewController?
     
-    public override init(_ viewController: WQLayoutContainerViewController) {
+    public override init(_ viewController: WQLayoutController) {
         super.init(viewController)
     }
     
