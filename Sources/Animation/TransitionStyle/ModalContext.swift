@@ -8,13 +8,14 @@
 import UIKit
 
 //TransitionAnimationPreprocessor
+
 open class ModalContext: NSObject {
     
     public typealias Completion = (() -> Void)
     
-//    public var readyShowStates: [AnyHashable: [TSReferenceWriteable]] = [:]
-//    public var showingStates: [AnyHashable: [TSReferenceWriteable]] = [:]
-//    public var dismissStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+    public var readyShowStates: WQReferenceStates = [:]
+    public var showingStates: WQReferenceStates = [:]
+    public var dismissStates: WQReferenceStates = [:]
      /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
     public var snapShotShowViews: [UIView] = []
     /// showing -> hide的时候 显示

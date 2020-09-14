@@ -25,5 +25,10 @@ open class ModalInParentContext: ModalDrivenContext {
         super.show(in: viewController, animated: flag, completion: completion)
         
     }
+//    func beiginAnimate(_ states: []) {
+//        UIView.animate(withDuration: self.duration, animations: {
+//
+//        }, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+//    }
    
 }

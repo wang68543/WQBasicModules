@@ -39,19 +39,20 @@ public protocol TransitionManagerDelegate: NSObjectProtocol {
 //    case topToBottom
 //    case bottomToTop
 //}
+public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
+
 open class TransitionManager: NSObject {
     public typealias Completion = ((Bool) -> Void)
     
-    public var readyShowStates: [AnyHashable: [TSReferenceWriteable]] = [:]
-    public var showingStates: [AnyHashable: [TSReferenceWriteable]] = [:]
-    public var dismissStates: [AnyHashable: [TSReferenceWriteable]] = [:]
+    public var readyShowStates: WQReferenceStates = [:]
+    public var showingStates: WQReferenceStates = [:]
+    public var dismissStates: WQReferenceStates = [:]
     /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
     public var snapShotShowViews: [UIView] = []
     /// showing -> hide的时候 显示
     public var snapShotHideViews: [UIView] = []
     
     public weak var delegate: TransitionManagerDelegate?
- 
 
     /// 动画时长
     public var duration: TimeInterval = 0.25
@@ -63,7 +64,11 @@ open class TransitionManager: NSObject {
     var transitionStyle: ModalStyle = .autoModal
     public unowned let showViewController: WQLayoutController
 
-    public var context: ModalContext?
+//    public var context: ModalContext?
+    lazy var context: ModalContext = {
+        let ctx = ModalContext(self.showViewController)
+        return ctx
+    }()
 //    public let preprocessor: TransitionAnimationPreprocessor
     
 //    var width: CGFloat = .nan
@@ -73,11 +78,15 @@ open class TransitionManager: NSObject {
 //        self.preprocessor = preprocessor
         super.init()
     }
+    func show() {
+        
+//        context?.show(in: fromViewController, animated: <#T##Bool#>, completion: <#T##ModalContext.Completion?##ModalContext.Completion?##() -> Void#>)
+    }
     
     /// 默认为View的宽度
-    public func setPanGesture(_ pan: UIPanGestureRecognizer, direction: DrivenDirection, moveWidth: CGFloat? = nil) {
-//        pan.addTarget(self, action: #selector(handlePanGesture(_:)))
-    } 
+//    public func setPanGesture(_ pan: UIPanGestureRecognizer, direction: DrivenDirection, moveWidth: CGFloat? = nil) {
+////        pan.addTarget(self, action: #selector(handlePanGesture(_:)))
+//    } 
 }
 public extension TransitionManager {
 //    @objc
