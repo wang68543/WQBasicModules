@@ -12,8 +12,6 @@ import UIKit
  */
 public class WQLayoutController: UIViewController {
     
-    
-    
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var shouldEnableLifecycle: Bool = false
     

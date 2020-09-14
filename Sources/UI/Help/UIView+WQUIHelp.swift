@@ -12,31 +12,52 @@ public extension WQModules where Base: UIView {
 //    var subtextFields: [textFieldView] {
 //        return self.base.subtextFields
 //    }
-    var presenter: UIViewController? {
-        return self.base.presenter
+//    var presenter: UIViewController? {
+//        return self.base.presenter
+//    }
+    var viewController: UIViewController? {
+        return self.base.viewController
     }
 }
 extension UIView {
-    /// 当前View所在的控制器
-    var presenter: UIViewController? {
-        var nextReponder: UIResponder? = self
-        repeat {
-            nextReponder = nextReponder?.next
-            if nextReponder is UIViewController {
-                if let tabBar = nextReponder as? UITabBarController {
+    var viewController: UIViewController? {
+        var topView = self
+        while let view = self.superview { topView = view }
+        if let nextResponder = topView.next {
+            if let controller = nextResponder as? UIViewController {
+                if let tabBar = controller as? UITabBarController {
                     return tabBar.selectedViewController
-                } else if let nav = nextReponder as? UINavigationController {
+                } else if let nav = controller as? UINavigationController {
                     return nav.topViewController
                 }
-                return nextReponder as? UIViewController
+                return controller
             }
-        } while (nextReponder != nil)
-        
+        } else if let window = topView as? UIWindow {
+            return window.rootViewController
+        }
         return nil
+        
     }
+//    /// 当前View所在的控制器
+//    var presenter: UIViewController? {
+//        var nextReponder: UIResponder? = self
+//        repeat {
+//            nextReponder = nextReponder?.next
+//            if nextReponder is UIViewController {
+//                if let tabBar = nextReponder as? UITabBarController {
+//                    return tabBar.selectedViewController
+//                } else if let nav = nextReponder as? UINavigationController {
+//                    return nav.topViewController
+//                }
+//                return nextReponder as? UIViewController
+//            }
+//        } while (nextReponder != nil)
+//
+//        return nil
+//    }
     /// 获取控制器提前设置的keyboardManager
     public var keyboardManager: WQKeyboardManager? {
-        return self.presenter?.keyboardManager
+        return self.viewController?.keyboardManager
     }
 }
 extension UIView {
