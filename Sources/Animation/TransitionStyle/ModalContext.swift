@@ -35,6 +35,8 @@ open class ModalContext: NSObject {
     open var isInteracting: Bool = false
     /// 如果使用Spring动画 就禁止交互动画
     open var isSpring: Bool = false
+    /// 转场动画承载View
+    public private(set) weak var transitioningContainerView: UIView?
     
     /// 初始化转场场景
     /// - Parameters:
@@ -52,7 +54,26 @@ open class ModalContext: NSObject {
     open func show(in viewController: UIViewController?, animated flag: Bool, completion: Completion? = nil) {
         self.fromViewController = viewController
     }
-     
+    
+    /// 在开始显示动画之前 提前准备一些动作
+    open func prepareShow() {
+        
+    }
+    
+    /// 显示动画
+    /// - Parameter completion: 动画完成回调
+    open func showAnimation(_ completion: Completion) {
+        
+    }
+    /// 在开始隐藏动画之前 提前准备一些动作
+    open func prepareHide() {
+        
+    }
+    /// 隐藏动画
+    /// - Parameter completion: 动画完成
+    open func hideAnimation(_ completion: Completion) {
+        
+    } 
     
 }
 

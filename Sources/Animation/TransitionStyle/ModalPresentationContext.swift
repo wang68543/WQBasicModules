@@ -19,6 +19,8 @@ open class ModalPresentationContext: ModalContext {
     
     public override init(_ viewController: WQLayoutController) {
         super.init(viewController)
+        viewController.modalPresentationStyle = .custom
+        viewController.transitioningDelegate = self
     }
     
     /// 开始当前的ViewController转场动画
@@ -33,6 +35,9 @@ open class ModalPresentationContext: ModalContext {
     public override func dismiss(animated flag: Bool, completion: ModalContext.Completion? = nil) {
         showViewController.dismiss(animated: flag, completion: completion)
     }
+    
+    
+    
 }
 extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
@@ -57,6 +62,8 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         return self.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        let fromVc = transitionContext.viewController(forKey: .from)
+        let toVc = transitionContext.viewController(forKey: .to)
         
     }
 //    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {

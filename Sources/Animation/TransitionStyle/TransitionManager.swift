@@ -66,7 +66,9 @@ open class TransitionManager: NSObject {
 
 //    public var context: ModalContext?
     lazy var context: ModalContext = {
-        let ctx = ModalContext(self.showViewController)
+        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
+            fatalError("请先设置ModalStyle")
+        }
         return ctx
     }()
 //    public let preprocessor: TransitionAnimationPreprocessor
@@ -79,10 +81,17 @@ open class TransitionManager: NSObject {
         super.init()
     }
     func show() {
+        self.transitionStyle = .modalSystem
         
+//        context.show(in: <#T##UIViewController?#>, animated: <#T##Bool#>)
 //        context?.show(in: fromViewController, animated: <#T##Bool#>, completion: <#T##ModalContext.Completion?##ModalContext.Completion?##() -> Void#>)
     }
-    
+    func alert(with width: CGFloat, height: CGFloat) {
+        
+    }
+    func sheet(with width: CGFloat, height: CGFloat, shouldMarginBottom: Bool) {
+        
+    }
     /// 默认为View的宽度
 //    public func setPanGesture(_ pan: UIPanGestureRecognizer, direction: DrivenDirection, moveWidth: CGFloat? = nil) {
 ////        pan.addTarget(self, action: #selector(handlePanGesture(_:)))

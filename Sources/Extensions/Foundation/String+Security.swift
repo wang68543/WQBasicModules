@@ -63,6 +63,13 @@ public extension String {
         let result = string(fromBytes: digest, length: len)
         return lower ? result.lowercased() : result
     }
+//    func sha1() -> String {
+//        guard let data = cString(using: .utf8) else { return String() }
+//        var digest = [UInt8](repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
+//        CC_SHA1(data, CC_LONG(data.count), &digest)
+//        let hexBytes = digest.map { String(format: "%02hhx", $0) }
+//        return hexBytes.joined(separator: "")
+//    }
     func sha256String(lower: Bool = true) -> String {
       guard let utf8 = cString(using: .utf8) else { return String() }
       let len = Int(CC_SHA256_DIGEST_LENGTH)
