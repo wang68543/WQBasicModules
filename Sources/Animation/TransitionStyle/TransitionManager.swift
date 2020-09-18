@@ -52,16 +52,14 @@ open class TransitionManager: NSObject {
     /// showing -> hide的时候 显示
     public var snapShotHideViews: [UIView] = []
     
-    public weak var delegate: TransitionManagerDelegate?
+//    public weak var delegate: TransitionManagerDelegate?
 
     /// 动画时长
-    public var duration: TimeInterval = 0.25
+//    public var duration: TimeInterval = 0.25
 
     public weak var fromViewController: UIViewController?
 
-//    public internal(set) var containerWindow: WQTransitionWindow?
-
-    var transitionStyle: ModalStyle = .autoModal
+    public internal(set) var transitionStyle: ModalStyle = .autoModal
     public unowned let showViewController: WQLayoutController
 
 //    public var context: ModalContext?
@@ -80,12 +78,26 @@ open class TransitionManager: NSObject {
 //        self.preprocessor = preprocessor
         super.init()
     }
-    func show() {
-        self.transitionStyle = .modalSystem
+    func prepareShow() {
+        UIView.performWithoutAnimation {
+            self.readyShowStates.forEach { (instance, values) in
+                values.forEach { value in
+                    value.setup(instance, state: .readyToShow)
+                }
+            }
+        }
+    }
+    
+    func show(_ flag: Bool, completion: TransitionManager.Completion? = nil) {
+        self.prepareShow()
         
-//        context.show(in: <#T##UIViewController?#>, animated: <#T##Bool#>)
+//        context.show(in: T##UIViewController?, animated: <#T##Bool#>)
 //        context?.show(in: fromViewController, animated: <#T##Bool#>, completion: <#T##ModalContext.Completion?##ModalContext.Completion?##() -> Void#>)
     }
+    func hide(_ flag: Bool, completion: (() -> Void)? = nil) {
+        
+    }
+    
     func alert(with width: CGFloat, height: CGFloat) {
         
     }

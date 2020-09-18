@@ -48,7 +48,7 @@ open class ModalContext: NSObject {
     }
     
     open func dismiss(animated flag: Bool, completion: Completion? = nil) {
-        
+         
     }
     
     open func show(in viewController: UIViewController?, animated flag: Bool, completion: Completion? = nil) {
@@ -95,6 +95,7 @@ public extension ModalContext {
         case .modalPresentWithNavRoot:
             return ModalPresentWithNavRootContext(viewController)
         case .autoModal:
+            
             return nil
         }
     }

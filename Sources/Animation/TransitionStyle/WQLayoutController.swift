@@ -20,65 +20,58 @@ public class WQLayoutController: UIViewController {
        return TransitionManager(self)
     }()
     
-    public var modalContext: ModalContext?
+//    public var modalContext: ModalContext?
       
     internal func setup() {
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
         self.view.addSubview(self.container)
     }
-    
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
-    
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-    }
-    public override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    public override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    public override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-    }
-    
+     
+     
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         dimmingView.frame = self.view.bounds
-    }
-    
-    /// 这里的尺寸是跟随父View的尺寸的 
-    public func show(in viewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+         
         
     }
-    
-    public func show(withSystemPrensention presenter: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        let viewController = presenter ?? wm_topVisibleViewController()
-        self.show(fromViewController: viewController, animated: flag, style: .modalSystem, completion: completion)
+    public func modal(in controller: UIViewController?, animated flag: Bool, style: ModalStyle = .autoModal, completion: TransitionManager.Completion? = nil) {
+        modalManager.fromViewController = controller
+        modalManager.transitionStyle = style
+
+        modalManager.show(flag, completion: completion)
     }
-    public func show(inWindow fromViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        let viewController = fromViewController ?? wm_topVisibleViewController()
-        self.show(fromViewController: viewController, animated: flag, style: .modalInWindow, completion: completion)
-    }
-    public func show(inParent parentViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-        guard let fromViewController = parentViewController ?? wm_topVisibleViewController() ?? UIApplication.shared.keyWindow?.rootViewController else {
-            fatalError("当前没有可显示的窗口")
-        }
-        self.show(fromViewController: fromViewController, animated: flag, style: .modalInParent, completion: completion)
-    }
-    
-    private func show(fromViewController: UIViewController?, animated flag: Bool, style: ModalStyle, completion: (() -> Void)? = nil) {
-        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: style) }
-        modalContext?.show(in: fromViewController, animated: flag, completion: completion)
-    }
-    
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        modalContext?.dismiss(animated: flag, completion: completion)
+        modalManager.hide(flag, completion: completion)
+//        modalContext?.dismiss(animated: flag, completion: completion)
     }
+    
+//    /// 这里的尺寸是跟随父View的尺寸的
+//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+//
+//    }
+//
+//    public func show(withSystemPrensention presenter: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+//        let viewController = presenter ?? wm_topVisibleViewController()
+//        self.show(fromViewController: viewController, animated: flag, style: .modalSystem, completion: completion)
+//    }
+//    public func show(inWindow fromViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+//        let viewController = fromViewController ?? wm_topVisibleViewController()
+//        self.show(fromViewController: viewController, animated: flag, style: .modalInWindow, completion: completion)
+//    }
+//    public func show(inParent parentViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
+//        guard let fromViewController = parentViewController ?? wm_topVisibleViewController() ?? UIApplication.shared.keyWindow?.rootViewController else {
+//            fatalError("当前没有可显示的窗口")
+//        }
+//        self.show(fromViewController: fromViewController, animated: flag, style: .modalInParent, completion: completion)
+//    }
+//
+//    private func show(fromViewController: UIViewController?, animated flag: Bool, style: ModalStyle, completion: (() -> Void)? = nil) {
+//        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: style) }
+//        modalContext?.show(in: fromViewController, animated: flag, completion: completion)
+//    }
+    
+    
     // MARK: -- -UI属性
     internal lazy var dimmingView: UIView = {
        let diming = UIView()
@@ -112,10 +105,8 @@ public class WQLayoutController: UIViewController {
     
 }
 
-//extension WQLayoutContainerViewController {
-//    @objc func tapBackgroundAction(_ tapGR: UITapGestureRecognizer) {
+//public extension WQLayoutController {
 //
-//    }
 //}
 public class WQContainerView: UIView {
     public override func addSubview(_ view: UIView) {
