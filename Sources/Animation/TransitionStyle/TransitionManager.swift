@@ -9,17 +9,17 @@ import Foundation
 
 
 //public enum 
-public protocol TransitionManagerDelegate: NSObjectProtocol {
-    func transitionManager(prepare manager: TransitionManager)
-
-    /// from to 始终是相对于
-    func transitionManager(willTransition manager: TransitionManager, completion: TransitionManager.Completion)
-
-//    func transitionManager(willHide manager: TransitionManager, completion: TransitionManager.Completion )
-
-    /// 手势交互弹出
-    func transitionManager(shouldShowController manager: TransitionManager) -> UIViewController
-}
+//public protocol TransitionManagerDelegate: NSObjectProtocol {
+//    func transitionManager(prepare manager: TransitionManager)
+//
+//    /// from to 始终是相对于
+//    func transitionManager(willTransition manager: TransitionManager, completion: TransitionManager.Completion)
+//
+////    func transitionManager(willHide manager: TransitionManager, completion: TransitionManager.Completion )
+//
+//    /// 手势交互弹出
+//    func transitionManager(shouldShowController manager: TransitionManager) -> UIViewController
+//}
 
 //public enum TransitionStyle {
 ////    case none //使用系统自带的 动画方式
@@ -43,49 +43,55 @@ public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
 
 open class TransitionManager: NSObject {
     public typealias Completion = ((Bool) -> Void)
+    public internal(set) var state: ModalState = .readyToShow
     
-    public var readyShowStates: WQReferenceStates = [:]
-    public var showingStates: WQReferenceStates = [:]
-    public var dismissStates: WQReferenceStates = [:]
-    /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
-    public var snapShotShowViews: [UIView] = []
-    /// showing -> hide的时候 显示
-    public var snapShotHideViews: [UIView] = []
+    public var states: [ModalState: WQReferenceStates] = [:]
+    /// 当前状态的时候将[UIView]添加到UIView上
+    public var snapShotAttachAnimatorViews:[ModalState: [UIView: [UIView]]] = [:]
+//    /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
+//    public var snapShotShowViews: [UIView] = []
+//    /// showing -> hide的时候 显示
+//    public var snapShotHideViews: [UIView] = []
     
 //    public weak var delegate: TransitionManagerDelegate?
 
     /// 动画时长
-//    public var duration: TimeInterval = 0.25
+    public var duration: TimeInterval = 0.25
 
     public weak var fromViewController: UIViewController?
 
     public internal(set) var transitionStyle: ModalStyle = .autoModal
-    public unowned let showViewController: WQLayoutController
+    public weak var showViewController: WQLayoutController?
 
 //    public var context: ModalContext?
-    lazy var context: ModalContext = {
-        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
-            fatalError("请先设置ModalStyle")
-        }
-        return ctx
-    }()
+//    lazy var context: ModalContext = {
+//        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
+//            fatalError("请先设置ModalStyle")
+//        }
+//        return ctx
+//    }()
+    
+    public var animator: ModalBaseAnimation?
+
+    
+    
 //    public let preprocessor: TransitionAnimationPreprocessor
     
 //    var width: CGFloat = .nan
     
-    public init(_ viewController: WQLayoutController) {
-        self.showViewController = viewController
-//        self.preprocessor = preprocessor
-        super.init()
-    }
+//    public init(_ viewController: WQLayoutController) {
+//        self.showViewController = viewController
+////        self.preprocessor = preprocessor
+//        super.init()
+//    }
     func prepareShow() {
-        UIView.performWithoutAnimation {
-            self.readyShowStates.forEach { (instance, values) in
-                values.forEach { value in
-                    value.setup(instance, state: .readyToShow)
-                }
-            }
-        }
+//        UIView.performWithoutAnimation {
+//            self.readyShowStates.forEach { (instance, values) in
+//                values.forEach { value in
+//                    value.setup(instance, state: .readyToShow)
+//                }
+//            }
+//        }
     }
     
     func show(_ flag: Bool, completion: TransitionManager.Completion? = nil) {
@@ -94,16 +100,20 @@ open class TransitionManager: NSObject {
 //        context.show(in: T##UIViewController?, animated: <#T##Bool#>)
 //        context?.show(in: fromViewController, animated: <#T##Bool#>, completion: <#T##ModalContext.Completion?##ModalContext.Completion?##() -> Void#>)
     }
+    
+    func prepareHide() {
+        
+    }
     func hide(_ flag: Bool, completion: (() -> Void)? = nil) {
         
     }
     
-    func alert(with width: CGFloat, height: CGFloat) {
-        
-    }
-    func sheet(with width: CGFloat, height: CGFloat, shouldMarginBottom: Bool) {
-        
-    }
+//    func alert(with width: CGFloat, height: CGFloat) {
+//
+//    }
+//    func sheet(with width: CGFloat, height: CGFloat, shouldMarginBottom: Bool) {
+//
+//    }
     /// 默认为View的宽度
 //    public func setPanGesture(_ pan: UIPanGestureRecognizer, direction: DrivenDirection, moveWidth: CGFloat? = nil) {
 ////        pan.addTarget(self, action: #selector(handlePanGesture(_:)))
@@ -164,4 +174,14 @@ public extension TransitionManager {
 //            break
 //        }
 //    }
+}
+public extension TransitionManager {
+    subscript(_ state: ModalState) -> WQReferenceStates {
+        set {
+            self.states[state] = newValue
+        }
+        get {
+            return self.states[state] ?? [:]
+        }
+    }
 }

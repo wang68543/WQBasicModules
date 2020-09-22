@@ -6,12 +6,11 @@
 //
 
 import Foundation
-
-
+ 
 public protocol ModalBaseAnimation {
     typealias Completion = (() -> Void)
-    func prepare(show manager: TransitionManager, states: WQReferenceStates)
+    func prepare(show manager: TransitionManager, states: WQReferenceStates, completion: @escaping Completion)
     func show(_ manager: TransitionManager, states: WQReferenceStates, completion: @escaping Completion)
-    func prepare(hide manager: TransitionManager, states: WQReferenceStates)
+    func prepare(hide manager: TransitionManager, states: WQReferenceStates, completion: @escaping Completion)
     func hide(_ manager: TransitionManager, states: WQReferenceStates, completion: @escaping Completion)
 }

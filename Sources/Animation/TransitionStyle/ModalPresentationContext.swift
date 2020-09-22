@@ -62,8 +62,14 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         return self.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        let fromVc = transitionContext.viewController(forKey: .from)
-        let toVc = transitionContext.viewController(forKey: .to)
+        guard let fromVC = transitionContext.viewController(forKey: .from),
+            let toVC = transitionContext.viewController(forKey: .to) else {
+                return
+        }
+        let vcFinalFrame = transitionContext.finalFrame(for: toVC)
+        let isPresented = toVC.presentingViewController === fromVC
+//        let fromVc = transitionContext.viewController(forKey: .from)
+//        let toVc = transitionContext.viewController(forKey: .to)
         
     }
 //    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {

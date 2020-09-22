@@ -33,6 +33,8 @@ public enum ModalState {
     case readyToShow
     /// 显示
     case showing
+    /// 准备隐藏
+    case readyToHide
     ///
     case hide
 }

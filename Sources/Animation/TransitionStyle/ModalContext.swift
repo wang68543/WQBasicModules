@@ -13,14 +13,14 @@ open class ModalContext: NSObject {
     
     public typealias Completion = (() -> Void)
     
-    public var readyShowStates: WQReferenceStates = [:]
-    public var showingStates: WQReferenceStates = [:]
-    public var dismissStates: WQReferenceStates = [:]
+//    public var readyShowStates: WQReferenceStates = [:]
+//    public var showingStates: WQReferenceStates = [:]
+//    public var dismissStates: WQReferenceStates = [:]
      /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
-    public var snapShotShowViews: [UIView] = []
-    /// showing -> hide的时候 显示
-    public var snapShotHideViews: [UIView] = []
-    
+//    public var snapShotShowViews: [UIView] = []
+//    /// showing -> hide的时候 显示
+//    public var snapShotHideViews: [UIView] = []
+//
     
     public unowned let showViewController: WQLayoutController
     
@@ -34,7 +34,7 @@ open class ModalContext: NSObject {
     /// 是否正在交互
     open var isInteracting: Bool = false
     /// 如果使用Spring动画 就禁止交互动画
-    open var isSpring: Bool = false
+//    open var isSpring: Bool = false
     /// 转场动画承载View
     public private(set) weak var transitioningContainerView: UIView?
     

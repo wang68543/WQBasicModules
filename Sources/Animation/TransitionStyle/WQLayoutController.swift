@@ -13,12 +13,12 @@ import UIKit
 public class WQLayoutController: UIViewController {
     
     // viewWillAppear viewWillDisappear viewDidDisappear
-    public var shouldEnableLifecycle: Bool = false
+    public var lifeCycleable: Bool = false
     
-    
-    public lazy var modalManager: TransitionManager = {
-       return TransitionManager(self)
-    }()
+    public lazy var modalManager = TransitionManager()
+//    public lazy var modalManager: TransitionManager = {
+//       return TransitionManager(self)
+//    }()
     
 //    public var modalContext: ModalContext?
       
@@ -36,14 +36,14 @@ public class WQLayoutController: UIViewController {
         
     }
     public func modal(in controller: UIViewController?, animated flag: Bool, style: ModalStyle = .autoModal, completion: TransitionManager.Completion? = nil) {
+        modalManager.showViewController = self
         modalManager.fromViewController = controller
         modalManager.transitionStyle = style
 
         modalManager.show(flag, completion: completion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        modalManager.hide(flag, completion: completion)
-//        modalContext?.dismiss(animated: flag, completion: completion)
+        modalManager.hide(flag, completion: completion) 
     }
     
 //    /// 这里的尺寸是跟随父View的尺寸的
