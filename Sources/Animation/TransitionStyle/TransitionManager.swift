@@ -63,7 +63,7 @@ open class TransitionManager: NSObject {
     public internal(set) var transitionStyle: ModalStyle = .autoModal
     public weak var showViewController: WQLayoutController?
 
-//    public var context: ModalContext?
+    public var context: ModalContext?
 //    lazy var context: ModalContext = {
 //        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
 //            fatalError("请先设置ModalStyle")
@@ -71,7 +71,7 @@ open class TransitionManager: NSObject {
 //        return ctx
 //    }()
     
-    public var animator: ModalBaseAnimation?
+//    public weak var animator: TransitionAnimationPreprocessor?
 
     
     

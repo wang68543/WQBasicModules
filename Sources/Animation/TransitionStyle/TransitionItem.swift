@@ -32,38 +32,11 @@ public class TSReference<Root, Value>: TSReferenceWriteable {
    }
    
 }
+
 public class TSReferenceRect: TSReference<WQLayoutController, CGRect> { }
 public class TSReferenceColor: TSReference<WQLayoutController, UIColor> { }
 public class TSReferenceTransform: TSReference<WQLayoutController, CGAffineTransform> { }
 public class TSReferencePosition: TSReference<WQLayoutController, CGPoint> { }
 public class TSReferenceToggle: TSReference<WQLayoutController, Bool> { }
 public class TSReferenceValue: TSReference<WQLayoutController, CGFloat> { }
-//@dynamicMemberLookup
-//public class TSMutableTransformRefrence: TSReference<CGAffineTransform> {
-//    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<CGAffineTransform, T>) -> T {
-//        get { value[keyPath: keyPath] }
-//        set { value[keyPath: keyPath] = newValue }
-//    }
-//}
-//@dynamicMemberLookup
-//public class TSMutableColorRefrence: TSReference<UIColor> {
-//    public subscript<T>(dynamicMember keyPath: ReferenceWritableKeyPath<UIColor, T>) -> T {
-//        get { value[keyPath: keyPath] }
-//        set { value[keyPath: keyPath] = newValue }
-//    }
-//}
-
-//func addTarget<Value>(_ target: UIViewController, value: TSReference<Value>) {
-//
-//}
-///// 转场的状态
-//public enum TransitionState {
-//    /// 准备显示之前状态
-//    case readyShow
-//    /// 显示
-//    case show
-//    ///
-//    case hide
-//}
-
-
+ 
