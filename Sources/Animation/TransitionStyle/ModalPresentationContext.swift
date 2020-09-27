@@ -22,19 +22,19 @@ open class ModalPresentationContext: ModalContext {
         viewController.modalPresentationStyle = .custom
         viewController.transitioningDelegate = self
     }
-    
-    /// 开始当前的ViewController转场动画
-    /// - Parameters:
-    ///   - viewController: 承载present的viewController
-    public override func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-        super.show(in: viewController, animated: flag, completion: completion)
-        showViewController.transitioningDelegate = self
-        showViewController.modalPresentationStyle = .custom
-        fromViewController?.present(showViewController, animated: flag, completion: completion)
-    }
-    public override func dismiss(animated flag: Bool, completion: ModalContext.Completion? = nil) {
-        showViewController.dismiss(animated: flag, completion: completion)
-    }
+//    
+//    /// 开始当前的ViewController转场动画
+//    /// - Parameters:
+//    ///   - viewController: 承载present的viewController
+//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
+////        super.show(in: viewController, animated: flag, completion: completion)
+//        showViewController.transitioningDelegate = self
+//        showViewController.modalPresentationStyle = .custom
+//        fromViewController?.present(showViewController, animated: flag, completion: completion)
+//    }
+//    public  func dismiss(animated flag: Bool, completion: ModalContext.Completion? = nil) {
+//        showViewController.dismiss(animated: flag, completion: completion)
+//    }
     
     
     

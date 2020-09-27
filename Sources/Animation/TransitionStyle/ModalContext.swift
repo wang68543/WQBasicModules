@@ -39,33 +39,33 @@ open class ModalContext: NSObject {
         super.init()
     }
     
-    open func dismiss(animated flag: Bool, completion: Completion? = nil) {
-         
-    }
-    
-    open func show(in viewController: UIViewController?, animated flag: Bool, completion: Completion? = nil) {
-        self.fromViewController = viewController
-    }
-    
-    /// 在开始显示动画之前 提前准备一些动作
-    open func prepareShow() {
-        
-    }
-    
-    /// 显示动画
-    /// - Parameter completion: 动画完成回调
-    open func showAnimation(_ completion: Completion) {
-        
-    }
-    /// 在开始隐藏动画之前 提前准备一些动作
-    open func prepareHide() {
-        
-    }
-    /// 隐藏动画
-    /// - Parameter completion: 动画完成
-    open func hideAnimation(_ completion: Completion) {
-        
-    } 
+//    open func dismiss(animated flag: Bool, completion: Completion? = nil) {
+//         
+//    }
+//    
+//    open func show(in viewController: UIViewController?, animated flag: Bool, completion: Completion? = nil) {
+//        self.fromViewController = viewController
+//    }
+//    
+//    /// 在开始显示动画之前 提前准备一些动作
+//    open func prepareShow() {
+//        
+//    }
+//    
+//    /// 显示动画
+//    /// - Parameter completion: 动画完成回调
+//    open func showAnimation(_ completion: Completion) {
+//        
+//    }
+//    /// 在开始隐藏动画之前 提前准备一些动作
+//    open func prepareHide() {
+//        
+//    }
+//    /// 隐藏动画
+//    /// - Parameter completion: 动画完成
+//    open func hideAnimation(_ completion: Completion) {
+//        
+//    } 
     
 }
 

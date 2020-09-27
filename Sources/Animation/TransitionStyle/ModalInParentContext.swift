@@ -17,14 +17,14 @@ open class ModalInParentContext: ModalDrivenContext {
 //        super.init(viewController)
 //    }
     
-    /// 开始当前的ViewController转场动画
-    /// - Parameters:
-    ///   - viewController: 若为nil 查找当前正在显示的最顶层的ViewController
-    ///     viewController 可为TabBarViewController或NavigationViewController
-    open override func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-        super.show(in: viewController, animated: flag, completion: completion)
-        
-    }
+//    /// 开始当前的ViewController转场动画
+//    /// - Parameters:
+//    ///   - viewController: 若为nil 查找当前正在显示的最顶层的ViewController
+//    ///     viewController 可为TabBarViewController或NavigationViewController
+//    open  func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
+//        super.show(in: viewController, animated: flag, completion: completion)
+//        
+//    }
 //    func beiginAnimate(_ states: []) {
 //        UIView.animate(withDuration: self.duration, animations: {
 //

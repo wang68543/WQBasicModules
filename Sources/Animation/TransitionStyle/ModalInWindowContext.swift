@@ -19,10 +19,10 @@ public class ModalInWindowContext: ModalDrivenContext {
         super.init(viewController)
     }
     
-    /// 开始当前的ViewController转场动画
-    /// - Parameters:
-    ///   - viewController: 主要用于转场动画 snapshot
-    public override func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-        super.show(in: viewController, animated: flag, completion: completion)
-    }
+//    /// 开始当前的ViewController转场动画
+//    /// - Parameters:
+//    ///   - viewController: 主要用于转场动画 snapshot
+//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
+//        super.show(in: viewController, animated: flag, completion: completion)
+//    }
 }
