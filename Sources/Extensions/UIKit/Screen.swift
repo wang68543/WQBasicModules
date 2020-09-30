@@ -4,8 +4,8 @@
 //
 //  Created by HuaShengiOS on 2019/2/22.
 //
-
 import Foundation
+#if canImport(UIKit)
 import UIKit
 public struct Screen {
     public static let bounds = UIScreen.main.bounds
@@ -38,3 +38,4 @@ public struct Screen {
         return instets
     }()
 }
+#endif
