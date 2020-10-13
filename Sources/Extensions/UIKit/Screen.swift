@@ -6,7 +6,11 @@
 //
 import Foundation
 #if canImport(UIKit)
+//#if canUse(UIApplication)
+//#if os(iOS)
+//#if targetEnvironment(iOSApplicationExtension)
 import UIKit
+@available(iOSApplicationExtension, unavailable)
 public struct Screen {
     public static let bounds = UIScreen.main.bounds
     public static let size = UIScreen.main.bounds.size
@@ -18,10 +22,10 @@ public struct Screen {
     /// 绘制1像素线条时候的偏移
     public static let lineAdjustOffset = (1 / UIScreen.main.scale) / 2
     
-    /// 屏幕的 周边限制显示区域 (因为这里在非刘海屏上面首次)
+    /// 屏幕的 周边限制显示区域 (因为这里在非刘海屏上面首次) 
     public static let safeAreaInsets: UIEdgeInsets = {
         var instets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-        if #available(iOS 11.0, *) {
+        if #available(iOS 11.0, tvOS 11.0, *) {
             if let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
                 instets = window.safeAreaInsets
                 if instets.top == 0 {
