@@ -109,7 +109,7 @@ class ExampleViewController: UITableViewController {
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
         let appName = UIApplication.shared.displayName
-
+        
 //        self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView

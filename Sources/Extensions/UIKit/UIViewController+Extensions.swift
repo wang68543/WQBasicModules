@@ -4,7 +4,7 @@
 //
 //  Created by WQ on 2019/7/26.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UIViewController {
     /// SwifterSwift: Check if ViewController is onscreen and not hidden.
@@ -13,3 +13,4 @@ public extension UIViewController {
         return isViewLoaded && view.window != nil
     }
 }
+#endif

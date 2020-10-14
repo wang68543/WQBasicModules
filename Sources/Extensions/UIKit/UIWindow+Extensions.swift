@@ -4,7 +4,7 @@
 //
 //  Created by WQ on 2019/6/21.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 // MARK: - Methods
 public extension UIWindow {
@@ -41,3 +41,4 @@ public extension UIWindow {
     }
     
 }
+#endif

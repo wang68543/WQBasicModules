@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 public extension NSAttributedString {
     
     /// label 宽度固定 文字均匀分布
@@ -36,4 +35,4 @@ public extension NSAttributedString {
             self.init(string: string, attributes: attrs)
         }
     }
-}
+}  

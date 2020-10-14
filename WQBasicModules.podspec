@@ -30,6 +30,21 @@ Pod::Spec.new do |s|
   s.source_files  = 'Sources/WQBasicModules.h'
 #  s.swift_version = '4.2'
   s.swift_versions = ['4.0', '4.2', '5.0']
+  s.default_subspec = 'Core'
+  
+  s.subspec 'Core' do |ss|
+      ss.dependency 'WQBasicModules/Function'
+      ss.dependency 'WQBasicModules/Animation'
+      ss.dependency 'WQBasicModules/Extensions'
+      ss.dependency 'WQBasicModules/Tool'
+      ss.dependency 'WQBasicModules/UI'
+  end
+  
+  s.subspec 'AppExtension' do |ss|
+      ss.dependency 'WQBasicModules/Extensions'
+      ss.dependency 'WQBasicModules/Tool'
+  end
+  
   
   s.subspec 'Function' do |ss|
       ss.subspec 'PageViewController' do |sss|
@@ -49,9 +64,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
-        ss.subspec 'TransitionStyle' do |sss|
-            sss.source_files = 'Sources/Animation/TransitionStyle/*.swift'
-        end
+#        ss.subspec 'TransitionStyle' do |sss|
+#            sss.source_files = 'Sources/Animation/TransitionStyle/*.swift'
+#        end
     end
 
     s.subspec 'Extensions' do |ss|

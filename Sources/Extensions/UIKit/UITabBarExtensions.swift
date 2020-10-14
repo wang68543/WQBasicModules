@@ -4,7 +4,7 @@
 //
 //  Created by iMacHuaSheng on 2020/7/30.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UITabBar {
     
@@ -61,3 +61,4 @@ extension UITabBar {
 
     }
 }
+#endif

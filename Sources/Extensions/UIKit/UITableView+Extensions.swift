@@ -4,7 +4,7 @@
 //
 //  Created by WQ on 2019/12/30.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import UIKit
 public extension UITableView {
     /// 隐藏最后一个的分割线
@@ -60,3 +60,4 @@ public extension UITableView {
         
     }
 }
+#endif

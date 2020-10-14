@@ -1,10 +1,6 @@
 PODS:
   - WQBasicModules (0.3.3):
-    - WQBasicModules/Animation (= 0.3.3)
-    - WQBasicModules/Extensions (= 0.3.3)
-    - WQBasicModules/Function (= 0.3.3)
-    - WQBasicModules/Tool (= 0.3.3)
-    - WQBasicModules/UI (= 0.3.3)
+    - WQBasicModules/Core (= 0.3.3)
   - WQBasicModules/Animation (0.3.3):
     - WQBasicModules/Animation/Layer (= 0.3.3)
     - WQBasicModules/Animation/Transitioning (= 0.3.3)
@@ -17,6 +13,12 @@ PODS:
   - WQBasicModules/Animation/TransitionStyle (0.3.3)
   - WQBasicModules/Animation/Views (0.3.3):
     - WQBasicModules/Animation/Layer
+  - WQBasicModules/Core (0.3.3):
+    - WQBasicModules/Animation
+    - WQBasicModules/Extensions
+    - WQBasicModules/Function
+    - WQBasicModules/Tool
+    - WQBasicModules/UI
   - WQBasicModules/Extensions (0.3.3):
     - WQBasicModules/Extensions/CoreGrapics (= 0.3.3)
     - WQBasicModules/Extensions/Date (= 0.3.3)
@@ -60,8 +62,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 2cf6957d9d9117631243164eaf925d37f6d13eb3
+  WQBasicModules: db5db4a90d80e30f6e440532e1dedd4c821527b7
 
 PODFILE CHECKSUM: 8a6102617853fcb4a21f044d637653b0c35c1d12
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

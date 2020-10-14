@@ -5,6 +5,7 @@
 //  Created by WangQiang on 2018/5/18.
 //
 
+#if canImport(UIKit) && !os(watchOS)
 import UIKit
 
 // MARK: - --clip
@@ -221,3 +222,4 @@ fileprivate extension UITableView {
         return sectionHeight
     }
 }
+#endif

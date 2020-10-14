@@ -24,7 +24,39 @@
     "4.2",
     "5.0"
   ],
+  "default_subspecs": "Core",
   "subspecs": [
+    {
+      "name": "Core",
+      "dependencies": {
+        "WQBasicModules/Function": [
+
+        ],
+        "WQBasicModules/Animation": [
+
+        ],
+        "WQBasicModules/Extensions": [
+
+        ],
+        "WQBasicModules/Tool": [
+
+        ],
+        "WQBasicModules/UI": [
+
+        ]
+      }
+    },
+    {
+      "name": "AppExtension",
+      "dependencies": {
+        "WQBasicModules/Extensions": [
+
+        ],
+        "WQBasicModules/Tool": [
+
+        ]
+      }
+    },
     {
       "name": "Function",
       "subspecs": [

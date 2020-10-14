@@ -4,7 +4,7 @@
 //
 //  Created by WQ on 2019/11/28.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UINavigationBar {
     struct AssociatedKeys {
@@ -74,3 +74,4 @@ public extension UINavigationBar {
     }
 
 }
+#endif
