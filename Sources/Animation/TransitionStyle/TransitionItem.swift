@@ -6,14 +6,6 @@
 //
 
 import Foundation
-//public protocol TransitionItem {
-//    associatedtype T
-//    var keyPath: PartialKeyPath
-//}
- 
-//public extension NSObjectProtocol where Self: NSObject {
-//
-//}
  
 public protocol TSReferenceWriteable {
     func setup(_ target: Any, state: ModalState)
