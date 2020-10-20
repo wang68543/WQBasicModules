@@ -27,3 +27,9 @@ pod 'WQBasicModules'
 
 WQBasicModules is available under the MIT license. See the LICENSE file for more info.
 # WQBasicModules
+
+### issue
+当多个target使用不同的subspec的时候,请将podfile中的
+```ruby 
+use_frameworks! 改为 use_modular_headers!
+```

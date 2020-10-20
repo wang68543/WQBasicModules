@@ -68,6 +68,28 @@ public class JSONModel {
     }
 }
 
+//public extension Decodable {
+//    static func model(_ data: Data?, decoder: JSONDecoder = JSONDecoder()) throws -> Self? {
+//        guard let value = data else { return nil}
+//        return try? decoder.decode(type(of: Self), from: value)
+//    }
+//}
+public extension Encodable {
+    func data(_ encoder: JSONEncoder = JSONEncoder()) throws -> Data {
+        return try encoder.encode(self)
+    }
+    
+    func jsonString(_ encoder: JSONEncoder = JSONEncoder()) -> String? {
+        do {
+            let data = try self.data(encoder)
+            return String(data: data, encoding: .utf8)
+        } catch let error {
+            debugPrint(error)
+            return nil
+        }
+    }
+}
+
 // MARK: - --解决php从内存读取的时候 数字变为字符串类型
 extension KeyedDecodingContainer {
 

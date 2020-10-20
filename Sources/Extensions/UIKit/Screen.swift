@@ -26,7 +26,12 @@ public struct Screen {
     public static let safeAreaInsets: UIEdgeInsets = {
         var instets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, tvOS 11.0, *) {
-            if let window = UIApplication.shared.delegate?.window ?? UIApplication.shared.windows.last {
+            #if targetEnvironment(macCatalyst)
+            let win = UIApplication.shared.windows.last
+            #else
+            let win = UIApplication.shared.keyWindow
+            #endif
+            if let window = UIApplication.shared.delegate?.window ?? win {
                 instets = window.safeAreaInsets
                 if instets.top == 0 {
                     if instets.bottom > 0 { //刘海屏
