@@ -35,11 +35,14 @@ Pod::Spec.new do |s|
       ss.dependency 'WQBasicModules/Tool'
       ss.dependency 'WQBasicModules/UI'
   end
-#
   s.subspec 'AppExtension' do |ss|
       ss.dependency 'WQBasicModules/Extensions'
-      ss.dependency 'WQBasicModules/Tool' 
+      ss.dependency 'WQBasicModules/Tool'
+      #可以使用此属性替代全局
+#      ss.ios.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   end
+  
+  
   
   
   s.subspec 'Function' do |ss|
