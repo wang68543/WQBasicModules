@@ -16,6 +16,7 @@ import Foundation
  XR/11                6.1 英寸    326 ppi    414*896 pt     828*1792 px     @2x
  XS Max/11 Pro Max    6.5 英寸    458 ppi    621*1344 pt    1242*2688 px    @3x
  */
+
 public enum iDevice {
     case iPhone4s
     case iPhone5_5s_5c_SE

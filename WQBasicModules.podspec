@@ -10,12 +10,7 @@ Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
   s.version          = '0.3.3'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
-
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!
+ 
 
   s.description      = <<-DESC
 日常常用的功能集合, 持续优化更新(包含扩展，工具类以及一些基础框架)
@@ -27,11 +22,12 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '9.0'
-  s.source_files  = 'Sources/WQBasicModules.h'
+#  s.source_files  = 'Sources/WQBasicModules.h'
 #  s.swift_version = '4.2'
-  s.swift_versions = ['4.0', '4.2', '5.0']
+  s.swift_versions = ['4.0', '4.2', '5.0', '5.1' ,'5.2', '5.3']
   s.default_subspec = 'Core'
-  
+#  s.source_files = 'Sources/**/**/*.swift'
+  s.requires_arc = true
   s.subspec 'Core' do |ss|
       ss.dependency 'WQBasicModules/Function'
       ss.dependency 'WQBasicModules/Animation'
@@ -39,11 +35,14 @@ Pod::Spec.new do |s|
       ss.dependency 'WQBasicModules/Tool'
       ss.dependency 'WQBasicModules/UI'
   end
-  
   s.subspec 'AppExtension' do |ss|
       ss.dependency 'WQBasicModules/Extensions'
       ss.dependency 'WQBasicModules/Tool'
+      #可以使用此属性替代全局
+#      ss.ios.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
   end
+  
+  
   
   
   s.subspec 'Function' do |ss|
@@ -64,9 +63,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
-#        ss.subspec 'TransitionStyle' do |sss|
-#            sss.source_files = 'Sources/Animation/TransitionStyle/*.swift'
-#        end
+        ss.subspec 'TransitionStyle' do |sss|
+            sss.source_files = 'Sources/Animation/TransitionStyle/*.swift'
+        end
     end
 
     s.subspec 'Extensions' do |ss|
@@ -81,7 +80,7 @@ Pod::Spec.new do |s|
             sss.source_files = 'Sources/Extensions/UIKit/*.swift'
         end
         ss.subspec 'Foundation' do |sss|
-            sss.source_files = 'Sources/Extensions/Foundation/*.{swift,h,m}'
+            sss.source_files = 'Sources/Extensions/Foundation/*.swift'
         end
         ss.subspec 'Date' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Foundation'

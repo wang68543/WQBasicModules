@@ -18,22 +18,22 @@ public extension Data {
         digest.deallocate()
         return result
     } 
-    @available(*, deprecated, message: "use encodedDES")
-    func DES(encodeWithKey key: String) -> Data? {
-        return (self as NSData).desEncode(key)
-    }
-    @available(*, deprecated, message: "use decodedDES")
-    func DES(decodeWithKey key: String) -> Data? {
-         return (self as NSData).desDecode(key)
-    }
-    @available(*, deprecated, message: "use encodedAES256")
-    func AES256(encodeWithKey key: String) -> Data? {
-        return (self as NSData).aes256Encode(key)
-    }
-    @available(*, deprecated, message: "use decodedAES256")
-    func AES256(decodeWithKey key: String) -> Data? {
-         return (self as NSData).aes256Decode(key)
-    }
+//    @available(*, deprecated, message: "use encodedDES")
+//    func DES(encodeWithKey key: String) -> Data? {
+//        return (self as NSData).desEncode(key)
+//    }
+//    @available(*, deprecated, message: "use decodedDES")
+//    func DES(decodeWithKey key: String) -> Data? {
+//         return (self as NSData).desDecode(key)
+//    }
+//    @available(*, deprecated, message: "use encodedAES256")
+//    func AES256(encodeWithKey key: String) -> Data? {
+//        return (self as NSData).aes256Encode(key)
+//    }
+//    @available(*, deprecated, message: "use decodedAES256")
+//    func AES256(decodeWithKey key: String) -> Data? {
+//         return (self as NSData).aes256Decode(key)
+//    }
     
 }
 

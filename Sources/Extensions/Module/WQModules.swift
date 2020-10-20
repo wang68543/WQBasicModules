@@ -26,5 +26,9 @@ public extension WQModulesCompatible {
         return WQModules(self)
     }
 }
+#if canImport(UIKit)
+@available(iOSApplicationExtension, unavailable)
 extension UIView: WQModulesCompatible { }
+@available(iOSApplicationExtension, unavailable)
 extension UIViewController: WQModulesCompatible { }
+#endif
