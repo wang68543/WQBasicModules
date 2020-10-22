@@ -86,6 +86,7 @@ public extension String {
         let result = string(fromBytes: digest, length: len)
         return lower ? result.lowercased() : result
     }
+    ///https://github.com/laevandus/CommonCryptoExample
     func hmacString(_ algorithm: CCAlgorithmType, key: String) -> String {
         guard let cKey = cString(using: .utf8),
             let cData = self.cString(using: .utf8) else {
