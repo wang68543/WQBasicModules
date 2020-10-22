@@ -31,6 +31,7 @@ public struct Screen {
             #else
             let win = UIApplication.shared.keyWindow
             #endif
+            /// 12 Pro Max/12 Pro/12 top: 47, 12 Mini top: 50
             if let window = UIApplication.shared.delegate?.window ?? win {
                 instets = window.safeAreaInsets
                 if instets.top == 0 {

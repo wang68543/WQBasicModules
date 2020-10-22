@@ -74,47 +74,33 @@ public class JSONModel {
 //        return try? decoder.decode(type(of: Self), from: value)
 //    }
 //}
-public extension Encodable {
-    func data(_ encoder: JSONEncoder = JSONEncoder()) throws -> Data {
-        return try encoder.encode(self)
-    }
-    
-    func jsonString(_ encoder: JSONEncoder = JSONEncoder()) -> String? {
-        do {
-            let data = try self.data(encoder)
-            return String(data: data, encoding: .utf8)
-        } catch let error {
-            debugPrint(error)
-            return nil
-        }
-    }
-}
+
 
 // MARK: - --解决php从内存读取的时候 数字变为字符串类型
-extension KeyedDecodingContainer {
-
-    public func decode<T: Decodable>(_ key: Key, as type: T.Type = T.self) throws -> T {
-        return try self.decode(type, forKey: key)
-    }
-    public func decodeIfPresent<T: Decodable>(_ key: KeyedDecodingContainer.Key) throws -> T? {
-        return try decodeIfPresent(T.self, forKey: key)
-    }
-    public func decodeIfPresent(_ type: Int.Type, forKey key: K) throws -> Int? {
-        if let int = try? decode(type, forKey: key) {
-            return int
-        } else if let string = try? decode(String.self, forKey: key) {
-            return Int(string)
-        } else {
-            return nil
-        }
-    }
-    public func decodeIfPresent(_ type: Double.Type, forKey key: K) throws -> Double? {
-        if let double = try? decode(type, forKey: key) {
-            return double
-        } else if let string = try? decode(String.self, forKey: key) {
-            return Double(string)
-        } else {
-            return nil
-        }
-    }
-}
+//extension KeyedDecodingContainer {
+//
+//    public func decode<T: Decodable>(_ key: Key, as type: T.Type = T.self) throws -> T {
+//        return try self.decode(type, forKey: key)
+//    }
+//    public func decodeIfPresent<T: Decodable>(_ key: KeyedDecodingContainer.Key) throws -> T? {
+//        return try decodeIfPresent(T.self, forKey: key)
+//    }
+//    public func decodeIfPresent(_ type: Int.Type, forKey key: K) throws -> Int? {
+//        if let int = try? decode(type, forKey: key) {
+//            return int
+//        } else if let string = try? decode(String.self, forKey: key) {
+//            return Int(string)
+//        } else {
+//            return nil
+//        }
+//    }
+//    public func decodeIfPresent(_ type: Double.Type, forKey key: K) throws -> Double? {
+//        if let double = try? decode(type, forKey: key) {
+//            return double
+//        } else if let string = try? decode(String.self, forKey: key) {
+//            return Double(string)
+//        } else {
+//            return nil
+//        }
+//    }
+//}
