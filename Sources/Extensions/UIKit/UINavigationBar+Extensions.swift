@@ -13,7 +13,10 @@ public extension UINavigationBar {
     /// 隐藏导航栏 KVC
     var isHiddenShadow: Bool {
         set {
-            self.setValue(newValue, forKey: "hidesShadow")
+            if let value = value(forKey: "hidesShadow") as? Bool,
+              value != newValue {
+                self.setValue(newValue, forKey: "hidesShadow")
+            } 
         }
         get {
             return (self.value(forKey: "hidesShadow") as? Bool) ?? false 

@@ -21,22 +21,23 @@ public extension WQModules where Base: UIView {
 }
 extension UIView {
     var viewController: UIViewController? {
-        var topView = self
-        while let view = self.superview { topView = view }
-        if let nextResponder = topView.next {
-            if let controller = nextResponder as? UIViewController {
-                if let tabBar = controller as? UITabBarController {
-                    return tabBar.selectedViewController
-                } else if let nav = controller as? UINavigationController {
-                    return nav.topViewController
-                }
+        var topResponser: UIResponder = self
+        while let nextResponser = topResponser.next {
+            if let window = nextResponser as? UIWindow {
+                return window.rootViewController
+            } else if nextResponser is UIView {
+                topResponser = nextResponser
+            } else if let controller = nextResponser as? UIViewController {
                 return controller
+            } else {
+                return nil
             }
-        } else if let window = topView as? UIWindow {
-            return window.rootViewController
         }
-        return nil
-        
+        if let window = self as? UIWindow {
+            return window.rootViewController
+        } else {
+            return nil
+        } 
     }
 //    /// 当前View所在的控制器
 //    var presenter: UIViewController? {
