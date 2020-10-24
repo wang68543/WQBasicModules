@@ -28,6 +28,8 @@ Pod::Spec.new do |s|
   s.default_subspec = 'Core'
 #  s.source_files = 'Sources/**/**/*.swift'
   s.requires_arc = true
+  
+  
   s.subspec 'Core' do |ss|
       ss.dependency 'WQBasicModules/Function'
       ss.dependency 'WQBasicModules/Animation'
@@ -35,6 +37,8 @@ Pod::Spec.new do |s|
       ss.dependency 'WQBasicModules/Tool'
       ss.dependency 'WQBasicModules/UI'
   end
+  
+  
   s.subspec 'AppExtension' do |ss|
       ss.dependency 'WQBasicModules/Extensions'
       ss.dependency 'WQBasicModules/Tool'
@@ -44,6 +48,11 @@ Pod::Spec.new do |s|
   
   
   
+  s.subspec 'FunModule' do |ss|
+      ss.subspec 'ImagePicker' do |sss|
+          sss.source_files = 'Sources/FunModule/ImagePicker/*.swift'
+      end
+  end
   
   s.subspec 'Function' do |ss|
       ss.subspec 'PageViewController' do |sss|

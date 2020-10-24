@@ -61,6 +61,15 @@
       }
     },
     {
+      "name": "FunModule",
+      "subspecs": [
+        {
+          "name": "ImagePicker",
+          "source_files": "Sources/FunModule/ImagePicker/*.swift"
+        }
+      ]
+    },
+    {
       "name": "Function",
       "subspecs": [
         {
@@ -148,10 +157,6 @@
         {
           "name": "Cache",
           "source_files": "Sources/Tool/Cache/*.swift"
-        },
-        {
-          "name": "JsonCodable",
-          "source_files": "Sources/Tool/JsonCodable/*.swift"
         }
       ]
     },
