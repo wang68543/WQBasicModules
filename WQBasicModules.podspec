@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   
   
   s.subspec 'Core' do |ss|
-      ss.dependency 'WQBasicModules/Function'
+#      ss.dependency 'WQBasicModules/Function'
       ss.dependency 'WQBasicModules/Animation'
       ss.dependency 'WQBasicModules/Extensions'
       ss.dependency 'WQBasicModules/Tool'
@@ -54,11 +54,11 @@ Pod::Spec.new do |s|
       end
   end
   
-  s.subspec 'Function' do |ss|
-      ss.subspec 'PageViewController' do |sss|
-          sss.source_files = 'Sources/Function/PageViewController/*.swift'
-      end
-  end
+#  s.subspec 'Function' do |ss|
+#      ss.subspec 'PageViewController' do |sss|
+#          sss.source_files = 'Sources/Function/PageViewController/*.swift'
+#      end
+#  end
     s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'Sources/Animation/Layer/*.swift'
