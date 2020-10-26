@@ -48,11 +48,11 @@ public extension UIViewController {
         }
     }
     
-    func showSheetSelectImage(_ completion: @escaping PickerCompletion) {
+    func showSheetSelectImage(_ config: ((UIImagePickerController)->Void)? = nil, completion: @escaping PickerCompletion) {
          self.requestImagePickerAuthorization { [weak self] status  in
             guard let `self` = self else { return }
             if status.isAvailable {
-                self.presentImageSelector(completion)
+                self.presentImageSelector(config: config, completion: completion)
             } else {
                 let fail = PickerResult.failure(NSError(domain: "selectImage", code: UIViewController.imagePickerAuthorizationDeniedCode, userInfo: ["status": status, NSLocalizedDescriptionKey: "请先授权访问权限"]))
                 completion(fail)
@@ -60,13 +60,13 @@ public extension UIViewController {
         }
     }
     
-    private func presentImageSelector(_ completion: @escaping PickerCompletion) {
+    private func presentImageSelector(config: ((UIImagePickerController)->Void)?, completion: @escaping PickerCompletion) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let action1 = UIAlertAction(title: "相机", style: .default) { action in
-            self.showImagePicker(.camera, completion: completion)
+            self.showImagePicker(.camera, config: config, completion: completion)
         }
         let action2 = UIAlertAction(title: "相册", style: .default) { action in
-            self.showImagePicker(.photoLibrary, completion: completion)
+            self.showImagePicker(.photoLibrary, config: config, completion: completion)
         }
         let action3 = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         actionSheet.addAction(action1)
@@ -75,7 +75,7 @@ public extension UIViewController {
         self.present(actionSheet, animated: true, completion: nil)
     }
     
-    func showImagePicker(_ type: UIImagePickerController.SourceType, completion: @escaping PickerCompletion) {
+    func showImagePicker(_ type: UIImagePickerController.SourceType, config: ((UIImagePickerController)->Void)? = nil, completion: @escaping PickerCompletion) {
         guard UIImagePickerController.isSourceTypeAvailable(type) else {
             let fail = PickerResult.failure(NSError(domain: "selectImage", code: -2000, userInfo: ["type": type, NSLocalizedDescriptionKey: "当前设备不支持此功能"]))
             completion(fail)
