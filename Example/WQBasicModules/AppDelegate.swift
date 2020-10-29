@@ -12,6 +12,7 @@ import CoreLocation
 
 // Swift宏定义
 // https://www.cnblogs.com/sundaysme/p/11933754.html
+// https://www.macbed.com/navicat-premium/ 软件地址
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?

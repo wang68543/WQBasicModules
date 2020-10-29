@@ -32,9 +32,6 @@
     {
       "name": "Core",
       "dependencies": {
-        "WQBasicModules/Function": [
-
-        ],
         "WQBasicModules/Animation": [
 
         ],
@@ -66,15 +63,6 @@
         {
           "name": "ImagePicker",
           "source_files": "Sources/FunModule/ImagePicker/*.swift"
-        }
-      ]
-    },
-    {
-      "name": "Function",
-      "subspecs": [
-        {
-          "name": "PageViewController",
-          "source_files": "Sources/Function/PageViewController/*.swift"
         }
       ]
     },
@@ -189,6 +177,10 @@
         {
           "name": "FlowLayout",
           "source_files": "Sources/UI/FlowLayout/*.swift"
+        },
+        {
+          "name": "Gesture",
+          "source_files": "Sources/UI/Gesture/*.swift"
         }
       ]
     }
