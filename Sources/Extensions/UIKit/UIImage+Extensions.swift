@@ -27,7 +27,6 @@ public extension UIImage {
             self.init()
             return
         }
-        
         self.init(cgImage: aCgImage)
     }
     
@@ -272,6 +271,7 @@ public extension UIImage {
      }
 }
 
+/// 获取视频
 public extension UIImage {
     
     /// 获取视频的某一帧的图片
@@ -311,3 +311,104 @@ public extension UIImage {
         }
     }
 }
+
+/// 图片缩放/裁剪
+public extension UIImage {
+    /// 可异步绘制 也可提前绘制解码(可异步)
+    /// - Parameters:
+    ///   - size: 目标size
+    ///   - opaque: 是否是透明
+    ///   - contentMode: 图片缩放模式
+    ///   - clipPath: 裁剪图片
+    /// - Returns: 绘制的图片
+    func render(to size: CGSize,
+                opaque: Bool = false,
+                contentMode: UIView.ContentMode = .scaleToFill,
+                clipPath: UIBezierPath? = nil,
+                clipRule: CGPathFillRule = .evenOdd) -> UIImage? {
+        let rect = self.aspectRatio(size, contentMode: contentMode)
+        if #available(iOS 10.0, *) {
+            let format = UIGraphicsImageRendererFormat()
+            format.opaque = opaque
+            format.scale = UIScreen.main.scale
+            let renderer = UIGraphicsImageRenderer(size: size,format: format)
+            return renderer.image { context in
+                if let path = clipPath?.cgPath {
+                    context.cgContext.beginPath()
+                    context.cgContext.addPath(path)
+                    context.cgContext.closePath()
+                    context.cgContext.clip(using: clipRule)
+                }
+                self.draw(in: rect)
+            }
+        } else {
+            UIGraphicsBeginImageContextWithOptions(size, opaque, UIScreen.main.scale)
+            if let path = clipPath?.cgPath,
+               let context = UIGraphicsGetCurrentContext(){
+                context.beginPath()
+                context.addPath(path)
+                context.closePath()
+                context.clip(using: clipRule)
+            }
+            self.draw(in: rect)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image
+        }
+    }
+    
+    /// 根据不同模式适配宽高比
+    func aspectRatio(_ aspectRatio: CGSize, contentMode: UIView.ContentMode) -> CGRect {
+        guard size.width*size.height != 0 && aspectRatio.height*aspectRatio.width != 0  else {
+            return CGRect.zero
+        }
+        switch contentMode {
+        case .scaleToFill:
+            return CGRect(origin: .zero, size: aspectRatio)
+        case .scaleAspectFit: //按照最小的比例居中
+            let scaleW = aspectRatio.width/size.width
+            let scaleH = aspectRatio.height/size.height
+            let scale = min(scaleW, scaleH)
+            let scaleSize = CGSize(width: size.width*scale, height: size.height*scale)
+            let origin = CGPoint(x: (aspectRatio.width - scaleSize.width) * 0.5, y: (aspectRatio.height - scaleSize.height) * 0.5)
+            return CGRect(origin: origin, size: scaleSize)
+        case .scaleAspectFill: //按照最大的比例居中
+            let scaleW = aspectRatio.width/size.width
+            let scaleH = aspectRatio.height/size.height
+            let scale = max(scaleW, scaleH)
+            let scaleSize = CGSize(width: size.width*scale, height: size.height*scale)
+            let origin = CGPoint(x: (aspectRatio.width - scaleSize.width) * 0.5, y: (aspectRatio.height - scaleSize.height) * 0.5)
+            return CGRect(origin: origin, size: scaleSize)
+        case .center:
+            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: (aspectRatio.height - size.height) * 0.5)
+            return CGRect(origin: origin, size: size)
+        case .top:
+            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: 0.0)
+            return CGRect(origin: origin, size: size)
+        case .bottom:
+            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: aspectRatio.height - size.height)
+            return CGRect(origin: origin, size: size)
+        case .left:
+            let origin = CGPoint(x: 0, y: (aspectRatio.height - size.height) * 0.5)
+            return CGRect(origin: origin, size: size)
+        case .right:
+            let origin = CGPoint(x: aspectRatio.width - size.width, y: (aspectRatio.height - size.height) * 0.5)
+            return CGRect(origin: origin, size: size)
+        case .topLeft:
+            return CGRect(origin: .zero, size: size)
+        case .topRight:
+            let origin = CGPoint(x: aspectRatio.width - size.width, y: 0.0)
+            return CGRect(origin: origin, size: size)
+        case .bottomLeft:
+            let origin = CGPoint(x: 0.0, y: aspectRatio.height - size.height)
+            return CGRect(origin: origin, size: size)
+        case .bottomRight:
+            let origin = CGPoint(x: aspectRatio.width - size.width, y: aspectRatio.height - size.height)
+            return CGRect(origin: origin, size: size)
+        default:
+            return .zero
+        }
+    }
+}
+
+
