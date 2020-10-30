@@ -15,9 +15,9 @@ public class ModalInWindowContext: ModalDrivenContext {
        let win = WQModalContainerWindow()
         return win
     }()
-    override init(_ viewController: WQLayoutController) {
-        super.init(viewController)
-    }
+//    override init(_ viewController: WQLayoutController) {
+//        super.init(viewController)
+//    }
     
 //    /// 开始当前的ViewController转场动画
 //    /// - Parameters:

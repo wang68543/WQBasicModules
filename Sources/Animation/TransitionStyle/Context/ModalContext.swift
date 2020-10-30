@@ -17,12 +17,14 @@ open class ModalContext: NSObject {
     public unowned let showViewController: WQLayoutController
     
     public weak var fromViewController: UIViewController?
+    
+    public let style: ModalStyle
     /// 动画时长
     open var duration: TimeInterval = 0.25
     /// 动画结束的时候的View的状态
-    open var modalState: ModalState = .readyToShow
+//    open var modalState: ModalState = .readyToShow
     /// 是否能够交互
-    open var isInteractiveable: Bool = false
+    open var isInteractable: Bool = false
     /// 是否正在交互
     open var isInteracting: Bool = false
     /// 如果使用Spring动画 就禁止交互动画
@@ -34,8 +36,9 @@ open class ModalContext: NSObject {
     /// - Parameters:
     ///   - viewController: 用于承载弹窗的ViewController
     ///   - fromViewController: 当前动画场景的起始
-    public init(_ viewController: WQLayoutController) {
+    public init(_ viewController: WQLayoutController, style: ModalStyle) {
         self.showViewController = viewController
+        self.style = style
         super.init()
     }
     
@@ -79,15 +82,14 @@ public extension ModalContext {
     static func modalContext(with viewController: WQLayoutController, modalStyle: ModalStyle) -> ModalContext? {
         switch modalStyle {
         case .modalSystem:
-            return ModalPresentationContext(viewController)
+            return ModalPresentationContext(viewController, style: modalStyle)
         case .modalInParent:
-            return ModalInParentContext(viewController)
+            return ModalInParentContext(viewController, style: modalStyle)
         case .modalInWindow:
-            return ModalInWindowContext(viewController)
+            return ModalInWindowContext(viewController, style: modalStyle)
         case .modalPresentWithNavRoot:
-            return ModalPresentWithNavRootContext(viewController)
-        case .autoModal:
-            
+            return ModalPresentWithNavRootContext(viewController, style: modalStyle)
+        case .autoModal: 
             return nil
         }
     }

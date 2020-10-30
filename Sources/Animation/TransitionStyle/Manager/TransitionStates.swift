@@ -28,7 +28,7 @@ public enum ModalStyle {
 
 /// 处理bottom
 /// 转场的状态
-public enum ModalState {
+public enum ModalState: Comparable {
     /// 准备显示之前状态
     case readyToShow
     /// 显示
@@ -50,16 +50,17 @@ internal extension ModalState {
     }
 } 
 
-/// 需扩展依赖于父控件的尺寸
-public enum TransitionPosition {
-    case none
-    case centerZoom(Bool)
-    case left(Bool)
-    case right(Bool)
-    case bottom(Bool)
-    case top(Bool)
-}
-public enum TransitionShowStyle {
+///// 需扩展依赖于父控件的尺寸
+//public enum TransitionPosition {
+//    case none
+//    case centerZoom(Bool)
+//    case left(Bool)
+//    case right(Bool)
+//    case bottom(Bool)
+//    case top(Bool)
+//}
+public enum TransitionAnimationStyle {
+ 
     case alert
     /// 考虑是否默认添加底部safeArea间距色块
     case actionSheet // 使用(alert) bottomOut bottomIn

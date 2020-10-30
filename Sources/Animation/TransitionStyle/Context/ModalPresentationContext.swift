@@ -17,8 +17,8 @@ open class ModalPresentationContext: ModalContext {
     
 //    var presenter: UIViewController?
     
-    public override init(_ viewController: WQLayoutController) {
-        super.init(viewController)
+    public override init(_ viewController: WQLayoutController, style: ModalStyle) {
+        super.init(viewController, style: style)
         viewController.modalPresentationStyle = .custom
         viewController.transitioningDelegate = self
     }

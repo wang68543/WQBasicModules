@@ -6,6 +6,9 @@
 //
 
 import Foundation
+
+
+
 public class ModalDefaultAnimation: TransitionAnimationPreprocessor {
     
     public func preprocessor(duration manager: TransitionManager) -> TimeInterval {
@@ -63,6 +66,7 @@ public class ModalDefaultAnimation: TransitionAnimationPreprocessor {
             completion?(flag)
         }
     }
+    
     public func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat) {
         
     }

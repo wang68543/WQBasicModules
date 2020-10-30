@@ -10,17 +10,20 @@ public extension UIView {
     struct AssociatedKeys {
         static let presenter = UnsafeRawPointer(bitPattern: "wq.modal.presenter".hashValue)!
     }
-//    public var modal: TransitionManager {
-//        
-//    }
-//   internal var modal: WQLayoutController? {
-//        set {
+//    func alert() {
 //
-//        }
-//        get {
-//
-//        }
 //    }
-    
+//    func actionSheet() {
+//
+//    }
+//    func present() {
+//
+//    }
+//    func show(_ config: ModalConfig, )
+}
+public extension UIView {
+    func present(_ config: ModalContext, animation: TransitionAnimationPreprocessor, parent: UIViewController?) {
+        
+    }
     
 }

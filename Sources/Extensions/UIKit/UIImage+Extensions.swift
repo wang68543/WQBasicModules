@@ -326,31 +326,29 @@ public extension UIImage {
                 contentMode: UIView.ContentMode = .scaleToFill,
                 clipPath: UIBezierPath? = nil,
                 clipRule: CGPathFillRule = .evenOdd) -> UIImage? {
+        
         let rect = self.aspectRatio(size, contentMode: contentMode)
+        
+        func drawContext(_ context: CGContext?) {
+            if let path = clipPath?.cgPath, let ctx = context {
+                ctx.beginPath()
+                ctx.addPath(path)
+                ctx.closePath()
+                ctx.clip(using: clipRule)
+            }
+            self.draw(in: rect)
+        }
         if #available(iOS 10.0, *) {
             let format = UIGraphicsImageRendererFormat()
             format.opaque = opaque
             format.scale = UIScreen.main.scale
             let renderer = UIGraphicsImageRenderer(size: size,format: format)
             return renderer.image { context in
-                if let path = clipPath?.cgPath {
-                    context.cgContext.beginPath()
-                    context.cgContext.addPath(path)
-                    context.cgContext.closePath()
-                    context.cgContext.clip(using: clipRule)
-                }
-                self.draw(in: rect)
+                drawContext(context.cgContext)
             }
         } else {
             UIGraphicsBeginImageContextWithOptions(size, opaque, UIScreen.main.scale)
-            if let path = clipPath?.cgPath,
-               let context = UIGraphicsGetCurrentContext(){
-                context.beginPath()
-                context.addPath(path)
-                context.closePath()
-                context.clip(using: clipRule)
-            }
-            self.draw(in: rect)
+            drawContext(UIGraphicsGetCurrentContext())
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             return image

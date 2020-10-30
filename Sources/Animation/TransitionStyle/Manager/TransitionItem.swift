@@ -11,7 +11,8 @@ public protocol TSReferenceWriteable {
     func setup(_ target: Any, state: ModalState)
 }
  
-public class TSReference<Root, Value>: TSReferenceWriteable {
+public class TSReference<Root, Value>: TSReferenceWriteable { 
+    
     public let value: Value
     public let keyPath: ReferenceWritableKeyPath<Root, Value>
     public init(value: Value, keyPath: ReferenceWritableKeyPath<Root, Value>) {

@@ -73,7 +73,7 @@ Pod::Spec.new do |s|
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
         ss.subspec 'TransitionStyle' do |sss|
-            sss.source_files = 'Sources/Animation/TransitionStyle/*.swift'
+            sss.source_files = 'Sources/Animation/TransitionStyle/**/*.swift'
         end
     end
 

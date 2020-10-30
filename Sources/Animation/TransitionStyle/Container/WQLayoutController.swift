@@ -7,15 +7,22 @@
 
 import UIKit
 
+
 /**
  将当前控制器的View 作为transitionView 
  */
+public protocol WQLayoutControllerDelegate: NSObjectProtocol {
+    func didViewLoad(_ controller: WQLayoutController)
+    func show(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?)
+    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) -> Bool
+}
 public class WQLayoutController: UIViewController {
-    
+    public typealias Completion = (() -> Void)
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false
     
-    public lazy var modalManager = TransitionManager()
+//    public lazy var manager = TransitionManager()
+    weak var delegate: WQLayoutControllerDelegate?
 //    public lazy var modalManager: TransitionManager = {
 //       return TransitionManager(self)
 //    }()
@@ -28,22 +35,26 @@ public class WQLayoutController: UIViewController {
         self.view.addSubview(self.container)
     }
      
-     
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        self.delegate?.didViewLoad(self)
+    }
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        dimmingView.frame = self.view.bounds
-         
+        dimmingView.frame = self.view.bounds 
         
     }
-    public func modal(in controller: UIViewController?, animated flag: Bool, style: ModalStyle = .autoModal, completion: TransitionManager.Completion? = nil) {
-        modalManager.showViewController = self
-        modalManager.fromViewController = controller
-        modalManager.transitionStyle = style
-
-        modalManager.show(flag, completion: completion)
+//    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
+//
+//    }
+    public func modal(animated flag: Bool, completion: WQLayoutController.Completion? = nil) {
+        self.delegate?.show(self, animated: flag, completion: completion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        modalManager.hide(flag, completion: completion) 
+        let superDismiss = self.delegate?.hide(self, animated: flag, completion: completion)
+        if superDismiss == true  {
+            super.dismiss(animated: flag, completion: completion)
+        }  
     }
     
 //    /// 这里的尺寸是跟随父View的尺寸的
@@ -106,7 +117,7 @@ public class WQLayoutController: UIViewController {
 }
 
 //public extension WQLayoutController {
-//
+//    static let container: TSReferenceWriteable
 //}
 public class WQContainerView: UIView {
     public override func addSubview(_ view: UIView) {
