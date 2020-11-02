@@ -5,10 +5,7 @@
 //  Created by iMacHuaSheng on 2020/9/22.
 //
 
-import Foundation
-
-
-
+import Foundation 
 public class ModalDefaultAnimation: TransitionAnimationPreprocessor {
     
     public func preprocessor(duration manager: TransitionManager) -> TimeInterval {

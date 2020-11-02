@@ -8,15 +8,15 @@
 import Foundation
 extension TransitionManager: WQLayoutControllerDelegate {
     public func didViewLoad(_ controller: WQLayoutController) {
-        <#code#>
+        
     }
     
     public func show(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) {
-        <#code#>
+        
     }
     
     public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) -> Bool {
-        <#code#>
+        return true
     }
     
     

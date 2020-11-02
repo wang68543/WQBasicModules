@@ -16,6 +16,7 @@ public protocol WQLayoutControllerDelegate: NSObjectProtocol {
     func show(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) -> Bool
 }
+
 public class WQLayoutController: UIViewController {
     public typealias Completion = (() -> Void)
     // viewWillAppear viewWillDisappear viewDidDisappear
