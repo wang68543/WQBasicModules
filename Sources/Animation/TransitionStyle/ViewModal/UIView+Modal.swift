@@ -20,7 +20,9 @@ public extension UIView {
 //
 //    }
 //    func show(_ config: ModalConfig, )
-    func present(_ config: ModalConfig, anmation: TransitionAnimationPreprocessor)
+    func present(_ config: ModalConfig, anmation: TransitionAnimationPreprocessor) {
+        
+    }
 }
 public extension UIView {
     func present(_ config: ModalContext, animation: TransitionAnimationPreprocessor, parent: UIViewController?) {
