@@ -1,8 +1,14 @@
 platform :ios, 10.0
-use_frameworks!
+use_modular_headers!
+
+
+
 target 'WQBasicModules_Example' do
+#  warn_for_unused_master_specs_repo => false
+  
   pod 'WQBasicModules', :path => '../'
   pod 'WQBasicModules/FunModule/ImagePicker', :path => '../'
+  pod 'WQBasicModules/Test/TransitionStyle', :path => '../'
 #  pod 'SnapKit'
 #  pod 'SwiftLint', :configuration => 'Debug'
   target 'WQBasicModules_Tests' do
