@@ -27,15 +27,14 @@ public class WQLayoutController: UIViewController {
     weak var delegate: WQLayoutControllerDelegate?
     public lazy var manager: TransitionManager = {
        return TransitionManager(self)
-    }()
-    
-//    public var modalContext: ModalContext?
+    }() 
     let config: ModalConfig
     let statesConfig: TransitionStatesConfig
     public init(_ config: ModalConfig, states: TransitionStatesConfig) {
         self.config = config
         self.statesConfig = states
         super.init(nibName: nil, bundle: nil)
+        setup()
     }
 //
     
@@ -57,7 +56,7 @@ public class WQLayoutController: UIViewController {
 //    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
 //
 //    }
-    public func modal(_ config: ModalConfig, states: TransitionStatesConfig, animator: TransitionAnimation?) {
+    public func modal(_ animator: TransitionAnimation?) {
         
     }
 //    public func modal(animated flag: Bool, completion: TransitionAnimation.Completion? = nil) {
@@ -112,11 +111,7 @@ public class WQLayoutController: UIViewController {
         return transitionView
     }()
     
-    // MARK: -- -init
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
-    }
+     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

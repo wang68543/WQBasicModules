@@ -12,6 +12,7 @@ public extension String {
     /// 序列化URL的查询参数 (可处理包含=)
     ///
     /// - Returns: 键值对 (由于URLString 都是字符串所有这里的键值对类型就是[String: String])
+    @available(*, deprecated, message: "use URL.queryParameters")
     func serializedURLQueryParameters() -> [String: String] {
         var parameters: [String: String] = [:]
         let string = self.components(separatedBy: "?").last

@@ -12,9 +12,9 @@ import UIKit
 open class ModalContext: NSObject {
     
 //    public typealias Completion = (() -> Void)
-    public let animator: TransitionAnimation = ModalDefaultAnimation()
+//    public let animator: TransitionAnimation = ModalDefaultAnimation()
  
-    public unowned let showViewController: WQLayoutController
+//    public unowned let showViewController: WQLayoutController
     
     public weak var fromViewController: UIViewController?
     
