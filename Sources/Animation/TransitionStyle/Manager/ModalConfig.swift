@@ -27,9 +27,9 @@ public class ModalConfig {
     /// 显示ViewController
     weak var fromViewController: UIViewController?
     /// 容器控制器
-    let presenting = WQLayoutController()
+//    let presenting: WQLayoutController = WQLayoutController()
     /// 是否要调用生命周期
-    let layoutControllerLifeCycleable: Bool = false
+    var layoutControllerLifeCycleable: Bool = false
     /// 用户交互消失的方式
     var interactionDismiss: InteractDismissMode = .none
     /// 容器控制器的View显示frame
@@ -43,6 +43,14 @@ public class ModalConfig {
 //        self.stateConfig = states
         self.fromViewController = fromViewController
     }
+}
+public extension ModalConfig {
+    static let `default` = ModalConfig(fromViewController: nil)
+    
+    static func inParent(_ parentViewController: UIViewController) -> ModalConfig {
+        return ModalConfig(.modalInParent, fromViewController: parentViewController)
+    }
+    
 }
 //public extension ModalConfig {
 //    /// 添加属性到fromViewController

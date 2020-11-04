@@ -13,12 +13,12 @@ import UIKit
  */
 public protocol WQLayoutControllerDelegate: NSObjectProtocol {
     func didViewLoad(_ controller: WQLayoutController)
-    func show(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?)
-    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) -> Bool
+    func show(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?)
+    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) -> Bool
+//    optional func update(_ controller: WQLayoutController, progress: CGFloat) 
 }
 
 public class WQLayoutController: UIViewController {
-    public typealias Completion = (() -> Void)
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false
     
@@ -29,7 +29,10 @@ public class WQLayoutController: UIViewController {
 //    }()
     
 //    public var modalContext: ModalContext?
-      
+//    public init(_ manager: TransitionManager) {
+//        
+//    }
+//    
     internal func setup() {
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
@@ -48,7 +51,7 @@ public class WQLayoutController: UIViewController {
 //    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
 //
 //    }
-    public func modal(animated flag: Bool, completion: WQLayoutController.Completion? = nil) {
+    public func modal(animated flag: Bool, completion: TransitionAnimation.Completion? = nil) {
         self.delegate?.show(self, animated: flag, completion: completion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

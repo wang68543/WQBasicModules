@@ -11,11 +11,11 @@ extension TransitionManager: WQLayoutControllerDelegate {
         
     }
     
-    public func show(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) {
+    public func show(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) {
         
     }
     
-    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: WQLayoutController.Completion?) -> Bool {
+    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) -> Bool {
         return true
     }
     

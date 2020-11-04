@@ -42,28 +42,21 @@ import Foundation
 
 
 open class TransitionManager: NSObject {
-    public typealias Completion = ((Bool) -> Void)
-    public internal(set) var state: ModalState = .readyToShow
+ 
+    public let config: ModalConfig
+    public let statesConfig: TransitionStatesConfig
     
-    public var states: [ModalState: WQReferenceStates] = [:]
-    /// 当前状态的时候将[UIView]添加到UIView上
-    public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
-//    /// 这里的view 咋 readShow的时候 添加到view showing的时候移除 (主要用于开场显示的时候 从一个动画到这个动画)
-//    public var snapShotShowViews: [UIView] = []
-//    /// showing -> hide的时候 显示
-//    public var snapShotHideViews: [UIView] = []
+    public let showViewController: WQLayoutController
     
-//    public weak var delegate: TransitionManagerDelegate?
-
-    /// 动画时长
-//    public var duration: TimeInterval = 0.25
-
-    public weak var fromViewController: UIViewController?
-
-//    public internal(set) var transitionStyle: ModalStyle = .autoModal
-    public weak var showViewController: WQLayoutController?
-
     public var context: ModalContext?
+    
+    public init(_ config: ModalConfig, states: TransitionStatesConfig, layout: WQLayoutController = WQLayoutController()) {
+        self.config = config
+        self.statesConfig = states
+        self.showViewController = layout
+//        layout.delegate = self
+        super.init()
+    }
     
 //    lazy var context: ModalContext = {
 //        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
@@ -94,11 +87,11 @@ open class TransitionManager: NSObject {
 ////            }
 ////        }
 //    }
-    func show(_ context: ModalContext, animation: TransitionAnimationPreprocessor) {
+    func show(_ context: ModalContext, animation: TransitionAnimation) {
         
     }
     
-    func hide(_ context: ModalContext, animation: TransitionAnimationPreprocessor) {
+    func hide(_ context: ModalContext, animation: TransitionAnimation) {
         
     }
 }
