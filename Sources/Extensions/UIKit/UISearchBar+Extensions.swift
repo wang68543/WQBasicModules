@@ -2,9 +2,9 @@
 //  UISearchBar+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/10/22.
+//  Created by WQ on 2019/10/22.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UISearchBar {
     /// SwifterSwift: Text field inside search bar (if applicable).
@@ -25,3 +25,4 @@ public extension UISearchBar {
            return text?.trimmingCharacters(in: .whitespacesAndNewlines)
        }
 }
+#endif

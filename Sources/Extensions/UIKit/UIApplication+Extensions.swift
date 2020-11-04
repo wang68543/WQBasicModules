@@ -2,9 +2,8 @@
 //  UIApplication+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/6/21.
+//  Created by WQ on 2019/6/21.
 //
-
 import Foundation
 public extension UIApplication {
     /// SwifterSwift: Application running environment.
@@ -47,8 +46,8 @@ public extension UIApplication {
         #endif
     }
     /// SwifterSwift: Application name (if applicable).
-    var displayName: String? {
-        return Bundle.main.infoDictionary?["CFBundleDisplayName"] as? String
+    var displayName: String? { 
+        return Bundle.main.infoDictionary?[kCFBundleNameKey as String] as? String
     }
     
     /// SwifterSwift: App current build number (if applicable).
@@ -63,4 +62,4 @@ public extension UIApplication {
     var bundleIdentifier: String {
         return Bundle.main.bundleIdentifier ?? String() 
     }
-}
+} 

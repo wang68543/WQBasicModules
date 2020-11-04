@@ -2,9 +2,9 @@
 //  UINavigationController+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/7/26.
+//  Created by WQ on 2019/7/26.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 extension UINavigationController {
     /// SwifterSwift: Pop ViewController with completion handler.
@@ -54,3 +54,4 @@ public extension WQModules where Base: UINavigationController {
         self.base.pushViewController(viewController, completion: completion)
      }
 }
+#endif

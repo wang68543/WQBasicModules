@@ -96,7 +96,7 @@ public extension WQKeyboardManager {
 }
 private extension WQKeyboardManager {
     func addTapGesture() {
-        if let view = self.view.containingController?.view {
+        if let view = self.view.viewController?.view {
             let tapGR = UITapGestureRecognizer()
             tapGR.delegate = self
             view.addGestureRecognizer(tapGR)
@@ -263,7 +263,7 @@ private extension WQKeyboardManager {
         //then adjustPosition again because iOS internally update formSheet frame on keyboardShown.
         if _keyboardShowing == true,
             _textFieldView != nil,
-            let controller = self.view.containingController,
+            let controller = self.view.viewController,
             (controller.modalPresentationStyle == .formSheet || controller.modalPresentationStyle == .pageSheet) {
             self.optimizedAdjustPosition()
         }

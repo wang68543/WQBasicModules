@@ -23,18 +23,18 @@ public class WQTextView: UITextView {
             refreshPlaceholder()
         }
     }
-    
+
     public var placeholderInsets: UIEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7) {
         didSet {
             refreshPlaceholder()
         }
     }
-    
+
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
         commonInit()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
@@ -46,7 +46,7 @@ public class WQTextView: UITextView {
                          name: UITextView.textDidChangeNotification,
                          object: self)
     }
-    
+
     @objc
     func textViewTextDidChange(_ note: Notification) {
         guard self.hasPlaceholder else {
@@ -57,7 +57,7 @@ public class WQTextView: UITextView {
         }
         self.refreshPlaceholder()
     }
-    
+
     override public var delegate: UITextViewDelegate? {
         set {
             super.delegate = newValue
@@ -76,7 +76,7 @@ public class WQTextView: UITextView {
             return super.text
         }
     }
-    
+
     private func refreshPlaceholder() {
         guard self.hasPlaceholder else {
             return
@@ -97,7 +97,7 @@ public class WQTextView: UITextView {
                                         width: self.frame.width - insets.left - insets.right,
                                         height: placeholderLabel.frame.height)
     }
-    
+
     private var hasPlaceholder: Bool = false
     private lazy var placeholderLabel: UILabel = {
         let label = UILabel()
@@ -112,7 +112,7 @@ public class WQTextView: UITextView {
         self.addSubview(label)
         return label
     }()
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
     }

@@ -9,14 +9,14 @@
 import UIKit
 import WQBasicModules
 class ExampleViewCell: UITableViewCell {
-   
+
     @IBOutlet weak var titleLabel: UILabel!
-    
+
     @IBOutlet weak var exampleLabel: UILabel!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        
+
         // Initialization code
     }
 
@@ -38,6 +38,6 @@ extension ExampleViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ExampleViewCell {
             return cell
         }
-        return ExampleViewCell() 
+        return ExampleViewCell()
     }
 }

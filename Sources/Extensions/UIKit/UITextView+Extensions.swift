@@ -4,7 +4,7 @@
 //
 //  Created by HuaShengiOS on 2019/4/17.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UITextView {
     private struct AssociatedKeys {
@@ -84,3 +84,4 @@ public extension UITextView {
         scrollRangeToVisible(range)
     }
 }
+#endif

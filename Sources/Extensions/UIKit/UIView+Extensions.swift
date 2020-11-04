@@ -5,6 +5,7 @@
 //  Created by WangQiang on 2018/5/18.
 //
 
+#if canImport(UIKit) && !os(watchOS)
 import UIKit
 
 // MARK: - --clip
@@ -44,6 +45,11 @@ public extension UIView {
             self.layer.mask = shapeLayer
         } 
     }
+    @available(iOS 11.0, *)
+    func makeShapeCorners(_ cornerSize: CGSize, corners: CACornerMask = []) {
+        self.layer.maskedCorners = corners
+    }
+    
     /// 截屏
     func snapshot(_ size: CGSize = .zero) -> UIImage? {
         let drawSize = (size == .zero) ? self.bounds.size : size
@@ -216,3 +222,4 @@ fileprivate extension UITableView {
         return sectionHeight
     }
 }
+#endif

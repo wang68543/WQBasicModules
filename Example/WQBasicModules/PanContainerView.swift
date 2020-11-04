@@ -19,7 +19,7 @@ class PanContainerView: UIView {
     var panView: PanView = PanView()
     var panBehavior: WQPanBehavior?
     var animator: UIDynamicAnimator = UIDynamicAnimator()
-    
+
     var lastPosition: CGPoint = .zero
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -30,7 +30,7 @@ class PanContainerView: UIView {
         self.targetFrameMinY.append(Screen.height * 0.6)
         panView.targetFrameMinY = self.targetFrameMinY
         panView.panMoveDelegate = self
-        
+
     }
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -39,7 +39,7 @@ class PanContainerView: UIView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not ·been implemented")
     }
-    
+
 }
 extension PanContainerView: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -50,7 +50,7 @@ extension PanContainerView: UIScrollViewDelegate {
         // 没有到达顶点无法滚动 大于0向上滚动 小于0向下滚动
 //        let offset = CGPoint(x: scrollView.contentOffset.x - self.lastPosition.x,
 //        y: scrollView.contentOffset.y - self.lastPosition.y)
-       
+
 //        let top = self.targetPoints.first!
 //        let bottom = self.targetPoints.last!
 //        guard !(position.y >= top.y && offset.y > 0)
@@ -66,7 +66,7 @@ extension PanContainerView: UIScrollViewDelegate {
 //        } else { //
 //
 //        }
-        
+
     }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.animator.removeAllBehaviors()
@@ -113,9 +113,8 @@ extension PanContainerView: WQPanViewable {
             panBehavior = pan
         }
         let targetPoint: CGPoint = CGPoint(x: targetContentOffset.x, y: targetContentOffset.y + panView.frame.height * 0.5)
-     
+
         panBehavior.targetPoint = targetPoint
-        
 
         panBehavior.velocity = velocity
         self.animator.addBehavior(panBehavior)

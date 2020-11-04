@@ -10,27 +10,55 @@ Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
   s.version          = '0.3.3'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
+ 
 
   s.description      = <<-DESC
-  日常常用的功能集合, 持续优化更新(包含扩展，工具类以及一些基础框架)
+日常常用的功能集合, 持续优化更新(包含扩展，工具类以及一些基础框架)
                        DESC
 
-  s.homepage         = 'https://github.com/wang68543/WQBasicModules'
+  s.homepage         = 'https://github.com/wang68543/WQBasicModules' 
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'wang68543' => 'wang68543@163.com' }
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
- 
 
   s.ios.deployment_target = '9.0'
-  s.source_files  = 'Sources/WQBasicModules.h'
+#  s.source_files  = 'Sources/WQBasicModules.h'
 #  s.swift_version = '4.2'
-  s.swift_versions = ['4.0', '4.2', '5.0']
+  s.swift_versions = ['4.0', '4.2', '5.0', '5.1' ,'5.2', '5.3']
+  s.default_subspec = 'Core'
+#  s.source_files = 'Sources/**/**/*.swift'
+  s.requires_arc = true
   
-  s.subspec 'Function' do |ss|
-      ss.subspec 'PageViewController' do |sss|
-          sss.source_files = 'Sources/Function/PageViewController/*.swift'
+  
+  s.subspec 'Core' do |ss|
+#      ss.dependency 'WQBasicModules/Function'
+      ss.dependency 'WQBasicModules/Animation'
+      ss.dependency 'WQBasicModules/Extensions'
+      ss.dependency 'WQBasicModules/Tool'
+      ss.dependency 'WQBasicModules/UI'
+  end
+  
+  
+  s.subspec 'AppExtension' do |ss|
+      ss.dependency 'WQBasicModules/Extensions'
+      ss.dependency 'WQBasicModules/Tool'
+      #可以使用此属性替代全局
+#      ss.ios.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES' }
+  end
+  
+  
+  
+  s.subspec 'FunModule' do |ss|
+      ss.subspec 'ImagePicker' do |sss|
+          sss.source_files = 'Sources/FunModule/ImagePicker/*.swift'
       end
   end
+  
+#  s.subspec 'Function' do |ss|
+#      ss.subspec 'PageViewController' do |sss|
+#          sss.source_files = 'Sources/Function/PageViewController/*.swift'
+#      end
+#  end
     s.subspec 'Animation' do |ss|
         ss.subspec 'Layer' do |sss|
             sss.source_files = 'Sources/Animation/Layer/*.swift'
@@ -44,18 +72,24 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/UI/Help'
             sss.source_files = 'Sources/Animation/Transitioning/*.swift'
         end
+#        ss.subspec 'TransitionStyle' do |sss|
+#            sss.source_files = 'Sources/Animation/TransitionStyle/**/*.swift'
+#        end
     end
 
     s.subspec 'Extensions' do |ss|
         ss.subspec 'Module' do |sss|
             sss.source_files = 'Sources/Extensions/Module/*.swift'
         end
+        ss.subspec 'CoreGrapics' do |sss|
+            sss.source_files = 'Sources/Extensions/CoreGrapics/*.swift'
+        end
         ss.subspec 'UIKit' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
             sss.source_files = 'Sources/Extensions/UIKit/*.swift'
         end
         ss.subspec 'Foundation' do |sss|
-            sss.source_files = 'Sources/Extensions/Foundation/*.{swift,h,m}'
+            sss.source_files = 'Sources/Extensions/Foundation/*.swift'
         end
         ss.subspec 'Date' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Foundation'
@@ -70,9 +104,9 @@ Pod::Spec.new do |s|
          ss.subspec 'Cache' do |sss|
              sss.source_files = 'Sources/Tool/Cache/*.swift'
          end
-         ss.subspec 'JsonCodable' do |sss|
-            sss.source_files = 'Sources/Tool/JsonCodable/*.swift'
-         end
+#         ss.subspec 'JsonCodable' do |sss|
+#            sss.source_files = 'Sources/Tool/JsonCodable/*.swift'
+#         end
      end
      
      s.subspec 'UI' do |ss|
@@ -90,6 +124,9 @@ Pod::Spec.new do |s|
          end
          ss.subspec 'FlowLayout' do |sss|
              sss.source_files = 'Sources/UI/FlowLayout/*.swift'
+         end
+         ss.subspec 'Gesture' do |sss|
+             sss.source_files = 'Sources/UI/Gesture/*.swift'
          end
      end
 end

@@ -1,10 +1,14 @@
 disabled_rules: # 禁用指定的规则
   - fatal_error
 included:
+  # - Source
+  # - Tests
   - Source
-  - Tests
+  # - Example/Pods/WQBasicModules
 excluded:
   - Tests/SwiftLintFrameworkTests/Resources
+  - Example/Pods
+  - Example/Tests
 opt_in_rules:
   - array_init
   - attributes

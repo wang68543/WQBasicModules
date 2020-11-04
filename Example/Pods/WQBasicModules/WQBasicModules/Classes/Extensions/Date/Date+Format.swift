@@ -13,21 +13,21 @@ public enum DateFormatEnum: String {
     case k
     /// yyyy年
     case k年
-    
+
     /// yyyy-MM
     case kAMM
     /// yyyy/MM
     case k1MM
     /// yyyy年MM月
     case k年MM月
-    
+
     /// yyyy-MM-dd
     case kAMMAdd
     /// yyyy/MM/dd
     case k1MM1dd
     /// yyyy年MM月dd日
     case k年MM月dd日
-    
+
     /// yyyyMMddHHmm
     case kMMddHHmm
     /// yyyy-MM-dd HH:mm
@@ -36,7 +36,7 @@ public enum DateFormatEnum: String {
     case k1MM1ddCHHBmm
     /// yyyy年MM月dd日HH时mm分
     case k年MM月dd日HH时mm分
-    
+
     /// yyyyMMddHHmmss
     case kMMddHHmmss
     /// yyyy-MM-dd HH:mm:ss
@@ -49,56 +49,56 @@ public enum DateFormatEnum: String {
     case M
     /// M月
     case M月
-    
+
     /// MM
     case MM
     /// MM
     case MM月
-    
+
     /// MM-dd
     case MMAdd
     /// MM/dd
     case MM1dd
     /// MM月dd日
     case MM月dd日
-    
+
     /// MM-dd HH:ss
     case MMAddCHHBss
     /// MM/dd HH:ss
     case MM1ddCHHBss
     /// MM月dd日HH时mm分
     case MM月dd日HH时mm分
-    
+
     /// MM-dd HH:mm:ss
     case MMAddCHHBmmBss
     /// MM/dd HH:mm:ss
     case MM1ddCHHBmmBss
     /// MM月dd日HH时mm分ss秒
     case MM月dd日HH时mm分ss秒
-    
+
     /// d
     case d
     /// d日
     case d日
-    
+
     /// dd
     case dd
     /// dd日
     case dd日
-   
+
     case HH
     case HH时
-    
+
     /// HH:mm
     case HHBmm
     /// HH时mm分
     case HH时mm分
-    
+
     /// HH:mm:ss
     case HHBmmBss
     /// HH时mm分ss秒
     case HH时mm分ss秒
- 
+
     case E
 
     public var formatString: String {
@@ -111,7 +111,7 @@ public enum DateFormatEnum: String {
                     let start = fmtStr.index(fmtStr.startIndex, offsetBy: result.range.location)
                     let end = fmtStr.index(start, offsetBy: result.range.length)
                     let range = start ..< end
-                    
+
                     let match = fmtStr[range]
                     var replaceStr: String
                     switch match {
@@ -128,7 +128,7 @@ public enum DateFormatEnum: String {
                     default:
                         replaceStr = String(match)
                     }
-                    let resultStr = fmtStr.replacingOccurrences(of: match, with: replaceStr, options: [], range: range) 
+                    let resultStr = fmtStr.replacingOccurrences(of: match, with: replaceStr, options: [], range: range)
                     return resultStr
                 })
             } catch {
@@ -146,7 +146,7 @@ public extension Date { // MARK: 日期格式化
     func toString(_ format: DateFormatEnum, in calendar: Calendar = .current) -> String {
         return toString(format.formatString, in: calendar)
     }
-    
+
     func toString(_ format: String, in calendar: Calendar = .current) -> String {
         let fortmatter = WQDateFormatter.shared
         fortmatter.dateFormat = format
@@ -174,7 +174,7 @@ public extension String { // MARK: 字符串转日期
     }
 }
 public extension Double {
-    
+
     /// 中间符号连接形式
     func toDuration(connect hour_minute: String, minute_second: String? = nil) -> String {
         let compments = Int(self).toDurationCompments

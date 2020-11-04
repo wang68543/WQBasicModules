@@ -8,7 +8,7 @@
 
 import UIKit
 import WQBasicModules
-class textFieldViewController: UIViewController {
+class TextFieldViewController: UIViewController {
     var keyboardMangaer: WQKeyboardManager!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -16,7 +16,6 @@ class textFieldViewController: UIViewController {
         keyboardMangaer.shouldResignOnTouchOutside = true
         // Do any additional setup after loading the view.
     }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let textFiled = UITextField(frame: CGRect(x: 10, y: self.view.frame.height - 20, width: 300, height: 40))

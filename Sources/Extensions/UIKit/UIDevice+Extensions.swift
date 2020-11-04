@@ -2,7 +2,7 @@
 //  UIDevice+Extensions.swift
 //  HandMetroSwift
 //
-//  Created by iMacHuaSheng on 2019/6/11.
+//  Created by WQ on 2019/6/11.
 //
 
 import Foundation
@@ -21,4 +21,12 @@ public extension UIDevice {
             return identifier + String(UnicodeScalar(UInt8(value)))
         } 
     }
+    /// 判断是否是模拟器
+    static let isEmulator: Bool = {
+        #if arch(i386) || arch(x86_64)
+        return true
+        #else
+        return false
+        #endif
+    }()
 }

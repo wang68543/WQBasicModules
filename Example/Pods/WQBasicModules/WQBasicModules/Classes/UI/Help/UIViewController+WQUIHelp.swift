@@ -23,7 +23,7 @@ extension UIViewController {
            return objc_getAssociatedObject(self, &keyboardManagerKey) as? WQKeyboardManager
         }
     }
-    
+
     @discardableResult
     public func enableKeyboardManager(_ enable: Bool) -> WQKeyboardManager? {
         if enable {
@@ -40,7 +40,7 @@ extension UIViewController {
         }
         return self.keyboardManager
     }
-    
+
     func topVisible() -> UIViewController? {
         if self.presentedViewController != nil {
             return self.presentedViewController?.topVisible()

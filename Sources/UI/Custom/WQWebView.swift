@@ -2,20 +2,50 @@
 //  WQWebView.swift
 //  Pods-WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2019/4/30.
+//  Created by WQ on 2019/4/30.
 //
 
 import UIKit
 import WebKit
+//https://juejin.im/post/6887161842406260744
 open class WQWebView: WKWebView {
     public var isAttachProgressTop: Bool = true
-    public var progressHeight: CGFloat = 5 {
+    public var progressHeight: CGFloat = 2 {
         didSet {
             self.setNeedsLayout()
             self.layoutIfNeeded()
         }
-    }
-    
+    } 
+//    //包装请求头内容
+//    - (WKNavigation *)loadRequest:(NSURLRequest *)request{
+//        NSLog(@"发起请求:%@ method:%@",request.URL.absoluteString,request.HTTPMethod);
+//        NSMutableURLRequest *mutableRequest = [request mutableCopy];
+//        NSMutableDictionary *requestHeaders = [request.allHTTPHeaderFields mutableCopy];
+//        //判断是否是POST请求，POST请求需要包装request中的body内容到请求头中（会有丢失body问题的产生）
+//        //,包装完成之后重定向到拦截的协议中自己包装处理请求数据内容，拦截协议是GCURLProtocol，请自行搜索
+//        if ([mutableRequest.HTTPMethod isEqualToString:@"POST"] && ([mutableRequest.URL.scheme isEqualToString:@"http"] || [mutableRequest.URL.scheme isEqualToString:@"https"])) {
+//            NSString *absoluteStr = mutableRequest.URL.absoluteString;
+//            if ([[absoluteStr substringWithRange:NSMakeRange(absoluteStr.length-1, 1)] isEqualToString:@"/"]) {
+//                absoluteStr = [absoluteStr stringByReplacingCharactersInRange:NSMakeRange(absoluteStr.length-1, 1) withString:@""];
+//            }
+//
+//            if ([mutableRequest.URL.scheme isEqualToString:@"https"]) {
+//                absoluteStr = [absoluteStr stringByReplacingOccurrencesOfString:@"https" withString:WkCustomHttps];
+//            }else{
+//                absoluteStr = [absoluteStr stringByReplacingOccurrencesOfString:@"http" withString:WkCustomHttp];
+//            }
+//
+//            mutableRequest.URL = [NSURL URLWithString:absoluteStr];
+//            NSString *bodyDataStr = [[NSString alloc]initWithData:mutableRequest.HTTPBody encoding:NSUTF8StringEncoding];
+//            [requestHeaders addEntriesFromDictionary:@{@"httpbody":bodyDataStr}];
+//            mutableRequest.allHTTPHeaderFields = requestHeaders;
+//
+//            NSLog(@"当前请求为POST请求Header:%@",mutableRequest.allHTTPHeaderFields);
+//
+//        }
+//        return [super loadRequest:mutableRequest];
+//    }
+ 
     public var titleDidChange: ((String?) -> Void)? {
         didSet {
             if titleDidChange == nil {

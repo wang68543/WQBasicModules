@@ -2,7 +2,7 @@
 //  WQTransitionWindow.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/9/2.
+//  Created by WQ on 2019/9/2.
 //
 
 import Foundation

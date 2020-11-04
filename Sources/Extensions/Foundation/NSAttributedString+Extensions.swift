@@ -2,11 +2,10 @@
 //  NSAttributedString+Extensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/12/30.
+//  Created by WQ on 2019/12/30.
 //
 
 import Foundation
-
 public extension NSAttributedString {
     
     /// label 宽度固定 文字均匀分布
@@ -36,4 +35,4 @@ public extension NSAttributedString {
             self.init(string: string, attributes: attrs)
         }
     }
-}
+}  

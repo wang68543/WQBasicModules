@@ -10,7 +10,7 @@ import WebKit
 open class WQWebView: WKWebView {
     public var isAttachProgressTop: Bool = true
     public var progressHeight: CGFloat = 5
-    
+
     public var titleDidChange: ((String?) -> Void)? {
         didSet {
             if titleDidChange == nil {
@@ -20,7 +20,7 @@ open class WQWebView: WKWebView {
             }
         }
     }
-    
+
     public lazy var progressView: UIProgressView = {
         let progressView = UIProgressView()
         progressView.progressViewStyle = .default
@@ -33,7 +33,7 @@ open class WQWebView: WKWebView {
     private var progressObservation: NSKeyValueObservation?
     private var isLoadingObservation: NSKeyValueObservation?
     private var titleObservation: NSKeyValueObservation?
-    
+
     open override func layoutSubviews() {
         super.layoutSubviews()
         var progressY: CGFloat = 0
@@ -57,7 +57,7 @@ open class WQWebView: WKWebView {
         self.invalidate()
         self.invalidateTitleObservation()
     }
-   
+
 }
 
 extension WQWebView {
@@ -76,7 +76,7 @@ extension WQWebView {
             }
         }
     }
-   
+
     func configTitleObservation() {
         guard self.titleObservation == nil else {
             return
@@ -90,7 +90,7 @@ extension WQWebView {
             weakSelf.titleDidChange?(newValue)
         })
     }
-    
+
     func invalidateTitleObservation() {
         if #available(iOS 11.0, *) {
             titleObservation = nil
@@ -109,7 +109,7 @@ extension WQWebView {
                     return
             }
             weakSelf.progressView.progress = Float(newValue)
-        }) 
+        })
         let isLoading = \WQWebView.isLoading
         isLoadingObservation = self.observe(isLoading, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,

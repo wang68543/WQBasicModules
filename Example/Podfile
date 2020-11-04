@@ -1,9 +1,10 @@
-platform :ios, 9.0
+platform :ios, 10.0
 use_frameworks!
 target 'WQBasicModules_Example' do
   pod 'WQBasicModules', :path => '../'
-#  pod 'SwiftLint'
-
+  pod 'WQBasicModules/FunModule/ImagePicker', :path => '../'
+#  pod 'SnapKit'
+#  pod 'SwiftLint', :configuration => 'Debug'
   target 'WQBasicModules_Tests' do
     inherit! :search_paths
 #    inhibit_all_warnings!

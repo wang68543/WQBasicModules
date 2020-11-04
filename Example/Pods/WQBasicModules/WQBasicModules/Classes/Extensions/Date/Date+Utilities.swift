@@ -61,7 +61,7 @@ public extension Date {
         let interval = (week - 1) * 7 - (component - 1)
         return calendar.date(byAdding: .day, value: interval, to: startDate)
     }
-    
+
     /// distance unit counts between two date
     ///
     /// - Parameters:
@@ -187,7 +187,7 @@ public extension Date {
     func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         return dateEnd(unit, with: calendar) + 1
     }
-    
+
     /// smaller unit counts in larger unit
     ///
     /// - Parameters:
@@ -202,24 +202,24 @@ public extension Date {
                 bigUnit = .hour
             case .hour:
                 bigUnit = .day
-            case .day, .weekOfMonth: 
+            case .day, .weekOfMonth:
                 bigUnit = .month
             case .month, .weekOfYear:
                 bigUnit = .year
-                
+
             default:
                 fatalError("此类型的单位计算不支持")
             }
         } else {
             bigUnit = larger
         }
-        
+
         guard let counts = calendar.range(of: unit, in: bigUnit, for: self) else {
             return 0
         }
         return counts.upperBound - counts.lowerBound
     }
-    
+
     func daysInMonth(_ year: Int, at month: Int) -> Int {
         var days: Int = 30
         if month == 2 {
@@ -266,7 +266,7 @@ public extension Date {
     }
 }
 public extension Date {// MARK: - Compare
-    
+
     func isToday(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInToday(self)
     }
@@ -276,7 +276,7 @@ public extension Date {// MARK: - Compare
     func isTomorrow(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInTomorrow(self)
     }
-    
+
     func isThisWeek(with calendar: Calendar = .current) -> Bool {
         return calendar.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
     }
@@ -302,14 +302,14 @@ public extension Date {// MARK: - Compare
     }
     func isNextYear(with calendar: Calendar = .current) -> Bool {
         let nextDate = Date().dateByAdding(1, unit: .year, with: calendar)
-        
+
          return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     func isLastYear(with calendar: Calendar = .current) -> Bool {
         let nextDate = Date().dateByAdding(-1, unit: .year, with: calendar)
         return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
-    
+
    private static let commentFlags: Set<Calendar.Component> = [
         .second,
         .minute,
@@ -320,7 +320,7 @@ public extension Date {// MARK: - Compare
         .weekOfYear,
         .weekday,
         .timeZone]
-  
+
 }
 
 // MARK: - --equal
@@ -368,7 +368,7 @@ public extension Date {
         case .yearForWeekOfYear: // let comps = DateComponents(weekday: 6, weekOfYear: 1, yearForWeekOfYear: 2016)
            units = []
         default:
-            units = [] 
+            units = []
         }
         return units
     }

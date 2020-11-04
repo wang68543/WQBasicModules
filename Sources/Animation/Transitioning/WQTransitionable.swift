@@ -68,7 +68,7 @@ open class WQTransitionable: UIViewController {
         return view
     }()
     //用于容纳当前控制器的window窗口
-    internal var containerWindow: WQTransitionWindow?
+    public internal(set) var containerWindow: WQTransitionWindow?
     
     /// 非present的时候 用于动画管理器里面的转场动画
     internal weak var usingTransitionAnimatedController: UIViewController?

@@ -13,7 +13,7 @@ public extension CALayer {
         //If `bitPattern` is zero, the result is `nil`.
         static let isAnimating = UnsafeRawPointer(bitPattern: "wq.layer.anmations.isAnimating".hashValue)!
     }
-    
+
     private(set) var isAnimating: Bool {
         set {
             objc_setAssociatedObject(self, AnimationKeys.isAnimating, newValue, .OBJC_ASSOCIATION_ASSIGN)
@@ -22,7 +22,7 @@ public extension CALayer {
             return (objc_getAssociatedObject(self, AnimationKeys.isAnimating) as? Bool) ?? false
         }
     }
-    
+
     @discardableResult
     func rotation(_ from: Double = 0,
                   to angle: Double = Double.pi * 2,
@@ -38,11 +38,11 @@ public extension CALayer {
         self.interal_add(animate, forKey: AnimationKeys.rotation)
         return animate
     }
-     
+
     func stopRotation() {
         self.interal_remove(forKey: AnimationKeys.rotation)
     }
-    
+
     @discardableResult
     func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
                     type: CATransitionType = .fade,
@@ -54,11 +54,11 @@ public extension CALayer {
         self.interal_add(transtion, forKey: AnimationKeys.transition)
         return transtion
     }
-    
+
     func stopTransition() {
         self.interal_remove(forKey: AnimationKeys.transition)
     }
-    
+
     private func interal_add(_ animate: CAAnimation, forKey key: String) {
         if self.animation(forKey: key) != nil {
            self.removeAnimation(forKey: key)

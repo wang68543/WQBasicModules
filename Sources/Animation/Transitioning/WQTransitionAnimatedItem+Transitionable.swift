@@ -2,7 +2,7 @@
 //  WQTransitionAnimatedItem+Transitionable.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2019/12/31.
+//  Created by WQ on 2019/12/31.
 //
 
 import Foundation

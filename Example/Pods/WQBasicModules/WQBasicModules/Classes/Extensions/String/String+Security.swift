@@ -18,9 +18,9 @@ public extension String {
         }
         return md5Str
     }
-    
+
    func oc_sha1() -> String {
-        let str = self as NSString 
+        let str = self as NSString
         return str.sha1()
     }
 }

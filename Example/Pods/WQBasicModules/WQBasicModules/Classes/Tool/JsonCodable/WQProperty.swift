@@ -19,25 +19,25 @@ import Foundation
 // Pointer
 // OpaquePointer
 public enum WQPropertyStyle {
-    
+
         case unknown
-    
+
         case `struct`
-        
+
         case `class`
-        
+
         case `enum`
-        
+
         case tuple
-        
+
         case optional
-        
+
         case collection
-        
+
         case dictionary
-        
+
         case set
- 
+
     init(_ mirrorStyle: Mirror.DisplayStyle) {
         switch mirrorStyle {
         case .`struct`:
@@ -72,10 +72,10 @@ public struct WQProperty {
     var displayStyle: WQPropertyStyle
     //在内存中占据的字节数
     var memorySize: Int
-    
+
     //下属属性的类型
     var subProperties: [WQProperty]?
-    
+
     init(name label: String, value: Any, subProperties: [WQProperty]?) {
          let mirror = Mirror(reflecting: value)
         name = label
@@ -85,7 +85,7 @@ public struct WQProperty {
         } else {
             displayStyle = WQPropertyStyle.unknown
         }
-        
+
         self.subProperties = subProperties
         //如果这里值为空
         memorySize = MemoryLayout.size(ofValue: value)
@@ -93,7 +93,7 @@ public struct WQProperty {
     static public func properties(for instance: Any) -> [WQProperty] {
         var properties: [WQProperty] = []
         let current = Mirror(reflecting: instance)
-        
+
         if   current.displayStyle != nil {
             //displayStyle
 //            switch displayStyle {
@@ -106,7 +106,7 @@ public struct WQProperty {
 //            case .dictionary:
 //            case .set:
 //            }
-            
+
         } else {//displayStyle 为nil 表示基本数据类型
             //
         }
@@ -123,6 +123,6 @@ public struct WQProperty {
              properties.append(property)
             }
         return properties
-        
+
     }
 }

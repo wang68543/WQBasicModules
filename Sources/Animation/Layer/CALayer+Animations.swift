@@ -6,6 +6,7 @@
 //
 
 import UIKit
+@available(iOSApplicationExtension, unavailable)
 public extension CALayer {
     struct AnimationKeys {
         static let rotation = "wq.layer.anmations.rotation"
@@ -78,4 +79,4 @@ extension CALayer: CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         self.isAnimating = false
     }
-}
+} 

@@ -1,26 +1,31 @@
 PODS:
   - WQBasicModules (0.3.3):
-    - WQBasicModules/Animation (= 0.3.3)
-    - WQBasicModules/Extensions (= 0.3.3)
-    - WQBasicModules/Function (= 0.3.3)
-    - WQBasicModules/Tool (= 0.3.3)
-    - WQBasicModules/UI (= 0.3.3)
+    - WQBasicModules/Core (= 0.3.3)
   - WQBasicModules/Animation (0.3.3):
     - WQBasicModules/Animation/Layer (= 0.3.3)
     - WQBasicModules/Animation/Transitioning (= 0.3.3)
+    - WQBasicModules/Animation/TransitionStyle (= 0.3.3)
     - WQBasicModules/Animation/Views (= 0.3.3)
   - WQBasicModules/Animation/Layer (0.3.3)
   - WQBasicModules/Animation/Transitioning (0.3.3):
     - WQBasicModules/Extensions/Module
     - WQBasicModules/UI/Help
+  - WQBasicModules/Animation/TransitionStyle (0.3.3)
   - WQBasicModules/Animation/Views (0.3.3):
     - WQBasicModules/Animation/Layer
+  - WQBasicModules/Core (0.3.3):
+    - WQBasicModules/Animation
+    - WQBasicModules/Extensions
+    - WQBasicModules/Tool
+    - WQBasicModules/UI
   - WQBasicModules/Extensions (0.3.3):
+    - WQBasicModules/Extensions/CoreGrapics (= 0.3.3)
     - WQBasicModules/Extensions/Date (= 0.3.3)
     - WQBasicModules/Extensions/Foundation (= 0.3.3)
     - WQBasicModules/Extensions/Module (= 0.3.3)
     - WQBasicModules/Extensions/String (= 0.3.3)
     - WQBasicModules/Extensions/UIKit (= 0.3.3)
+  - WQBasicModules/Extensions/CoreGrapics (0.3.3)
   - WQBasicModules/Extensions/Date (0.3.3):
     - WQBasicModules/Extensions/Foundation
   - WQBasicModules/Extensions/Foundation (0.3.3)
@@ -28,36 +33,35 @@ PODS:
   - WQBasicModules/Extensions/String (0.3.3)
   - WQBasicModules/Extensions/UIKit (0.3.3):
     - WQBasicModules/Extensions/Module
-  - WQBasicModules/Function (0.3.3):
-    - WQBasicModules/Function/PageViewController (= 0.3.3)
-  - WQBasicModules/Function/PageViewController (0.3.3)
+  - WQBasicModules/FunModule/ImagePicker (0.3.3)
   - WQBasicModules/Tool (0.3.3):
     - WQBasicModules/Tool/Cache (= 0.3.3)
-    - WQBasicModules/Tool/JsonCodable (= 0.3.3)
   - WQBasicModules/Tool/Cache (0.3.3)
-  - WQBasicModules/Tool/JsonCodable (0.3.3)
   - WQBasicModules/UI (0.3.3):
     - WQBasicModules/UI/Custom (= 0.3.3)
     - WQBasicModules/UI/FlowLayout (= 0.3.3)
     - WQBasicModules/UI/Function (= 0.3.3)
+    - WQBasicModules/UI/Gesture (= 0.3.3)
     - WQBasicModules/UI/Help (= 0.3.3)
   - WQBasicModules/UI/Custom (0.3.3):
     - WQBasicModules/Extensions/Module
   - WQBasicModules/UI/FlowLayout (0.3.3)
   - WQBasicModules/UI/Function (0.3.3)
+  - WQBasicModules/UI/Gesture (0.3.3)
   - WQBasicModules/UI/Help (0.3.3):
     - WQBasicModules/Extensions/Module
 
 DEPENDENCIES:
   - WQBasicModules (from `../`)
+  - WQBasicModules/FunModule/ImagePicker (from `../`)
 
 EXTERNAL SOURCES:
   WQBasicModules:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 74907ebf33a5ac394fb9069b7b3f5be94e8d6bef
+  WQBasicModules: 9133046f66d6532884bff789518cf04d103ef357
 
-PODFILE CHECKSUM: 847dc8c144242caaf0f9af9c2af8f4cc5561bacc
+PODFILE CHECKSUM: d69a610b4caddddfc869c3d1072a5b47f88911aa
 
 COCOAPODS: 1.9.1

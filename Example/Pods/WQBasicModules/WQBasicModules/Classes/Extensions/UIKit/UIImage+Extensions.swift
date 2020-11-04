@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - -- convenience init
 public extension UIImage {
-    
+
     /// 根据颜色创建图片
     ///
     /// - Parameters:
@@ -17,22 +17,22 @@ public extension UIImage {
     ///   - size: image size.
     convenience init(color: UIColor, size: CGSize) {
         UIGraphicsBeginImageContextWithOptions(size, false, 1)
-        
+
         defer {
             UIGraphicsEndImageContext()
         }
-        
+
         color.setFill()
         UIRectFill(CGRect(origin: .zero, size: size))
-        
+
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
             self.init()
             return
         }
-        
+
         self.init(cgImage: aCgImage)
     }
-    
+
     /// 根据文字创建二维码
     ///
     /// - Parameters:
@@ -83,7 +83,7 @@ public extension UIImage {
         }
          self.init(cgImage: scaleImage)
     }
-    
+
 }
 public extension UIImage {
     /// SwifterSwift: UIImage with rounded corners
@@ -99,13 +99,13 @@ public extension UIImage {
         } else {
             cornerRadius = maxRadius
         }
-        
+
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        
+
         let rect = CGRect(origin: .zero, size: size)
         UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius).addClip()
         draw(in: rect)
-        
+
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image

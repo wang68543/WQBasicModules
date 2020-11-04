@@ -7,7 +7,7 @@
 
 import UIKit
 public extension UIImage {
-    
+
     /// 指定区域重绘图片
     func reDraw(_ rect: CGRect) -> UIImage? {
         UIGraphicsBeginImageContext(rect.size)
@@ -16,7 +16,7 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
-    
+
     /// 根据路径裁剪图片
     ///
     /// - Parameters:
@@ -38,14 +38,14 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return image
     }
-    
+
     /// 绘制圆或椭圆图片
     func drawInCircle(_ size: CGSize) -> UIImage? {
         let rect = CGRect(origin: .zero, size: size)
         let path = UIBezierPath(ovalIn: rect)
        return clip(rect, path: path.cgPath, mode: .winding)
     }
-    
+
     /// 指定宽或高缩放到适当的大小
     ///
     /// - Parameters:
@@ -120,6 +120,6 @@ public extension Array where Element: UIImage {
                 }
             }
         }
-       
+
     }
 }

@@ -10,7 +10,7 @@ public enum WQStarValueType {
     case valueHalf, valueWhole, valueRandom // Random is not support custom image
 }
 open class WQStarControl: UIControl {
-    
+
     public var minimumValue: Int = 0
     public var maximumValue: Int = 1
     /// minimumValue ~ maximumValue
@@ -26,9 +26,9 @@ open class WQStarControl: UIControl {
     public var starSize: CGSize  = .zero
     /// polygon counts
     public var counts: Int = 5
-    
+
     public var valueType: WQStarValueType = .valueHalf
-    
+
     ///绘制的图形的角的个数
     public var shapeCoreners: Int = 5 {
         didSet {
@@ -39,11 +39,11 @@ open class WQStarControl: UIControl {
     public var highlightedColor: UIColor = .red
     public var borderWidth: CGFloat = 1.0
     public var borderColor: UIColor = .red
-    
+
     public var normalImage: UIImage?
     public var halfHighlightedImage: UIImage?
     public var highlightedImage: UIImage?
-   
+
     /// 每个星星之间的最小间距
     public var minInterSpacing: CGFloat = 5
     public var contentEdgeInsets: UIEdgeInsets = .zero
@@ -53,11 +53,11 @@ open class WQStarControl: UIControl {
     public var hideUnHighlited = false
     ///是否连续产生事件 为false的时候 只有当结束了才会产生事件
     public var isSendActionContinuous: Bool = true
-    
+
     private var rects: [CGRect] = []
     /// 是否是使用图片绘制
     private var isUsingImage: Bool = false
-    
+
     open override func layoutSubviews() {
         super.layoutSubviews()
         let contentRect = self.frame.inset(by: self.contentEdgeInsets)
@@ -97,7 +97,7 @@ open class WQStarControl: UIControl {
         }
         guard self.starSize.height <= contentRect.height,
             self.starSize.width <= contentRect.width else {
-                debugPrint("星星的尺寸必须小于控件的尺寸");return 
+                debugPrint("星星的尺寸必须小于控件的尺寸");return
         }
         //更新绘制方式
         shouldUpdateDrawMethod()
@@ -108,7 +108,7 @@ open class WQStarControl: UIControl {
         context.clear(rect)
         context.setFillColor(self.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
         context.fill(rect)
-        
+
         let top = self.contentEdgeInsets.top
         var items: [CGRect] = []
         for idx in 0 ..< counts {
@@ -126,7 +126,7 @@ open class WQStarControl: UIControl {
         return true
     }
     open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        super.continueTracking(touch, with: event) 
+        super.continueTracking(touch, with: event)
         handleTouch(touch)
         return true
     }
@@ -137,7 +137,7 @@ open class WQStarControl: UIControl {
             handleTouch(touch, isEnd: true)
         }
     }
-    
+
     open override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -207,7 +207,7 @@ private extension WQStarControl {
 }
 /// 画单个
 private extension WQStarControl {
-    
+
     func handleTouch(_ touch: UITouch, isEnd: Bool = false) {
         let point = touch.location(in: self)
         self.value = value(for: point)
@@ -307,5 +307,5 @@ private extension WQStarControl {
         drawImage?.draw(in: rect)
         UIGraphicsPopContext()
     }
-    
+
 }

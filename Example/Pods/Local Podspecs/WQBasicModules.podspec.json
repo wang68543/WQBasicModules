@@ -16,21 +16,53 @@
     "tag": "0.3.3"
   },
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   },
-  "source_files": "Sources/WQBasicModules.h",
   "swift_versions": [
     "4.0",
     "4.2",
-    "5.0"
+    "5.0",
+    "5.1",
+    "5.2",
+    "5.3"
   ],
+  "default_subspecs": "Core",
+  "requires_arc": true,
   "subspecs": [
     {
-      "name": "Function",
+      "name": "Core",
+      "dependencies": {
+        "WQBasicModules/Animation": [
+
+        ],
+        "WQBasicModules/Extensions": [
+
+        ],
+        "WQBasicModules/Tool": [
+
+        ],
+        "WQBasicModules/UI": [
+
+        ]
+      }
+    },
+    {
+      "name": "AppExtension",
+      "dependencies": {
+        "WQBasicModules/Extensions": [
+
+        ],
+        "WQBasicModules/Tool": [
+
+        ]
+      }
+    },
+    {
+      "name": "FunModule",
       "subspecs": [
         {
-          "name": "PageViewController",
-          "source_files": "Sources/Function/PageViewController/*.swift"
+          "name": "ImagePicker",
+          "source_files": "Sources/FunModule/ImagePicker/*.swift"
         }
       ]
     },
@@ -61,6 +93,10 @@
             ]
           },
           "source_files": "Sources/Animation/Transitioning/*.swift"
+        },
+        {
+          "name": "TransitionStyle",
+          "source_files": "Sources/Animation/TransitionStyle/**/*.swift"
         }
       ]
     },
@@ -70,6 +106,10 @@
         {
           "name": "Module",
           "source_files": "Sources/Extensions/Module/*.swift"
+        },
+        {
+          "name": "CoreGrapics",
+          "source_files": "Sources/Extensions/CoreGrapics/*.swift"
         },
         {
           "name": "UIKit",
@@ -82,7 +122,7 @@
         },
         {
           "name": "Foundation",
-          "source_files": "Sources/Extensions/Foundation/*.{swift,h,m}"
+          "source_files": "Sources/Extensions/Foundation/*.swift"
         },
         {
           "name": "Date",
@@ -105,10 +145,6 @@
         {
           "name": "Cache",
           "source_files": "Sources/Tool/Cache/*.swift"
-        },
-        {
-          "name": "JsonCodable",
-          "source_files": "Sources/Tool/JsonCodable/*.swift"
         }
       ]
     },
@@ -141,9 +177,13 @@
         {
           "name": "FlowLayout",
           "source_files": "Sources/UI/FlowLayout/*.swift"
+        },
+        {
+          "name": "Gesture",
+          "source_files": "Sources/UI/Gesture/*.swift"
         }
       ]
     }
   ],
-  "swift_version": "5.0"
+  "swift_version": "5.3"
 }

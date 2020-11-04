@@ -72,7 +72,7 @@ public extension WQPresentationOption.Position {
         }
         return CGRect(origin: origin, size: size)
     }
-    
+
     func mapInteractionDirection() -> DrivenDirection {
         var direction: DrivenDirection
         switch self {
@@ -95,7 +95,7 @@ public extension WQPresentationOption.Position {
                        viewFrame: CGRect) -> CGPoint {
         var position: CGPoint
         let viewW = viewFrame.width
-        let viewH = viewFrame.height 
+        let viewH = viewFrame.height
         let insetW = anchorPoint.x * size.width
         let insetH = anchorPoint.y * size.height
         switch self {

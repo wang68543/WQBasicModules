@@ -9,6 +9,4 @@
 import UIKit
 
 class PanScrollView: UIScrollView {
- 
-
 }

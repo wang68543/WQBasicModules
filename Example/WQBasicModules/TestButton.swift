@@ -18,32 +18,31 @@ class TestButton: UIButton {
         debugPrint(#function)
     }
     open override func backgroundRect(forBounds bounds: CGRect) -> CGRect {
-        debugPrint("--------",#function)
+        debugPrint("--------", #function)
         let rect = super.backgroundRect(forBounds: bounds)
         debugPrint("value:\(bounds),cal:\(rect)")
         return rect
     }
-    
+
     open override func contentRect(forBounds bounds: CGRect) -> CGRect {
-        debugPrint("*************",#function)
+        debugPrint("*************", #function)
         let rect = super.contentRect(forBounds: bounds)
         debugPrint("value:\(bounds),cal:\(rect)")
         return rect
     }
-    
+
     open override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        debugPrint("=======",#function)
+        debugPrint("=======", #function)
         let rect = super.titleRect(forContentRect: bounds)
         debugPrint("value:\(bounds),cal:\(rect)")
         return rect
     }
-    
+
     open override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        debugPrint("=======",#function)
+        debugPrint("=======", #function)
         let rect = super.imageRect(forContentRect: contentRect)
         debugPrint("value:\(contentRect),cal:\(rect)")
         return rect
     }
-    
 
 }

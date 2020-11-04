@@ -22,11 +22,11 @@ public protocol WQAnimatedConfigAble {
     ///   - presenting: 被show出来的Controller
     ///   - state: 动画状态
     func config(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState)
-    
+
     @available(iOS 10.0, *)
     func setup(_ presented: UIViewController?, presenting: UIViewController?, present state: WQTransitionState) -> UIViewPropertyAnimator
 }
- 
+
 // MARK: - -- 手势驱动动画的目标状态
 public extension WQAnimatedConfigAble {
     @available(iOS 10.0, *)
@@ -41,14 +41,14 @@ public extension WQAnimatedConfigAble {
 public typealias WQAnimatedConfigItems = [WQAnimatedConfigAble]
 
 /// 动画属性配置 (主要配置参与动画的两个ccontroller的属性变化)
-public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedConfigAble { 
+public class WQPresentedAnimatedItem<ViewControllerType, Element>: WQAnimatedConfigAble {
     public typealias Value = Element
     public typealias Root = ReferenceWritableKeyPath<ViewControllerType, Value>
     public let keyPath: Root
     public var initial: Value
     public var show: Value
     public var dismiss: Value
-    
+
     public init(_ key: Root, initial: Value, show: Value, dismiss: Value? = nil) {
         self.keyPath = key
         self.initial = initial
@@ -89,7 +89,7 @@ public extension WQAnimatedItem where Element == UIColor? {
     }
 }
 public extension WQAnimatedItem where Element == CGRect {
-    
+
     /// VC view的背景动画 
     class func defaultViewShowFrame(_ show: CGRect = UIScreen.main.bounds,
                                     initial: CGRect = UIScreen.main.bounds) -> WQAnimatedItem {
@@ -148,7 +148,7 @@ public extension Array where Element == WQAnimatedConfigAble {
         self.forEach { item in
             item.config(presented, presenting: presenting, present: state)
         }
-    } 
+    }
     /// 创建一个包含 View frame 跟 view 默认Color 动画
     init(default item: WQAnimatedConfigAble, viewFrame: CGRect) {
         self.init()

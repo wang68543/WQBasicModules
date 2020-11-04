@@ -8,26 +8,57 @@
 import Foundation
 /// 输入框类型
 public typealias TextFieldView = UIView & UITextInput
-//public extension WQModules where Base: UIView {
+public extension WQModules where Base: UIView {
 //    var subtextFields: [textFieldView] {
 //        return self.base.subtextFields
 //    }
-//}
-extension UIView {
-    /// 当前View所在的控制器
-    var containingController: UIViewController? {
-        var nextReponder: UIResponder? = self
-        repeat {
-            nextReponder = nextReponder?.next
-            if nextReponder is UIViewController {
-                return nextReponder as? UIViewController
-            }
-        } while (nextReponder != nil)
-        return nil
+//    var presenter: UIViewController? {
+//        return self.base.presenter
+//    }
+    var viewController: UIViewController? {
+        return self.base.viewController
     }
+}
+extension UIView {
+    var viewController: UIViewController? {
+        var topResponser: UIResponder = self
+        while let nextResponser = topResponser.next {
+            if let window = nextResponser as? UIWindow {
+                return window.rootViewController
+            } else if nextResponser is UIView {
+                topResponser = nextResponser
+            } else if let controller = nextResponser as? UIViewController {
+                return controller
+            } else {
+                return nil
+            }
+        }
+        if let window = self as? UIWindow {
+            return window.rootViewController
+        } else {
+            return nil
+        } 
+    }
+//    /// 当前View所在的控制器
+//    var presenter: UIViewController? {
+//        var nextReponder: UIResponder? = self
+//        repeat {
+//            nextReponder = nextReponder?.next
+//            if nextReponder is UIViewController {
+//                if let tabBar = nextReponder as? UITabBarController {
+//                    return tabBar.selectedViewController
+//                } else if let nav = nextReponder as? UINavigationController {
+//                    return nav.topViewController
+//                }
+//                return nextReponder as? UIViewController
+//            }
+//        } while (nextReponder != nil)
+//
+//        return nil
+//    }
     /// 获取控制器提前设置的keyboardManager
     public var keyboardManager: WQKeyboardManager? {
-        return self.containingController?.keyboardManager
+        return self.viewController?.keyboardManager
     }
 }
 extension UIView {

@@ -18,7 +18,7 @@ public protocol DrivenableProtocol: NSObjectProtocol {
     var shouldCompletionSpeed: CGFloat { get set }
     var shouldCompletionProgress: CGFloat { get set }
     var direction: DrivenDirection { get set }
-    
+
     func isEnableDriven(_ gestureRecognizer: UIGestureRecognizer) -> Bool
     func progress(for translate: CGPoint) -> CGFloat
     func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool
@@ -33,7 +33,7 @@ public class WQVectorView: UIView {
         guard let subView = self.subviews.first else { return }
         subView.bounds = self.bounds
         let anchorPoint = subView.layer.anchorPoint
-        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height) 
+        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
     }
 }
 open class WQPresentationable: UIViewController {
@@ -89,31 +89,31 @@ open class WQPresentationable: UIViewController {
     open var isEnableKeyboardObserver: Bool = false {
         didSet {
             if isEnableKeyboardObserver {
-                self.keyboardManager = WQKeyboardManager(self.containerView) 
+                self.keyboardManager = WQKeyboardManager(self.containerView)
             } else {
                 self.keyboardManager = nil
             }
         }
     }
     /// 是否是Modal出来的
-    public internal(set) var shownMode: WQShownMode = .present 
+    public internal(set) var shownMode: WQShownMode = .present
     ///containerView上的子View 用于转场动画切换
     public internal(set) var childViews: [UIView] = []
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     internal var contentViewInputs: [TextFieldView] = []
     internal var tapGesture: UITapGestureRecognizer?
-    
+
     /// shownInWindow的时候 记录的属性 用于消失之后恢复
     internal weak var previousKeyWindow: UIWindow?
     //用于容纳当前控制器的window窗口
     internal var containerWindow: WQPresentationWindow?
-    
+
     /// 非present的时候 用于动画管理器里面的转场动画
     internal weak var shouldUsingPresentionAnimatedController: UIViewController?
-    
+
     /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
     public var shouldViewWillApperance: Bool = false
- 
+
     /// 初始化
     ///
     /// - Parameters:
@@ -134,7 +134,7 @@ open class WQPresentationable: UIViewController {
         if let viewFrame = presentedFrame {
             self.view.frame = viewFrame
         }
-    } 
+    }
     override open func viewDidLoad() {
         super.viewDidLoad()
         //延迟加载View
@@ -167,7 +167,7 @@ open class WQPresentationable: UIViewController {
             self.hideFromWindow(animated: flag, completion: completion)
         case .superChildController:
             self.hideFromParent(animated: flag, completion: completion)
-        } 
+        }
     }
     #if DEBUG
     open override func viewWillAppear(_ animated: Bool) {

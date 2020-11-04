@@ -69,13 +69,31 @@ public extension UIColor {
 // MARK: - Helpers
 public extension UIColor {
     
-    func hex(hashPrefix: Bool = true) -> String {
-        var (r, g, b, a): (CGFloat, CGFloat, CGFloat, CGFloat) = (0.0, 0.0, 0.0, 0.0)
-        getRed(&r, green: &g, blue: &b, alpha: &a)
-        
-        let prefix = hashPrefix ? "#" : ""
-        
-        return String(format: "\(prefix)%02X%02X%02X", Int(r * 255), Int(g * 255), Int(b * 255))
+    // swiftlint:enable large_tuple
+
+    /// SwifterSwift: Hexadecimal value string (read-only).
+    var hexString: String {
+        let components: [Int] = {
+            let comps = cgColor.components!.map { Int($0 * 255.0) }
+            guard comps.count != 4 else { return comps }
+            return [comps[0], comps[0], comps[0], comps[1]]
+        }()
+        return String(format: "#%02X%02X%02X", components[0], components[1], components[2])
+    }
+    /// SwifterSwift: Get UInt representation of a Color (read-only).
+    var uInt: UInt {
+        let components: [CGFloat] = {
+            let comps: [CGFloat] = cgColor.components!
+            guard comps.count != 4 else { return comps }
+            return [comps[0], comps[0], comps[0], comps[1]]
+        }()
+
+        var colorAsUInt32: UInt32 = 0
+        colorAsUInt32 += UInt32(components[0] * 255.0) << 16
+        colorAsUInt32 += UInt32(components[1] * 255.0) << 8
+        colorAsUInt32 += UInt32(components[2] * 255.0)
+
+        return UInt(colorAsUInt32)
     }
     
     internal func rgbComponents() -> [CGFloat] {
@@ -154,7 +172,13 @@ public extension Array where Element: UIColor {
 
 // MARK: - Components
 public extension UIColor {
-    
+    /// SwifterSwift: Random color.
+    static var random: UIColor {
+        let red = Int.random(in: 0...255)
+        let green = Int.random(in: 0...255)
+        let blue = Int.random(in: 0...255)
+        return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: 1.0)
+    }
     var redComponent: CGFloat {
         var red: CGFloat = 0
         getRed(&red, green: nil, blue: nil, alpha: nil)

@@ -4,7 +4,7 @@
 //
 //  Created by HuaShengiOS on 2019/4/17.
 //
-
+#if canImport(UIKit) && !os(watchOS)
 import UIKit
 public extension UITextField {
     private struct AssociatedKeys {
@@ -74,3 +74,4 @@ public extension UITextField {
         leftViewMode = .always
     }
 }
+#endif

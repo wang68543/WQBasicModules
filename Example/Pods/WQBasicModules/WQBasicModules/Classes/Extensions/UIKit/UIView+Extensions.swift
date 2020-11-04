@@ -25,7 +25,7 @@ public extension UIView {
            makeRectangleCorners(CGSize(width: radius, height: radius), react: self.bounds, corners: corners)
         }
     }
-    
+
     /// 设置方形边框
     func makeRectangleCorners(_ cornerSize: CGSize, react: CGRect, corners: UIRectCorner = .allCorners) {
         let bounds = self.bounds
@@ -35,7 +35,7 @@ public extension UIView {
         shapeLayer.path = bezierPath.cgPath
         layer.mask = shapeLayer
     }
-    
+
     /// 截屏
     func snapshot(_ size: CGSize = .zero) -> UIImage? {
         let drawSize = (size == .zero) ? self.bounds.size : size
@@ -55,11 +55,11 @@ public extension UIScrollView {
     struct AssociatedKeys {
         static let isSnapping = UnsafeRawPointer(bitPattern: "wq.view.clip.isSnapping".hashValue)!
     }
-    
+
     var isSnapping: Bool {
         return (objc_getAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping) as? Bool) ?? false
     }
-    
+
     fileprivate func snapshotScroll(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
         let contentSize = self.contentSize
         let viewSize = self.frame.size
@@ -140,7 +140,7 @@ public extension UIScrollView {
     }
 }
 fileprivate extension UITableView {
-    
+
     func snapshotTable(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
         if self.style == .plain {
             let scale = UIScreen.main.scale

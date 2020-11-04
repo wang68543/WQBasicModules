@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 public extension String {
     
     /// 序列化URL的查询参数 (可处理包含=)
@@ -37,7 +38,7 @@ public extension String {
     ///
     /// - Parameter size: 二维码图片尺寸
     /// - Returns: UIImage
-    
+
     @available(*, deprecated, message: "use UIImage.create")
     func QRCode(_ size: CGSize) -> UIImage? {
         let filter = CIFilter(name: "CIQRCodeGenerator")
@@ -73,7 +74,7 @@ public extension String {
         } else {
             return nil
         }
-        
+
     }
 }
 
@@ -285,7 +286,7 @@ public extension String {
     ///
     /// - Returns: Strings separated by new lines.
     func lines() -> [String] {
-        var result = [String]()
+        var result: [String] = []
         enumerateLines { line, _ in
             result.append(line)
         }

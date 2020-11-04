@@ -8,7 +8,7 @@
 import UIKit
 public extension UITextField {
     private struct AssociatedKeys {
-        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)! 
+        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)!
     }
     /// 限制最大输入长度
     var maxInputLength: Int? {
@@ -28,7 +28,7 @@ public extension UITextField {
            return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int
         }
     }
-    
+
     private func addObserver() {
         self.removeObserver()
         NotificationCenter.default.addObserver(self,
@@ -39,7 +39,7 @@ public extension UITextField {
     private func removeObserver() {
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: self)
     }
-    
+
     @objc
     func textDidChange() {
         guard let length = self.maxInputLength,
@@ -50,4 +50,4 @@ public extension UITextField {
         self.text = String(string.prefix(length))
         self.selectedTextRange = range
     }
-} 
+}

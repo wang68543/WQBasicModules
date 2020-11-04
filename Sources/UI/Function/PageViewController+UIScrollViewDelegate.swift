@@ -2,7 +2,7 @@
 //  PageViewController+UIScrollViewDelegate.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/4/8.
+//  Created by WQ on 2020/4/8.
 //
 
 import UIKit

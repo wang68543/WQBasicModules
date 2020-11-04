@@ -5,7 +5,8 @@
 //  Created by WangQiang on 2018/12/26.
 // swiftlint:disable identifier_name
 
-import Foundation
+import Foundation 
+ 
 public final class WQModules<Base> {
     public let base: Base
     
@@ -25,5 +26,9 @@ public extension WQModulesCompatible {
         return WQModules(self)
     }
 }
+#if canImport(UIKit)
+@available(iOSApplicationExtension, unavailable)
 extension UIView: WQModulesCompatible { }
+@available(iOSApplicationExtension, unavailable)
 extension UIViewController: WQModulesCompatible { }
+#endif
