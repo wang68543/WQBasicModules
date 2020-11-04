@@ -14,10 +14,9 @@ public class TransitionStatesConfig {
     public var states: [ModalState: WQReferenceStates] = [:]
     /// 是否需要遮罩
     public var dimming: Bool
-    /// 动画之前附加的view
-    public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
+   
     
-    init(_ states: [ModalState: WQReferenceStates], isDimming: Bool = false) {
+    init(_ states: [ModalState: WQReferenceStates] = [:], isDimming: Bool = false) {
         self.states = states
         self.dimming = isDimming
     }

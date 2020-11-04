@@ -7,17 +7,24 @@
 
 import Foundation
 public extension UIView {
-    struct AssociatedKeys {
-        static let modal = UnsafeRawPointer(bitPattern: "wq.modal.config".hashValue)!
-    }
-    var modal: ModalConfig? {
-        return objc_getAssociatedObject(self, AssociatedKeys.modal) as? ModalConfig
+//    struct AssociatedKeys {
+//        static let modal = UnsafeRawPointer(bitPattern: "wq.modal.config".hashValue)!
+//    }
+    var modal: TransitionManager? {
+        var layout: UIResponder? = self
+        while let nextView = layout?.next {
+            layout = nextView
+            if nextView is WQLayoutController {  break }
+        }
+        return (layout as? WQLayoutController)?.manager
     }
 }
 public extension UIView {
     
     func alert(_ config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
-
+        let states = TransitionStatesConfig()
+        let layout = WQLayoutController(config, states: states)
+//        layout.manager
     }
     
     func actionSheet(_ config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
@@ -29,8 +36,9 @@ public extension UIView {
     }
 }
 public extension UIView {
-    func present(_ config: ModalContext, animation: TransitionAnimation, parent: UIViewController?) {
+    func present(_ manger: TransitionManager, animation: TransitionAnimation) {
         
     }
+//    func dismiss()
     
 }

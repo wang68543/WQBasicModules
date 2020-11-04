@@ -11,6 +11,7 @@ public protocol TransitionAnimation: class {
     
     var completionBlock: Completion? { get set }
     var duration: TimeInterval { get set }
+    var areAnimationEnable: Bool { get set }
 //    func preprocessor(duration manager: TransitionManager) -> TimeInterval
     
 //    func preprocessor(readyToShow context: ModalContext, to states: WQReferenceStates, completion: Completion?)

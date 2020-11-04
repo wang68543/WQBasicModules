@@ -43,50 +43,22 @@ import Foundation
 
 open class TransitionManager: NSObject {
  
-    public let config: ModalConfig
-    public let statesConfig: TransitionStatesConfig
+    public unowned let config: ModalConfig
     
-    public let showViewController: WQLayoutController
+    public unowned let statesConfig: TransitionStatesConfig
+    
+    public unowned let showViewController: WQLayoutController
     
     public var context: ModalContext?
     
-    public init(_ config: ModalConfig, states: TransitionStatesConfig, layout: WQLayoutController = WQLayoutController()) {
-        self.config = config
-        self.statesConfig = states
+    public init(_ layout: WQLayoutController) {
+        self.config = layout.config
+        self.statesConfig = layout.statesConfig
         self.showViewController = layout
 //        layout.delegate = self
         super.init()
     }
     
-//    lazy var context: ModalContext = {
-//        guard let ctx = ModalContext.modalContext(with: self.showViewController, modalStyle: self.transitionStyle) else {
-//            fatalError("请先设置ModalStyle")
-//        }
-//        return ctx
-//    }()
-    
-//    public weak var animator: TransitionAnimationPreprocessor?
-
-    
-    
-//    public let preprocessor: TransitionAnimationPreprocessor
-    
-//    var width: CGFloat = .nan
-    
-//    public init(_ viewController: WQLayoutController) {
-//        self.showViewController = viewController
-////        self.preprocessor = preprocessor
-//        super.init()
-//    }
-//    func prepareShow() {
-////        UIView.performWithoutAnimation {
-////            self.readyShowStates.forEach { (instance, values) in
-////                values.forEach { value in
-////                    value.setup(instance, state: .readyToShow)
-////                }
-////            }
-////        }
-//    }
     func show(_ context: ModalContext, animation: TransitionAnimation) {
         
     }

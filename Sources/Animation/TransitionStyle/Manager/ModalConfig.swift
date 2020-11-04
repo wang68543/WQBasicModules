@@ -33,24 +33,22 @@ public class ModalConfig {
     /// 用户交互消失的方式
     var interactionDismiss: InteractDismissMode = .none
     /// 容器控制器的View显示frame
-    var containerViewControllerFinalFrame: CGRect = UIScreen.main.bounds
+    var containerViewControllerFinalFrame: CGRect = UIScreen.main.bounds 
     
-
-//    let stateConfig: TransitionStatesConfig
+    /// 动画之前附加的view
+    public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
-    init(_ style: ModalStyle = .autoModal, fromViewController: UIViewController?) {
+    init(_ style: ModalStyle = .autoModal, fromViewController: UIViewController? = nil) {
         self.style = style
-//        self.stateConfig = states
         self.fromViewController = fromViewController
     }
 }
 public extension ModalConfig {
-    static let `default` = ModalConfig(fromViewController: nil)
+    static let `default` = ModalConfig()
     
     static func inParent(_ parentViewController: UIViewController) -> ModalConfig {
         return ModalConfig(.modalInParent, fromViewController: parentViewController)
     }
-    
 }
 //public extension ModalConfig {
 //    /// 添加属性到fromViewController

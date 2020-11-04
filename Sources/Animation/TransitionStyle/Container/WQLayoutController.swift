@@ -22,17 +22,23 @@ public class WQLayoutController: UIViewController {
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false
     
-//    public lazy var manager = TransitionManager()
+  
+    
     weak var delegate: WQLayoutControllerDelegate?
-//    public lazy var modalManager: TransitionManager = {
-//       return TransitionManager(self)
-//    }()
+    public lazy var manager: TransitionManager = {
+       return TransitionManager(self)
+    }()
     
 //    public var modalContext: ModalContext?
-//    public init(_ manager: TransitionManager) {
-//        
-//    }
-//    
+    let config: ModalConfig
+    let statesConfig: TransitionStatesConfig
+    public init(_ config: ModalConfig, states: TransitionStatesConfig) {
+        self.config = config
+        self.statesConfig = states
+        super.init(nibName: nil, bundle: nil)
+    }
+//
+    
     internal func setup() {
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
@@ -51,9 +57,12 @@ public class WQLayoutController: UIViewController {
 //    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
 //
 //    }
-    public func modal(animated flag: Bool, completion: TransitionAnimation.Completion? = nil) {
-        self.delegate?.show(self, animated: flag, completion: completion)
+    public func modal(_ config: ModalConfig, states: TransitionStatesConfig, animator: TransitionAnimation?) {
+        
     }
+//    public func modal(animated flag: Bool, completion: TransitionAnimation.Completion? = nil) {
+//        self.delegate?.show(self, animated: flag, completion: completion)
+//    }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         let superDismiss = self.delegate?.hide(self, animated: flag, completion: completion)
         if superDismiss == true  {
