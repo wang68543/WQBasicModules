@@ -16,9 +16,9 @@ open class ModalContext: NSObject {
  
 //    public unowned let showViewController: WQLayoutController
     
-    public weak var fromViewController: UIViewController?
+//    public weak var fromViewController: UIViewController?
     
-    public let style: ModalStyle
+//    public let style: ModalStyle
     /// 动画时长
     open var duration: TimeInterval = 0.25
     /// 动画结束的时候的View的状态
@@ -36,12 +36,12 @@ open class ModalContext: NSObject {
     /// - Parameters:
     ///   - viewController: 用于承载弹窗的ViewController
     ///   - fromViewController: 当前动画场景的起始
-    public init(_ viewController: WQLayoutController, style: ModalStyle) {
-        self.showViewController = viewController
-        self.style = style
-        super.init()
-    }
-    
+//    public init(_ viewController: WQLayoutController, style: ModalStyle) {
+//        self.showViewController = viewController
+//        self.style = style
+//        super.init()
+//    }
+//
 //    open func dismiss(animated flag: Bool, completion: Completion? = nil) {
 //         
 //    }
@@ -80,17 +80,18 @@ open class ModalDrivenContext: ModalContext {
 /// 构造不同的动画场景
 public extension ModalContext {
     static func modalContext(with viewController: WQLayoutController, modalStyle: ModalStyle) -> ModalContext? {
-        switch modalStyle {
-        case .modalSystem:
-            return ModalPresentationContext(viewController, style: modalStyle)
-        case .modalInParent:
-            return ModalInParentContext(viewController, style: modalStyle)
-        case .modalInWindow:
-            return ModalInWindowContext(viewController, style: modalStyle)
-        case .modalPresentWithNavRoot:
-            return ModalPresentWithNavRootContext(viewController, style: modalStyle)
-        case .autoModal: 
-            return nil
-        }
+        return nil
+//        switch modalStyle {
+//        case .modalSystem:
+//            return ModalPresentationContext(viewController, style: modalStyle)
+//        case .modalInParent:
+//            return ModalInParentContext(viewController, style: modalStyle)
+//        case .modalInWindow:
+//            return ModalInWindowContext(viewController, style: modalStyle)
+//        case .modalPresentWithNavRoot:
+//            return ModalPresentWithNavRootContext(viewController, style: modalStyle)
+//        case .autoModal:
+//            return nil
+//        }
     }
 }

@@ -32,38 +32,60 @@ public enum ModalState: Comparable {
     /// 准备显示之前状态
     case readyToShow
     /// 显示
-    case showing
+    case show
     /// 准备隐藏
     case readyToHide
     ///
     case hide
 }
 
-internal extension ModalState {
-    var isShow: Bool {
-        switch self {
-        case .showing:
-            return true
-        default:
-            return false
-        }
-    }
-} 
-
-///// 需扩展依赖于父控件的尺寸
-//public enum TransitionPosition {
-//    case none
-//    case centerZoom(Bool)
-//    case left(Bool)
-//    case right(Bool)
-//    case bottom(Bool)
-//    case top(Bool)
+//internal extension ModalState {
+//    var isShow: Bool {
+//        switch self {
+//        case .show:
+//            return true
+//        default:
+//            return false
+//        }
+//    }
 //}
-public enum TransitionAnimationStyle {
- 
+
+public enum HorizontalPanPosition {
+    case center
+
+    case top
+
+    case bottom
+}
+
+public enum VerticalPanPosition {
+    case center
+    
+    case leading
+    
+    case trailing
+}
+/// showing的时候 in
+public struct PanPosition {
+    let horizontal: HorizontalPanPosition
+    let vertical: VerticalPanPosition
+}
+/// contentView的 最终显示方式
+public enum TransitionShowStyle {
+    /// 定点中间显示
     case alert
     /// 考虑是否默认添加底部safeArea间距色块
-    case actionSheet // 使用(alert) bottomOut bottomIn
-    case custom
+    case actionSheet
+    /// 自定义显示
+    case pan([ModalState: PanPosition])
+    /// 自定义显示位置
+    case custom([ModalState: WQReferenceStates])
 } 
-
+/// 支持动画方式
+public enum TransitionAnimationStyle {
+    /// 背景淡入
+    case fade
+    case scaleFade
+    /// 自定义states 默认动画
+    case custom(TransitionAnimation)
+}

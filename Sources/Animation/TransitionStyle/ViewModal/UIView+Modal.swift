@@ -21,8 +21,7 @@ public extension UIView {
 }
 public extension UIView {
     
-    func alert(_ config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
-        let states = TransitionStatesConfig()
+    func alert(_ config: ModalConfig = .default, states: TransitionStatesConfig, completion: TransitionAnimation.Completion? = nil) {
         let layout = WQLayoutController(config, states: states)
 //        layout.manager
     }

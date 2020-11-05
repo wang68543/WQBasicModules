@@ -22,8 +22,15 @@ public class TSReference<Root, Value>: TSReferenceWriteable {
     public func setup(_ target: Any, state: ModalState) {
      guard let item = target as? Root else { return }
      item[keyPath: keyPath] = value
-   }
-   
+   } 
+}
+public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
+public extension WQReferenceStates {
+    func setup(for state: ModalState) {
+        self.forEach { target, values in
+            values.forEach({ $0.setup(target, state: state) })
+        }
+    }
 }
 
 public class TSReferenceRect: TSReference<WQLayoutController, CGRect> { }

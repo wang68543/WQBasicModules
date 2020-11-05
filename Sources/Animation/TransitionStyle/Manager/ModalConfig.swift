@@ -50,24 +50,3 @@ public extension ModalConfig {
         return ModalConfig(.modalInParent, fromViewController: parentViewController)
     }
 }
-//public extension ModalConfig {
-//    /// 添加属性到fromViewController
-//    func addStateFromTarget(_ values: [TSReferenceWriteable], state: ModalState) {
-//        guard let from = self.fromViewController else { return }
-//        self.stateConfig.addState(from, values: values, state: state)
-//    }
-//    /// 添加属性到fromViewController
-//    func addStateFromTarget(_ value: TSReferenceWriteable, state: ModalState) {
-//        self.addStateFromTarget([value], state: state)
-//    }
-//    /// 添加属性到presenting
-//    func addStateToTarget(_ values: [TSReferenceWriteable], state: ModalState) {
-////        addState(presenting, values: values, state: state)
-//    }
-//    /// 添加属性到presenting
-//    func addStateToTarget(_ value: TSReferenceWriteable, state: ModalState) {
-//        self.addStateToTarget([value], state: state)
-//    }
-//
-//
-//}

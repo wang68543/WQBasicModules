@@ -7,19 +7,29 @@
 
 import Foundation
 
-public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
+
 /// 转场动画各种状态的配置
 public class TransitionStatesConfig {
     /// 各个状态的配置
-    public var states: [ModalState: WQReferenceStates] = [:]
+    public private(set) var states: [ModalState: WQReferenceStates]
     /// 是否需要遮罩
-    public var dimming: Bool
-   
+    public var dimming: Bool = false
+   /// states
+    public let showStyle: TransitionShowStyle
+    /// 动画方式 ModalDefaultAnimation
+    public let animationStyle: TransitionAnimationStyle
     
-    init(_ states: [ModalState: WQReferenceStates] = [:], isDimming: Bool = false) {
-        self.states = states
-        self.dimming = isDimming
-    }
+    public init(_ style: TransitionShowStyle, anmation: TransitionAnimationStyle) {
+        self.showStyle = style
+        self.animationStyle = anmation
+        switch style {
+        case let .custom(values):
+            states = values
+        default:
+            states = [:]
+            break
+        }
+    } 
 }
 public extension TransitionStatesConfig {
     func addState(_ target: AnyHashable, values: [TSReferenceWriteable], state: ModalState) {
@@ -31,9 +41,6 @@ public extension TransitionStatesConfig {
     func addState(_ target: AnyHashable, value: TSReferenceWriteable, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
-} 
-//func addDefaultDimming(_ initial: UIColor = .clear, show: UIColor = UIColor.black.withAlphaComponent(0.6)) {
-//    self.stateConfig.dimming = true
-//    let keyPath = \WQLayoutController.dimmingView.backgroundColor
-//    self.addStateToTarget(TSReferenceColor(value: initial, keyPath: <#T##ReferenceWritableKeyPath<WQLayoutController, UIColor>#>), state: <#T##ModalState#>)
-//}
+}  
+
+

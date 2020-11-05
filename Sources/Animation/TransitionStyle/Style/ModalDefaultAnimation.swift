@@ -7,13 +7,23 @@
 
 import Foundation 
 public class ModalDefaultAnimation: TransitionAnimation {
+    public var areAnimationEnable: Bool = true
+    
     public var completionBlock: Completion?
 
     public var duration: TimeInterval = 0.25
-
-    public func preprocessor(_ state: ModalState, with context: ModalContext, to states: WQReferenceStates, completion: Completion?) {
-
+    
+    public func preprocessor(_ manager: TransitionManager, state: ModalState, completion: Completion?) {
+         
     }
+    
+
+
+    
+    
+//    public func preprocessor(_ state: ModalState, with context: ModalContext, to states: WQReferenceStates, completion: Completion?) {
+//
+//    }
 //
 //    public func preprocessor(duration manager: TransitionManager) -> TimeInterval {
 //        return 0.25

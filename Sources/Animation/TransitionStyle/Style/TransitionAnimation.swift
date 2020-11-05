@@ -19,9 +19,8 @@ public protocol TransitionAnimation: class {
 //    func preprocessor(readyToHide context: ModalContext, to states: WQReferenceStates, completion: Completion?)
 //    func preprocessor(willHide context: ModalContext, to states: WQReferenceStates, completion: Completion?)
     
-    func preprocessor(_ state: ModalState,
-                      with context: ModalContext,
-                      to states: WQReferenceStates,
+    func preprocessor(_ manager: TransitionManager,
+                      state: ModalState,
                       completion: Completion?)
     
     func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat)
@@ -41,10 +40,3 @@ public extension TransitionAnimation {
     }
 }
 
-public extension WQReferenceStates {
-    func setup(for state: ModalState) {
-        self.forEach { target, values in
-            values.forEach({ $0.setup(target, state: state) })
-        }
-    }
-}

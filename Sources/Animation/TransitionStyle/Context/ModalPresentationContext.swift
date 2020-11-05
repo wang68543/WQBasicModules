@@ -17,11 +17,11 @@ open class ModalPresentationContext: ModalContext {
     
 //    var presenter: UIViewController?
     
-    public override init(_ viewController: WQLayoutController, style: ModalStyle) {
-        super.init(viewController, style: style)
-        viewController.modalPresentationStyle = .custom
-        viewController.transitioningDelegate = self
-    }
+//    public override init(_ viewController: WQLayoutController, style: ModalStyle) {
+//        super.init(viewController, style: style)
+//        viewController.modalPresentationStyle = .custom
+//        viewController.transitioningDelegate = self
+//    }
 //    
 //    /// 开始当前的ViewController转场动画
 //    /// - Parameters:
