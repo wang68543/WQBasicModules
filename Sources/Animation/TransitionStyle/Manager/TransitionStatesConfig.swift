@@ -19,6 +19,10 @@ public class TransitionStatesConfig {
     /// 动画方式 ModalDefaultAnimation
     public let animationStyle: TransitionAnimationStyle
     
+    /// 动画执行者
+    lazy var animator: TransitionAnimation = {
+        return animationStyle.animator
+    }()
     public init(_ style: TransitionShowStyle, anmation: TransitionAnimationStyle) {
         self.showStyle = style
         self.animationStyle = anmation
@@ -43,4 +47,21 @@ public extension TransitionStatesConfig {
     }
 }  
 
+//public extension TransitionStatesConfig {
+//    convenience init(_ ) {
+//        <#statements#>
+//    }
+//    static func alert(_ animation: TransitionAnimationStyle = .fade) -> TransitionStatesConfig {
+//        let states = TransitionStatesConfig(.alert, anmation: animation)
+//        return states
+//    }
+//    static func actionSheet(_ animation: TransitionAnimationStyle = .fade) -> TransitionStatesConfig {
+//        let states = TransitionStatesConfig(.actionSheet, anmation: animation)
+//        return states
+//    }
+//    static func pan(_ animation: TransitionAnimationStyle = .fade, panStates: [ModalState: PanPosition]) -> TransitionStatesConfig {
+//        let states = TransitionStatesConfig(.pan(panStates), anmation: animation)
+//        return states
+//    }
+//}
 

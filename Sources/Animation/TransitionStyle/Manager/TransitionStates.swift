@@ -89,3 +89,17 @@ public enum TransitionAnimationStyle {
     /// 自定义states 默认动画
     case custom(TransitionAnimation)
 }
+
+public extension TransitionAnimationStyle {
+    
+    var animator: TransitionAnimation {
+        switch self {
+        case .fade:
+            return ModalFadeAnimation()
+        case .scaleFade:
+            return ModalScaleFadeAnimation()
+        case let .custom(animation):
+            return animation
+        }
+    }
+}

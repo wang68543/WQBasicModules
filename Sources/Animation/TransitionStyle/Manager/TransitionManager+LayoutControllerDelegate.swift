@@ -6,7 +6,7 @@
 //
 
 import Foundation
-extension TransitionManager: WQLayoutControllerDelegate {
+extension TransitionManager: WQLayoutControllerTransition {
     public func didViewLoad(_ controller: WQLayoutController) {
         
     }

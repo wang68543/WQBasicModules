@@ -5,13 +5,11 @@
 //  Created by iMacHuaSheng on 2020/8/21.
 //
 
-import UIKit
-
-
+import UIKit 
 /**
  将当前控制器的View 作为transitionView 
  */
-public protocol WQLayoutControllerDelegate: NSObjectProtocol {
+public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func didViewLoad(_ controller: WQLayoutController)
     func show(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) -> Bool
@@ -21,13 +19,10 @@ public protocol WQLayoutControllerDelegate: NSObjectProtocol {
 public class WQLayoutController: UIViewController {
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false
-    
-  
-    
-    weak var delegate: WQLayoutControllerDelegate?
+     
     public lazy var manager: TransitionManager = {
-       return TransitionManager(self)
-    }() 
+       return TransitionManager(config, states: statesConfig, layout: self)
+    }()
     let config: ModalConfig
     let statesConfig: TransitionStatesConfig
     public init(_ config: ModalConfig, states: TransitionStatesConfig) {
@@ -36,7 +31,6 @@ public class WQLayoutController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         setup()
     }
-//
     
     internal func setup() {
         self.view.addSubview(dimmingView)
@@ -46,54 +40,23 @@ public class WQLayoutController: UIViewController {
      
     public override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate?.didViewLoad(self)
+        manager.didViewLoad(self)
+        
     }
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         dimmingView.frame = self.view.bounds 
         
     }
-//    public override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-//
-//    }
-    public func modal(_ animator: TransitionAnimation?) {
-        
+    public func modal(_ flag: Bool, comletion: TransitionAnimation.Completion? = nil) {
+        manager.show(self, animated: flag, completion: comletion)
     }
-//    public func modal(animated flag: Bool, completion: TransitionAnimation.Completion? = nil) {
-//        self.delegate?.show(self, animated: flag, completion: completion)
-//    }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        let superDismiss = self.delegate?.hide(self, animated: flag, completion: completion)
+        let superDismiss = self.manager.hide(self, animated: flag, completion: completion)
         if superDismiss == true  {
             super.dismiss(animated: flag, completion: completion)
         }  
     }
-    
-//    /// 这里的尺寸是跟随父View的尺寸的
-//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-//
-//    }
-//
-//    public func show(withSystemPrensention presenter: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-//        let viewController = presenter ?? wm_topVisibleViewController()
-//        self.show(fromViewController: viewController, animated: flag, style: .modalSystem, completion: completion)
-//    }
-//    public func show(inWindow fromViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-//        let viewController = fromViewController ?? wm_topVisibleViewController()
-//        self.show(fromViewController: viewController, animated: flag, style: .modalInWindow, completion: completion)
-//    }
-//    public func show(inParent parentViewController: UIViewController?, animated flag: Bool, completion: (() -> Void)? = nil) {
-//        guard let fromViewController = parentViewController ?? wm_topVisibleViewController() ?? UIApplication.shared.keyWindow?.rootViewController else {
-//            fatalError("当前没有可显示的窗口")
-//        }
-//        self.show(fromViewController: fromViewController, animated: flag, style: .modalInParent, completion: completion)
-//    }
-//
-//    private func show(fromViewController: UIViewController?, animated flag: Bool, style: ModalStyle, completion: (() -> Void)? = nil) {
-//        if modalContext == nil { modalContext =  ModalContext.modalContext(with: self, modalStyle: style) }
-//        modalContext?.show(in: fromViewController, animated: flag, completion: completion)
-//    }
-    
     
     // MARK: -- -UI属性
     internal lazy var dimmingView: UIView = {
@@ -120,24 +83,6 @@ public class WQLayoutController: UIViewController {
         #if WDEBUG
         debugPrint("\(self):" + #function + "♻️")
         #endif
-    }
-    
+    } 
 }
-
-//public extension WQLayoutController {
-//    static let container: TSReferenceWriteable
-//}
-public class WQContainerView: UIView {
-    public override func addSubview(_ view: UIView) {
-        super.addSubview(view)
-        view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    }
-//    public override func layoutSubviews() {
-//        super.layoutSubviews()
-//        guard let subView = self.subviews.first else { return }
-//        subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-////        subView.bounds = self.bounds
-////        let anchorPoint = subView.layer.anchorPoint
-////        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
-//    }
-}
+ 

@@ -15,10 +15,7 @@ public class ModalDefaultAnimation: TransitionAnimation {
     
     public func preprocessor(_ manager: TransitionManager, state: ModalState, completion: Completion?) {
          
-    }
-    
-
-
+    } 
     
     
 //    public func preprocessor(_ state: ModalState, with context: ModalContext, to states: WQReferenceStates, completion: Completion?) {

@@ -43,31 +43,20 @@ import Foundation
 
 open class TransitionManager: NSObject {
  
-    public unowned let config: ModalConfig
+    public let config: ModalConfig
     
-    public unowned let statesConfig: TransitionStatesConfig
+    public let statesConfig: TransitionStatesConfig
     
     public unowned let showViewController: WQLayoutController
     
     public var context: ModalContext?
-//    lazy var context: ModalContext = {
-//        
-//    }()
-    public init(_ layout: WQLayoutController) {
-        self.config = layout.config
-        self.statesConfig = layout.statesConfig
+    
+    public init(_ config: ModalConfig, states: TransitionStatesConfig, layout: WQLayoutController) {
+        self.config = config
+        self.statesConfig = states
         self.showViewController = layout
-//        layout.delegate = self
         super.init()
     }
-    
-//    func show(_ context: ModalContext, animation: TransitionAnimation) {
-//        
-//    }
-//    
-//    func hide(_ context: ModalContext, animation: TransitionAnimation) {
-//        
-//    }
 }
 // custom 配置
 public extension TransitionManager {
