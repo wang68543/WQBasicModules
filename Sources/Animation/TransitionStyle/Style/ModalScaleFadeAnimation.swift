@@ -17,6 +17,8 @@ public class ModalScaleFadeAnimation: ModalDefaultAnimation {
             willHide(layoutController, config: config, states: states, completion: completion)
         case .hide:
             hide(layoutController, config: config, states: states, completion: completion)
+        default:
+            break
         }
     }
     

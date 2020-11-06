@@ -13,6 +13,15 @@ public class WQContainerView: UIView {
         super.addSubview(view)
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     }
+    
+    public func boundsToFit(_ view: UIView? = nil) {
+        if view == nil && !self.bounds.isEmpty {
+            return
+        }
+        guard let subView = view ?? self.subviews.first else { return }
+        self.bounds = subView.bounds
+    }
+    
 //    public override func layoutSubviews() {
 //        super.layoutSubviews()
 //        guard let subView = self.subviews.first else { return }

@@ -17,7 +17,7 @@ public class ModalDefaultAnimation: TransitionAnimation {
     
 //    public var completionBlocks: [ModalState: Completion] = [:]
 
-    public var duration: TimeInterval = 0.25
+    public var duration: TimeInterval = 0.45
     
 //    public func preprocessor(_ manager: TransitionManager, state: ModalState, completion: Completion?) {
 //         

@@ -124,7 +124,7 @@ public extension ModalContext {
 }
 /// 构造不同的动画场景
 public extension ModalContext {
-    static func modalContext(_ config: ModalConfig, states: TransitionStatesConfig, layoutController: WQLayoutController) -> ModalContext? {
+    static func modalContext(_ config: ModalConfig, states: TransitionStatesConfig) -> ModalContext? {
         
         func context(_ style: ModalStyle) -> ModalContext? {
             switch style {

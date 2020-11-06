@@ -29,16 +29,17 @@ public class WQLayoutController: UIViewController {
 //    let statesConfig: TransitionStatesConfig
     var statesConfig: TransitionStatesConfig?
     
-    public init(_ config: ModalConfig) {
+    public init(_ config: ModalConfig, subView: UIView) {
         self.config = config
 //        self.statesConfig = states
         super.init(nibName: nil, bundle: nil)
-//        setup()
+        setup()
+        self.container.addSubview(subView)
     }
     
     internal func setup() { 
         self.view.addSubview(dimmingView)
-        self.dimmingView.isOpaque = false
+//        self.dimmingView.isOpaque = false 
         self.view.addSubview(self.container)
     }
      
@@ -56,7 +57,7 @@ public class WQLayoutController: UIViewController {
     }
     public func modal(_ states: TransitionStatesConfig, comletion: TransitionAnimation.Completion? = nil) {
 //        self.statesConfig = states
-        context = ModalContext(self.config, states: states)
+        context = ModalContext.modalContext(self.config, states: states)
         context?.show(self, statesConfig: states, completion: comletion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -74,7 +75,7 @@ public class WQLayoutController: UIViewController {
     internal lazy var dimmingView: UIView = {
        let diming = UIView()
         diming.isUserInteractionEnabled = false
-        diming.backgroundColor = UIColor.black
+        diming.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         diming.alpha = 0.0
         return diming
     }()

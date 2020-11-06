@@ -18,6 +18,8 @@ public class ModalFadeAnimation: ModalDefaultAnimation {
             willHide(layoutController, config: config, states: states, completion: completion)
         case .hide:
             hide(layoutController, config: config, states: states, completion: completion)
+        default:
+            break
         }
     }
     
@@ -28,9 +30,17 @@ public class ModalFadeAnimation: ModalDefaultAnimation {
         case .alert:
             layoutController.dimmingView.alpha = 0.0
             layoutController.container.alpha = 0.0
+            layoutController.container.boundsToFit()
+            let controllerSize = config.containerViewControllerFinalFrame.size
+            let size = layoutController.container.bounds.size
+//            layoutController.container.center = CGPoint(x: controllerSize.width*0.5, y: controllerSize.height*0.5)
+            layoutController.container.frame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
             layoutController.container.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
         case .actionSheet:
             layoutController.dimmingView.alpha = 0.0
+            layoutController.container.boundsToFit()
+            let controllerSize = config.containerViewControllerFinalFrame.size
+            layoutController.container.center = CGPoint(x: controllerSize.width*0.5, y: controllerSize.height - layoutController.container.bounds.height*0.5)
             layoutController.container.transform = CGAffineTransform(translationX: 0, y: layoutController.container.modalSize.height)
         case .custom:
             if let bindViews = states.snapShotAttachAnimatorViews[.willShow] {
@@ -42,6 +52,7 @@ public class ModalFadeAnimation: ModalDefaultAnimation {
         default:
             break
         }
+        layoutController.view.setNeedsLayout()
         UIView.setAnimationsEnabled(areAnimationsEnabled)
         completion?()
     }
@@ -50,10 +61,12 @@ public class ModalFadeAnimation: ModalDefaultAnimation {
         UIView.animate(withDuration: self.duration - 0.2, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
             switch states.showStyle {
             case .alert:
+                layoutController.dimmingView.alpha = 1.0
                 layoutController.container.alpha = 1.0
                 layoutController.container.transform = CGAffineTransform(scaleX: 1.05, y: 1.05)
             case .actionSheet:
                 layoutController.container.alpha = 1.0
+                layoutController.dimmingView.alpha = 1.0
                 layoutController.container.transform = CGAffineTransform(translationX: 0, y: -10)
             case .custom:
                 states.states[.show]?.setup(for: .show)

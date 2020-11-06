@@ -16,7 +16,13 @@ open class ModalPresentationContext: ModalContext {
  
     public override func show(_ controller: WQLayoutController, statesConfig: TransitionStatesConfig, completion: (() -> Void)?) {
         controller.modalPresentationStyle = .custom
-        controller.transitioningDelegate = self 
+        controller.transitioningDelegate = self
+        switch statesConfig.showStyle {
+        case .alert, .actionSheet:
+            self.animator.duration = 0.45
+        default:
+            break
+        }
         self.animator.preprocessor(.willShow, layoutController: controller, config: config, states: statesConfig) { [weak self] in
             guard let `self` = self else { return }
             self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
@@ -24,6 +30,12 @@ open class ModalPresentationContext: ModalContext {
         }
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        switch statesConfig.showStyle {
+        case .alert, .actionSheet:
+            self.animator.duration = 0.25
+        default:
+            break
+        }
         self.animator.preprocessor(.willHide, layoutController: controller, config: config, states: self.statesConfig, completion: completion)
         return false
     }

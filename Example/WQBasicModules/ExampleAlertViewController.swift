@@ -60,61 +60,62 @@ class ExampleAlertViewController: BaseExampleViewController {
 
         let alertView = UIView()
 
-        let subView = UIView()
-        alertView.addSubview(subView)
-//        subView.snp.makeConstraints { make in
-////            make.edges.equalToSuperview()
-//            make.left.equalToSuperview().offset(25)
-//            make.right.equalToSuperview().offset(-25)
-//            make.top.bottom.equalToSuperview()
-//        }
-        let size = CGSize(width: 200, height: 200)
-        alertView.backgroundColor = UIColor.red
-        let presentedFrame = UIScreen.main.bounds
-        let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: presentedFrame.height * 0.5, width: size.width, height: 0)
-
-        let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
-
-        let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
-        let animator = WQTransitionAnimator(items: items)
+//        let subView = UIView()
+//        alertView.addSubview(subView)
+////        subView.snp.makeConstraints { make in
+//////            make.edges.equalToSuperview()
+////            make.left.equalToSuperview().offset(25)
+////            make.right.equalToSuperview().offset(-25)
+////            make.top.bottom.equalToSuperview()
+////        }
+//        let size = CGSize(width: 200, height: 200)
+//        alertView.backgroundColor = UIColor.red
+//        let presentedFrame = UIScreen.main.bounds
+//        let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: presentedFrame.height * 0.5, width: size.width, height: 0)
+//
+//        let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
+//
+//        let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
+//        let animator = WQTransitionAnimator(items: items)
         let alertSubView = UIView()
         alertSubView.backgroundColor = UIColor.blue
         alertView.addSubview(alertSubView)
-        alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
-        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-//        presention.show(animated: true, in: nil, completion: nil)
-        presention.interactionDismissDirection = .down
-         presention.tapDimmingViewDismissable = true
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-
-            alertView.wm.dismiss(true)
-            self.show()
-        }
+        alertSubView.frame = CGRect(x: 20, y: 20, width: 100, height: 100)
+        alertSubView.alert(true, config: ModalConfig.default)
+//        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
+////        presention.show(animated: true, in: nil, completion: nil)
+//        presention.interactionDismissDirection = .down
+//         presention.tapDimmingViewDismissable = true
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+//
+//            alertView.wm.dismiss(true)
+//            self.show()
+//        }
     }
 
     func show() {
-        let size = CGSize(width: 300, height: 100)
-         alertView.backgroundColor = UIColor.green
-         let presentedFrame = UIScreen.main.bounds
-         let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5,
-                              y: presentedFrame.height * 0.5, width: size.width, height: 0)
-
-         let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
-
-         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
-         let animator = WQTransitionAnimator(items: items)
-         let alertSubView = UIView()
-         alertSubView.backgroundColor = UIColor.blue
-         alertView.addSubview(alertSubView)
-         alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
-         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-//         presention.show(animated: true, in: nil, completion: nil)
-         presention.interactionDismissDirection = .down
-          presention.tapDimmingViewDismissable = true
-        let nav = UINavigationController(rootViewController: presention)
-        nav.view.backgroundColor = .clear
-        nav.transitioningDelegate = presention
-        nav.modalPresentationStyle = .custom
-        self.present(nav, animated: true, completion: nil)
+//        let size = CGSize(width: 300, height: 100)
+//         alertView.backgroundColor = UIColor.green
+//         let presentedFrame = UIScreen.main.bounds
+//         let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5,
+//                              y: presentedFrame.height * 0.5, width: size.width, height: 0)
+//
+//         let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
+//
+//         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
+//         let animator = WQTransitionAnimator(items: items)
+//         let alertSubView = UIView()
+//         alertSubView.backgroundColor = UIColor.blue
+//         alertView.addSubview(alertSubView)
+//         alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
+//         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
+////         presention.show(animated: true, in: nil, completion: nil)
+//         presention.interactionDismissDirection = .down
+//          presention.tapDimmingViewDismissable = true
+//        let nav = UINavigationController(rootViewController: presention)
+//        nav.view.backgroundColor = .clear
+//        nav.transitioningDelegate = presention
+//        nav.modalPresentationStyle = .custom
+//        self.present(nav, animated: true, completion: nil)
     }
 }

@@ -30,16 +30,18 @@ public extension UIView {
     
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
         let states = TransitionStatesConfig(.alert, anmation: .fade)
-        let layout = WQLayoutController(config)
-        self.present(layout, states: states, completion: completion)
+        self.present(config, states: states, completion: completion)
     }
     
     func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
         let states = TransitionStatesConfig(.actionSheet, anmation: .fade)
-        let layout = WQLayoutController(config)
-        self.present(layout, states: states, completion: completion)
+        self.present(config, states: states, completion: completion)
     }
     
+    func present(_ config: ModalConfig, states: TransitionStatesConfig, completion: TransitionAnimation.Completion? = nil) {
+        let layout = WQLayoutController(config, subView: self)
+        present(layout, states: states, completion: completion)
+    }
     func present(_ container: WQLayoutController, states: TransitionStatesConfig, completion: TransitionAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
     }

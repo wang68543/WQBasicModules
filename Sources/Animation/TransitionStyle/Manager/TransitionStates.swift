@@ -68,10 +68,12 @@ public enum ModalState: Comparable {
     case willShow
     /// 显示
     case show
+    case didShow
 //    /// 准备隐藏
     case willHide
     ///
     case hide
+    case didHide
 } 
 
 public enum HorizontalPanPosition {
