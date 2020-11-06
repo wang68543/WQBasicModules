@@ -22,31 +22,41 @@ public enum InteractDismissMode {
     /// 移动消失
     case pan(Direction)
 }
+
+extension InteractDismissMode {
+    var isGestureDrivenDismiss: Bool {
+        switch self {
+        case .pan:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 public class ModalConfig {
-    let style: ModalStyle
-    /// 显示ViewController
-    weak var fromViewController: UIViewController?
+    public let style: ModalStyle 
+    /// 当前在结构中的 viewController
+    internal weak var fromViewController: UIViewController?
     /// 容器控制器
 //    let presenting: WQLayoutController = WQLayoutController()
     /// 是否要调用生命周期
-    var layoutControllerLifeCycleable: Bool = false
+    public var layoutControllerLifeCycleable: Bool = false
     /// 用户交互消失的方式
-    var interactionDismiss: InteractDismissMode = .none
+    public var interactionDismiss: InteractDismissMode = .none
     /// 容器控制器的View显示frame
-    var containerViewControllerFinalFrame: CGRect = UIScreen.main.bounds 
+    public var containerViewControllerFinalFrame: CGRect = UIScreen.main.bounds
     
-    /// 动画之前附加的view
-    public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
-    init(_ style: ModalStyle = .autoModal, fromViewController: UIViewController? = nil) {
+    public init(_ style: ModalStyle = .autoModal) {
         self.style = style
-        self.fromViewController = fromViewController
+        fromViewController = style.fromViewController
     }
 }
 public extension ModalConfig {
     static let `default` = ModalConfig()
     
     static func inParent(_ parentViewController: UIViewController) -> ModalConfig {
-        return ModalConfig(.modalInParent, fromViewController: parentViewController)
+        return ModalConfig(.modalInParent(parentViewController))
     }
 }

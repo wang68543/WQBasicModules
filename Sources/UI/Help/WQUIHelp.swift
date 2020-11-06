@@ -10,13 +10,12 @@ import Foundation
 final public class WQUIHelp {
     class func topNormalWindow() -> UIWindow? {
         let app = UIApplication.shared
-        var topWindow: UIWindow?
-        if let mainWindow = app.delegate?.window {
-            topWindow = mainWindow
-        }
-        if topWindow == nil {
-            topWindow = app.windows.last(where: { $0.windowLevel == .normal })
-        }
+        #if targetEnvironment(macCatalyst)
+        var topWindow = UIApplication.shared.windows.last
+        #else
+        var topWindow = UIApplication.shared.keyWindow
+        #endif 
+        topWindow = topWindow ?? app.delegate?.window ?? app.windows.last(where: { $0.windowLevel == .normal })
         return topWindow
     }
      

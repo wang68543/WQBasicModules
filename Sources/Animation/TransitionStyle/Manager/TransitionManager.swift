@@ -49,7 +49,10 @@ open class TransitionManager: NSObject {
     
     public unowned let showViewController: WQLayoutController
     
-    public var context: ModalContext?
+//    public var context: ModalContext?
+    public lazy var context: ModalContext? = {
+        return ModalContext.modalContext(config, states: statesConfig, layoutController: showViewController)
+    }()
     
     public init(_ config: ModalConfig, states: TransitionStatesConfig, layout: WQLayoutController) {
         self.config = config

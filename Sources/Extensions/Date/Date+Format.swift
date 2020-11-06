@@ -185,6 +185,7 @@ public extension Double {
         }
         return fmtString
     }
+    
     ///
     /// 数字自定义转成时长格式
     ///
@@ -192,6 +193,12 @@ public extension Double {
     /// - Returns: 格式化之后的时长
     func toDuration(_ format: String, timeZone: TimeZone = .current) -> String {
        return self.toDate(timeZone).toString(format)
+    }
+    
+    /// 配合 MeasurementFormatter 转换为想要的格式
+    @available(iOS 10.0, *)
+    func seconds(to unit: UnitDuration) -> Measurement<UnitDuration> {
+        return Measurement(value: self, unit: UnitDuration.seconds).converted(to: unit)
     }
     /// 将时间秒数转成UTC时间
     func toDate(_ timeZone: TimeZone = .current) -> Date {

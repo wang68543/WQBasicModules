@@ -18,6 +18,9 @@ public class TransitionStatesConfig {
     public let showStyle: TransitionShowStyle
     /// 动画方式 ModalDefaultAnimation
     public let animationStyle: TransitionAnimationStyle
+     
+    /// 动画之前附加的view
+    public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
     /// 动画执行者
     lazy var animator: TransitionAnimation = {
@@ -45,23 +48,5 @@ public extension TransitionStatesConfig {
     func addState(_ target: AnyHashable, value: TSReferenceWriteable, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
-}  
-
-//public extension TransitionStatesConfig {
-//    convenience init(_ ) {
-//        <#statements#>
-//    }
-//    static func alert(_ animation: TransitionAnimationStyle = .fade) -> TransitionStatesConfig {
-//        let states = TransitionStatesConfig(.alert, anmation: animation)
-//        return states
-//    }
-//    static func actionSheet(_ animation: TransitionAnimationStyle = .fade) -> TransitionStatesConfig {
-//        let states = TransitionStatesConfig(.actionSheet, anmation: animation)
-//        return states
-//    }
-//    static func pan(_ animation: TransitionAnimationStyle = .fade, panStates: [ModalState: PanPosition]) -> TransitionStatesConfig {
-//        let states = TransitionStatesConfig(.pan(panStates), anmation: animation)
-//        return states
-//    }
-//}
+}   
 

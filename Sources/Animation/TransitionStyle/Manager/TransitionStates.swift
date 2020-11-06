@@ -6,17 +6,52 @@
 //
 
 import Foundation
-
+import UIKit
 
 public enum ModalStyle {
-    case modalSystem
+    case modalSystem(UIViewController?)
     /// 这里要分
-    case modalInParent
+    case modalInParent(UIViewController)
     case modalInWindow
     /// 以Nav rootViewController的形式present
-    case modalPresentWithNavRoot
+    case modalPresentWithNavRoot(UINavigationController)
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
+}
+
+public extension ModalStyle {
+    ///
+    var fromViewController: UIViewController? {
+        switch self {
+        case let .modalSystem(viewController):
+            return viewController ?? WQUIHelp.topVisibleViewController()
+        case let .modalInParent(viewController):
+            return viewController
+        case let .modalPresentWithNavRoot(navgationController):
+            return navgationController
+        case .autoModal:
+            return self.autoAdaptationStyle.fromViewController
+        default:
+            return nil
+        }
+    }
+    /// 自动适配autoModal Style
+    var autoAdaptationStyle: ModalStyle {
+        switch self {
+        case .autoModal:
+            if let topVisible = WQUIHelp.topVisibleViewController() {
+                if topVisible.presentedViewController == nil {
+                    return .modalSystem(topVisible)
+                } else {
+                    return .modalInParent(topVisible)
+                }
+            } else {
+                return .modalInWindow
+            }
+        default:
+            return self
+        }
+    }
 }
 
 /**
@@ -30,25 +65,14 @@ public enum ModalStyle {
 /// 转场的状态
 public enum ModalState: Comparable {
     /// 准备显示之前状态
-    case readyToShow
+    case willShow
     /// 显示
     case show
-    /// 准备隐藏
-    case readyToHide
+//    /// 准备隐藏
+    case willHide
     ///
     case hide
-}
-
-//internal extension ModalState {
-//    var isShow: Bool {
-//        switch self {
-//        case .show:
-//            return true
-//        default:
-//            return false
-//        }
-//    }
-//}
+} 
 
 public enum HorizontalPanPosition {
     case center
@@ -70,6 +94,7 @@ public struct PanPosition {
     let horizontal: HorizontalPanPosition
     let vertical: VerticalPanPosition
 }
+
 /// contentView的 最终显示方式
 public enum TransitionShowStyle {
     /// 定点中间显示

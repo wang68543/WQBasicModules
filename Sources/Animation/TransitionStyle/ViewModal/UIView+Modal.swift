@@ -7,13 +7,7 @@
 
 import Foundation
 public extension UIView {
-//    struct AssociatedKeys {
-//        static let modal = UnsafeRawPointer(bitPattern: "wq.modal.config".hashValue)!
-//    }
-    var modal: TransitionManager? {
-        return nextLayoutController?.manager
-    }
-    
+
     var modalSize: CGSize {
         if !self.bounds.isEmpty {
             return self.bounds.size
@@ -23,7 +17,7 @@ public extension UIView {
         }
     }
     
-    var nextLayoutController: WQLayoutController? {
+    var layoutController: WQLayoutController? {
         var layout: UIResponder? = self
         while let nextView = layout?.next {
             layout = nextView
@@ -34,23 +28,23 @@ public extension UIView {
 }
 public extension UIView {
     
-    func alert(_ flag: Bool, config: ModalConfig, completion: TransitionAnimation.Completion? = nil) {
+    func alert(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
         let states = TransitionStatesConfig(.alert, anmation: .fade)
-        let layout = WQLayoutController(config, states: states)
-        self.present(flag, container: layout, completion: completion)
+        let layout = WQLayoutController(config)
+        self.present(layout, states: states, completion: completion)
     }
     
-    func actionSheet(_ flag: Bool, config: ModalConfig, completion: TransitionAnimation.Completion? = nil) {
-        let states = TransitionStatesConfig(.alert, anmation: .fade)
-        let layout = WQLayoutController(config, states: states)
-        self.present(flag, container: layout, completion: completion)
+    func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
+        let states = TransitionStatesConfig(.actionSheet, anmation: .fade)
+        let layout = WQLayoutController(config)
+        self.present(layout, states: states, completion: completion)
     }
     
-    func present(_ flag: Bool, container: WQLayoutController, completion: TransitionAnimation.Completion? = nil) {
-        container.modal(flag, comletion: completion)
+    func present(_ container: WQLayoutController, states: TransitionStatesConfig, completion: TransitionAnimation.Completion? = nil) {
+        container.modal(states, comletion: completion)
     }
     
     func dismiss(_ flag: Bool, completion: TransitionAnimation.Completion? = nil) {
-        self.nextLayoutController?.dismiss(animated: flag, completion: completion)
+        self.layoutController?.dismiss(animated: flag, completion: completion)
     }
 } 

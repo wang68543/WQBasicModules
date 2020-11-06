@@ -10,8 +10,8 @@ import UIKit
  将当前控制器的View 作为transitionView 
  */
 public protocol WQLayoutControllerTransition: NSObjectProtocol {
-    func didViewLoad(_ controller: WQLayoutController)
-    func show(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?)
+//    func didViewLoad(_ controller: WQLayoutController)
+    func show(_ controller: WQLayoutController, statesConfig: TransitionStatesConfig, completion: TransitionAnimation.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) -> Bool
 //    optional func update(_ controller: WQLayoutController, progress: CGFloat) 
 }
@@ -20,19 +20,23 @@ public class WQLayoutController: UIViewController {
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false
      
-    public lazy var manager: TransitionManager = {
-       return TransitionManager(config, states: statesConfig, layout: self)
-    }()
+//    public lazy var context: ModalContext? = {
+//        return ModalContext(config, states: statesConfig, layoutController: self)
+//    }()
+    public var context: ModalContext?
+    
     let config: ModalConfig
-    let statesConfig: TransitionStatesConfig
-    public init(_ config: ModalConfig, states: TransitionStatesConfig) {
+//    let statesConfig: TransitionStatesConfig
+    var statesConfig: TransitionStatesConfig?
+    
+    public init(_ config: ModalConfig) {
         self.config = config
-        self.statesConfig = states
+//        self.statesConfig = states
         super.init(nibName: nil, bundle: nil)
-        setup()
+//        setup()
     }
     
-    internal func setup() {
+    internal func setup() { 
         self.view.addSubview(dimmingView)
         self.dimmingView.isOpaque = false
         self.view.addSubview(self.container)
@@ -40,7 +44,9 @@ public class WQLayoutController: UIViewController {
      
     public override func viewDidLoad() {
         super.viewDidLoad()
-        manager.didViewLoad(self)
+        setup()
+//        manager.didViewLoad(self)
+//        context?.didViewLoad(self)
         
     }
     public override func viewWillLayoutSubviews() {
@@ -48,14 +54,20 @@ public class WQLayoutController: UIViewController {
         dimmingView.frame = self.view.bounds 
         
     }
-    public func modal(_ flag: Bool, comletion: TransitionAnimation.Completion? = nil) {
-        manager.show(self, animated: flag, completion: comletion)
+    public func modal(_ states: TransitionStatesConfig, comletion: TransitionAnimation.Completion? = nil) {
+//        self.statesConfig = states
+        context = ModalContext(self.config, states: states)
+        context?.show(self, statesConfig: states, completion: comletion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        let superDismiss = self.manager.hide(self, animated: flag, completion: completion)
-        if superDismiss == true  {
+        if let ctx = context {
+            if ctx.hide(self, animated: flag, completion: completion) == false {
+                super.dismiss(animated: flag, completion: completion)
+            }
+        } else {
             super.dismiss(animated: flag, completion: completion)
-        }  
+        }
+       
     }
     
     // MARK: -- -UI属性

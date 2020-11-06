@@ -13,8 +13,20 @@ open class ModalPresentationContext: ModalContext {
         return driven
     }()
     
-    fileprivate var transitionContext: UIViewControllerContextTransitioning?
-    
+ 
+    public override func show(_ controller: WQLayoutController, statesConfig: TransitionStatesConfig, completion: (() -> Void)?) {
+        controller.modalPresentationStyle = .custom
+        controller.transitioningDelegate = self 
+        self.animator.preprocessor(.willShow, layoutController: controller, config: config, states: statesConfig) { [weak self] in
+            guard let `self` = self else { return }
+            self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
+//            self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: self.statesConfig, completion: completion)
+        }
+    }
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        self.animator.preprocessor(.willHide, layoutController: controller, config: config, states: self.statesConfig, completion: completion)
+        return false
+    }
 //    var presenter: UIViewController?
     
 //    public override init(_ viewController: WQLayoutController, style: ModalStyle) {
@@ -50,16 +62,17 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
 
       
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.isInteracting ? self.driven : nil
+//        return self.config.interactionDismiss.isGestureDrivenDismiss ? self.driven : nil
+        return nil
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.isInteracting ? self.driven : nil
+        return self.config.interactionDismiss.isGestureDrivenDismiss ? self.driven : nil
     } 
 }
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return self.duration
+        return self.animator.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let fromVC = transitionContext.viewController(forKey: .from),
@@ -68,8 +81,25 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         }
         let vcFinalFrame = transitionContext.finalFrame(for: toVC)
         let isPresented = toVC.presentingViewController === fromVC
-//        let fromVc = transitionContext.viewController(forKey: .from)
-//        let toVc = transitionContext.viewController(forKey: .to)
+        func completionBlock() {
+            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+        }
+        if isPresented {
+            self.config.containerViewControllerFinalFrame = vcFinalFrame
+            transitionContext.containerView.addSubview(toVC.view)
+            if let showViewController = toVC as? WQLayoutController {
+                self.animator.preprocessor(.show, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
+            } else {
+                completionBlock()
+            } 
+        } else {
+            transitionContext.containerView.addSubview(toVC.view)
+            if let showViewController = fromVC as? WQLayoutController {
+                self.animator.preprocessor(.hide, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
+            } else {
+                completionBlock()
+            }
+        }
         
     }
 //    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
