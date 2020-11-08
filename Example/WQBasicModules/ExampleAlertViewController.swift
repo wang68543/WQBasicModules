@@ -79,9 +79,12 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        let animator = WQTransitionAnimator(items: items)
         let alertSubView = UIView()
         alertSubView.backgroundColor = UIColor.blue
-        alertView.addSubview(alertSubView)
-        alertSubView.frame = CGRect(x: 20, y: 20, width: 100, height: 100)
-        alertSubView.alert(true, config: ModalConfig.default)
+//        alertView.addSubview(alertSubView)
+        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 100)
+        let config = ModalConfig.default
+        config.interactionDismiss = .tapOutSide
+//        alertSubView.alert(true, config: config)
+        alertSubView.actionSheet(true, config: config)
 //        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
 ////        presention.show(animated: true, in: nil, completion: nil)
 //        presention.interactionDismissDirection = .down

@@ -7,7 +7,7 @@
 
 import Foundation
 public class ModalScaleFadeAnimation: ModalDefaultAnimation {
-    public override func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: ModalDefaultAnimation.Completion?) {
+    public override func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         switch state {
         case .willShow:
             willShow(layoutController, config: config, states: states, completion: completion)
@@ -22,7 +22,7 @@ public class ModalScaleFadeAnimation: ModalDefaultAnimation {
         }
     }
     
-    func willShow(_ layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: ModalDefaultAnimation.Completion?) {
+    func willShow(_ layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         let areAnimationsEnabled =  UIView.areAnimationsEnabled
         UIView.setAnimationsEnabled(false)
         switch states.showStyle {
@@ -47,7 +47,7 @@ public class ModalScaleFadeAnimation: ModalDefaultAnimation {
         completion?()
     }
     
-    func show(_ layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: ModalDefaultAnimation.Completion?) {
+    func show(_ layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         UIView.animate(withDuration: self.duration - 0.2, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
             switch states.showStyle {
             case .alert, .actionSheet:
@@ -68,7 +68,7 @@ public class ModalScaleFadeAnimation: ModalDefaultAnimation {
         }
     }
     
-    func willHide(_ layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: ModalDefaultAnimation.Completion?) {
+    func willHide(_ layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         let areAnimationsEnabled =  UIView.areAnimationsEnabled
         UIView.setAnimationsEnabled(false)
         switch states.showStyle {
@@ -90,7 +90,7 @@ public class ModalScaleFadeAnimation: ModalDefaultAnimation {
         completion?()
     }
     
-    func hide(_ layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: ModalDefaultAnimation.Completion?) {
+    func hide(_ layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         UIView.animate(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
             switch states.showStyle {
             case .alert:

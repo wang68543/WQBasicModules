@@ -19,7 +19,7 @@ public protocol TransitionAnimation: class {
     func preprocessor(_ state: ModalState,
                       layoutController: WQLayoutController,
                       config: ModalConfig,
-                      states: TransitionStatesConfig,
+                      states: StyleConfig,
                       completion: Completion?)
 //    func preprocessor(duration manager: TransitionManager) -> TimeInterval
     

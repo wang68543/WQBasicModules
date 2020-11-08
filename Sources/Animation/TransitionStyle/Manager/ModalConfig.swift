@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum InteractDismissMode {
+public enum InteractDismissMode: Equatable {
     public enum Direction {
         case toTop
         case toBottom
@@ -22,8 +22,33 @@ public enum InteractDismissMode {
     /// 移动消失
     case pan(Direction)
 }
-
-extension InteractDismissMode {
+public extension InteractDismissMode {
+    static func == (lhs: InteractDismissMode, rhs: InteractDismissMode) -> Bool {
+        switch lhs {
+        case .none:
+            switch rhs {
+            case .none: return true
+            default: return false
+            }
+        case .tapAll:
+            switch rhs {
+            case .tapAll: return true
+            default: return false
+            }
+        case .tapOutSide:
+            switch rhs {
+            case .tapOutSide: return true
+            default: return false
+            }
+        case .pan:
+            switch rhs {
+            case .pan: return true
+            default: return false
+            }
+        }
+    }
+}
+public extension InteractDismissMode {
     var isGestureDrivenDismiss: Bool {
         switch self {
         case .pan:
@@ -44,9 +69,6 @@ public class ModalConfig {
     public var layoutControllerLifeCycleable: Bool = false
     /// 用户交互消失的方式
     public var interactionDismiss: InteractDismissMode = .none
-    /// 容器控制器的View显示frame
-    public var containerViewControllerFinalFrame: CGRect = UIScreen.main.bounds
-    
     
     public init(_ style: ModalStyle = .autoModal) {
         self.style = style

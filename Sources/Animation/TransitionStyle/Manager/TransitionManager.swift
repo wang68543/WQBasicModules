@@ -45,7 +45,7 @@ open class TransitionManager: NSObject {
  
     public let config: ModalConfig
     
-    public let statesConfig: TransitionStatesConfig
+    public let statesConfig: StyleConfig
     
     public unowned let showViewController: WQLayoutController
     
@@ -54,7 +54,7 @@ open class TransitionManager: NSObject {
         return ModalContext.modalContext(config, states: statesConfig )
     }()
     
-    public init(_ config: ModalConfig, states: TransitionStatesConfig, layout: WQLayoutController) {
+    public init(_ config: ModalConfig, states: StyleConfig, layout: WQLayoutController) {
         self.config = config
         self.statesConfig = states
         self.showViewController = layout

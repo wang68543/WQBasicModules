@@ -8,7 +8,7 @@
 import UIKit 
 
 open class ModalContext: NSObject, WQLayoutControllerTransition {
-    public func show(_ controller: WQLayoutController, statesConfig: TransitionStatesConfig, completion: (() -> Void)?) {
+    public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
          
     }
     
@@ -29,11 +29,11 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     
     public unowned let config: ModalConfig
     
-    public let statesConfig: TransitionStatesConfig
+    public let statesConfig: StyleConfig
     
 //    public unowned let showViewController: WQLayoutController
     
-    public init(_ config: ModalConfig, states: TransitionStatesConfig) {
+    public init(_ config: ModalConfig, states: StyleConfig) {
         self.config = config
         self.statesConfig = states
 //        self.showViewController = layoutController
@@ -124,7 +124,7 @@ public extension ModalContext {
 }
 /// 构造不同的动画场景
 public extension ModalContext {
-    static func modalContext(_ config: ModalConfig, states: TransitionStatesConfig) -> ModalContext? {
+    static func modalContext(_ config: ModalConfig, states: StyleConfig) -> ModalContext? {
         
         func context(_ style: ModalStyle) -> ModalContext? {
             switch style {

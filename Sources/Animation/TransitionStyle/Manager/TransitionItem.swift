@@ -25,7 +25,24 @@ public class TSReference<Root, Value>: TSReferenceWriteable {
    } 
 }
 public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
+ 
 public extension WQReferenceStates {
+    mutating func addState(_ target: AnyHashable, _ values: [TSReferenceWriteable]) {
+        var states: [TSReferenceWriteable] = self[target] ?? []
+        states.append(contentsOf: values)
+        self[target] = states
+    }
+    
+    mutating func addState(_ target: AnyHashable, _ value: TSReferenceWriteable) {
+        self.addState(target, [value])
+    }
+    
+    mutating func merge(_ refrence: WQReferenceStates) {
+        for (key, value) in refrence {
+            self.addState(key, value)
+        }
+    }
+    
     func setup(for state: ModalState) {
         self.forEach { target, values in
             values.forEach({ $0.setup(target, state: state) })

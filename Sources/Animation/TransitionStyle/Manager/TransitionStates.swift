@@ -63,7 +63,7 @@ public extension ModalStyle {
 
 /// 处理bottom
 /// 转场的状态
-public enum ModalState: Comparable {
+public enum ModalState: Comparable, CaseIterable {
     /// 准备显示之前状态
     case willShow
     /// 显示
@@ -73,7 +73,7 @@ public enum ModalState: Comparable {
     case willHide
     ///
     case hide
-    case didHide
+//    case didHide
 } 
 
 public enum HorizontalPanPosition {
@@ -107,7 +107,8 @@ public enum TransitionShowStyle {
     case pan([ModalState: PanPosition])
     /// 自定义显示位置
     case custom([ModalState: WQReferenceStates])
-} 
+}
+
 /// 支持动画方式
 public enum TransitionAnimationStyle {
     /// 背景淡入

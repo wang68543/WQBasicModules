@@ -7,7 +7,7 @@
 
 import Foundation 
 public class ModalDefaultAnimation: TransitionAnimation {
-    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: TransitionStatesConfig, completion: Completion?) {
+    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: Completion?) {
          
     }
     

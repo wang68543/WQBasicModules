@@ -8,13 +8,13 @@
 import UIKit
 //https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/CustomizingtheTransitionAnimations.html
 open class ModalPresentationContext: ModalContext {
-    lazy var driven: UIPercentDrivenInteractiveTransition = {
-       let driven = UIPercentDrivenInteractiveTransition()
-        return driven
-    }()
+//    lazy var driven: UIPercentDrivenInteractiveTransition = {
+//       let driven = UIPercentDrivenInteractiveTransition()
+//        return driven
+//    }()
     
  
-    public override func show(_ controller: WQLayoutController, statesConfig: TransitionStatesConfig, completion: (() -> Void)?) {
+    public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         controller.modalPresentationStyle = .custom
         controller.transitioningDelegate = self
         switch statesConfig.showStyle {
@@ -23,11 +23,11 @@ open class ModalPresentationContext: ModalContext {
         default:
             break
         }
-        self.animator.preprocessor(.willShow, layoutController: controller, config: config, states: statesConfig) { [weak self] in
-            guard let `self` = self else { return }
+//        self.animator.preprocessor(.willShow, layoutController: controller, config: config, states: statesConfig) { [weak self] in
+//            guard let `self` = self else { return }
             self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
 //            self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: self.statesConfig, completion: completion)
-        }
+//        }
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
         switch statesConfig.showStyle {
@@ -36,7 +36,8 @@ open class ModalPresentationContext: ModalContext {
         default:
             break
         }
-        self.animator.preprocessor(.willHide, layoutController: controller, config: config, states: self.statesConfig, completion: completion)
+        
+//        self.animator.preprocessor(.willHide, layoutController: controller, config: config, states: self.statesConfig, completion: completion)
         return false
     }
 //    var presenter: UIViewController?
@@ -79,7 +80,8 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
     }
     
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.config.interactionDismiss.isGestureDrivenDismiss ? self.driven : nil
+        return nil
+//        return self.config.interactionDismiss.isGestureDrivenDismiss ? self.driven : nil
     } 
 }
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
@@ -94,18 +96,30 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         let vcFinalFrame = transitionContext.finalFrame(for: toVC)
         let isPresented = toVC.presentingViewController === fromVC
         func completionBlock() {
-            transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
+            let success = !transitionContext.transitionWasCancelled
+            if (isPresented && !success) {
+                toVC.view.removeFromSuperview()
+            }
+            transitionContext.completeTransition(success)
         }
+        let toVCView = transitionContext.view(forKey: .to)
+        let transitionView = transitionContext.containerView
+        
+        if let toView = toVCView {
+            if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
+               transitionView.addSubview(toView)
+            }
+        }
+        
         if isPresented {
-            self.config.containerViewControllerFinalFrame = vcFinalFrame
-            transitionContext.containerView.addSubview(toVC.view)
+//            self.statesConfig.showControllerFrame = vcFinalFrame
+            toVCView?.frame = vcFinalFrame
             if let showViewController = toVC as? WQLayoutController {
                 self.animator.preprocessor(.show, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
             } else {
                 completionBlock()
             } 
         } else {
-            transitionContext.containerView.addSubview(toVC.view)
             if let showViewController = fromVC as? WQLayoutController {
                 self.animator.preprocessor(.hide, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
             } else {
