@@ -8,27 +8,33 @@
 import UIKit
 
 open class ModalInParentContext: ModalDrivenContext {
-//   weak var parent: UIViewController?
-//    public override init(_ viewController: WQLayoutContainerViewController) {
-//        guard let fatherViewController = fromViewController ?? wm_topVisibleViewController() else {
-//                  fatalError("未找到当前正在显示的ViewController")
-//              }
-//         parent = fatherViewController
-//        super.init(viewController)
-//    }
+    public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+        guard let parent = self.config.fromViewController else {
+            completion?()
+            return
+        }
+        
+        func completionCallback() {
+            controller.didMove(toParent: parent)
+            completion?()
+        }
+        parent.addChild(controller )
+        parent.view.addSubview(controller.view)
+        self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: statesConfig) {
+            completionCallback()
+        }
+    } 
     
-//    /// 开始当前的ViewController转场动画
-//    /// - Parameters:
-//    ///   - viewController: 若为nil 查找当前正在显示的最顶层的ViewController
-//    ///     viewController 可为TabBarViewController或NavigationViewController
-//    open  func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-//        super.show(in: viewController, animated: flag, completion: completion)
-//        
-//    }
-//    func beiginAnimate(_ states: []) {
-//        UIView.animate(withDuration: self.duration, animations: {
-//
-//        }, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
-//    }
-   
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        func completionCallback() {
+            controller.view.removeFromSuperview()
+            controller.removeFromParent()
+            completion?()
+        }
+        controller.willMove(toParent: nil)
+        self.animator.preprocessor(.hide, layoutController: controller, config: self.config, states: self.styleConfig) {
+            completionCallback()
+        }
+         return true
+    }
 }

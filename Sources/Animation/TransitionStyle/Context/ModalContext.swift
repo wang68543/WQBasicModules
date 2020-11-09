@@ -29,13 +29,13 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     
     public unowned let config: ModalConfig
     
-    public let statesConfig: StyleConfig
+    public let styleConfig: StyleConfig
     
 //    public unowned let showViewController: WQLayoutController
     
     public init(_ config: ModalConfig, states: StyleConfig) {
         self.config = config
-        self.statesConfig = states
+        self.styleConfig = states
 //        self.showViewController = layoutController
         animator = states.animator
         super.init()
@@ -107,7 +107,7 @@ public extension ModalContext {
     /// 添加属性到fromViewController
     func addStateFromTarget(_ values: [TSReferenceWriteable], state: ModalState) {
         guard let from = self.config.fromViewController else { return }
-        self.statesConfig.addState(from, values: values, state: state)
+        self.styleConfig.addState(from, values: values, state: state)
     }
     /// 添加属性到fromViewController
     func addStateFromTarget(_ value: TSReferenceWriteable, state: ModalState) {

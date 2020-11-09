@@ -30,7 +30,7 @@ open class ModalPresentationContext: ModalContext {
 //        }
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-        switch statesConfig.showStyle {
+        switch styleConfig.showStyle {
         case .alert, .actionSheet:
             self.animator.duration = 0.25
         default:
@@ -115,13 +115,13 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
 //            self.statesConfig.showControllerFrame = vcFinalFrame
             toVCView?.frame = vcFinalFrame
             if let showViewController = toVC as? WQLayoutController {
-                self.animator.preprocessor(.show, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
+                self.animator.preprocessor(.show, layoutController: showViewController, config: config, states: styleConfig, completion: completionBlock)
             } else {
                 completionBlock()
             } 
         } else {
             if let showViewController = fromVC as? WQLayoutController {
-                self.animator.preprocessor(.hide, layoutController: showViewController, config: config, states: statesConfig, completion: completionBlock)
+                self.animator.preprocessor(.hide, layoutController: showViewController, config: config, states: styleConfig, completion: completionBlock)
             } else {
                 completionBlock()
             }
