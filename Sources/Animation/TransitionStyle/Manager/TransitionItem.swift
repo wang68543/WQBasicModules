@@ -24,28 +24,52 @@ public class TSReference<Root, Value>: TSReferenceWriteable {
      item[keyPath: keyPath] = value
    } 
 }
-public typealias WQReferenceStates = [AnyHashable: [TSReferenceWriteable]]
+/// 解决循环引用问题
+public class TSReferenceTargetItem {
+    weak var target: NSObject?
+    var refrences: [TSReferenceWriteable]
+    init(_ target: NSObject, refrences: [TSReferenceWriteable]) {
+        self.target = target
+        self.refrences = refrences
+    }
+    func setup(for state: ModalState) {
+        guard let root = target else { return }
+        refrences.forEach({ $0.setup(root, state: state)})
+    }
+}
+public typealias WQReferenceStates = [TSReferenceTargetItem]
  
 public extension WQReferenceStates {
-    mutating func addState(_ target: AnyHashable, _ values: [TSReferenceWriteable]) {
-        var states: [TSReferenceWriteable] = self[target] ?? []
-        states.append(contentsOf: values)
-        self[target] = states
+    mutating func addState(_ target: NSObject?, _ values: [TSReferenceWriteable]) {
+//        var item: TSReferenceTargetItem
+        if let targetItem = self.first(where: {$0.target === target }) {
+//            item = targetItem
+            targetItem.refrences.append(contentsOf: values)
+        } else if let root = target {
+            let item = TSReferenceTargetItem(root, refrences: values)
+            self.append(item)
+        
+        }
+//        var states: [TSReferenceWriteable] = self[target] ?? []
+//        states.append(contentsOf: values)
+//        self[target] = states
     }
     
-    mutating func addState(_ target: AnyHashable, _ value: TSReferenceWriteable) {
+    mutating func addState(_ target: NSObject, _ value: TSReferenceWriteable) {
         self.addState(target, [value])
     }
     
     mutating func merge(_ refrence: WQReferenceStates) {
-        for (key, value) in refrence {
-            self.addState(key, value)
+        for value in refrence {
+            self.addState(value.target, value.refrences)
         }
     }
     
     func setup(for state: ModalState) {
-        self.forEach { target, values in
-            values.forEach({ $0.setup(target, state: state) })
+        
+        self.forEach { value in
+            value.setup(for: state)
+//            values.forEach({ $0.setup(target, state: state) })
         }
     }
 }

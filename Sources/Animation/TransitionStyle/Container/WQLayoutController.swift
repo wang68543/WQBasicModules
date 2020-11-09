@@ -77,9 +77,8 @@ public class WQLayoutController: UIViewController {
         
     }
     public func modal(_ states: StyleConfig, comletion: TransitionAnimation.Completion? = nil) {
-//        let sConfig = self.setupStates(states)
         statesConfig = states
-        states.setupStates(self)
+        states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
         
         context?.show(self, statesConfig: states, completion: comletion)
@@ -117,9 +116,9 @@ public class WQLayoutController: UIViewController {
     }
     
     deinit {
-        #if WDEBUG
+//        #if WDEBUG
         debugPrint("\(self):" + #function + "♻️")
-        #endif
+//        #endif
     } 
 }
 extension WQLayoutController: UIGestureRecognizerDelegate {

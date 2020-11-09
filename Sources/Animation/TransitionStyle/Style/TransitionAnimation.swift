@@ -8,8 +8,8 @@
 import Foundation
 public protocol TransitionAnimation: class {
     typealias Completion = (() -> Void)
-    /// 用于外部回调 
-    var completionBlock: Completion? { get set }
+    ///用于存储 show 跟hide 的时候 动画完成回调
+    var animationCompletion: Completion? { get set }
 //    var completionBlocks: [ModalState: Completion] { get set }
     
     var duration: TimeInterval { get set }

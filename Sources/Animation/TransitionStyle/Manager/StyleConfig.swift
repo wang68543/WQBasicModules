@@ -11,17 +11,13 @@ import Foundation
 /// 转场动画各种状态的配置
 public class StyleConfig {
     /// 各个状态的配置
-    public private(set) var states: [ModalState: WQReferenceStates]
+    public var states: [ModalState: WQReferenceStates]
     /// 是否需要遮罩
     public var dimming: Bool = false
    /// states
     public let showStyle: TransitionShowStyle
     /// 动画方式 ModalDefaultAnimation
-    public let animationStyle: TransitionAnimationStyle
-     
-    /// 容器控制器的View显示frame
-    public var showControllerFrame: CGRect = UIScreen.main.bounds
-    
+    public let animationStyle: TransitionAnimationStyle 
     /// 动画之前附加的view
     public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
@@ -43,36 +39,39 @@ public class StyleConfig {
             sts = [:]
             break
         }
-        // 需要手动配满各个键值对的值
-        for state in ModalState.allCases {
-            if !sts.has(key: state) {
-                sts[state] = [:]
-            }
-        }
+//        // 需要手动配满各个键值对的值
+//        for state in ModalState.allCases {
+//            if !sts.has(key: state) {
+//                sts[state] = []
+//            }
+//        }
         states = sts
+    }
+    deinit {
+        debugPrint("\(self):" + #function + "♻️")
     }
 }
 public extension StyleConfig {
-    func addState(_ target: AnyHashable, values: [TSReferenceWriteable], state: ModalState) {
-        var sts = self.states[state]?[target] ?? []
-        sts.append(contentsOf: values)
-        self.states[state]?[target] = sts
+    func addState(_ target: NSObject, values: [TSReferenceWriteable], state: ModalState) {
+        var sts = self.states[state] ?? []
+        sts.addState(target, values)
+        self.states[state] = sts
     }
     
-    func addState(_ target: AnyHashable, value: TSReferenceWriteable, state: ModalState) {
+    func addState(_ target: NSObject, value: TSReferenceWriteable, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
 }   
 public extension StyleConfig {
-    func setupStates(_ layout: WQLayoutController) {
+    func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
         var values: [ModalState: WQReferenceStates] = [:]
         switch self.showStyle {
             case .alert:
-                var willShowStates: WQReferenceStates = [:]
+                var willShowStates: WQReferenceStates = []
                 let dimWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.dimmingView.alpha)
                 let containerWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.container.alpha)
                 
-                let controllerSize = self.showControllerFrame.size
+                let controllerSize = config.showControllerFrame.size
                 let size = layout.container.sizeThatFits()
                 
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
@@ -84,15 +83,15 @@ public extension StyleConfig {
                 let showDimalpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.dimmingView.alpha)
                 let showConataineralpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.container.alpha)
                 let showRefrenceTransform = TSReferenceTransform(value: CGAffineTransform(scaleX: 1.05, y: 1.05), keyPath: \WQLayoutController.container.transform)
-                var showStates: WQReferenceStates = [:]
+                var showStates: WQReferenceStates = []
                 showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
                  
                 let didShowRefrenceTransform = TSReferenceTransform(value: .identity, keyPath: \WQLayoutController.container.transform)
-                var didShowStates: WQReferenceStates = [:]
+                var didShowStates: WQReferenceStates = []
                 didShowStates.addState(layout, [didShowRefrenceTransform])
                 
                 
-                var hideStates: WQReferenceStates = [:]
+                var hideStates: WQReferenceStates = []
                 let hideTransform = TSReferenceTransform(value: CGAffineTransform(scaleX: 0.6, y: 0.6), keyPath: \WQLayoutController.container.transform)
                 hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
                 
@@ -101,11 +100,11 @@ public extension StyleConfig {
                 values[.didShow] = didShowStates
                 values[.hide] = hideStates
             case .actionSheet:
-                var willShowStates: WQReferenceStates = [:]
+                var willShowStates: WQReferenceStates = []
                 let dimWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.dimmingView.alpha)
                 let containerWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.container.alpha)
                 
-                let controllerSize = self.showControllerFrame.size
+                let controllerSize = config.showControllerFrame.size
                 let size = layout.container.sizeThatFits()
                 
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
@@ -118,15 +117,15 @@ public extension StyleConfig {
                 let showDimalpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.dimmingView.alpha)
                 let showConataineralpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.container.alpha)
                 let showRefrenceTransform = TSReferenceTransform(value: CGAffineTransform(translationX: 0, y: -10), keyPath: \WQLayoutController.container.transform)
-                var showStates: WQReferenceStates = [:]
+                var showStates: WQReferenceStates = []
                 showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
                  
                 let didShowRefrenceTransform = TSReferenceTransform(value: .identity, keyPath: \WQLayoutController.container.transform)
-                var didShowStates: WQReferenceStates = [:]
+                var didShowStates: WQReferenceStates = []
                 didShowStates.addState(layout, [didShowRefrenceTransform])
                 
                 
-                var hideStates: WQReferenceStates = [:]
+                var hideStates: WQReferenceStates = []
                 let hideTransform = TSReferenceTransform(value: CGAffineTransform(translationX: 0, y: size.height), keyPath: \WQLayoutController.container.transform)
                 hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
                 

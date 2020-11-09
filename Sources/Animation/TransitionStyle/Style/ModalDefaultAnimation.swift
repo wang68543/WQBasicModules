@@ -13,7 +13,7 @@ public class ModalDefaultAnimation: TransitionAnimation {
     
     public var areAnimationEnable: Bool = true
     
-    public var completionBlock: Completion?
+    public var animationCompletion: Completion?
     
 //    public var completionBlocks: [ModalState: Completion] = [:]
 

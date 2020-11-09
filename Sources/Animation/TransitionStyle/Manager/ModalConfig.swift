@@ -70,9 +70,19 @@ public class ModalConfig {
     /// 用户交互消失的方式
     public var interactionDismiss: InteractDismissMode = .none
     
+    /// 容器控制器的View显示frame
+    // 可以通过 self.edgesForExtendedLayout = [] 确保alertView 居中
+    public var showControllerFrame: CGRect = UIScreen.main.bounds
+    
     public init(_ style: ModalStyle = .autoModal) {
         self.style = style
-        fromViewController = style.fromViewController
+        if let viewController = style.fromViewController  {
+            showControllerFrame = viewController.view.bounds
+            fromViewController = viewController
+        }
+    }
+    deinit {
+        debugPrint("\(self):" + #function + "♻️")
     }
 }
 public extension ModalConfig {

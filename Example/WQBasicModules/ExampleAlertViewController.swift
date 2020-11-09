@@ -15,30 +15,31 @@ class ExampleAlertViewController: BaseExampleViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let button = UIButton()
+        self.edgesForExtendedLayout = []
         self.view.addSubview(button)
         button.setTitle("点击弹出", for: .normal)
         button.setTitleColor(UIColor.blue, for: .normal)
         button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
-        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
-        self.view.addSubview(imageView)
-        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor],
-                                  size: CGSize(width: 60, height: 60),
-                                  startCenter: CGPoint(x: 0.5, y: 0.5),
-                                  startRaidus: 0,
-                                  endCenter: CGPoint(x: 0.5, y: 0.5),
-                                  endRaidus: 60,
-                                  options: .drawsAfterEndLocation)
-        imageView.layer.cornerRadius = 30
-        imageView.layer.masksToBounds = true
+//        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
+//        self.view.addSubview(imageView)
+//        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor],
+//                                  size: CGSize(width: 60, height: 60),
+//                                  startCenter: CGPoint(x: 0.5, y: 0.5),
+//                                  startRaidus: 0,
+//                                  endCenter: CGPoint(x: 0.5, y: 0.5),
+//                                  endRaidus: 60,
+//                                  options: .drawsAfterEndLocation)
+//        imageView.layer.cornerRadius = 30
+//        imageView.layer.masksToBounds = true
 
-        if Bundle.main.path(forResource: "douYin", ofType: "mp4") != nil {
-            let path = "http://129.204.89.248:9301/busvod/观光1路/1.mp4"
-            if let url = URL(string: path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
-                let img = UIImage(fromVideoURL: url, size: CGSize(width: 100, height: 100), isFirstFrame: false)
-                imageView.image = img
-            }
-        }
+//        if Bundle.main.path(forResource: "douYin", ofType: "mp4") != nil {
+//            let path = "http://129.204.89.248:9301/busvod/观光1路/1.mp4"
+//            if let url = URL(string: path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "") {
+//                let img = UIImage(fromVideoURL: url, size: CGSize(width: 100, height: 100), isFirstFrame: false)
+//                imageView.image = img
+//            }
+//        }
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 6) {
 //            let alertView = UIView()
 //                   let size = CGSize(width: 80, height: 600)
@@ -80,11 +81,12 @@ class ExampleAlertViewController: BaseExampleViewController {
         let alertSubView = UIView()
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
-        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 100)
-        let config = ModalConfig.default
+        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 700)
+        let config = ModalConfig(.modalInParent(self))
         config.interactionDismiss = .tapOutSide
-//        alertSubView.alert(true, config: config)
-        alertSubView.actionSheet(true, config: config)
+        
+        alertSubView.alert(true, config: config)
+//        alertSubView.actionSheet(true, config: config)
 //        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
 ////        presention.show(animated: true, in: nil, completion: nil)
 //        presention.interactionDismissDirection = .down
