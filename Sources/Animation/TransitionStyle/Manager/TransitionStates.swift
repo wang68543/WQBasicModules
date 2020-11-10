@@ -74,29 +74,141 @@ public enum ModalState: Comparable, CaseIterable {
     ///
     case hide
 //    case didHide
-} 
-
-public enum HorizontalPanPosition {
-    case center
-
-    case top
-
-    case bottom
+}
+public extension ModalState {
+    var isOutSide: Bool {
+        switch self {
+        case .show, .didShow, .willHide:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
-public enum VerticalPanPosition {
+public enum HorizontalPanPosition {
     case center
     
     case leading
     
     case trailing
 }
+
+public enum VerticalPanPosition {
+    case center
+
+    case top
+
+    case bottom
+     
+}
 /// showing的时候 in
 public struct PanPosition {
     let horizontal: HorizontalPanPosition
     let vertical: VerticalPanPosition
 }
-
+public extension PanPosition {
+    func frame(size: CGSize, container: CGSize, state: ModalState) -> CGRect {
+        var origin: CGPoint = .zero
+        let isOutSide = state.isOutSide
+        switch horizontal {
+        case .leading:
+            if isOutSide {
+                origin.x = -size.width
+            } else {
+                origin.x = 0
+            }
+        case .center:
+            origin.x = (container.width - size.width) * 0.5;
+        case .trailing:
+            if isOutSide {
+                origin.x = container.width
+            } else {
+                origin.x = container.width - size.width
+            }
+        }
+        switch vertical {
+        case .top:
+            if isOutSide {
+                origin.y = -size.height
+            } else {
+                origin.y = 0
+            }
+        case .center:
+            origin.y = (container.height - size.height) * 0.5
+        case .bottom:
+            if isOutSide {
+                origin.y = container.height
+            } else {
+                origin.y = container.height - size.height
+            }
+        }
+        return CGRect(origin: origin, size: size)
+    }
+    func center(size: CGSize, container: CGSize, state: ModalState) -> CGPoint {
+        var centerX: CGFloat = .zero
+        var centerY: CGFloat = .zero
+        let isOutSide = state.isOutSide
+        switch horizontal {
+        case .leading:
+            if isOutSide {
+                centerX = -size.width*0.5
+            } else {
+                centerX = size.width*0.5
+            }
+        case .center:
+            centerX = container.width * 0.5;
+        case .trailing:
+            if isOutSide {
+                centerX = container.width + size.width * 0.5
+            } else {
+                centerX = container.width - size.width * 0.5
+            }
+        }
+        switch vertical {
+        case .top:
+            if isOutSide {
+                centerY = -size.height*0.5
+            } else {
+                centerY = size.height*0.5
+            }
+        case .center:
+            centerY = container.height * 0.5
+        case .bottom:
+            if isOutSide {
+                centerY = container.height + size.height * 0.5
+            } else {
+                centerY = container.height - size.height * 0.5
+            }
+        }
+        return CGPoint(x: centerX, y: centerY)
+    }
+}
+public extension PanPosition {
+    static func bottomToCenter(_ autoReverse: Bool) -> [ModalState: PanPosition] {
+        var states: [ModalState: PanPosition] = [:]
+        states[.willShow] = PanPosition(horizontal: .center, vertical: .bottom)
+        states[.show] = PanPosition(horizontal: .center, vertical: .center)
+        if autoReverse {
+            states[.hide] = states[.willShow]
+        } else {
+            states[.hide] = PanPosition(horizontal: .center, vertical: .top)
+        }
+        return states
+    }
+    static func topToCenter(_ autoReverse: Bool) -> [ModalState: PanPosition] {
+        var states: [ModalState: PanPosition] = [:]
+        states[.willShow] = PanPosition(horizontal: .center, vertical: .top)
+        states[.show] = PanPosition(horizontal: .center, vertical: .center)
+        if autoReverse {
+            states[.hide] = states[.willShow]
+        } else {
+            states[.hide] = PanPosition(horizontal: .center, vertical: .bottom)
+        }
+        return states
+    }
+}
+ 
 /// contentView的 最终显示方式
 public enum TransitionShowStyle {
     /// 定点中间显示
