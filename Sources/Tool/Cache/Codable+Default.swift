@@ -39,6 +39,21 @@ public extension KeyedDecodingContainer {
         try decodeIfPresent(type, forKey: key) ?? Default(wrappedValue: T.defaultValue)
     }
 }
+public extension Int {
+    enum Zero: DefaultValue {
+        public static let defaultValue = 0
+    }
+    enum One: DefaultValue {
+        public static let defaultValue = 1
+    }
+    enum Two: DefaultValue {
+        public static let defaultValue = 2
+    }
+    enum Three: DefaultValue {
+        public static let defaultValue = 3
+    }
+}
+
 public extension Bool {
     enum False: DefaultValue {
         public static let defaultValue = false
@@ -50,5 +65,10 @@ public extension Bool {
 public extension Default {
     typealias True = Default<Bool.True>
     typealias False = Default<Bool.False>
+    
+    typealias Zero = Default<Int.Zero>
+    typealias One = Default<Int.One>
+    typealias Two = Default<Int.Two>
+    typealias Three = Default<Int.Three>
 }
 #endif
