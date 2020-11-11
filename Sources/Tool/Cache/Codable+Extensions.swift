@@ -175,7 +175,7 @@ public extension KeyedDecodingContainer {
         return nil
     }
     
-    func decodeIfPresent<T>(_ type: T.Type, forKey key: K) throws -> T? where T : Decodable {
-        return try? decode(type, forKey: key)
-    }
+//    func decodeIfPresent<T>(_ type: T.Type, forKey key: K) throws -> T? where T : Decodable {
+//        return try? decode(type, forKey: key)
+//    }
 }

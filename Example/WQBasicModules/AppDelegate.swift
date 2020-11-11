@@ -26,7 +26,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
+        testCodable()
+        TestWebViewController.uid = 1000
         return true
+    }
+    
+    
+    struct Video: Decodable { 
+        enum State: String, Decodable, DefaultValue {
+            case streaming
+            case archived
+            case unknown
+            
+            static let defaultValue = Video.State.unknown
+        }
+
+        let id: Int
+        let title: String
+        @Default.False var commentEnabled: Bool
+        @Default.True var publicVideo: Bool
+
+        @Default<State> var state: State
+    }
+
+    func testCodable() {
+        let json = #"{"id": 12345, "title": "My First Video", "state": "reversed"}"#
+//        let value = try! JSONDecoder().decode(Video.self, from: json.data(using: .utf8)!)
+        let value = try! Video.model(from: json.data(using: .utf8)!)
+        
     }
 
 }
