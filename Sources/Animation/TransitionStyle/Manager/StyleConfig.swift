@@ -63,11 +63,16 @@ public extension StyleConfig {
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:
-                let diming = self.dimingReference()
+                var diming = self.dimingReference()
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
                 let willShowFrame = TSReferenceRect(container: containerFrame)
                 
                 let tranforms = self.alertTransform()
+                
+                var values: [ModalState: [TSReferenceWriteable]] = [:]
+                values.combine([.willShow: willShowFrame])
+                values.combine(diming)
+                values.combine(tranforms)
                 
 //                var willShowStates: WQReferenceStates = []
 //                let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
