@@ -9,8 +9,7 @@
 import UIKit
 import WQBasicModules
 class TestWebViewController: UIViewController {
-    @UserDefault("uid")
-    static var uid: Int?
+  
     let webView = WQWebView()
     override func viewDidLoad() {
         super.viewDidLoad()

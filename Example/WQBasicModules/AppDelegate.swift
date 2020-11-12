@@ -16,6 +16,8 @@ import CoreLocation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
+//    @UserDefault("video", default: Video.default)
+//    static var viedo: Video
     // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         debugPrint("\(Int.max)")
@@ -27,27 +29,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
-        TestWebViewController.uid = 1000
+//        TestWebViewController.uid = 1000
+//        
+//        debugPrint("=====\(TestWebViewController.uid)")
+//        
+//        debugPrint(AppDelegate.viedo.title)
         return true
     }
     
     
-    struct Video: Decodable { 
-        enum State: String, Decodable, DefaultValue {
-            case streaming
-            case archived
-            case unknown
-            
-            static let defaultValue = Video.State.unknown
-        }
-
-        let id: Int
-        let title: String
-        @Default.False var commentEnabled: Bool
-        @Default.True var publicVideo: Bool
-
-        @Default<State> var state: State
-    }
+   
 
     func testCodable() {
         let json = #"{"id": 12345, "title": "My First Video", "state": "reversed"}"#
@@ -56,4 +47,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
     }
 
+}
+struct Video: Codable {
+    enum State: String, Codable, CodableDefaultValue {
+        case streaming
+        case archived
+        case unknown
+        
+        static let defaultValue = Video.State.unknown
+    }
+    @CodableDefault.IntOne var id: Int
+    @CodableDefault.Empty var title: String
+    @CodableDefault.False var commentEnabled: Bool
+    @CodableDefault.True var publicVideo: Bool
+
+    @CodableDefault<State> var state: State
+    
+}
+extension Video {
+    static let `default` = Video(id: 111, title: "test", commentEnabled: false, publicVideo: false, state: .archived)
 }

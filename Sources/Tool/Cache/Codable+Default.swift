@@ -8,67 +8,40 @@
 import Foundation
 #if swift(>=5.1)
 //https://mp.weixin.qq.com/s/jOyHRS2Wx6MJpuYuENhVgg
-public protocol DefaultValue {
-    associatedtype Value: Decodable
+public protocol CodableDefaultValue {
+    associatedtype Value: Codable
     static var defaultValue: Value { get }
-}
-
-extension Bool: DefaultValue {
-    public static let defaultValue = false
-}
+} 
  
 @propertyWrapper
-public struct Default<T: DefaultValue> {
+public struct CodableDefault<T: CodableDefaultValue> {
     public var wrappedValue: T.Value
     public init(wrappedValue: T.Value) {
         self.wrappedValue = wrappedValue
     }
 }
 
-extension Default: Decodable {
+extension CodableDefault: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         wrappedValue = (try? container.decode(T.Value.self)) ?? T.defaultValue
     }
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(wrappedValue)
+    }
 }
 public extension KeyedDecodingContainer {
     func decode<T>(
-        _ type: Default<T>.Type,
+        _ type: CodableDefault<T>.Type,
         forKey key: Key
-    ) throws -> Default<T> where T: DefaultValue {
-        try decodeIfPresent(type, forKey: key) ?? Default(wrappedValue: T.defaultValue)
+    ) throws -> CodableDefault<T> where T: CodableDefaultValue {
+        try decodeIfPresent(type, forKey: key) ?? CodableDefault(wrappedValue: T.defaultValue)
     }
 }
-public extension Int {
-    enum Zero: DefaultValue {
-        public static let defaultValue = 0
+public extension KeyedEncodingContainer {
+    mutating func encode<T>(_ value: CodableDefault<T>, forKey key: Key) throws where T: CodableDefaultValue {
+        try encode(value.wrappedValue, forKey: key)
     }
-    enum One: DefaultValue {
-        public static let defaultValue = 1
-    }
-    enum Two: DefaultValue {
-        public static let defaultValue = 2
-    }
-    enum Three: DefaultValue {
-        public static let defaultValue = 3
-    }
-}
-
-public extension Bool {
-    enum False: DefaultValue {
-        public static let defaultValue = false
-    }
-    enum True: DefaultValue {
-        public static let defaultValue = true
-    }
-} 
-public extension Default {
-    typealias True = Default<Bool.True>
-    typealias False = Default<Bool.False>
-    
-    typealias Zero = Default<Int.Zero>
-    typealias One = Default<Int.One>
-    typealias Two = Default<Int.Two>
-    typealias Three = Default<Int.Three>
 }
 #endif
