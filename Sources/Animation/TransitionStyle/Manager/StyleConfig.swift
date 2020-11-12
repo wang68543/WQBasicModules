@@ -13,7 +13,7 @@ public class StyleConfig {
     /// 各个状态的配置
     public var states: [ModalState: WQReferenceStates]
     /// 是否需要遮罩
-    public var dimming: Bool = false
+    public var dimming: Bool = true
    /// states
     public let showStyle: TransitionShowStyle
     /// 动画方式 ModalDefaultAnimation
@@ -38,13 +38,7 @@ public class StyleConfig {
         default:
             sts = [:]
             break
-        }
-//        // 需要手动配满各个键值对的值
-//        for state in ModalState.allCases {
-//            if !sts.has(key: state) {
-//                sts[state] = []
-//            }
-//        }
+        } 
         states = sts
     }
     deinit {
@@ -69,60 +63,67 @@ public extension StyleConfig {
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:
-                var willShowStates: WQReferenceStates = []
-                let dimWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.dimmingView.alpha)
-                let containerWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.container.alpha)
-                
+                let diming = self.dimingReference()
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
-                let willShowTransform = TSReferenceTransform(value: CGAffineTransform(scaleX: 0.3, y: 0.3), keyPath: \WQLayoutController.container.transform)
-                let willShowFrame = TSReferenceRect(value: containerFrame, keyPath: \WQLayoutController.container.frame)
-                willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
-                                                 willShowTransform])
-  
-                let showDimalpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.dimmingView.alpha)
-                let showConataineralpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.container.alpha)
-                let showRefrenceTransform = TSReferenceTransform(value: CGAffineTransform(scaleX: 1.05, y: 1.05), keyPath: \WQLayoutController.container.transform)
-                var showStates: WQReferenceStates = []
-                showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
-                 
-                let didShowRefrenceTransform = TSReferenceTransform(value: .identity, keyPath: \WQLayoutController.container.transform)
-                var didShowStates: WQReferenceStates = []
-                didShowStates.addState(layout, [didShowRefrenceTransform])
+                let willShowFrame = TSReferenceRect(container: containerFrame)
                 
+                let tranforms = self.alertTransform()
                 
-                var hideStates: WQReferenceStates = []
-                let hideTransform = TSReferenceTransform(value: CGAffineTransform(scaleX: 0.6, y: 0.6), keyPath: \WQLayoutController.container.transform)
-                hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
-                
-                values[.willShow] = willShowStates
-                values[.show] = showStates
-                values[.didShow] = didShowStates
-                values[.hide] = hideStates
+//                var willShowStates: WQReferenceStates = []
+//                let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
+//                let containerWillShowalpha = TSReferenceValue(container: 0.0)
+//
+//                let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
+//                let willShowTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 0.3, y: 0.3))
+//                let willShowFrame = TSReferenceRect(container: containerFrame)
+//                willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
+//                                                 willShowTransform])
+//
+//                let showDimalpha = TSReferenceValue(dimming: 1.0)
+//                let showConataineralpha = TSReferenceValue(container: 1.0)
+//                let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 1.05, y: 1.05))
+//                var showStates: WQReferenceStates = []
+//                showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
+//
+//                let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
+//                var didShowStates: WQReferenceStates = []
+//                didShowStates.addState(layout, [didShowRefrenceTransform])
+//
+//
+//                var hideStates: WQReferenceStates = []
+//
+//                let hideTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 0.6, y: 0.6))
+//                hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
+//
+//                values[.willShow] = willShowStates
+//                values[.show] = showStates
+//                values[.didShow] = didShowStates
+//                values[.hide] = hideStates
             case .actionSheet:
                 var willShowStates: WQReferenceStates = []
-                let dimWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.dimmingView.alpha)
-                let containerWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.container.alpha)
+                let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
+                let containerWillShowalpha = TSReferenceValue(container: 0.0)
                 
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
-                let willShowTransform = TSReferenceTransform(value: CGAffineTransform(translationX: 0, y: size.height), keyPath: \WQLayoutController.container.transform)
-                let willShowFrame = TSReferenceRect(value: containerFrame, keyPath: \WQLayoutController.container.frame)
+                let willShowTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: size.height))
+                let willShowFrame = TSReferenceRect(container: containerFrame)
                 //这里设置transform 必须在设置frame之后 否则identity将会对应为 先设置的transform(离屏的frame)
                 willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
                                                  willShowTransform ])
   
-                let showDimalpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.dimmingView.alpha)
-                let showConataineralpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.container.alpha)
-                let showRefrenceTransform = TSReferenceTransform(value: CGAffineTransform(translationX: 0, y: -10), keyPath: \WQLayoutController.container.transform)
+                let showDimalpha = TSReferenceValue(dimming: 1.0)
+                let showConataineralpha = TSReferenceValue(container: 1.0)
+                let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: -10))
                 var showStates: WQReferenceStates = []
                 showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
                  
-                let didShowRefrenceTransform = TSReferenceTransform(value: .identity, keyPath: \WQLayoutController.container.transform)
+                let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
                 var didShowStates: WQReferenceStates = []
                 didShowStates.addState(layout, [didShowRefrenceTransform])
                 
                 
                 var hideStates: WQReferenceStates = []
-                let hideTransform = TSReferenceTransform(value: CGAffineTransform(translationX: 0, y: size.height), keyPath: \WQLayoutController.container.transform)
+                let hideTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: size.height))
                 hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
                 
                 values[.willShow] = willShowStates
@@ -140,28 +141,28 @@ public extension StyleConfig {
             
             
             var willShowStates: WQReferenceStates = []
-            let dimWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.dimmingView.alpha)
-            let containerWillShowalpha = TSReferenceValue(value: 0.0, keyPath: \WQLayoutController.container.alpha)
+            let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
+            let containerWillShowalpha = TSReferenceValue(container: 0.0)
             
-            let willShowTransform = TSReferenceTransform(value: CGAffineTransform(translationX: willShowPoint.x - showPoint.x, y: willShowPoint.y - showPoint.y), keyPath: \WQLayoutController.container.transform)
-            let willShowFrame = TSReferenceRect(value: containerFrame, keyPath: \WQLayoutController.container.frame)
+            let willShowTransform = TSReferenceTransform(container: CGAffineTransform(translationX: willShowPoint.x - showPoint.x, y: willShowPoint.y - showPoint.y))
+            let willShowFrame = TSReferenceRect(container: containerFrame)
             //这里设置transform 必须在设置frame之后 否则identity将会对应为 先设置的transform(离屏的frame)
             willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
                                              willShowTransform])
             
             
-            let showDimalpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.dimmingView.alpha)
-            let showConataineralpha = TSReferenceValue(value: 1.0, keyPath: \WQLayoutController.container.alpha)
-            let showRefrenceTransform = TSReferenceTransform(value: CGAffineTransform(translationX: -(willShowPoint.x - showPoint.x) * 0.1, y: -(willShowPoint.y - showPoint.y) * 0.1), keyPath: \WQLayoutController.container.transform)
+            let showDimalpha = TSReferenceValue(dimming: 1.0)
+            let showConataineralpha = TSReferenceValue(container: 1.0)
+            let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(translationX: -(willShowPoint.x - showPoint.x) * 0.1, y: -(willShowPoint.y - showPoint.y) * 0.1))
             var showStates: WQReferenceStates = []
             showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
             
-            let didShowRefrenceTransform = TSReferenceTransform(value: .identity, keyPath: \WQLayoutController.container.transform)
+            let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
             var didShowStates: WQReferenceStates = []
             didShowStates.addState(layout, [didShowRefrenceTransform])
             
             var hideStates: WQReferenceStates = []
-            let hideTransform = TSReferenceTransform(value: CGAffineTransform(translationX: hidePoint.x - showPoint.x, y: hidePoint.y - showPoint.y), keyPath: \WQLayoutController.container.transform)
+            let hideTransform = TSReferenceTransform(container: CGAffineTransform(translationX: hidePoint.x - showPoint.x, y: hidePoint.y - showPoint.y))
             hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
             values[.willShow] = willShowStates
             values[.show] = showStates
@@ -173,5 +174,40 @@ public extension StyleConfig {
                 break
             }
         self.states.merge(values, uniquingKeysWith: {(_, new) in new })
+    }
+    
+   private func dimingReference() -> [ModalState: TSReferenceWriteable] {
+        var values: [ModalState: TSReferenceWriteable] = [:]
+        if self.dimming {
+            values[.willShow] = TSReferenceValue(dimming: 0.0)
+            values[.show] = TSReferenceValue(dimming: 1.0)
+            values[.hide] = values[.willShow]
+        }
+        return values
+    }
+    
+    private func alertTransform() -> [ModalState: TSReferenceWriteable] {
+        let initalValue = CGAffineTransform(scaleX: 0.5, y: 0.5)
+        let showValue = CGAffineTransform(scaleX: 1.05, y: 1.05)
+        let didShowValue = CGAffineTransform.identity
+        let hideValue = CGAffineTransform(scaleX: 0.4, y: 0.4)
+        var values: [ModalState: TSReferenceWriteable] = [:]
+        values[.willShow] = TSReferenceTransform(container: initalValue)
+        values[.show] = TSReferenceTransform(container: showValue)
+        values[.didShow] = TSReferenceTransform(container: didShowValue)
+        values[.hide] = TSReferenceTransform(container: hideValue)
+        return values
+    }
+    private func panContainerTransform(_ initial: CGPoint, show: CGPoint, hide: CGPoint, size: CGSize, frameSize: CGSize) -> [ModalState: TSReferenceWriteable] {
+        let initalValue = CGAffineTransform(translationX: show.x - initial.x, y: show.y - initial.y)
+        let showValue = CGAffineTransform(translationX: -(show.x - initial.x) * 0.1, y: -(show.y - initial.y) * 0.1)
+        let didShowValue = CGAffineTransform.identity
+        let hideValue = CGAffineTransform(translationX: hide.x - initial.x, y: hide.y - initial.y)
+        var values: [ModalState: TSReferenceWriteable] = [:]
+        values[.willShow] = TSReferenceTransform(container: initalValue)
+        values[.show] = TSReferenceTransform(container: showValue)
+        values[.didShow] = TSReferenceTransform(container: didShowValue)
+        values[.hide] = TSReferenceTransform(container: hideValue)
+        return values
     }
 }
