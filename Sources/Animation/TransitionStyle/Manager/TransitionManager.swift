@@ -64,20 +64,20 @@ open class TransitionManager: NSObject {
 // custom 配置
 public extension TransitionManager {
     /// 添加属性到fromViewController
-    func addStateFromTarget(_ values: [TSReferenceWriteable], state: ModalState) {
+    func addStateFromTarget(_ values: [ModalKeyPath], state: ModalState) {
         guard let from = self.config.fromViewController else { return }
         self.statesConfig.addState(from, values: values, state: state)
     }
     /// 添加属性到fromViewController
-    func addStateFromTarget(_ value: TSReferenceWriteable, state: ModalState) {
+    func addStateFromTarget(_ value: ModalKeyPath, state: ModalState) {
         self.addStateFromTarget([value], state: state)
     }
     /// 添加属性到presenting
-    func addStateToTarget(_ values: [TSReferenceWriteable], state: ModalState) {
+    func addStateToTarget(_ values: [ModalKeyPath], state: ModalState) {
         self.statesConfig.addState(showViewController, values: values, state: state)
     }
     /// 添加属性到presenting
-    func addStateToTarget(_ value: TSReferenceWriteable, state: ModalState) {
+    func addStateToTarget(_ value: ModalKeyPath, state: ModalState) {
         self.addStateToTarget([value], state: state)
     }
 

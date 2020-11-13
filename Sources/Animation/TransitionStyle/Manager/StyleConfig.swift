@@ -11,7 +11,7 @@ import Foundation
 /// 转场动画各种状态的配置
 public class StyleConfig {
     /// 各个状态的配置
-    public var states: [ModalState: WQReferenceStates]
+    public var states: [ModalState: ModalTargets]
     /// 是否需要遮罩
     public var dimming: Bool = true
    /// states
@@ -31,7 +31,7 @@ public class StyleConfig {
     public init(_ style: TransitionShowStyle, anmation: TransitionAnimationStyle) {
         self.showStyle = style
         self.animationStyle = anmation
-        var sts: [ModalState: WQReferenceStates]
+        var sts: [ModalState: ModalTargets]
         switch style {
         case let .custom(values):
             sts = values
@@ -46,95 +46,46 @@ public class StyleConfig {
     }
 }
 public extension StyleConfig {
-    func addState(_ target: NSObject, values: [TSReferenceWriteable], state: ModalState) {
+    func addState(_ target: NSObject, values: [ModalKeyPath], state: ModalState) {
         var sts = self.states[state] ?? []
         sts.addState(target, values)
         self.states[state] = sts
     }
     
-    func addState(_ target: NSObject, value: TSReferenceWriteable, state: ModalState) {
+    func addState(_ target: NSObject, value: ModalKeyPath, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
 }   
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
-        var values: [ModalState: WQReferenceStates] = [:]
+        var values: [ModalState: ModalTargets] = [:]
         let size = layout.container.sizeThatFits()
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:
-                var diming = self.dimingReference()
+                let diming = self.dimingReference()
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
-                let willShowFrame = TSReferenceRect(container: containerFrame)
-                
+                let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.alertTransform()
-                
-                var values: [ModalState: [TSReferenceWriteable]] = [:]
-                values.combine([.willShow: willShowFrame])
-                values.combine(diming)
-                values.combine(tranforms)
-                
-//                var willShowStates: WQReferenceStates = []
-//                let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
-//                let containerWillShowalpha = TSReferenceValue(container: 0.0)
-//
-//                let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
-//                let willShowTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 0.3, y: 0.3))
-//                let willShowFrame = TSReferenceRect(container: containerFrame)
-//                willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
-//                                                 willShowTransform])
-//
-//                let showDimalpha = TSReferenceValue(dimming: 1.0)
-//                let showConataineralpha = TSReferenceValue(container: 1.0)
-//                let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 1.05, y: 1.05))
-//                var showStates: WQReferenceStates = []
-//                showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
-//
-//                let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
-//                var didShowStates: WQReferenceStates = []
-//                didShowStates.addState(layout, [didShowRefrenceTransform])
-//
-//
-//                var hideStates: WQReferenceStates = []
-//
-//                let hideTransform = TSReferenceTransform(container: CGAffineTransform(scaleX: 0.6, y: 0.6))
-//                hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
-//
-//                values[.willShow] = willShowStates
-//                values[.show] = showStates
-//                values[.didShow] = didShowStates
-//                values[.hide] = hideStates
+                var references: [ModalState: [ModalKeyPath]] = [:]
+                references.combine([.willShow: willShowFrame])
+                references.combine(diming)
+                references.combine(tranforms)
+                for (key, items) in references {
+                    values[key] = [ModalTargetItem(layout, refrences: items)]
+                }
             case .actionSheet:
-                var willShowStates: WQReferenceStates = []
-                let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
-                let containerWillShowalpha = TSReferenceValue(container: 0.0)
-                
+                let diming = self.dimingReference()
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
-                let willShowTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: size.height))
-                let willShowFrame = TSReferenceRect(container: containerFrame)
-                //这里设置transform 必须在设置frame之后 否则identity将会对应为 先设置的transform(离屏的frame)
-                willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
-                                                 willShowTransform ])
-  
-                let showDimalpha = TSReferenceValue(dimming: 1.0)
-                let showConataineralpha = TSReferenceValue(container: 1.0)
-                let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: -10))
-                var showStates: WQReferenceStates = []
-                showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
-                 
-                let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
-                var didShowStates: WQReferenceStates = []
-                didShowStates.addState(layout, [didShowRefrenceTransform])
-                
-                
-                var hideStates: WQReferenceStates = []
-                let hideTransform = TSReferenceTransform(container: CGAffineTransform(translationX: 0, y: size.height))
-                hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
-                
-                values[.willShow] = willShowStates
-                values[.show] = showStates
-                values[.didShow] = didShowStates
-                values[.hide] = hideStates
+                let willShowFrame = ModalRect(container: containerFrame)
+                let tranforms = self.actionSheetTransform(size, container: controllerSize)
+                var references: [ModalState: [ModalKeyPath]] = [:]
+                references.combine([.willShow: willShowFrame])
+                references.combine(diming)
+                references.combine(tranforms)
+                for (key, items) in references {
+                    values[key] = [ModalTargetItem(layout, refrences: items)]
+                }
         case let .pan(positions):
            if let willShowPostion = positions[.willShow],
             let showPostion = positions[.show],
@@ -143,37 +94,16 @@ public extension StyleConfig {
             let willShowPoint = willShowPostion.center(size: size, container: controllerSize, state: .willShow)
             let showPoint = showPostion.center(size: size, container: controllerSize, state: .show)
             let hidePoint = hidePosition.center(size: size, container: controllerSize, state: .hide)
-            
-            
-            var willShowStates: WQReferenceStates = []
-            let dimWillShowalpha = TSReferenceValue(dimming: 0.0)
-            let containerWillShowalpha = TSReferenceValue(container: 0.0)
-            
-            let willShowTransform = TSReferenceTransform(container: CGAffineTransform(translationX: willShowPoint.x - showPoint.x, y: willShowPoint.y - showPoint.y))
-            let willShowFrame = TSReferenceRect(container: containerFrame)
-            //这里设置transform 必须在设置frame之后 否则identity将会对应为 先设置的transform(离屏的frame)
-            willShowStates.addState(layout, [dimWillShowalpha, containerWillShowalpha,willShowFrame,
-                                             willShowTransform])
-            
-            
-            let showDimalpha = TSReferenceValue(dimming: 1.0)
-            let showConataineralpha = TSReferenceValue(container: 1.0)
-            let showRefrenceTransform = TSReferenceTransform(container: CGAffineTransform(translationX: -(willShowPoint.x - showPoint.x) * 0.1, y: -(willShowPoint.y - showPoint.y) * 0.1))
-            var showStates: WQReferenceStates = []
-            showStates.addState(layout, [showDimalpha, showConataineralpha,showRefrenceTransform])
-            
-            let didShowRefrenceTransform = TSReferenceTransform(container: .identity)
-            var didShowStates: WQReferenceStates = []
-            didShowStates.addState(layout, [didShowRefrenceTransform])
-            
-            var hideStates: WQReferenceStates = []
-            let hideTransform = TSReferenceTransform(container: CGAffineTransform(translationX: hidePoint.x - showPoint.x, y: hidePoint.y - showPoint.y))
-            hideStates.addState(layout, [hideTransform, dimWillShowalpha, containerWillShowalpha])
-            values[.willShow] = willShowStates
-            values[.show] = showStates
-            values[.didShow] = didShowStates
-            values[.hide] = hideStates
-            
+            let diming = self.dimingReference()
+            let willShowFrame = ModalRect(container: containerFrame)
+            let tranforms = self.panTransform(willShowPoint, show: showPoint, hide: hidePoint)
+            var references: [ModalState: [ModalKeyPath]] = [:]
+            references.combine([.willShow: willShowFrame])
+            references.combine(diming)
+            references.combine(tranforms)
+            for (key, items) in references {
+                values[key] = [ModalTargetItem(layout, refrences: items)]
+            }  
            }
             default:
                 break
@@ -181,38 +111,44 @@ public extension StyleConfig {
         self.states.merge(values, uniquingKeysWith: {(_, new) in new })
     }
     
-   private func dimingReference() -> [ModalState: TSReferenceWriteable] {
-        var values: [ModalState: TSReferenceWriteable] = [:]
+   private func dimingReference() -> [ModalState: ModalKeyPath] {
+        var values: [ModalState: ModalKeyPath] = [:]
         if self.dimming {
-            values[.willShow] = TSReferenceValue(dimming: 0.0)
-            values[.show] = TSReferenceValue(dimming: 1.0)
+            values[.willShow] = ModalFloat(dimming: 0.0)
+            values[.show] = ModalFloat(dimming: 1.0)
             values[.hide] = values[.willShow]
         }
         return values
     }
     
-    private func alertTransform() -> [ModalState: TSReferenceWriteable] {
+    private func alertTransform() -> [ModalState: ModalKeyPath] {
         let initalValue = CGAffineTransform(scaleX: 0.5, y: 0.5)
         let showValue = CGAffineTransform(scaleX: 1.05, y: 1.05)
         let didShowValue = CGAffineTransform.identity
         let hideValue = CGAffineTransform(scaleX: 0.4, y: 0.4)
-        var values: [ModalState: TSReferenceWriteable] = [:]
-        values[.willShow] = TSReferenceTransform(container: initalValue)
-        values[.show] = TSReferenceTransform(container: showValue)
-        values[.didShow] = TSReferenceTransform(container: didShowValue)
-        values[.hide] = TSReferenceTransform(container: hideValue)
+        var values: [ModalState: ModalKeyPath] = [:]
+        values[.willShow] = ModalTransform(container: initalValue)
+        values[.show] = ModalTransform(container: showValue)
+        values[.didShow] = ModalTransform(container: didShowValue)
+        values[.hide] = ModalTransform(container: hideValue)
         return values
     }
-    private func panContainerTransform(_ initial: CGPoint, show: CGPoint, hide: CGPoint, size: CGSize, frameSize: CGSize) -> [ModalState: TSReferenceWriteable] {
-        let initalValue = CGAffineTransform(translationX: show.x - initial.x, y: show.y - initial.y)
-        let showValue = CGAffineTransform(translationX: -(show.x - initial.x) * 0.1, y: -(show.y - initial.y) * 0.1)
+    private func actionSheetTransform(_ size: CGSize, container: CGSize) -> [ModalState: ModalKeyPath] {
+        let inital = CGPoint(x: 0, y: container.height + size.height*0.5)
+        let show = CGPoint(x: 0, y: container.height - size.height*0.5)
+        let hide = inital
+        return panTransform(inital, show: show, hide: hide)
+    }
+    private func panTransform(_ initial: CGPoint, show: CGPoint, hide: CGPoint) -> [ModalState: ModalKeyPath] {
+        let initalValue = CGAffineTransform(translationX: initial.x - show.x, y: initial.y - show.y)
+        let showValue = CGAffineTransform(translationX: -(initial.x - show.x) * 0.1, y: -(initial.y - show.y) * 0.1)
         let didShowValue = CGAffineTransform.identity
-        let hideValue = CGAffineTransform(translationX: hide.x - initial.x, y: hide.y - initial.y)
-        var values: [ModalState: TSReferenceWriteable] = [:]
-        values[.willShow] = TSReferenceTransform(container: initalValue)
-        values[.show] = TSReferenceTransform(container: showValue)
-        values[.didShow] = TSReferenceTransform(container: didShowValue)
-        values[.hide] = TSReferenceTransform(container: hideValue)
+        let hideValue = CGAffineTransform(translationX: hide.x - show.x, y: hide.y - show.y)
+        var values: [ModalState: ModalKeyPath] = [:]
+        values[.willShow] = ModalTransform(container: initalValue)
+        values[.show] = ModalTransform(container: showValue)
+        values[.didShow] = ModalTransform(container: didShowValue)
+        values[.hide] = ModalTransform(container: hideValue)
         return values
     }
 }

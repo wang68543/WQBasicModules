@@ -7,10 +7,10 @@
 
 import Foundation
  
-public protocol TSReferenceWriteable {
+public protocol ModalKeyPath {
     func setup(_ target: Any, state: ModalState)
 }
-public class TSReference<Root, Value>: TSReferenceWriteable { 
+public class ModalReference<Root, Value>: ModalKeyPath { 
     
     public let value: Value
     public let keyPath: ReferenceWritableKeyPath<Root, Value>
@@ -24,10 +24,10 @@ public class TSReference<Root, Value>: TSReferenceWriteable {
    } 
 }
 /// 解决循环引用问题
-public class TSReferenceTargetItem {
+public class ModalTargetItem {
     weak var target: NSObject?
-    var refrences: [TSReferenceWriteable]
-    init(_ target: NSObject, refrences: [TSReferenceWriteable]) {
+    var refrences: [ModalKeyPath]
+    init(_ target: NSObject, refrences: [ModalKeyPath]) {
         self.target = target
         self.refrences = refrences
     }
@@ -37,22 +37,20 @@ public class TSReferenceTargetItem {
     }
 }
 
- 
 
-
-public class TSReferenceRect: TSReference<WQLayoutController, CGRect> { }
-public class TSReferenceColor: TSReference<WQLayoutController, UIColor> { }
-public class TSReferenceTransform: TSReference<WQLayoutController, CGAffineTransform> { }
-public class TSReferencePosition: TSReference<WQLayoutController, CGPoint> { }
-public class TSReferenceToggle: TSReference<WQLayoutController, Bool> { }
-public class TSReferenceValue: TSReference<WQLayoutController, CGFloat> { }
+public class ModalRect: ModalReference<WQLayoutController, CGRect> { }
+public class ModalColor: ModalReference<WQLayoutController, UIColor> { }
+public class ModalTransform: ModalReference<WQLayoutController, CGAffineTransform> { }
+public class ModalPosition: ModalReference<WQLayoutController, CGPoint> { }
+public class ModalBool: ModalReference<WQLayoutController, Bool> { }
+public class ModalFloat: ModalReference<WQLayoutController, CGFloat> { }
  
-public extension TSReferenceTransform {
+public extension ModalTransform {
     convenience init(container value: CGAffineTransform) {
         self.init(value, keyPath: \WQLayoutController.container.transform)
     }
 }
-public extension TSReferenceValue {
+public extension ModalFloat {
     /// alapha
     convenience init(container value: CGFloat) {
         self.init(value, keyPath: \WQLayoutController.container.alpha)
@@ -61,7 +59,7 @@ public extension TSReferenceValue {
         self.init(value, keyPath: \WQLayoutController.dimmingView.alpha)
     }
 }
-public extension TSReferenceRect {
+public extension ModalRect {
     convenience init(container value: CGRect) {
         self.init(value, keyPath: \WQLayoutController.container.frame)
     }

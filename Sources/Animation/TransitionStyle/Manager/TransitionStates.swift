@@ -218,7 +218,7 @@ public enum TransitionShowStyle {
     /// 自定义显示
     case pan([ModalState: PanPosition])
     /// 自定义显示位置
-    case custom([ModalState: WQReferenceStates])
+    case custom([ModalState: ModalTargets])
 }
 
 /// 支持动画方式

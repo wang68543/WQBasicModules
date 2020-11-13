@@ -6,24 +6,24 @@
 //
 
 import Foundation
-public typealias WQReferenceStates = [TSReferenceTargetItem]
+public typealias ModalTargets = [ModalTargetItem]
 
-public extension WQReferenceStates {
-    mutating func addState(_ target: NSObject?, _ values: [TSReferenceWriteable]) {
+public extension ModalTargets {
+    mutating func addState(_ target: NSObject?, _ values: [ModalKeyPath]) {
         if let targetItem = self.first(where: {$0.target === target }) {
             targetItem.refrences.append(contentsOf: values)
         } else if let root = target {
-            let item = TSReferenceTargetItem(root, refrences: values)
+            let item = ModalTargetItem(root, refrences: values)
             self.append(item)
         
         }
     }
     
-    mutating func addState(_ target: NSObject, _ value: TSReferenceWriteable) {
+    mutating func addState(_ target: NSObject, _ value: ModalKeyPath) {
         self.addState(target, [value])
     }
     
-    mutating func merge(_ refrence: WQReferenceStates) {
+    mutating func merge(_ refrence: ModalTargets) {
         for value in refrence {
             self.addState(value.target, value.refrences)
         }
@@ -37,8 +37,9 @@ public extension WQReferenceStates {
     }
 }
 
-extension Dictionary where Key == ModalState, Value == [TSReferenceWriteable] {
-    mutating func combine(_ values: [ModalState: TSReferenceWriteable]) {
+extension Dictionary where Key == ModalState, Value == [ModalKeyPath] {
+    
+    mutating func combine(_ values: [ModalState: ModalKeyPath]) {
         for state in ModalState.allCases {
             var value = self[state] ?? []
             if let refrence = values[state] {
@@ -48,8 +49,14 @@ extension Dictionary where Key == ModalState, Value == [TSReferenceWriteable] {
         }
     }
 }
-extension Dictionary where Key == ModalState, Value == [TSReferenceTargetItem] {
-    mutating func combine(_ values: [ModalState: TSReferenceTargetItem]) {
+extension Dictionary where Key == ModalState, Value == [ModalTargetItem] {
+    mutating func append(_ target: NSObject, with state: ModalState, refrences: [ModalKeyPath]) {
+        let item = ModalTargetItem(target, refrences: refrences)
+        var items = self[state] ?? []
+        items.append(item)
+        self[state] = items
+    }
+    mutating func combine(_ values: [ModalState: ModalTargetItem]) {
         for state in ModalState.allCases {
             var value = self[state] ?? []
             if let refrence = values[state] {

@@ -99,7 +99,6 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
 //
 //            alertView.wm.dismiss(true)
-//            self.show()
 //        }
     }
 
