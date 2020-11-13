@@ -28,25 +28,25 @@ public extension UIView {
 }
 public extension UIView {
     
-    func alert(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
+    func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .fade)
         self.present(config, states: states, completion: completion)
     }
     
-    func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: TransitionAnimation.Completion? = nil) {
+    func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.actionSheet, anmation: .fade)
         self.present(config, states: states, completion: completion)
     }
     
-    func present(_ config: ModalConfig, states: StyleConfig, completion: TransitionAnimation.Completion? = nil) {
+    func present(_ config: ModalConfig, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         let layout = WQLayoutController(config, subView: self)
         present(layout, states: states, completion: completion)
     }
-    func present(_ container: WQLayoutController, states: StyleConfig, completion: TransitionAnimation.Completion? = nil) {
+    func present(_ container: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
     }
     
-    func dismiss(_ flag: Bool, completion: TransitionAnimation.Completion? = nil) {
+    func dismiss(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
         self.layoutController?.dismiss(animated: flag, completion: completion)
     }
 } 

@@ -6,7 +6,7 @@
 //
 
 import Foundation 
-public class ModalDefaultAnimation: TransitionAnimation {
+public class ModalDefaultAnimation: ModalAnimation {
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: Completion?) {
          
     }

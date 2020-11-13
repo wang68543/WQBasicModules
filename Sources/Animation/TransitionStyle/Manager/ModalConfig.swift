@@ -60,7 +60,7 @@ public extension InteractDismissMode {
 }
 
 public class ModalConfig {
-    public let style: ModalStyle 
+    public let style: ModalPresentation 
     /// 当前在结构中的 viewController
     internal weak var fromViewController: UIViewController?
     /// 容器控制器
@@ -74,7 +74,7 @@ public class ModalConfig {
     // 可以通过 self.edgesForExtendedLayout = [] 确保alertView 居中
     public var showControllerFrame: CGRect = UIScreen.main.bounds
     
-    public init(_ style: ModalStyle = .autoModal) {
+    public init(_ style: ModalPresentation = .autoModal) {
         self.style = style
         if let viewController = style.fromViewController  {
             showControllerFrame = viewController.view.bounds

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-public protocol TransitionAnimation: class {
+public protocol ModalAnimation: class {
     typealias Completion = (() -> Void)
     ///用于存储 show 跟hide 的时候 动画完成回调
     var animationCompletion: Completion? { get set }
@@ -44,7 +44,7 @@ public protocol TransitionAnimation: class {
     
     
 }
-public extension TransitionAnimation {
+public extension ModalAnimation {
     func preprocessor(duration manager: TransitionManager) -> TimeInterval {
         return 0.25
     }

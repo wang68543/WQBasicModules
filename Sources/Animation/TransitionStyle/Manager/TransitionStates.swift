@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public enum ModalStyle {
+public enum ModalPresentation {
     case modalSystem(UIViewController?)
     /// 这里要分
     case modalInParent(UIViewController)
@@ -19,7 +19,7 @@ public enum ModalStyle {
     case autoModal
 }
 
-public extension ModalStyle {
+public extension ModalPresentation {
     ///
     var fromViewController: UIViewController? {
         switch self {
@@ -36,7 +36,7 @@ public extension ModalStyle {
         }
     }
     /// 自动适配autoModal Style
-    var autoAdaptationStyle: ModalStyle {
+    var autoAdaptationStyle: ModalPresentation {
         switch self {
         case .autoModal:
             if let topVisible = WQUIHelp.topVisibleViewController() {
@@ -87,20 +87,31 @@ public extension ModalState {
 }
 
 public enum HorizontalPanPosition {
-    case center
-    
-    case leading
-    
-    case trailing
+    case center, leading, trailing
+}
+public enum VerticalPanPosition {
+    case center, top, bottom
 }
 
-public enum VerticalPanPosition {
-    case center
+/// contentView的 最终显示方式
+public enum ModalShowStyle {
+   /// 定点中间显示
+   case alert
+   /// 考虑是否默认添加底部safeArea间距色块
+   case actionSheet
+   /// 自定义显示
+   case pan([ModalState: PanPosition])
+   /// 自定义显示位置
+   case custom([ModalState: ModalTargets])
+}
 
-    case top
-
-    case bottom
-     
+/// 支持动画方式
+public enum ModalAnimationStyle {
+   /// 背景淡入
+   case fade
+   case scaleFade
+   /// 自定义states 默认动画
+   case custom(ModalAnimation)
 }
 /// showing的时候 in
 public struct PanPosition {
@@ -208,31 +219,10 @@ public extension PanPosition {
         return states
     }
 }
- 
-/// contentView的 最终显示方式
-public enum TransitionShowStyle {
-    /// 定点中间显示
-    case alert
-    /// 考虑是否默认添加底部safeArea间距色块
-    case actionSheet
-    /// 自定义显示
-    case pan([ModalState: PanPosition])
-    /// 自定义显示位置
-    case custom([ModalState: ModalTargets])
-}
 
-/// 支持动画方式
-public enum TransitionAnimationStyle {
-    /// 背景淡入
-    case fade
-    case scaleFade
-    /// 自定义states 默认动画
-    case custom(TransitionAnimation)
-}
-
-public extension TransitionAnimationStyle {
+public extension ModalAnimationStyle {
     
-    var animator: TransitionAnimation {
+    var animator: ModalAnimation {
         switch self {
         case .fade:
             return ModalFadeAnimation()

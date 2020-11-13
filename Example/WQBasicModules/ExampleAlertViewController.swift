@@ -85,7 +85,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         let config = ModalConfig(.modalInParent(self))
         
         config.interactionDismiss = .tapOutSide
-        
+//        self.definesPresentationContext
 //        alertSubView.alert(true, config: config)
         let postions = PanPosition.bottomToCenter(true)
         let style = StyleConfig(.pan(postions), anmation: .fade)

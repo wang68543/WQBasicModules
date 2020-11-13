@@ -15,20 +15,20 @@ public class StyleConfig {
     /// 是否需要遮罩
     public var dimming: Bool = true
    /// states
-    public let showStyle: TransitionShowStyle
+    public let showStyle: ModalShowStyle
     /// 动画方式 ModalDefaultAnimation
-    public let animationStyle: TransitionAnimationStyle 
+    public let animationStyle: ModalAnimationStyle 
     /// 动画之前附加的view
     public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
     /// 约束container的显示尺寸(主要适用于actionSheet,alert)
     public var constraintSize = CGSize.zero
     /// 动画执行者
-    lazy var animator: TransitionAnimation = {
+    lazy var animator: ModalAnimation = {
         return animationStyle.animator
     }()
     
-    public init(_ style: TransitionShowStyle, anmation: TransitionAnimationStyle) {
+    public init(_ style: ModalShowStyle, anmation: ModalAnimationStyle) {
         self.showStyle = style
         self.animationStyle = anmation
         var sts: [ModalState: ModalTargets]
@@ -103,7 +103,7 @@ public extension StyleConfig {
             references.combine(tranforms)
             for (key, items) in references {
                 values[key] = [ModalTargetItem(layout, refrences: items)]
-            }  
+            }
            }
             default:
                 break

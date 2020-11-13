@@ -11,8 +11,8 @@ import UIKit
  */
 public protocol WQLayoutControllerTransition: NSObjectProtocol {
 //    func didViewLoad(_ controller: WQLayoutController)
-    func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: TransitionAnimation.Completion?)
-    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: TransitionAnimation.Completion?) -> Bool
+    func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: ModalAnimation.Completion?)
+    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
 //    optional func update(_ controller: WQLayoutController, progress: CGFloat) 
 }
 
@@ -76,7 +76,7 @@ public class WQLayoutController: UIViewController {
         dimmingView.frame = self.view.bounds 
         
     }
-    public func modal(_ states: StyleConfig, comletion: TransitionAnimation.Completion? = nil) {
+    public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
         statesConfig = states
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)

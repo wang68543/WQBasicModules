@@ -25,7 +25,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     }
     
      
-    public let animator: TransitionAnimation
+    public let animator: ModalAnimation
     
     public unowned let config: ModalConfig
     
@@ -126,7 +126,7 @@ public extension ModalContext {
 public extension ModalContext {
     static func modalContext(_ config: ModalConfig, states: StyleConfig) -> ModalContext? {
         
-        func context(_ style: ModalStyle) -> ModalContext? {
+        func context(_ style: ModalPresentation) -> ModalContext? {
             switch style {
             case .modalSystem:
                 return ModalPresentationContext(config, states: states)

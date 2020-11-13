@@ -15,7 +15,6 @@ public extension ModalTargets {
         } else if let root = target {
             let item = ModalTargetItem(root, refrences: values)
             self.append(item)
-        
         }
     }
     
