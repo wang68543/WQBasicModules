@@ -23,11 +23,7 @@ open class ModalPresentationContext: ModalContext {
         default:
             break
         }
-//        self.animator.preprocessor(.willShow, layoutController: controller, config: config, states: statesConfig) { [weak self] in
-//            guard let `self` = self else { return }
-            self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
-//            self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: self.statesConfig, completion: completion)
-//        }
+        self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
         switch styleConfig.showStyle {
@@ -36,32 +32,9 @@ open class ModalPresentationContext: ModalContext {
         default:
             break
         }
-        
-//        self.animator.preprocessor(.willHide, layoutController: controller, config: config, states: self.statesConfig, completion: completion)
+        // 交给系统dismiss
         return false
     }
-//    var presenter: UIViewController?
-    
-//    public override init(_ viewController: WQLayoutController, style: ModalStyle) {
-//        super.init(viewController, style: style)
-//        viewController.modalPresentationStyle = .custom
-//        viewController.transitioningDelegate = self
-//    }
-//    
-//    /// 开始当前的ViewController转场动画
-//    /// - Parameters:
-//    ///   - viewController: 承载present的viewController
-//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-////        super.show(in: viewController, animated: flag, completion: completion)
-//        showViewController.transitioningDelegate = self
-//        showViewController.modalPresentationStyle = .custom
-//        fromViewController?.present(showViewController, animated: flag, completion: completion)
-//    }
-//    public  func dismiss(animated flag: Bool, completion: ModalContext.Completion? = nil) {
-//        showViewController.dismiss(animated: flag, completion: completion)
-//    }
-    
-    
     
 }
 extension ModalPresentationContext: UIViewControllerTransitioningDelegate {

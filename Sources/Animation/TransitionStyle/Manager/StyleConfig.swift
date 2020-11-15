@@ -32,6 +32,7 @@ public class StyleConfig {
         self.showStyle = style
         self.animationStyle = anmation
         var sts: [ModalState: ModalTargets]
+        
         switch style {
         case let .custom(values):
             sts = values
@@ -59,7 +60,8 @@ public extension StyleConfig {
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
         var values: [ModalState: ModalTargets] = [:]
-        let size = layout.container.sizeThatFits()
+        var size = self.constraintSize
+        if size == .zero { size = layout.container.sizeThatFits() }
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:
@@ -141,7 +143,7 @@ public extension StyleConfig {
     }
     private func panTransform(_ initial: CGPoint, show: CGPoint, hide: CGPoint) -> [ModalState: ModalKeyPath] {
         let initalValue = CGAffineTransform(translationX: initial.x - show.x, y: initial.y - show.y)
-        let showValue = CGAffineTransform(translationX: -(initial.x - show.x) * 0.1, y: -(initial.y - show.y) * 0.1)
+        let showValue = CGAffineTransform(translationX: -min((initial.x - show.x) * 0.05, 15), y: -min((initial.y - show.y) * 0.05, 15))
         let didShowValue = CGAffineTransform.identity
         let hideValue = CGAffineTransform(translationX: hide.x - show.x, y: hide.y - show.y)
         var values: [ModalState: ModalKeyPath] = [:]
