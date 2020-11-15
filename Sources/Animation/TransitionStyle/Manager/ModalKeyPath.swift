@@ -22,9 +22,7 @@ public class ModalReference<Root, Value>: ModalKeyPath {
      guard let item = target as? Root else { return }
      item[keyPath: keyPath] = value
    } 
-}
-
-
+} 
 
 public class ModalRect: ModalReference<WQLayoutController, CGRect> { }
 public class ModalColor: ModalReference<WQLayoutController, UIColor> { }

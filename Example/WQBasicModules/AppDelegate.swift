@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
+//        debugPrint(<#T##items: Any...##Any#>)
 //        TestWebViewController.uid = 1000
 //        
 //        debugPrint("=====\(TestWebViewController.uid)")
