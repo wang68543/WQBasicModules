@@ -7,85 +7,54 @@
 
 import Foundation 
 public class ModalDefaultAnimation: ModalAnimation {
-    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: Completion?) {
-         
-    }
+ 
     
     public var areAnimationEnable: Bool = true
-    
-//    public var animationCompletion: Completion?÷
-    
-//    public var completionBlocks: [ModalState: Completion] = [:]
 
     public var duration: TimeInterval = 0.45
     
-//    public func preprocessor(_ manager: TransitionManager, state: ModalState, completion: Completion?) {
-//         
-//    } 
-    
-    
-//    public func preprocessor(_ state: ModalState, with context: ModalContext, to states: WQReferenceStates, completion: Completion?) {
-//
-//    }
-//
-//    public func preprocessor(duration manager: TransitionManager) -> TimeInterval {
-//        return 0.25
-//    }
-//
-//    public func preprocessor(readyToShow manager: TransitionManager, to states: WQReferenceStates, completion: Completion?) {
-//        UIView.performWithoutAnimation {
-//            if let bindViews = manager.snapShotAttachAnimatorViews[.readyToShow] {
-//                bindViews.forEach { view,subViews in
-//                    subViews.forEach { view.addSubview($0) }
-//                }
-//            }
-//            states.setup(for: .readyToShow)
-//        }
-//        completion?()
-//    }
-//    public func preprocessor(willShow manager: TransitionManager, to states: WQReferenceStates, completion: Completion?) {
-//        let duration = self.preprocessor(duration: manager)
-//        let options: UIView.AnimationOptions = [.beginFromCurrentState, .curveEaseOut]
-//        UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
-//            states.setup(for: .showing)
-//        }) { flag in
-//            if let bindViews = manager.snapShotAttachAnimatorViews[.readyToShow] {
-//                bindViews.forEach { view,subViews in
-//                    subViews.forEach { $0.removeFromSuperview() }
-//                }
-//            }
-//            completion?()
-//        }
-//
-//    }
-//    public func preprocessor(readyToHide manager: TransitionManager, to states: WQReferenceStates, completion: Completion?) {
-//        UIView.performWithoutAnimation {
-//            if let bindViews = manager.snapShotAttachAnimatorViews[.readyToHide] {
-//                bindViews.forEach { view,subViews in
-//                    subViews.forEach { view.addSubview($0) }
-//                }
-//            }
-//            states.setup(for: .readyToHide)
-//        }
-//        completion?()
-//    }
-//    public func preprocessor(willHide manager: TransitionManager, to states: WQReferenceStates, completion: Completion?) {
-//        let duration = self.preprocessor(duration: manager)
-//        let options: UIView.AnimationOptions = [.beginFromCurrentState, .curveEaseOut]
-//        UIView.animate(withDuration: duration, delay: 0, options: options, animations: {
-//            states.setup(for: .readyToHide)
-//        }) { flag in
-//            if let bindViews = manager.snapShotAttachAnimatorViews[.readyToHide] {
-//                bindViews.forEach { view,subViews in
-//                    subViews.forEach { $0.removeFromSuperview() }
-//                }
-//            }
-//            completion?()
-//        }
-//    }
-    
-    public func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat) {
-        
+    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
+        if state == .show {
+            let areAnimationsEnabled =  UIView.areAnimationsEnabled
+            UIView.setAnimationsEnabled(false)
+            states.states[.willShow]?.setup(for: .willShow)
+            UIView.setAnimationsEnabled(areAnimationsEnabled)
+            if states.states[.didShow] != nil {
+                UIView.animateKeyframes(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+                    UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: self.duration*0.5) {
+                        states.states[.show]?.setup(for: .show)
+                    }
+                    UIView.addKeyframe(withRelativeStartTime: self.duration*0.5, relativeDuration: self.duration*0.5) {
+                        states.states[.didShow]?.setup(for: .didShow)
+                    }
+                } completion: { flag in
+                    completion?()
+                }
+
+            } else {
+                UIView.animate(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+                    states.states[.show]?.setup(for: .show)
+                } completion: { flag in
+                    completion?()
+                }
+            }
+        } else {//隐藏
+            let areAnimationsEnabled =  UIView.areAnimationsEnabled
+            UIView.setAnimationsEnabled(false)
+            if let bindViews = states.snapShotAttachAnimatorViews[.willHide] {
+                bindViews.forEach { view,subViews in
+                    subViews.forEach { view.addSubview($0) }
+                }
+            }
+            states.states[.willHide]?.setup(for: .willHide)
+            UIView.setAnimationsEnabled(areAnimationsEnabled)
+            
+            UIView.animate(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+                states.states[.hide]?.setup(for: .hide)
+            } completion: { flag in
+                completion?()
+            }
+        }
     }
 }
 

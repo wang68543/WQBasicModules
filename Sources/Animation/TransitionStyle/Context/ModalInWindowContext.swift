@@ -75,19 +75,14 @@ public class ModalInWindowContext: ModalDrivenContext {
         return win
     }()
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
-        
+        self.window.addVisible(root: controller)
+        self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: statesConfig, completion: completion)
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        self.animator.preprocessor(.hide, layoutController: controller, config: self.config, states: self.styleConfig) { [weak self] in
+            completion?()
+            self?.window.remove()
+        }
         return true
-    }
-//    override init(_ viewController: WQLayoutController) {
-//        super.init(viewController)
-//    }
-    
-//    /// 开始当前的ViewController转场动画
-//    /// - Parameters:
-//    ///   - viewController: 主要用于转场动画 snapshot
-//    public func show(in viewController: UIViewController?, animated flag: Bool, completion: ModalContext.Completion? = nil) {
-//        super.show(in: viewController, animated: flag, completion: completion)
-//    }
+    } 
 }

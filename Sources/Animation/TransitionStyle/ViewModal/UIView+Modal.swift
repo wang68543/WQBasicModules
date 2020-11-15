@@ -29,12 +29,12 @@ public extension UIView {
 public extension UIView {
     
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
-        let states = StyleConfig(.alert, anmation: .fade)
+        let states = StyleConfig(.alert, anmation: .default)
         self.present(config, states: states, completion: completion)
     }
     
     func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
-        let states = StyleConfig(.actionSheet, anmation: .fade)
+        let states = StyleConfig(.actionSheet, anmation: .default)
         self.present(config, states: states, completion: completion)
     }
     

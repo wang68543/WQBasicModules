@@ -6,30 +6,41 @@
 //
 
 import Foundation
-public typealias ModalTargets = [ModalTargetItem]
-
-public extension ModalTargets {
-    mutating func addState(_ target: NSObject?, _ values: [ModalKeyPath]) {
+public typealias ModalMapItems = [ModalMapItem]
+/// 解决循环引用问题
+public class ModalMapItem {
+    weak var target: AnyObject?
+    var refrences: [ModalKeyPath]
+    init(_ target: AnyObject, refrences: [ModalKeyPath]) {
+        self.target = target
+        self.refrences = refrences
+    }
+    func setup(for state: ModalState) {
+        guard let root = target else { return }
+        refrences.forEach({ $0.setup(root, state: state)})
+    }
+}
+public extension ModalMapItems {
+    mutating func addState(_ target: AnyObject?, _ values: [ModalKeyPath]) {
         if let targetItem = self.first(where: {$0.target === target }) {
             targetItem.refrences.append(contentsOf: values)
         } else if let root = target {
-            let item = ModalTargetItem(root, refrences: values)
+            let item = ModalMapItem(root, refrences: values)
             self.append(item)
         }
     }
     
-    mutating func addState(_ target: NSObject, _ value: ModalKeyPath) {
+    mutating func addState(_ target: AnyObject, _ value: ModalKeyPath) {
         self.addState(target, [value])
     }
     
-    mutating func merge(_ refrence: ModalTargets) {
+    mutating func merge(_ refrence: ModalMapItems) {
         for value in refrence {
             self.addState(value.target, value.refrences)
         }
     }
     
     func setup(for state: ModalState) {
-        
         self.forEach { value in
             value.setup(for: state)
         }
@@ -48,14 +59,14 @@ extension Dictionary where Key == ModalState, Value == [ModalKeyPath] {
         }
     }
 }
-extension Dictionary where Key == ModalState, Value == [ModalTargetItem] {
-    mutating func append(_ target: NSObject, with state: ModalState, refrences: [ModalKeyPath]) {
-        let item = ModalTargetItem(target, refrences: refrences)
+extension Dictionary where Key == ModalState, Value == [ModalMapItem] {
+    mutating func append(_ target: AnyObject, with state: ModalState, refrences: [ModalKeyPath]) {
+        let item = ModalMapItem(target, refrences: refrences)
         var items = self[state] ?? []
         items.append(item)
         self[state] = items
     }
-    mutating func combine(_ values: [ModalState: ModalTargetItem]) {
+    mutating func combine(_ values: [ModalState: ModalMapItem]) {
         for state in ModalState.allCases {
             var value = self[state] ?? []
             if let refrence = values[state] {

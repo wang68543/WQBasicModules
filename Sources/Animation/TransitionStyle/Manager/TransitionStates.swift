@@ -102,14 +102,14 @@ public enum ModalShowStyle {
    /// 自定义显示
    case pan([ModalState: PanPosition])
    /// 自定义显示位置
-   case custom([ModalState: ModalTargets])
+   case custom([ModalState: ModalMapItems])
 }
 
 /// 支持动画方式
 public enum ModalAnimationStyle {
    /// 背景淡入
-   case fade
-   case scaleFade
+   case `default`
+//   case scaleFade
    /// 自定义states 默认动画
    case custom(ModalAnimation)
 }
@@ -224,10 +224,10 @@ public extension ModalAnimationStyle {
     
     var animator: ModalAnimation {
         switch self {
-        case .fade:
-            return ModalFadeAnimation()
-        case .scaleFade:
-            return ModalScaleFadeAnimation()
+        case .default:
+            return ModalDefaultAnimation()
+//        case .scaleFade:
+//            return ModalScaleFadeAnimation()
         case let .custom(animation):
             return animation
         }

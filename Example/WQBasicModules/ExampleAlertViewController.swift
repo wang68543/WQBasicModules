@@ -88,7 +88,7 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        self.definesPresentationContext
 //        alertSubView.alert(true, config: config)
         let postions = PanPosition.bottomToCenter(true)
-        let style = StyleConfig(.pan(postions), anmation: .fade)
+        let style = StyleConfig(.pan(postions), anmation: .default)
         
 //        alertSubView.present(config, states: style)
         alertSubView.actionSheet(true, config: config)

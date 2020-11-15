@@ -11,7 +11,7 @@ import Foundation
 /// 转场动画各种状态的配置
 public class StyleConfig {
     /// 各个状态的配置
-    public var states: [ModalState: ModalTargets]
+    public var states: [ModalState: ModalMapItems]
     /// 是否需要遮罩
     public var dimming: Bool = true
    /// states
@@ -28,10 +28,10 @@ public class StyleConfig {
         return animationStyle.animator
     }()
     
-    public init(_ style: ModalShowStyle, anmation: ModalAnimationStyle) {
+    public init(_ style: ModalShowStyle, anmation: ModalAnimationStyle = .default) {
         self.showStyle = style
         self.animationStyle = anmation
-        var sts: [ModalState: ModalTargets]
+        var sts: [ModalState: ModalMapItems]
         
         switch style {
         case let .custom(values):
@@ -59,7 +59,7 @@ public extension StyleConfig {
 }   
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
-        var values: [ModalState: ModalTargets] = [:]
+        var values: [ModalState: ModalMapItems] = [:]
         var size = self.constraintSize
         if size == .zero { size = layout.container.sizeThatFits() }
         let controllerSize = config.showControllerFrame.size
@@ -74,7 +74,7 @@ public extension StyleConfig {
                 references.combine(diming)
                 references.combine(tranforms)
                 for (key, items) in references {
-                    values[key] = [ModalTargetItem(layout, refrences: items)]
+                    values[key] = [ModalMapItem(layout, refrences: items)]
                 }
             case .actionSheet:
                 let diming = self.dimingReference()
@@ -86,7 +86,7 @@ public extension StyleConfig {
                 references.combine(diming)
                 references.combine(tranforms)
                 for (key, items) in references {
-                    values[key] = [ModalTargetItem(layout, refrences: items)]
+                    values[key] = [ModalMapItem(layout, refrences: items)]
                 }
         case let .pan(positions):
            if let willShowPostion = positions[.willShow],
@@ -104,7 +104,7 @@ public extension StyleConfig {
             references.combine(diming)
             references.combine(tranforms)
             for (key, items) in references {
-                values[key] = [ModalTargetItem(layout, refrences: items)]
+                values[key] = [ModalMapItem(layout, refrences: items)]
             }
            }
             default:

@@ -23,19 +23,7 @@ public class ModalReference<Root, Value>: ModalKeyPath {
      item[keyPath: keyPath] = value
    } 
 }
-/// 解决循环引用问题
-public class ModalTargetItem {
-    weak var target: NSObject?
-    var refrences: [ModalKeyPath]
-    init(_ target: NSObject, refrences: [ModalKeyPath]) {
-        self.target = target
-        self.refrences = refrences
-    }
-    func setup(for state: ModalState) {
-        guard let root = target else { return }
-        refrences.forEach({ $0.setup(root, state: state)})
-    }
-}
+
 
 
 public class ModalRect: ModalReference<WQLayoutController, CGRect> { }
