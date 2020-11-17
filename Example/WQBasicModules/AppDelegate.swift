@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    @UserDefault("video", default: Video.default)
 //    static var viedo: Video
     // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
+    //https://www.gitignore.io/api/objective-c
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         debugPrint("\(Int.max)")
         debugPrint("\(CGFloat.greatestFiniteMagnitude)")
