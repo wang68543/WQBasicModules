@@ -173,6 +173,7 @@ public extension String { // MARK: 字符串转日期
 public extension Double {
     
     /// 中间符号连接形式
+    @available(*, unavailable)
     func toDuration(connect hour_minute: String, minute_second: String? = nil) -> String {
         let compments = Int(self).toDurationCompments
         var fmtString: String = String(compments[0] * 24 + compments[1])
@@ -184,6 +185,23 @@ public extension Double {
            fmtString += String(compments[2] + Int(Double(compments[3]) / 60.0 ))
         }
         return fmtString
+    }
+    //https://nshipster.com/formatter/#dateintervalformatter
+    /**
+     * unitsStyle
+     - brief: 2wks 6days 20hr 0min 0sec
+     - positional: 2w 6d 20:00:00
+     - abbreviated: 2w 6d 20h 0m 0s
+     - short: 2 wks, 6 days, 20 hr, 0 min, 0 sec
+     - full: 2 weeks, 6 days, 20 hours, 0 minutes, 0 seconds
+     - spellOut: two weeks, six days, twenty hours, zero minutes, zero seconds
+     */
+    func duration(_ units: NSCalendar.Unit = [.minute, .second]) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = units
+        formatter.unitsStyle = .abbreviated
+        return formatter.string(from: self)!
     }
     
     ///

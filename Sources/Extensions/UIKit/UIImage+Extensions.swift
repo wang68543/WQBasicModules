@@ -306,7 +306,7 @@ public extension UIImage {
 //            debugPrint("time:\(time)====\(actualTime)")
             self.init(cgImage: ref)
         } catch let error {
-            debugPrint("=======", error.localizedDescription)
+            debugPrint("=======\(error)")
             return nil
         }
     }
