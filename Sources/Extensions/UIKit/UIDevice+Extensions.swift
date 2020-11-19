@@ -22,7 +22,7 @@ public extension UIDevice {
         } 
     }
    
-    var freeDiskSpaceInBytes: Int64 {
+    static var freeDiskSpaceInBytes: Int64 {
         if #available(iOS 11.0, *) {
             if let space = try? URL(fileURLWithPath: NSHomeDirectory() as String).resourceValues(forKeys: [URLResourceKey.volumeAvailableCapacityForImportantUsageKey]).volumeAvailableCapacityForImportantUsage {
                 return space
@@ -36,6 +36,24 @@ public extension UIDevice {
             } else {
                 return 0
             }
+        }
+    }
+   static var freeDiskSpace: String {
+        let KB: Int64 = 1024
+        let MB: Int64 = KB*KB
+        let GB: Int64 = MB*KB
+        let fileSize = self.freeDiskSpaceInBytes
+        switch fileSize {
+        case ...10:
+            return "0 B"
+        case ...KB:
+            return "1 KB"
+        case ...MB:
+            return "\(Int(Double(fileSize)/Double(KB))) KB"
+        case ...GB:
+            return "\(Int(Double(fileSize)/Double(MB))) MB"
+        default:
+            return String(format: "%.1f GB", Double(fileSize)/Double(GB))
         }
     }
     

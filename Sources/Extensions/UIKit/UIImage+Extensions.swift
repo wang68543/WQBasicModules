@@ -302,8 +302,7 @@ public extension UIImage {
         do {
             //actualTime: 实际的截图的时间
             var actualTime: CMTime = .invalid
-            let ref = try generator.copyCGImage(at: time, actualTime: &actualTime)
-//            debugPrint("time:\(time)====\(actualTime)")
+            let ref = try generator.copyCGImage(at: time, actualTime: &actualTime) 
             self.init(cgImage: ref)
         } catch let error {
             debugPrint("=======\(error)")
