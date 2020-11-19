@@ -66,6 +66,10 @@ public extension UIDevice {
         #endif
     }()
 }
+public extension UIDevice {
+    
+}
+
 /**
  #pragma 获取总内存大小
  + (NSString *)getTotalMemorySize {

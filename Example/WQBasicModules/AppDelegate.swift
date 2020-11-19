@@ -30,7 +30,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
-        
+        if #available(iOS 10.0, *) {
+            let formatter = MeasurementFormatter()
+            formatter.unitOptions = .providedUnit
+//            formatter.
+            formatter.unitStyle = .short
+            let number = NumberFormatter()
+            number.allowsFloats = true
+            number.generatesDecimalNumbers = true
+            formatter.numberFormatter = number
+            let storage = Measurement<UnitStorage>(value: 2024, unit: UnitStorage.kilobytes).converted(to: .megabytes)
+             // 69.345 mph
+            debugPrint(formatter.string(from: storage))
+        }
+      
 
 //        debugPrint(<#T##items: Any...##Any#>)
 //        TestWebViewController.uid = 1000
@@ -38,6 +51,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        debugPrint("=====\(TestWebViewController.uid)")
 //        
 //        debugPrint(AppDelegate.viedo.title)
+        
+        
         return true
     }
     
