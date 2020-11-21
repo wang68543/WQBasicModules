@@ -21,41 +21,6 @@ public extension UIDevice {
             return identifier + String(UnicodeScalar(UInt8(value)))
         } 
     }
-   
-    static var freeDiskSpaceInBytes: Int64 {
-        if #available(iOS 11.0, *) {
-            if let space = try? URL(fileURLWithPath: NSHomeDirectory() as String).resourceValues(forKeys: [URLResourceKey.volumeAvailableCapacityForImportantUsageKey]).volumeAvailableCapacityForImportantUsage {
-                return space
-            } else {
-                return 0
-            }
-        } else {
-            if let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String),
-                let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value {
-                return freeSpace
-            } else {
-                return 0
-            }
-        }
-    }
-   static var freeDiskSpace: String {
-        let KB: Int64 = 1024
-        let MB: Int64 = KB*KB
-        let GB: Int64 = MB*KB
-        let fileSize = self.freeDiskSpaceInBytes
-        switch fileSize {
-        case ...10:
-            return "0 B"
-        case ...KB:
-            return "1 KB"
-        case ...MB:
-            return "\(Int(Double(fileSize)/Double(KB))) KB"
-        case ...GB:
-            return "\(Int(Double(fileSize)/Double(MB))) MB"
-        default:
-            return String(format: "%.1f GB", Double(fileSize)/Double(GB))
-        }
-    }
     
     /// 判断是否是模拟器
     static let isEmulator: Bool = {
@@ -66,69 +31,100 @@ public extension UIDevice {
         #endif
     }()
 }
+
+
+// https://juejin.im/post/6844904184588795911
 public extension UIDevice {
-    
+    /// 内存 大小 按照 1024来计算
+    static let physicalMemory = Int64(ProcessInfo.processInfo.physicalMemory)
+    /// 当前内存可用大小
+    var freeMemory: Int64 {
+        //https://juejin.cn/post/6844904184588795911
+        let host = mach_host_self()
+        var size = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.size/MemoryLayout<integer_t>.size)
+        var pagesize = vm_size_t()
+        var vmstat = vm_statistics_data_t()
+         host_page_size(host, &pagesize);
+        let kerr: kern_return_t = withUnsafeMutablePointer(to: &vmstat) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
+                host_statistics(host, host_flavor_t(HOST_VM_INFO), host_info_t($0), &size);
+            }
+        }
+        if kerr == KERN_SUCCESS {
+            return Int64((vmstat.free_count + vmstat.inactive_count) *  UInt32(pagesize))
+        }
+        return .zero
+    }
+    /// 磁盘 总空间 按照 1000来计算
+    static let diskStorage: Int64 = {
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return .zero
+        }
+        do {
+            if #available(iOS 11.0, *) {
+                let results = try url.resourceValues(forKeys: [.volumeTotalCapacityKey])
+                return Int64(results.volumeTotalCapacity ?? .zero)
+            } else {
+                let results = try FileManager.default.attributesOfFileSystem(forPath: url.path)
+                return Int64((results[.systemSize] as? Int) ?? .zero)
+            }
+        } catch let error {
+            debugPrint(error)
+        }
+        return .zero
+         
+    }()
+    /// 磁盘可用空间 按照 1000来计算
+    var freeDiskStorage: Int64 {
+        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return .zero
+        }
+        do {
+            if #available(iOS 11.0, *) {
+            let results = try url.resourceValues(forKeys: [.volumeAvailableCapacityForImportantUsageKey])
+                return results.volumeAvailableCapacityForImportantUsage ?? .zero
+            } else {
+                let results = try FileManager.default.attributesOfFileSystem(forPath: url.path)
+                return Int64((results[.systemFreeSize] as? Int) ?? .zero)
+            }
+        } catch let error {
+            debugPrint(error)
+            return .zero
+        }
+    }
 }
 
-/**
- #pragma 获取总内存大小
- + (NSString *)getTotalMemorySize {
-     long long totalMemorySize = [NSProcessInfo processInfo].physicalMemory;
-     return [self fileSizeToString:totalMemorySize];
- }
-
- #pragma 获取当前可用内存
- + (NSString *)getAvailableMemorySize {
-     vm_statistics_data_t vmStats;
-     mach_msg_type_number_t infoCount = HOST_VM_INFO_COUNT;
-     kern_return_t kernReturn = host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vmStats, &infoCount);
-     if (kernReturn != KERN_SUCCESS) {
-         return @"内存查找失败";
-     }
-     long long availableMemorySize = ((vm_page_size * vmStats.free_count + vm_page_size * vmStats.inactive_count));
-     return [self fileSizeToString:availableMemorySize];
- }
-
- #pragma 获取总磁盘容量
- + (NSString *)getTotalDiskSize {
-     struct statfs buf;
-     unsigned long long totalDiskSize = -1;
-     if (statfs("/var", &buf) >= 0) {
-         totalDiskSize = (unsigned long long)(buf.f_bsize * buf.f_blocks);
-     }
-     return [self fileSizeToString:totalDiskSize];
- }
-
- #pragma 获取可用磁盘容量  f_bavail 已经减去了系统所占用的大小，比 f_bfree 更准确
- + (NSString *)getAvailableDiskSize {
-     struct statfs buf;
-     unsigned long long availableDiskSize = -1;
-     if (statfs("/var", &buf) >= 0) {
-         availableDiskSize = (unsigned long long)(buf.f_bsize * buf.f_bavail);
-     }
-     return [self fileSizeToString:availableDiskSize];
- }
-
- + (NSString *)fileSizeToString:(unsigned long long)fileSize {
-     NSInteger KB = 1024;
-     NSInteger MB = KB*KB;
-     NSInteger GB = MB*KB;
-
-     if (fileSize < 10)  {
-         return @"0 B";
-     }else if (fileSize < KB) {
-         return @"< 1 KB";
-     }else if (fileSize < MB) {
-         return [NSString stringWithFormat:@"%.2f KB",((CGFloat)fileSize)/KB];
-     }else if (fileSize < GB) {
-         return [NSString stringWithFormat:@"%.2f MB",((CGFloat)fileSize)/MB];
-     }else {
-          return [NSString stringWithFormat:@"%.2f GB",((CGFloat)fileSize)/GB];
-     }
- }
-
- 作者：Gavin_Kang
- 链接：https://juejin.im/post/6844904184588795911
- 来源：掘金
- 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
- */
+public extension UIDevice {
+    /// 内存 大小 按照 1024来计算
+    static let formatMemory: String = {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .memory
+        return formatter.string(fromByteCount: UIDevice.physicalMemory)
+    }()
+    /// 当前内存可用大小
+    var formatFreeMemory: String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .memory
+        return formatter.string(fromByteCount: UIDevice.current.freeMemory)
+    }
+    /// 磁盘 总空间 按照 1000来计算
+    static let formatDiskStorage: String = {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: UIDevice.diskStorage)
+    }()
+    /// 磁盘可用空间 按照 1000来计算
+    var formatDiskFreeStorage: String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: UIDevice.current.freeDiskStorage)
+    }
+}

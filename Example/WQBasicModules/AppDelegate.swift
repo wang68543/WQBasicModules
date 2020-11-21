@@ -30,6 +30,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
+        debugPrint("=================")
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .file
+        debugPrint(formatter.string(fromByteCount: UIDevice.current.freeMemory))
+        debugPrint(formatter.string(fromByteCount: UIDevice.current.diskFreeStorage))
+        debugPrint(formatter.string(fromByteCount: Int64(UIDevice.physicalMemory)))
         if #available(iOS 10.0, *) {
             let formatter = MeasurementFormatter()
             formatter.unitOptions = .providedUnit
