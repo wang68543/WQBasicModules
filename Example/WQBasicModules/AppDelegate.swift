@@ -31,26 +31,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         testCodable()
         debugPrint("=================")
-        let formatter = ByteCountFormatter()
-        formatter.allowedUnits = .useAll
-        formatter.zeroPadsFractionDigits = true
-        formatter.countStyle = .file
-        debugPrint(formatter.string(fromByteCount: UIDevice.current.freeMemory))
-        debugPrint(formatter.string(fromByteCount: UIDevice.current.diskFreeStorage))
-        debugPrint(formatter.string(fromByteCount: Int64(UIDevice.physicalMemory)))
-        if #available(iOS 10.0, *) {
-            let formatter = MeasurementFormatter()
-            formatter.unitOptions = .providedUnit
-//            formatter.
-            formatter.unitStyle = .short
-            let number = NumberFormatter()
-            number.allowsFloats = true
-            number.generatesDecimalNumbers = true
-            formatter.numberFormatter = number
-            let storage = Measurement<UnitStorage>(value: 2024, unit: UnitStorage.kilobytes).converted(to: .megabytes)
-             // 69.345 mph
-            debugPrint(formatter.string(from: storage))
-        }
+//        let groupValue: Int = 7
+//        let identifier = "2123"
+//        let libPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "goup = %d", groupValue),NSPredicate(format: "identifier = '%@'", identifier)])
+//        debugPrint(libPredicate.predicateFormat)
+        
+//        if #available(iOS 10.0, *) {
+//            let formatter = MeasurementFormatter()
+//            formatter.unitOptions = .providedUnit
+////            formatter.
+//            formatter.unitStyle = .short
+//            let number = NumberFormatter()
+//            number.allowsFloats = true
+//            number.generatesDecimalNumbers = true
+//            formatter.numberFormatter = number
+//            let storage = Measurement<UnitStorage>(value: 2024, unit: UnitStorage.kilobytes).converted(to: .megabytes)
+//             // 69.345 mph
+//            debugPrint(formatter.string(from: storage))
+//        }
       
 
 //        debugPrint(<#T##items: Any...##Any#>)
