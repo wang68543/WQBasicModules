@@ -55,6 +55,7 @@ public extension UIApplication {
         return Bundle.main.infoDictionary?[kCFBundleVersionKey as String] as? String
     }
     
+    /// https://www.hangge.com/blog/cache/detail_1793.html (动态设置启动页的版本号)
     /// SwifterSwift: App's current version number (if applicable).
     var version: String? {
         return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String

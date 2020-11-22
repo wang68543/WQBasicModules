@@ -43,6 +43,7 @@ public extension Date {// MARK: - Components
 }
 // MARK: - Calculate
 public extension Date {
+    // https://www.hangge.com/blog/cache/detail_1223.html
     /// calculate date 根据一年的第几周推算出这周的起始日期
     ///
     /// - Parameters:
@@ -104,6 +105,7 @@ public extension Date {
         return value
     }
     typealias DateUnitRange = (begin: Date, length: TimeInterval)
+    
     /// Calculate begin date and interval in date unit of self
     ///
     /// - Parameters:

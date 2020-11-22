@@ -103,25 +103,25 @@ open class ModalDrivenContext: ModalContext {
     
 }
 
-public extension ModalContext {
-    /// 添加属性到fromViewController
-    func addStateFromTarget(_ values: [ModalKeyPath], state: ModalState) {
-        guard let from = self.config.fromViewController else { return }
-        self.styleConfig.addState(from, values: values, state: state)
-    }
-    /// 添加属性到fromViewController
-    func addStateFromTarget(_ value: ModalKeyPath, state: ModalState) {
-        self.addStateFromTarget([value], state: state)
-    }
-    /// 添加属性到presenting
-    func addStateToTarget(_ values: [ModalKeyPath], state: ModalState) {
-//        self.statesConfig.addState(showViewController, values: values, state: state)
-    }
-    /// 添加属性到presenting
-    func addStateToTarget(_ value: ModalKeyPath, state: ModalState) {
-        self.addStateToTarget([value], state: state)
-    }
-}
+//public extension ModalContext {
+//    /// 添加属性到fromViewController
+//    func addStateFromTarget(_ values: [ModalKeyPath], state: ModalState) {
+//        guard let from = self.config.fromViewController else { return }
+//        self.styleConfig.addState(from, values: values, state: state)
+//    }
+//    /// 添加属性到fromViewController
+//    func addStateFromTarget(_ value: ModalKeyPath, state: ModalState) {
+//        self.addStateFromTarget([value], state: state)
+//    }
+//    /// 添加属性到presenting
+//    func addStateToTarget(_ values: [ModalKeyPath], state: ModalState) {
+////        self.statesConfig.addState(showViewController, values: values, state: state)
+//    }
+//    /// 添加属性到presenting
+//    func addStateToTarget(_ value: ModalKeyPath, state: ModalState) {
+//        self.addStateToTarget([value], state: state)
+//    }
+//}
 /// 构造不同的动画场景
 public extension ModalContext {
     static func modalContext(_ config: ModalConfig, states: StyleConfig) -> ModalContext? {

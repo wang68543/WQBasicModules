@@ -30,11 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
-        debugPrint("=================")
-//        let groupValue: Int = 7
-//        let identifier = "2123"
-//        let libPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [NSPredicate(format: "goup = %d", groupValue),NSPredicate(format: "identifier = '%@'", identifier)])
-//        debugPrint(libPredicate.predicateFormat)
         
 //        if #available(iOS 10.0, *) {
 //            let formatter = MeasurementFormatter()
@@ -50,14 +45,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            debugPrint(formatter.string(from: storage))
 //        }
       
-
-//        debugPrint(<#T##items: Any...##Any#>)
-//        TestWebViewController.uid = 1000
-//        
-//        debugPrint("=====\(TestWebViewController.uid)")
-//        
-//        debugPrint(AppDelegate.viedo.title)
-        
         
         return true
     }

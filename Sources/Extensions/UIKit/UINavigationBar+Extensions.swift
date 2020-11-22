@@ -36,7 +36,9 @@ public extension UINavigationBar {
 
 // MARK: - Methods
 public extension UINavigationBar {
-
+//    导航栏 滑动返回淡入淡出
+    // https://www.hangge.com/blog/cache/detail_1117.html
+    
     /// SwifterSwift: Set Navigation Bar title, title color and font.
     ///
     /// - Parameters:
@@ -52,6 +54,7 @@ public extension UINavigationBar {
     /// SwifterSwift: Make navigation bar transparent.
     ///
     /// - Parameter tint: tint color (default is .white).
+    //https://www.hangge.com/blog/cache/detail_2067.html
     func makeTransparent(withTint tint: UIColor = .white) {
         isTranslucent = true
         backgroundColor = .clear
