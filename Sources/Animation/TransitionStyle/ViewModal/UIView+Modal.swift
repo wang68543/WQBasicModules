@@ -6,6 +6,7 @@
 //
 
 import Foundation
+ 
 public extension UIView {
 
     var modalSize: CGSize {
@@ -16,7 +17,6 @@ public extension UIView {
             return sysSize
         }
     }
-    
     var layoutController: WQLayoutController? {
         var layout: UIResponder? = self
         while let nextView = layout?.next {
@@ -26,7 +26,7 @@ public extension UIView {
         return (layout as? WQLayoutController)
     }
 }
-public extension UIView {
+public extension WQModules where Base: UIView {
     
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)
@@ -39,14 +39,13 @@ public extension UIView {
     }
     
     func present(_ config: ModalConfig, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
-        let layout = WQLayoutController(config, subView: self)
+        let layout = WQLayoutController(config, subView: self.base)
         present(layout, states: states, completion: completion)
     }
     func present(_ container: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
-    }
-    
-    func dismiss(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
-        self.layoutController?.dismiss(animated: flag, completion: completion)
+    } 
+    func dismiss(style: Bool, completion: ModalAnimation.Completion? = nil) {
+        self.base.layoutController?.dismiss(animated: style, completion: completion)
     }
 } 

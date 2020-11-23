@@ -75,9 +75,10 @@ Pod::Spec.new do |s|
 
     end
 
-    s.subspec 'Test' do |ss|
+    s.subspec 'Beta' do |ss|
         ss.subspec 'TransitionStyle' do |sss|
             sss.dependency 'WQBasicModules/UI/Help'
+            sss.dependency 'WQBasicModules/Extensions/Module'
             sss.source_files = 'Sources/Animation/TransitionStyle/**/*.swift'
         end
     end
