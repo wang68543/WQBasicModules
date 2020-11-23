@@ -11,6 +11,9 @@ PODS:
     - WQBasicModules/UI/Help
   - WQBasicModules/Animation/Views (0.3.4):
     - WQBasicModules/Animation/Layer
+  - WQBasicModules/Beta/TransitionStyle (0.3.4):
+    - WQBasicModules/Extensions/Module
+    - WQBasicModules/UI/Help
   - WQBasicModules/Core (0.3.4):
     - WQBasicModules/Animation
     - WQBasicModules/Extensions
@@ -32,8 +35,6 @@ PODS:
   - WQBasicModules/Extensions/UIKit (0.3.4):
     - WQBasicModules/Extensions/Module
   - WQBasicModules/FunModule/ImagePicker (0.3.4)
-  - WQBasicModules/Test/TransitionStyle (0.3.4):
-    - WQBasicModules/UI/Help
   - WQBasicModules/Tool (0.3.4):
     - WQBasicModules/Tool/Cache (= 0.3.4)
   - WQBasicModules/Tool/Cache (0.3.4)
@@ -53,16 +54,16 @@ PODS:
 
 DEPENDENCIES:
   - WQBasicModules (from `../`)
+  - WQBasicModules/Beta/TransitionStyle (from `../`)
   - WQBasicModules/FunModule/ImagePicker (from `../`)
-  - WQBasicModules/Test/TransitionStyle (from `../`)
 
 EXTERNAL SOURCES:
   WQBasicModules:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 4ebbadf1f63de1a2b63e33751259fd74892ac4f9
+  WQBasicModules: 74954e114e2080fe54524a7adb2b32d688634dab
 
-PODFILE CHECKSUM: 471646a27f7b0ad3cb2b336234e936bfd0fb4d08
+PODFILE CHECKSUM: b9c0eeeea28a3f56eeed75f421fb37d70732185d
 
 COCOAPODS: 1.10.0

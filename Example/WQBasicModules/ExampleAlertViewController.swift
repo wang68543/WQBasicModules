@@ -91,7 +91,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         let style = StyleConfig(.pan(postions), anmation: .default)
         
 //        alertSubView.present(config, states: style)
-        alertSubView.actionSheet(true, config: config)
+        alertSubView.wm.actionSheet(true, config: config)
 //        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
 ////        presention.show(animated: true, in: nil, completion: nil)
 //        presention.interactionDismissDirection = .down
