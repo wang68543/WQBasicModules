@@ -7,9 +7,17 @@
 
 import Foundation
 import UIKit
-
+//https://blog.csdn.net/yzl826839001/article/details/51280829 解决transform引起的布局动画
 public class WQContainerView: UIView {
-//    public override func addSubview(_ view: UIView) {
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.translatesAutoresizingMaskIntoConstraints = true
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+//        public override func addSubview(_ view: UIView) {
 //        super.addSubview(view)
 //        view.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin, .flexibleBottomMargin, .flexibleRightMargin]
 //    }

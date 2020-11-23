@@ -15,11 +15,14 @@ public extension UIView {
         if !self.bounds.isEmpty {
             return self.bounds.size
         } else {
-            if self.layoutFittingMaxmiumSize == .zero {
+            let size = self.layoutFittingMaxmiumSize
+            if size == .zero {
                 let sysSize = self.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
                 return sysSize
             } else {
-                let sysSize = self.systemLayoutSizeFitting(self.layoutFittingMaxmiumSize, withHorizontalFittingPriority: .fittingSizeLevel, verticalFittingPriority: .fittingSizeLevel)
+                let horizontal: UILayoutPriority = size.width == .zero ? .fittingSizeLevel : .required
+                let vertical: UILayoutPriority = size.height == .zero ? .fittingSizeLevel : .required
+                let sysSize = self.systemLayoutSizeFitting(size, withHorizontalFittingPriority: horizontal, verticalFittingPriority: vertical)
                 return sysSize
             }
         }
@@ -28,13 +31,13 @@ public extension UIView {
     var layoutFittingMaxmiumSize: CGSize {
         set {
             //这里内存由外部管理
-            objc_setAssociatedObject(self, AssociatedKeys.layoutFittingMaxmiumSize, NSNumber(cgSize: newValue), .OBJC_ASSOCIATION_COPY_NONATOMIC)
+            objc_setAssociatedObject(self, AssociatedKeys.layoutFittingMaxmiumSize, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
-            guard let value = objc_getAssociatedObject(self, AssociatedKeys.layoutFittingMaxmiumSize) as? NSNumber else {
+            guard let value = objc_getAssociatedObject(self, AssociatedKeys.layoutFittingMaxmiumSize) as? CGSize else {
                 return .zero
             }
-            return value.cgSizeValue
+            return value
         }
     }
      
