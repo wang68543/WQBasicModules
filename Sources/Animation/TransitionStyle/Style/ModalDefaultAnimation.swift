@@ -14,47 +14,51 @@ public class ModalDefaultAnimation: ModalAnimation {
     public var duration: TimeInterval = 0.45
     
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
+        let time = self.duration
+        let areAnimationsEnabled =  UIView.areAnimationsEnabled
+        UIView.setAnimationsEnabled(false)
         if state == .show {
-            let areAnimationsEnabled =  UIView.areAnimationsEnabled
-            UIView.setAnimationsEnabled(false)
             states.states[.willShow]?.setup(for: .willShow)
+            layoutController.container.setNeedsLayout()
+            layoutController.view.setNeedsLayout()
             UIView.setAnimationsEnabled(areAnimationsEnabled)
-            if states.states[.didShow] != nil {
-                UIView.animateKeyframes(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
-                    UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: self.duration*0.5) {
-                        states.states[.show]?.setup(for: .show)
-                        layoutController.container.layoutIfNeeded()
-                    }
-                    UIView.addKeyframe(withRelativeStartTime: self.duration*0.5, relativeDuration: self.duration*0.5) {
-                        states.states[.didShow]?.setup(for: .didShow)
-                        layoutController.container.layoutIfNeeded()
+            
+            if states.states.has(key: .didShow) {
+                let keys: [ModalState] = [.show, .didShow]
+                UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
+                    let unit = time/TimeInterval(keys.count)
+                    for index in 0..<keys.count {
+                        let keyFrame = keys[index]
+                        UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
+                            states.states[keyFrame]?.setup(for: keyFrame)
+                        }
                     }
                 } completion: { flag in
                     completion?()
                 }
 
             } else {
-                UIView.animate(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+                UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
                     states.states[.show]?.setup(for: .show)
-                    layoutController.container.layoutIfNeeded()
                 } completion: { flag in
                     completion?()
                 }
             }
         } else {//隐藏
-            let areAnimationsEnabled =  UIView.areAnimationsEnabled
-            UIView.setAnimationsEnabled(false)
             if let bindViews = states.snapShotAttachAnimatorViews[.willHide] {
                 bindViews.forEach { view,subViews in
                     subViews.forEach { view.addSubview($0) }
                 }
             }
-            states.states[.willHide]?.setup(for: .willHide)
+            if states.states.has(key: .willHide) {
+                states.states[.willHide]?.setup(for: .willHide)
+                layoutController.container.setNeedsLayout()
+                layoutController.view.setNeedsLayout()
+            }
             UIView.setAnimationsEnabled(areAnimationsEnabled)
             
-            UIView.animate(withDuration: self.duration, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+            UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
                 states.states[.hide]?.setup(for: .hide)
-                layoutController.container.layoutIfNeeded()
             } completion: { flag in
                 completion?()
             }

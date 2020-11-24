@@ -40,27 +40,6 @@ public extension UIView {
             return value
         }
     }
-     
-//    var constraintLayoutWidth: CGFloat {
-//        set {
-//            var size = self.layoutFittingMaxmiumSize
-//            size.width = newValue
-//            self.layoutFittingMaxmiumSize = size
-//        }
-//        get {
-//            return layoutFittingMaxmiumSize.width
-//        }
-//    }
-//    var constraintLayoutHeight: CGFloat {
-//        set {
-//            var size = self.layoutFittingMaxmiumSize
-//            size.height = newValue
-//            self.layoutFittingMaxmiumSize = size
-//        }
-//        get {
-//            return layoutFittingMaxmiumSize.height
-//        }
-//    }
     var layoutController: WQLayoutController? {
         var layout: UIResponder? = self
         while let nextView = layout?.next {
@@ -92,8 +71,7 @@ public extension WQModules where Base: UIView {
         }
     }
 }
-public extension WQModules where Base: UIView {
-    
+public extension WQModules where Base: UIView { 
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)
         self.present(config, states: states, completion: completion)
