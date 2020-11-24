@@ -55,6 +55,10 @@ public extension UIDevice {
         }
         return .zero
     }
+    /// 已使用的内存
+    var usedMemory: Int64 {
+        return max(UIDevice.physicalMemory - freeMemory, 0)
+    }
     /// 磁盘 总空间 按照 1000来计算
     static let diskStorage: Int64 = {
         guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
@@ -74,6 +78,10 @@ public extension UIDevice {
         return .zero
          
     }()
+    /// 已使用的磁盘空间
+    var usedDiskStorage: Int64 {
+        return UIDevice.diskStorage - self.freeDiskStorage
+    }
     /// 磁盘可用空间 按照 1000来计算
     var freeDiskStorage: Int64 {
         guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {

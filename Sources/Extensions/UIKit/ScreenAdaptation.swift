@@ -30,7 +30,7 @@ public enum iDevice {
 }
 public extension CGFloat {
     func rpx(_ adaptWidth: CGFloat = iDevice.iPhone6_6s_7_8.width) -> CGFloat {
-        return UIScreen.main.bounds.width*UIScreen.main.scale/adaptWidth*self
+        return UIScreen.main.bounds.width/adaptWidth*self
     }
     var px: CGFloat {
         return self/UIScreen.main.scale
@@ -64,19 +64,35 @@ public extension iDevice {
     var width: CGFloat {
         switch self {
         case .iPhone4s:
-            return 640
+            return 320
         case .iPhone5_5s_5c_SE:
-            return 640
+            return 320
         case .iPhone6_6s_7_8:
-            return 750
+            return 375
         case .iPhone6p_6sp_7p_8p:
-            return 1242
+            return 414
         case .iPhoneX_XS_11Pro:
-            return 1125
+            return 375
         case .iPhoneXR_11:
-            return 828
+            return 414
         case .iPhoneXSMax_11ProMax:
-            return 1242
+            return 414
         }
+//        switch self {
+//        case .iPhone4s:
+//            return 640
+//        case .iPhone5_5s_5c_SE:
+//            return 640
+//        case .iPhone6_6s_7_8:
+//            return 750
+//        case .iPhone6p_6sp_7p_8p:
+//            return 1242
+//        case .iPhoneX_XS_11Pro:
+//            return 1125
+//        case .iPhoneXR_11:
+//            return 828
+//        case .iPhoneXSMax_11ProMax:
+//            return 1242
+//        }
     }
 }

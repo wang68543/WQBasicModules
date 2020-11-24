@@ -81,17 +81,18 @@ class ExampleAlertViewController: BaseExampleViewController {
         let alertSubView = UIView()
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
-        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 700)
+        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
         let config = ModalConfig(.modalInParent(self))
-        
-        config.interactionDismiss = .tapOutSide
+//        
+//        config.interactionDismiss = .tapOutSide
 //        self.definesPresentationContext
 //        alertSubView.alert(true, config: config)
-        let postions = PanPosition.bottomToCenter(true)
-        let style = StyleConfig(.pan(postions), anmation: .default)
-        
-//        alertSubView.present(config, states: style)
-        alertSubView.wm.actionSheet(true, config: config)
+        alertSubView.wm.alert(true, config: config)
+//        let postions = PanPosition.bottomToCenter(true)
+//        let style = StyleConfig(.pan(postions), anmation: .default)
+//
+////        alertSubView.present(config, states: style)
+//        alertSubView.wm.actionSheet(true, config: config)
 //        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
 ////        presention.show(animated: true, in: nil, completion: nil)
 //        presention.interactionDismissDirection = .down
