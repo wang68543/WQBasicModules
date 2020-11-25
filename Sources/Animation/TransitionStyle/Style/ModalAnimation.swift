@@ -17,8 +17,7 @@ public protocol ModalAnimation: class {
     var areAnimationEnable: Bool { get set }
     
     func preprocessor(_ state: ModalState,
-                      layoutController: WQLayoutController,
-                      config: ModalConfig,
+                      layoutController: WQLayoutController, 
                       states: StyleConfig,
                       completion: Completion?)
 //    func preprocessor(duration manager: TransitionManager) -> TimeInterval
@@ -44,9 +43,9 @@ public protocol ModalAnimation: class {
     
     
 }
-public extension ModalAnimation {
-    func preprocessor(duration manager: TransitionManager) -> TimeInterval {
-        return 0.25
-    }
-}
+//public extension ModalAnimation {
+//    func preprocessor(duration manager: TransitionManager) -> TimeInterval {
+//        return 0.25
+//    }
+//}
 

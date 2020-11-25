@@ -41,26 +41,26 @@ import Foundation
 //}
 
 
-open class TransitionManager: NSObject {
- 
-    public let config: ModalConfig
-    
-    public let statesConfig: StyleConfig
-    
-    public unowned let showViewController: WQLayoutController
-    
-//    public var context: ModalContext?
-    public lazy var context: ModalContext? = {
-        return ModalContext.modalContext(config, states: statesConfig )
-    }()
-    
-    public init(_ config: ModalConfig, states: StyleConfig, layout: WQLayoutController) {
-        self.config = config
-        self.statesConfig = states
-        self.showViewController = layout
-        super.init()
-    }
-}
+//open class TransitionManager: NSObject {
+// 
+//    public let config: ModalConfig
+//    
+//    public let statesConfig: StyleConfig
+//    
+//    public unowned let showViewController: WQLayoutController
+//    
+////    public var context: ModalContext?
+//    public lazy var context: ModalContext? = {
+//        return ModalContext.modalContext(config, states: statesConfig )
+//    }()
+//    
+//    public init(_ config: ModalConfig, states: StyleConfig, layout: WQLayoutController) {
+//        self.config = config
+//        self.statesConfig = states
+//        self.showViewController = layout
+//        super.init()
+//    }
+//}
 //// custom 配置
 //public extension TransitionManager {
 //    /// 添加属性到fromViewController

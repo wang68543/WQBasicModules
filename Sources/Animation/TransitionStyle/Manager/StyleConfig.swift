@@ -21,8 +21,6 @@ public class StyleConfig {
     /// 动画之前附加的view
     public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
     
-    /// 约束container的显示尺寸(主要适用于actionSheet,alert)
-    public var constraintSize = CGSize.zero
     /// 动画执行者
     lazy var animator: ModalAnimation = {
         return animationStyle.animator
@@ -60,8 +58,7 @@ public extension StyleConfig {
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
         var values: [ModalState: ModalMapItems] = [:]
-        var size = self.constraintSize
-        if size == .zero { size = layout.container.sizeThatFits() }
+        let size = layout.container.sizeThatFits() 
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:

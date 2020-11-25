@@ -14,7 +14,7 @@ public class ModalDefaultAnimation: ModalAnimation {
     public var duration: TimeInterval = 0.45
     
     /// 这里只会调过来 两种ModalState
-    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
+    public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         let time = self.duration
         //无动画状态更新
         func prepareStatesWithoutAnimation(_ modalState: ModalState) {

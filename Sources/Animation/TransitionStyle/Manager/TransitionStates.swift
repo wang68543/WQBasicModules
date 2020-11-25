@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public enum ModalPresentation {
+public enum ModalPresentation: Equatable {
     case modalSystem(UIViewController?)
     /// 这里要分
     case modalInParent(UIViewController)
@@ -18,7 +18,7 @@ public enum ModalPresentation {
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
 }
-
+ 
 public extension ModalPresentation {
     ///
     var fromViewController: UIViewController? {

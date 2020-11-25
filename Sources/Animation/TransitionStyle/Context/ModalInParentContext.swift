@@ -21,7 +21,7 @@ open class ModalInParentContext: ModalDrivenContext {
         }
         parent.addChild(controller )
         parent.view.addSubview(controller.view)
-        self.animator.preprocessor(.show, layoutController: controller, config: self.config, states: statesConfig) {
+        self.animator.preprocessor(.show, layoutController: controller, states: statesConfig) {
             completionCallback()
         }
     } 
@@ -34,7 +34,7 @@ open class ModalInParentContext: ModalDrivenContext {
 //            self.styleConfig.states.removeAll(keys: [.willHide, .hide])
         }
         controller.willMove(toParent: nil)
-        self.animator.preprocessor(.hide, layoutController: controller, config: self.config, states: self.styleConfig) {
+        self.animator.preprocessor(.hide, layoutController: controller, states: self.styleConfig) {
             completionCallback()
         }
          return true

@@ -72,6 +72,16 @@ public extension WQModules where Base: UIView {
             return base.layoutFittingMaxmiumSize.height
         }
     }
+    
+    /// 直接指定Modal View最终显示的尺寸
+    var constraintBoundSize: CGSize {
+        set {
+            self.base.bounds.size = newValue
+        }
+        get {
+            return self.base.bounds.size
+        }
+    }
 }
 public extension WQModules where Base: UIView { 
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {

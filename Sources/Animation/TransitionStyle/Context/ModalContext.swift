@@ -94,8 +94,10 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
 //    /// - Parameter completion: 动画完成
 //    open func hideAnimation(_ completion: Completion) {
 //        
-//    } 
-    
+//    }
+    deinit {
+       debugPrint("\(self):" + #function + "♻️")
+    }
 }
 
 /// 主要用于驱动动画 含驱动管理
@@ -125,26 +127,23 @@ open class ModalDrivenContext: ModalContext {
 /// 构造不同的动画场景
 public extension ModalContext {
     static func modalContext(_ config: ModalConfig, states: StyleConfig) -> ModalContext? {
-        
-        func context(_ style: ModalPresentation) -> ModalContext? {
-            switch style {
-            case .modalSystem:
-                return ModalPresentationContext(config, states: states)
-            case .modalInParent:
-                return ModalInParentContext(config, states: states)
-            case .modalInWindow:
-                return ModalInWindowContext(config, states: states)
-            case .modalPresentWithNavRoot:
-                return ModalPresentWithNavRootContext(config, states: states)
-            default:
-                return nil
-            }
+        let fixStyle: ModalPresentation
+        if config.style == .autoModal {
+            fixStyle = config.style.autoAdaptationStyle
+        } else {
+            fixStyle = config.style
         }
-        switch config.style {
-        case .autoModal:
-            return context(config.style.autoAdaptationStyle)
+        switch fixStyle {
+        case .modalSystem:
+            return ModalPresentationContext(config, states: states)
+        case .modalInParent:
+            return ModalInParentContext(config, states: states)
+        case .modalInWindow:
+            return ModalInWindowContext(config, states: states)
+        case .modalPresentWithNavRoot:
+            return ModalPresentWithNavRootContext(config, states: states)
         default:
-            return context(config.style)
+            return nil
         }
     }
 }
