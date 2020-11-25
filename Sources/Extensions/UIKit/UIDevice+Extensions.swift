@@ -128,11 +128,19 @@ public extension UIDevice {
         return formatter.string(fromByteCount: UIDevice.diskStorage)
     }()
     /// 磁盘可用空间 按照 1000来计算
-    var formatDiskFreeStorage: String {
+    var formatFreeDiskStorage: String {
         let formatter = ByteCountFormatter()
         formatter.allowedUnits = .useAll
         formatter.zeroPadsFractionDigits = true
         formatter.countStyle = .file
         return formatter.string(fromByteCount: UIDevice.current.freeDiskStorage)
+    }
+    /// 磁盘已用空间
+    var formatUsedDiskStorage: String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: UIDevice.current.usedDiskStorage)
     }
 }
