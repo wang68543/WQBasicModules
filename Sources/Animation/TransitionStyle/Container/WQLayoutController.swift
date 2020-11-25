@@ -33,7 +33,6 @@ public class WQLayoutController: UIViewController {
     
     internal func setup() { 
         self.view.addSubview(dimmingView)
-//        self.dimmingView.isOpaque = false 
         self.view.addSubview(self.container)
     }
     lazy var tapGesture: UITapGestureRecognizer = {

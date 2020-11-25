@@ -85,7 +85,6 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         }
         
         if isPresented {
-//            self.statesConfig.showControllerFrame = vcFinalFrame
             toVCView?.frame = vcFinalFrame
             if let showViewController = toVC as? WQLayoutController {
                 self.animator.preprocessor(.show, layoutController: showViewController, states: styleConfig, completion: completionBlock)

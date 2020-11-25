@@ -8,93 +8,26 @@
 import UIKit 
 
 open class ModalContext: NSObject, WQLayoutControllerTransition {
-    public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
-         
-    }
     
-//    public func didViewLoad(_ controller: WQLayoutController) {
-//
-//    }
-    
-//    public func show(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) {
-//
-//    }
-    
-    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-         return true
-    }
-    
-     
     public let animator: ModalAnimation
     
     public unowned let config: ModalConfig
     
     public let styleConfig: StyleConfig
     
-//    public unowned let showViewController: WQLayoutController
-    
     public init(_ config: ModalConfig, states: StyleConfig) {
         self.config = config
         self.styleConfig = states
-//        self.showViewController = layoutController
         animator = states.animator
         super.init()
     }
-//    public unowned let showViewController: WQLayoutController
+    public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+         
+    }
+    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+         return true
+    }
     
-//    public weak var fromViewController: UIViewController?
-    
-//    public let style: ModalStyle
-    /// 动画时长
-//    open var duration: TimeInterval = 0.25
-    /// 动画结束的时候的View的状态
-//    open var modalState: ModalState = .readyToShow
-    /// 是否能够交互
-//    open var isInteractable: Bool = false
-    /// 是否正在交互
-//    open var isInteracting: Bool = false
-    /// 如果使用Spring动画 就禁止交互动画
-//    open var isSpring: Bool = false
-    /// 转场动画承载View
-//    public private(set) weak var transitioningContainerView: UIView?
-    
-    /// 初始化转场场景
-    /// - Parameters:
-    ///   - viewController: 用于承载弹窗的ViewController
-    ///   - fromViewController: 当前动画场景的起始
-//    public init(_ viewController: WQLayoutController, style: ModalStyle) {
-//        self.showViewController = viewController
-//        self.style = style
-//        super.init()
-//    }
-//
-//    open func dismiss(animated flag: Bool, completion: Completion? = nil) {
-//         
-//    }
-//    
-//    open func show(in viewController: UIViewController?, animated flag: Bool, completion: Completion? = nil) {
-//        self.fromViewController = viewController
-//    }
-//    
-//    /// 在开始显示动画之前 提前准备一些动作
-//    open func prepareShow() {
-//        
-//    }
-//    
-//    /// 显示动画
-//    /// - Parameter completion: 动画完成回调
-//    open func showAnimation(_ completion: Completion) {
-//        
-//    }
-//    /// 在开始隐藏动画之前 提前准备一些动作
-//    open func prepareHide() {
-//        
-//    }
-//    /// 隐藏动画
-//    /// - Parameter completion: 动画完成
-//    open func hideAnimation(_ completion: Completion) {
-//        
-//    }
     deinit {
        debugPrint("\(self):" + #function + "♻️")
     }
@@ -104,26 +37,6 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
 open class ModalDrivenContext: ModalContext {
     
 }
-
-//public extension ModalContext {
-//    /// 添加属性到fromViewController
-//    func addStateFromTarget(_ values: [ModalKeyPath], state: ModalState) {
-//        guard let from = self.config.fromViewController else { return }
-//        self.styleConfig.addState(from, values: values, state: state)
-//    }
-//    /// 添加属性到fromViewController
-//    func addStateFromTarget(_ value: ModalKeyPath, state: ModalState) {
-//        self.addStateFromTarget([value], state: state)
-//    }
-//    /// 添加属性到presenting
-//    func addStateToTarget(_ values: [ModalKeyPath], state: ModalState) {
-////        self.statesConfig.addState(showViewController, values: values, state: state)
-//    }
-//    /// 添加属性到presenting
-//    func addStateToTarget(_ value: ModalKeyPath, state: ModalState) {
-//        self.addStateToTarget([value], state: state)
-//    }
-//}
 /// 构造不同的动画场景
 public extension ModalContext {
     static func modalContext(_ config: ModalConfig, states: StyleConfig) -> ModalContext? {
