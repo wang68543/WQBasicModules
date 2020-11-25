@@ -13,16 +13,43 @@ public class ModalDefaultAnimation: ModalAnimation {
 
     public var duration: TimeInterval = 0.45
     
+    /// 这里只会调过来 两种ModalState
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, config: ModalConfig, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
         let time = self.duration
-        let areAnimationsEnabled =  UIView.areAnimationsEnabled
-        UIView.setAnimationsEnabled(false)
-        if state == .show {
-            states.states[.willShow]?.setup(for: .willShow)
-            layoutController.container.setNeedsLayout()
-            layoutController.view.setNeedsLayout()
+        //无动画状态更新
+        func prepareStatesWithoutAnimation(_ modalState: ModalState) {
+            let areAnimationsEnabled =  UIView.areAnimationsEnabled
+            UIView.setAnimationsEnabled(false)
+            if let views = states.snapShotAttachAnimatorViews[modalState] {
+                views.forEach { view, subViews in
+                    subViews.forEach { view.addSubview($0) }
+                }
+            }
+            states.states[modalState]?.setup(for: modalState)
+            layoutController.container.layoutIfNeeded()
+            layoutController.view.layoutIfNeeded()
             UIView.setAnimationsEnabled(areAnimationsEnabled)
-            
+        }
+        //以默认的动画更新
+        func updateWithDefaultAnimation(_ modalState: ModalState) {
+            UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+                states.states[modalState]?.setup(for: modalState)
+            } completion: { flag in
+                // 移除动画的View
+                UIView.performWithoutAnimation {
+                    if let preState = modalState.preNode,
+                       let views = states.snapShotAttachAnimatorViews[preState] {
+                        views.forEach { view, subViews in
+                            subViews.forEach { $0.removeFromSuperview() }
+                        }
+                    }
+                }
+                completion?()
+            }
+        }
+        
+        if state == .show {
+            prepareStatesWithoutAnimation(.willShow)
             if states.states.has(key: .didShow) {
                 let keys: [ModalState] = [.show, .didShow]
                 UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
@@ -36,32 +63,13 @@ public class ModalDefaultAnimation: ModalAnimation {
                 } completion: { flag in
                     completion?()
                 }
-
             } else {
-                UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
-                    states.states[.show]?.setup(for: .show)
-                } completion: { flag in
-                    completion?()
-                }
+                updateWithDefaultAnimation(.show)
             }
         } else {//隐藏
-            if let bindViews = states.snapShotAttachAnimatorViews[.willHide] {
-                bindViews.forEach { view,subViews in
-                    subViews.forEach { view.addSubview($0) }
-                }
-            }
-            if states.states.has(key: .willHide) {
-                states.states[.willHide]?.setup(for: .willHide)
-                layoutController.container.setNeedsLayout()
-                layoutController.view.setNeedsLayout()
-            }
-            UIView.setAnimationsEnabled(areAnimationsEnabled)
-            
-            UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
-                states.states[.hide]?.setup(for: .hide)
-            } completion: { flag in
-                completion?()
-            }
+            prepareStatesWithoutAnimation(.willHide)
+            /// 更新隐藏
+            updateWithDefaultAnimation(.hide)
         }
     }
 }

@@ -63,7 +63,7 @@ public extension ModalPresentation {
 
 /// 处理bottom
 /// 转场的状态
-public enum ModalState: Comparable, CaseIterable {
+public enum ModalState: Int, Equatable, CaseIterable {
     /// 准备显示之前状态
     case willShow
     /// 显示
@@ -76,6 +76,12 @@ public enum ModalState: Comparable, CaseIterable {
 //    case didHide
 }
 public extension ModalState {
+    var preNode: ModalState? {
+        return ModalState(rawValue: self.rawValue-1)
+    }
+    var nextNode: ModalState? {
+        return ModalState(rawValue: self.rawValue+1)
+    }
     var isOutSide: Bool {
         switch self {
         case .show, .didShow, .willHide:

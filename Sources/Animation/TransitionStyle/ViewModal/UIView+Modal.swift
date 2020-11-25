@@ -50,6 +50,7 @@ public extension UIView {
     }
 }
 public extension WQModules where Base: UIView {
+    /// 弹窗尺寸自动布局的时候 宽度约束
     var constraintLayoutWidth: CGFloat {
         set {
             var size = self.base.layoutFittingMaxmiumSize
@@ -60,6 +61,7 @@ public extension WQModules where Base: UIView {
             return self.base.layoutFittingMaxmiumSize.width
         }
     }
+    /// 弹窗尺寸自动布局的时候 高度约束
     var constraintLayoutHeight: CGFloat {
         set {
             var size = self.base.layoutFittingMaxmiumSize
