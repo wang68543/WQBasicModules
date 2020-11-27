@@ -19,6 +19,5 @@ public protocol ModalAnimation: class {
                       completion: Completion?)
 //
 //    func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat)
-    
-    
+ 
 }

@@ -94,8 +94,10 @@ public extension WQModules where Base: UIView {
         let states = StyleConfig(.actionSheet, anmation: .default)
         self.present(config, states: states, completion: completion)
     }
-    
-    func present(_ config: ModalConfig, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
+    /// 弹窗
+    func present(_ config: ModalConfig = .default,
+                 states: StyleConfig,
+                 completion: ModalAnimation.Completion? = nil) {
         let layout = WQLayoutController(config, subView: self.base)
         present(layout, states: states, completion: completion)
     }

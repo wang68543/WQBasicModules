@@ -8,6 +8,9 @@
 import UIKit
 
 open class PanDirectionGestureRecongnizer: UIPanGestureRecognizer {
-    var direction: InteractDismissMode.Direction!
-  
+    var direction: PanDirection!
+    /// 是否可以开始识别
+    func canShouldBegin(_ velocity: CGPoint) -> Bool {
+        return direction.isSameDirection(with: velocity)
+    }
 }

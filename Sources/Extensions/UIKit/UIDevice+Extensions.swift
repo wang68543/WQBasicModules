@@ -119,6 +119,14 @@ public extension UIDevice {
         formatter.countStyle = .memory
         return formatter.string(fromByteCount: UIDevice.current.freeMemory)
     }
+    /// 当前已用的内存
+    var formatUsedMemory: String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = .useAll
+        formatter.zeroPadsFractionDigits = true
+        formatter.countStyle = .memory
+        return formatter.string(fromByteCount: UIDevice.current.usedMemory)
+    }
     /// 磁盘 总空间 按照 1000来计算
     static let formatDiskStorage: String = {
         let formatter = ByteCountFormatter()

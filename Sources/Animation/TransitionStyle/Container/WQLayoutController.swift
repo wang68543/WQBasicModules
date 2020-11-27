@@ -48,7 +48,9 @@ public class WQLayoutController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     @objc func panGestureAction(_ gesture: PanDirectionGestureRecongnizer) {
-        
+        let translate = gesture.translation(in: self.view)
+        let offset = gesture.direction.translationOffset(with: translate)
+        debugPrint(offset)
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,14 +74,12 @@ public class WQLayoutController: UIViewController {
     }
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        dimmingView.frame = self.view.bounds 
-        
+        dimmingView.frame = self.view.bounds
     }
     public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
         statesConfig = states
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
-        
         context?.show(self, statesConfig: states, completion: comletion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
@@ -90,7 +90,6 @@ public class WQLayoutController: UIViewController {
         } else {
             super.dismiss(animated: flag, completion: completion)
         }
-       
     }
     
     // MARK: -- -UI属性
@@ -122,11 +121,17 @@ public class WQLayoutController: UIViewController {
 }
 extension WQLayoutController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard let tap = gestureRecognizer as? UITapGestureRecognizer,
-              tap == self.tapGesture else {
+        if gestureRecognizer === self.tapGesture,
+           let tap = gestureRecognizer as? UITapGestureRecognizer {
+            let point = tap.location(in: self.view)
+            return !self.container.frame.contains(point)
+        } else if gestureRecognizer === self.panGesture,
+          let pan = gestureRecognizer as? PanDirectionGestureRecongnizer {
+           let velocity = pan.velocity(in: self.view)
+            return pan.canShouldBegin(velocity)
+        } else {
             return true
         }
-        let point = tap.location(in: self.view)
-        return !self.container.frame.contains(point)
+       
     }
 } 
