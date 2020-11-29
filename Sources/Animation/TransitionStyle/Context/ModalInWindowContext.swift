@@ -59,6 +59,7 @@ public extension WQModalWindow {
         self.previousKeyWindow = nil
     }
 }
+@available(iOS 10.0, *)
 public class ModalInWindowContext: ModalDrivenContext {
     lazy var window: WQModalWindow = {
        let win = WQModalWindow()

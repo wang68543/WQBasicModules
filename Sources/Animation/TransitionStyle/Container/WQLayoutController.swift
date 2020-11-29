@@ -9,13 +9,26 @@ import UIKit
 /**
  将当前控制器的View 作为transitionView 
  */
+@available(iOS 10.0, *)
 public protocol WQLayoutControllerTransition: NSObjectProtocol {
 //    func didViewLoad(_ controller: WQLayoutController)
     func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: ModalAnimation.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
-//    optional func update(_ controller: WQLayoutController, progress: CGFloat) 
+    
+    func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
+    
+    func began(interactive controller: WQLayoutController, isDismiss: Bool)
+    func end(interactive controller: WQLayoutController, isDismiss: Bool)
+    func cancel(interactive controller: WQLayoutController, isDismiss: Bool)
+    
 }
-
+@available(iOS 10.0, *)
+extension WQLayoutControllerTransition {
+    func update(_ controller: WQLayoutController, progress: CGFloat) {
+        debugPrint("===no implement")
+    }
+}
+@available(iOS 10.0, *)
 public class WQLayoutController: UIViewController {
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false 
@@ -48,9 +61,21 @@ public class WQLayoutController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     @objc func panGestureAction(_ gesture: PanDirectionGestureRecongnizer) {
-        let translate = gesture.translation(in: self.view)
-        let offset = gesture.direction.translationOffset(with: translate)
-        debugPrint(offset)
+        switch gesture.state {
+        case .began:
+            self.context?.began(interactive: self, isDismiss: true)
+        case .changed:
+            self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
+        case .ended:
+            self.context?.end(interactive: self, isDismiss: true)
+        case .failed, .cancelled:
+            self.context?.cancel(interactive: self, isDismiss: true)
+        default:
+            break
+        }
+//        let translate = gesture.translation(in: self.view)
+//        let offset = gesture.direction.translationOffset(with: translate)
+//        debugPrint(offset)
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +91,7 @@ public class WQLayoutController: UIViewController {
             self.view.addGestureRecognizer(tapGesture)
         case let .pan(direction):
             panGesture.direction = direction
-            self.view.addGestureRecognizer(panGesture)
+            self.container.addGestureRecognizer(panGesture)
             break
         default:
             break
@@ -119,6 +144,7 @@ public class WQLayoutController: UIViewController {
 //        #endif
     } 
 }
+@available(iOS 10.0, *)
 extension WQLayoutController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer === self.tapGesture,

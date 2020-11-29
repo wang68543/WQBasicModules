@@ -23,19 +23,28 @@ public class ModalReference<Root, Value>: ModalKeyPath {
      item[keyPath: keyPath] = value
    } 
 } 
-
+@available(iOS 10.0, *)
 public class ModalRect: ModalReference<WQLayoutController, CGRect> { }
+@available(iOS 10.0, *)
 public class ModalColor: ModalReference<WQLayoutController, UIColor> { }
+@available(iOS 10.0, *)
 public class ModalTransform: ModalReference<WQLayoutController, CGAffineTransform> { }
+@available(iOS 10.0, *)
 public class ModalPosition: ModalReference<WQLayoutController, CGPoint> { }
+@available(iOS 10.0, *)
 public class ModalBool: ModalReference<WQLayoutController, Bool> { }
+@available(iOS 10.0, *)
 public class ModalFloat: ModalReference<WQLayoutController, CGFloat> { }
- 
+
+
+@available(iOS 10.0, *)
 public extension ModalTransform {
     convenience init(container value: CGAffineTransform) {
         self.init(value, keyPath: \WQLayoutController.container.transform)
     }
 }
+
+@available(iOS 10.0, *)
 public extension ModalFloat {
     /// alapha
     convenience init(container value: CGFloat) {
@@ -45,6 +54,8 @@ public extension ModalFloat {
         self.init(value, keyPath: \WQLayoutController.dimmingView.alpha)
     }
 }
+
+@available(iOS 10.0, *)
 public extension ModalRect {
     convenience init(container value: CGRect) {
         self.init(value, keyPath: \WQLayoutController.container.frame)

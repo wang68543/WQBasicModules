@@ -6,6 +6,7 @@
 //
 
 import Foundation
+@available(iOS 10.0, *)
 public protocol ModalAnimation: class {
     typealias Completion = (() -> Void)
     

@@ -24,6 +24,9 @@ public enum InteractDismissMode: Equatable {
     case pan(PanDirection)
 }
 extension PanDirection {
+    var isHorizontal: Bool {
+        return self == .toLeft || self == .toRight
+    }
     /// 判断移动手势
     func isSameDirection(with velocity: CGPoint) -> Bool {
         switch self {
@@ -49,6 +52,6 @@ extension PanDirection {
         case .toTop:
             return  max(translation.y, 0)
         }
-        
     }
+    
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 //https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/CustomizingtheTransitionAnimations.html
+@available(iOS 10.0, *)
 open class ModalPresentationContext: ModalContext {
 //    lazy var driven: UIPercentDrivenInteractiveTransition = {
 //       let driven = UIPercentDrivenInteractiveTransition()
@@ -37,6 +38,7 @@ open class ModalPresentationContext: ModalContext {
     }
     
 }
+@available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
     public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         return self
@@ -57,6 +59,7 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
 //        return self.config.interactionDismiss.isGestureDrivenDismiss ? self.driven : nil
     } 
 }
+@available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return self.animator.duration

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+@available(iOS 10.0, *)
 open class ModalInParentContext: ModalDrivenContext {
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         guard let parent = self.config.fromViewController else {

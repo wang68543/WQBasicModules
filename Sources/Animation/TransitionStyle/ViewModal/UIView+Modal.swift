@@ -40,6 +40,7 @@ public extension UIView {
             return value
         }
     }
+    @available(iOS 10.0, *)
     var layoutController: WQLayoutController? {
         var layout: UIResponder? = self
         while let nextView = layout?.next {
@@ -84,6 +85,7 @@ public extension WQModules where Base: UIView {
         }
     }
 }
+@available(iOS 10.0, *)
 public extension WQModules where Base: UIView { 
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)

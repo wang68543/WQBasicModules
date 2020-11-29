@@ -9,6 +9,7 @@ import Foundation
 
 
 /// 转场动画各种状态的配置
+@available(iOS 10.0, *)
 public class StyleConfig {
     /// 各个状态的配置
     public var states: [ModalState: ModalMapItems]
@@ -44,6 +45,7 @@ public class StyleConfig {
         debugPrint("\(self):" + #function + "♻️")
     }
 }
+@available(iOS 10.0, *)
 public extension StyleConfig {
     func addState(_ target: NSObject, values: [ModalKeyPath], state: ModalState) {
         var sts = self.states[state] ?? []
@@ -54,7 +56,8 @@ public extension StyleConfig {
     func addState(_ target: NSObject, value: ModalKeyPath, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
-}   
+}
+@available(iOS 10.0, *)
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {
         var values: [ModalState: ModalMapItems] = [:]

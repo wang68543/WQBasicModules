@@ -112,6 +112,7 @@ public enum ModalShowStyle {
 }
 
 /// 支持动画方式
+@available(iOS 10.0, *)
 public enum ModalAnimationStyle {
    /// 背景淡入
    case `default`
@@ -225,7 +226,7 @@ public extension PanPosition {
         return states
     }
 }
-
+@available(iOS 10.0, *)
 public extension ModalAnimationStyle {
     
     var animator: ModalAnimation {

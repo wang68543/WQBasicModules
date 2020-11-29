@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+@available(iOS 10.0, *)
 public class ModalPresentWithNavRootContext: ModalPresentationContext {
 
 }
