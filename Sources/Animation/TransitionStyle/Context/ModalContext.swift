@@ -29,16 +29,20 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
          return true
     }
     public func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
-        
+        self.interactiveAnimator?.fractionComplete = progress
     }
     public func began(interactive controller: WQLayoutController, isDismiss: Bool) {
-        
+        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
+            guard let `self` = self else { return }
+            self.styleConfig.states[.hide]?.setup(for: .hide)
+        })
+        interactiveAnimator?.startAnimation()
     }
     public func end(interactive controller: WQLayoutController, isDismiss: Bool) {
-        
+        self.interactiveAnimator?.finishAnimation(at: .end)
     }
     public func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
-        
+        self.interactiveAnimator?.finishAnimation(at: .start)
     }
     deinit {
        debugPrint("\(self):" + #function + "♻️")
