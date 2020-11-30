@@ -15,8 +15,8 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: ModalAnimation.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
     
+    // interactive
     func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
-    
     func began(interactive controller: WQLayoutController, isDismiss: Bool)
     func end(interactive controller: WQLayoutController, isDismiss: Bool)
     func cancel(interactive controller: WQLayoutController, isDismiss: Bool)
