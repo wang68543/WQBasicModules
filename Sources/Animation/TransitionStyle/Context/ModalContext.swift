@@ -55,6 +55,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
 /// 主要用于驱动动画 含驱动管理
 @available(iOS 10.0, *)
 open class ModalDrivenContext: ModalContext {
+    
     var interactiveAnimator: UIViewPropertyAnimator?
     
     public override func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {

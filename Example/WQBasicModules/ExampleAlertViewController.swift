@@ -84,7 +84,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
         let config = ModalConfig(.modalSystem(self))
 //        
-        config.interactionDismiss = .tapOutSide
+        config.interactionDismiss = .pan(.toBottom)
 //        self.definesPresentationContext
         alertSubView.wm.actionSheet(true, config: config)
 //        alertSubView.wm.alert(true)

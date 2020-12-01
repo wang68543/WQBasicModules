@@ -15,6 +15,8 @@ public enum ModalPresentation: Equatable {
     case modalInWindow
     /// 以Nav rootViewController的形式present
     case modalPresentWithNavRoot(UINavigationController)
+    //TODO: 待实现
+    case push(UINavigationController?)
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
 }

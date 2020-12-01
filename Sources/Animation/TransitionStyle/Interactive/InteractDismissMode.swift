@@ -44,13 +44,13 @@ extension PanDirection {
     func translationOffset(with translation: CGPoint) -> CGFloat {
         switch self {
         case .toBottom:
-            return  max(-translation.y, 0)
-        case .toLeft:
-            return  max(translation.x, 0)
-        case .toRight:
-            return  max(-translation.x, 0)
-        case .toTop:
             return  max(translation.y, 0)
+        case .toLeft:
+            return  max(-translation.x, 0)
+        case .toRight:
+            return  max(translation.x, 0)
+        case .toTop:
+            return  max(-translation.y, 0)
         }
     }
     

@@ -9,12 +9,6 @@ import UIKit
 //https://developer.apple.com/library/archive/featuredarticles/ViewControllerPGforiPhoneOS/CustomizingtheTransitionAnimations.html
 @available(iOS 10.0, *)
 open class ModalPresentationContext: ModalContext {
-//    lazy var driven: UIPercentDrivenInteractiveTransition = {
-//       let driven = UIPercentDrivenInteractiveTransition()
-//        return driven
-//    }()
-    private var transitionContext: UIViewControllerContextTransitioning?
-//    UIPercentDrivenInteractiveTransition
     private var intercatController: UIPercentDrivenInteractiveTransition?
     
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
@@ -46,18 +40,16 @@ open class ModalPresentationContext: ModalContext {
     public override func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
         super.update(interactive: controller, progress: progress, isDismiss: isDismiss)
         self.intercatController?.update(progress)
-//        self.transitionContext?.updateInteractiveTransition(progress)
-        
     }
     public override func end(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.end(interactive: controller, isDismiss: isDismiss)
-//        self.transitionContext?.finishInteractiveTransition()
         self.intercatController?.finish()
+        self.intercatController = nil
     }
     public override func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.cancel(interactive: controller, isDismiss: isDismiss)
-//        self.transitionContext?.cancelInteractiveTransition()
         self.intercatController?.cancel()
+        self.intercatController = nil
     }
     
 }

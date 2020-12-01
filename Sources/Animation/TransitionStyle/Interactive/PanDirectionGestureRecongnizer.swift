@@ -11,19 +11,14 @@ open class PanDirectionGestureRecongnizer: UIPanGestureRecognizer {
     var direction: PanDirection!
     
     var progress: CGFloat {
-        guard let gestureView = self.view else { return .zero }
-        switch self.state {
-        case .changed:
-            let offset = self.translation(in: gestureView)
-            return direction.translationOffset(with: offset)/translationLength
-        case .ended:
-            return 1.0
-        default:
-            return .zero
-        }
+        let width = translationLength
+        guard let gestureView = self.view,
+              !width.isZero else { return .zero }
+        let offset = self.translation(in: gestureView)
+        return direction.translationOffset(with: offset)/width
     }
     private var translationLength: CGFloat {
-        guard let gestureView = self.view else { return .infinity }
+        guard let gestureView = self.view else { return .zero }
         if self.direction.isHorizontal {
             return gestureView.bounds.width
         } else {

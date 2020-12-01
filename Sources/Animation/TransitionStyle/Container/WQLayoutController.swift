@@ -11,7 +11,6 @@ import UIKit
  */
 @available(iOS 10.0, *)
 public protocol WQLayoutControllerTransition: NSObjectProtocol {
-//    func didViewLoad(_ controller: WQLayoutController)
     func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: ModalAnimation.Completion?)
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
     
@@ -22,12 +21,12 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func cancel(interactive controller: WQLayoutController, isDismiss: Bool)
     
 }
-@available(iOS 10.0, *)
-extension WQLayoutControllerTransition {
-    func update(_ controller: WQLayoutController, progress: CGFloat) {
-        debugPrint("===no implement")
-    }
-}
+//@available(iOS 10.0, *)
+//extension WQLayoutControllerTransition {
+//    func update(_ controller: WQLayoutController, progress: CGFloat) {
+//        debugPrint("===no implement")
+//    }
+//}
 @available(iOS 10.0, *)
 public class WQLayoutController: UIViewController {
     // viewWillAppear viewWillDisappear viewDidDisappear
@@ -57,9 +56,11 @@ public class WQLayoutController: UIViewController {
         let gesture = PanDirectionGestureRecongnizer(target: self, action: #selector(panGestureAction(_:)))
         return gesture
     }()
+    
     @objc func tapGestureAction(_ gseture: UITapGestureRecognizer) {
         self.dismiss(animated: true, completion: nil)
     }
+    
     @objc func panGestureAction(_ gesture: PanDirectionGestureRecongnizer) {
         switch gesture.state {
         case .began:
@@ -70,24 +71,20 @@ public class WQLayoutController: UIViewController {
             let velocity = gesture.velocity(in: self.view)
             var fast: Bool = false
             if gesture.direction.isHorizontal {
-                fast = abs(velocity.x) > 100
+                fast = abs(velocity.x) > 200
             } else {
-                fast = abs(velocity.y) > 100
+                fast = abs(velocity.y) > 200
             }
             if gesture.progress > 0.5 || fast {
                 self.context?.end(interactive: self, isDismiss: true)
             } else {
                 self.context?.cancel(interactive: self, isDismiss: true)
             }
-            
         case .failed, .cancelled:
             self.context?.cancel(interactive: self, isDismiss: true)
         default:
             break
         }
-//        let translate = gesture.translation(in: self.view)
-//        let offset = gesture.direction.translationOffset(with: translate)
-//        debugPrint(offset)
     }
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -144,7 +141,6 @@ public class WQLayoutController: UIViewController {
         transitionView.backgroundColor = UIColor.clear
         return transitionView
     }()
-    
      
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -156,6 +152,7 @@ public class WQLayoutController: UIViewController {
 //        #endif
     } 
 }
+
 @available(iOS 10.0, *)
 extension WQLayoutController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
