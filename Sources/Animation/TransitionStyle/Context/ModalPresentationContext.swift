@@ -80,33 +80,33 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
         return self.isInteractive ? self.intercatController : nil
     } 
 }
-@available(iOS 10.0, *)
-extension ModalPresentationContext: UIViewControllerInteractiveTransitioning {
-    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
-        self.transitionContext = transitionContext
-        guard let fromVC = transitionContext.viewController(forKey: .from),
-            let toVC = transitionContext.viewController(forKey: .to) else {
-                return
-        }
-        let isPresented = toVC.presentingViewController === fromVC
-        if isPresented {
-            let vcFinalFrame = transitionContext.finalFrame(for: toVC)
-            let transitionView = transitionContext.containerView
-                toVC.view.frame = vcFinalFrame
-                transitionView.addSubview(toVC.view)
-        }
-//        self.interactiveAnimator?.addCompletion { position in
-//            let completed = (position == .end)
-//            if (isPresented && !completed) || (!isPresented && completed) {
-//                toVC.view.removeFromSuperview()
-//            }
-//            transitionContext.completeTransition(completed)
-//            if !transitionContext.isInteractive {
-//                self.interactiveAnimator?.startAnimation()
-//            }
+//@available(iOS 10.0, *)
+//extension ModalPresentationContext: UIViewControllerInteractiveTransitioning {
+//    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
+//        self.transitionContext = transitionContext
+//        guard let fromVC = transitionContext.viewController(forKey: .from),
+//            let toVC = transitionContext.viewController(forKey: .to) else {
+//                return
 //        }
-    }
-}
+//        let isPresented = toVC.presentingViewController === fromVC
+//        if isPresented {
+//            let vcFinalFrame = transitionContext.finalFrame(for: toVC)
+//            let transitionView = transitionContext.containerView
+//                toVC.view.frame = vcFinalFrame
+//                transitionView.addSubview(toVC.view)
+//        }
+////        self.interactiveAnimator?.addCompletion { position in
+////            let completed = (position == .end)
+////            if (isPresented && !completed) || (!isPresented && completed) {
+////                toVC.view.removeFromSuperview()
+////            }
+////            transitionContext.completeTransition(completed)
+////            if !transitionContext.isInteractive {
+////                self.interactiveAnimator?.startAnimation()
+////            }
+////        }
+//    }
+//}
 @available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
