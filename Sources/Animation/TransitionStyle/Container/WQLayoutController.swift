@@ -67,7 +67,19 @@ public class WQLayoutController: UIViewController {
         case .changed:
             self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
         case .ended:
-            self.context?.end(interactive: self, isDismiss: true)
+            let velocity = gesture.velocity(in: self.view)
+            var fast: Bool = false
+            if gesture.direction.isHorizontal {
+                fast = abs(velocity.x) > 100
+            } else {
+                fast = abs(velocity.y) > 100
+            }
+            if gesture.progress > 0.5 || fast {
+                self.context?.end(interactive: self, isDismiss: true)
+            } else {
+                self.context?.cancel(interactive: self, isDismiss: true)
+            }
+            
         case .failed, .cancelled:
             self.context?.cancel(interactive: self, isDismiss: true)
         default:
