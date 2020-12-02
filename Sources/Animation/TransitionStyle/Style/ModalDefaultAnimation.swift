@@ -50,27 +50,46 @@ public class ModalDefaultAnimation: ModalAnimation {
         }
         
         if state == .show {
-            prepareStatesWithoutAnimation(.willShow)
-            if states.states.has(key: .didShow) {
-                let keys: [ModalState] = [.show, .didShow]
-                UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
-                    let unit = time/TimeInterval(keys.count)
-                    for index in 0..<keys.count {
-                        let keyFrame = keys[index]
-                        UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
-                            states.states[keyFrame]?.setup(for: keyFrame)
-                        }
+            if !self.areAnimationEnable {
+                UIView.performWithoutAnimation {
+                    if states.states.has(key: .didShow) {
+                        states.states[.didShow]?.setup(for: .didShow)
+                    } else {
+                        states.states[.show]?.setup(for: .show)
                     }
-                } completion: { flag in
-                    completion?()
                 }
+                completion?()
             } else {
-                updateWithDefaultAnimation(.show)
+                prepareStatesWithoutAnimation(.willShow)
+                if states.states.has(key: .didShow) {
+                    let keys: [ModalState] = [.show, .didShow]
+                    UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
+                        let unit = time/TimeInterval(keys.count)
+                        for index in 0..<keys.count {
+                            let keyFrame = keys[index]
+                            UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
+                                states.states[keyFrame]?.setup(for: keyFrame)
+                            }
+                        }
+                    } completion: { flag in
+                        completion?()
+                    }
+                } else {
+                    updateWithDefaultAnimation(.show)
+                }
             }
         } else {//隐藏
-            prepareStatesWithoutAnimation(.willHide)
-            /// 更新隐藏
-            updateWithDefaultAnimation(.hide)
+            if !self.areAnimationEnable {
+                UIView.performWithoutAnimation {
+                    states.states[.hide]?.setup(for: .hide)
+                }
+                completion?()
+            } else {
+                prepareStatesWithoutAnimation(.willHide)
+                /// 更新隐藏
+                updateWithDefaultAnimation(.hide)
+            }
+            
         }
     }
 }

@@ -15,6 +15,10 @@ import CoreLocation
 // https://www.macbed.com/navicat-premium/ 软件地址
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
+    
+//    @UserDefault
+    @UserDefault("AppTime", default: Date(timeIntervalSince1970: .zero))
+    static var date: Date
     var window: UIWindow?
 //    @UserDefault("video", default: Video.default)
 //    static var viedo: Video
@@ -30,7 +34,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         testCodable()
-        
+        AppDelegate.date = Date()
+        debugPrint("=======\(AppDelegate.date)")
 //        if #available(iOS 10.0, *) {
 //            let formatter = MeasurementFormatter()
 //            formatter.unitOptions = .providedUnit

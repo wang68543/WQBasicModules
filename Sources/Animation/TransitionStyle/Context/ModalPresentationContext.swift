@@ -12,6 +12,7 @@ open class ModalPresentationContext: ModalContext {
     private var intercatController: UIPercentDrivenInteractiveTransition?
     
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+        super.show(controller, statesConfig: statesConfig, completion: completion)
         controller.modalPresentationStyle = .custom
         controller.transitioningDelegate = self
         switch statesConfig.showStyle {
@@ -23,6 +24,7 @@ open class ModalPresentationContext: ModalContext {
         self.config.fromViewController?.present(controller, animated: self.animator.areAnimationEnable, completion: completion)
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        super.hide(controller, animated: flag, completion: completion)
         switch styleConfig.showStyle {
         case .alert, .actionSheet:
             self.animator.duration = 0.25

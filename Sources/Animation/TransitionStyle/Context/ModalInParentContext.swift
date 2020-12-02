@@ -9,6 +9,7 @@ import UIKit
 @available(iOS 10.0, *)
 open class ModalInParentContext: ModalDrivenContext {
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+        super.show(controller, statesConfig: statesConfig, completion: completion)
         guard let parent = self.config.fromViewController else {
             completion?()
             return
@@ -25,6 +26,7 @@ open class ModalInParentContext: ModalDrivenContext {
     } 
     
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        super.hide(controller, animated: flag, completion: completion)
         func completionCallback() {
             controller.view.removeFromSuperview()
             controller.removeFromParent()

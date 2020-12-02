@@ -67,10 +67,12 @@ public class ModalInWindowContext: ModalDrivenContext {
         return win
     }()
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+        super.show(controller, statesConfig: statesConfig, completion: completion)
         self.window.addVisible(root: controller)
         self.animator.preprocessor(.show, layoutController: controller, states: statesConfig, completion: completion)
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+        super.hide(controller, animated: flag, completion: completion)
         self.animator.preprocessor(.hide, layoutController: controller, states: self.styleConfig) { [weak self] in
             completion?()
             self?.window.remove()

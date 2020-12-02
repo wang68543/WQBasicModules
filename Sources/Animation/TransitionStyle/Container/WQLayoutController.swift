@@ -66,9 +66,12 @@ public class WQLayoutController: UIViewController {
         case .began:
             self.context?.began(interactive: self, isDismiss: true)
         case .changed:
+            if self.config.style.inParent {
+                gesture.setTranslation(.zero, in: self.container)
+            }
             self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
         case .ended:
-            let velocity = gesture.velocity(in: self.view)
+            let velocity = gesture.velocity(in: self.container)
             var fast: Bool = false
             if gesture.direction.isHorizontal {
                 fast = abs(velocity.x) > 200
@@ -117,13 +120,10 @@ public class WQLayoutController: UIViewController {
         context?.show(self, statesConfig: states, completion: comletion)
     }
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
-        if let ctx = context {
-            if ctx.hide(self, animated: flag, completion: completion) == false {
-                super.dismiss(animated: flag, completion: completion)
-            }
-        } else {
-            super.dismiss(animated: flag, completion: completion)
+        guard context?.hide(self, animated: flag, completion: completion) == false else {
+            return
         }
+        super.dismiss(animated: flag, completion: completion)
     }
     
     // MARK: -- -UI属性

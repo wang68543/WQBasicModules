@@ -25,8 +25,10 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
          
     }
+    @discardableResult
     public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-         return true
+        self.animator.areAnimationEnable = flag
+        return true
     }
     public func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
 //        self.interactiveAnimator?.fractionComplete = progress
@@ -60,25 +62,43 @@ open class ModalDrivenContext: ModalContext {
     
     public override func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
         super.update(interactive: controller, progress: progress, isDismiss: isDismiss)
+        guard let fractionComplete = self.interactiveAnimator?.fractionComplete else {
+            return
+        }
+        debugPrint("=====\(progress)=====\(fractionComplete)")
         self.interactiveAnimator?.fractionComplete = progress
     }
     public override func began(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.began(interactive: controller, isDismiss: isDismiss)
-        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
+        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .linear, animations: { [weak self] in
             guard let `self` = self else { return }
             self.styleConfig.states[.hide]?.setup(for: .hide)
         })
         interactiveAnimator?.startAnimation()
+        interactiveAnimator?.addCompletion({[weak self] position in
+            guard let `self` = self else { return }
+            if position == .end {
+//               _ = self.hide(controller, animated: false, completion: nil)
+            }
+        })
     }
     public override func end(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.end(interactive: controller, isDismiss: isDismiss)
         self.interactiveAnimator?.finishAnimation(at: .end)
+//        self.interactiveAnimator?.stopAnimation(false)
+        self.interactiveAnimator = nil
     }
     public override func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.cancel(interactive: controller, isDismiss: isDismiss)
         self.interactiveAnimator?.finishAnimation(at: .start)
+//        self.interactiveAnimator?.stopAnimation(true)
+        self.interactiveAnimator = nil
     }
 }
+
+
+
+
 /// 构造不同的动画场景
 @available(iOS 10.0, *)
 public extension ModalContext {
