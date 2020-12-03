@@ -66,9 +66,9 @@ public class WQLayoutController: UIViewController {
         case .began:
             self.context?.began(interactive: self, isDismiss: true)
         case .changed:
-            if self.config.style.inParent {
-                gesture.setTranslation(.zero, in: self.container)
-            }
+//            if self.config.style.inParent {
+//                gesture.setTranslation(.zero, in: self.container)
+//            }
             self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
         case .ended:
             let velocity = gesture.velocity(in: self.container)

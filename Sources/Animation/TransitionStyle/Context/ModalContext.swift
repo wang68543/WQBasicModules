@@ -78,21 +78,22 @@ open class ModalDrivenContext: ModalContext {
         interactiveAnimator?.addCompletion({[weak self] position in
             guard let `self` = self else { return }
             if position == .end {
-//               _ = self.hide(controller, animated: false, completion: nil)
+               _ = self.hide(controller, animated: false, completion: nil)
             }
+            self.interactiveAnimator = nil
         })
     }
     public override func end(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.end(interactive: controller, isDismiss: isDismiss)
+        self.interactiveAnimator?.stopAnimation(false)
         self.interactiveAnimator?.finishAnimation(at: .end)
 //        self.interactiveAnimator?.stopAnimation(false)
-        self.interactiveAnimator = nil
     }
     public override func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.cancel(interactive: controller, isDismiss: isDismiss)
+        self.interactiveAnimator?.stopAnimation(false)
         self.interactiveAnimator?.finishAnimation(at: .start)
-//        self.interactiveAnimator?.stopAnimation(true)
-        self.interactiveAnimator = nil
+//        self.interactiveAnimator?.stopAnimation(true) 
     }
 }
 
