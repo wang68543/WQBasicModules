@@ -2,7 +2,7 @@
 //  UIVIewController+SelectPicture.swift
 //  HeathyWidget
 //
-//  Created by iMacHuaSheng on 2020/10/23.
+//  Created by WQ on 2020/10/23.
 //
 
 import Foundation

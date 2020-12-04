@@ -2,7 +2,7 @@
 //  InteractDismissMode.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/11/27.
+//  Created by WQ on 2020/11/27.
 //
 
 import Foundation

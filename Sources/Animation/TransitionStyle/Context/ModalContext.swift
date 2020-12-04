@@ -2,7 +2,7 @@
 //  ModalContext.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/8/21.
+//  Created by WQ on 2020/8/21.
 //
 import UIKit 
 @available(iOS 10.0, *)
@@ -12,7 +12,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     
     public unowned let config: ModalConfig
     
-    public let styleConfig: StyleConfig
+    public private(set) var styleConfig: StyleConfig
     
     public var isInteractive: Bool = false
     
@@ -23,7 +23,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         super.init()
     }
     public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
-         
+        self.styleConfig = statesConfig
     }
     @discardableResult
     public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
@@ -31,23 +31,15 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         return true
     }
     public func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
-//        self.interactiveAnimator?.fractionComplete = progress
     }
     public func began(interactive controller: WQLayoutController, isDismiss: Bool) {
         self.isInteractive = true
-//        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
-//            guard let `self` = self else { return }
-//            self.styleConfig.states[.hide]?.setup(for: .hide)
-//        })
-//        interactiveAnimator?.startAnimation()
     }
-    public func end(interactive controller: WQLayoutController, isDismiss: Bool) {
-//        self.interactiveAnimator?.finishAnimation(at: .end)
+    public func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
         self.isInteractive = false
     }
-    public func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
+    public func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) { 
         self.isInteractive = false
-//        self.interactiveAnimator?.finishAnimation(at: .start)
     }
     deinit {
        debugPrint("\(self):" + #function + "♻️")
@@ -62,44 +54,52 @@ open class ModalDrivenContext: ModalContext {
     
     public override func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
         super.update(interactive: controller, progress: progress, isDismiss: isDismiss)
-        guard let fractionComplete = self.interactiveAnimator?.fractionComplete else {
-            return
-        }
-        debugPrint("=====\(progress)=====\(fractionComplete)")
-        self.interactiveAnimator?.fractionComplete = progress
+        guard let animator = self.interactiveAnimator else { return }
+        guard !animator.isRunning else { return }
+        animator.fractionComplete = progress
+        
     }
     public override func began(interactive controller: WQLayoutController, isDismiss: Bool) {
         super.began(interactive: controller, isDismiss: isDismiss)
-        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .linear, animations: { [weak self] in
-            guard let `self` = self else { return }
-            self.styleConfig.states[.hide]?.setup(for: .hide)
-        })
-        interactiveAnimator?.startAnimation()
+        if isDismiss {
+            interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
+                guard let `self` = self else { return }
+                self.styleConfig.states[.hide]?.setup(for: .hide)
+            })
+        }
+        
+    }
+    public override func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.end(interactive: controller, velocity: velocity, isDismiss: isDismiss)
         interactiveAnimator?.addCompletion({[weak self] position in
             guard let `self` = self else { return }
             if position == .end {
-               _ = self.hide(controller, animated: false, completion: nil)
+               self.hide(controller, animated: false, completion: nil)
             }
             self.interactiveAnimator = nil
         })
+        
+        let velocityVector = CGVector(dx: velocity.x / 100, dy: velocity.y / 100)
+        let springParameters = UISpringTimingParameters(dampingRatio: 0.8, initialVelocity: velocityVector)
+        self.interactiveAnimator?.continueAnimation(withTimingParameters: springParameters, durationFactor: 1.0)
     }
-    public override func end(interactive controller: WQLayoutController, isDismiss: Bool) {
-        super.end(interactive: controller, isDismiss: isDismiss)
-        self.interactiveAnimator?.stopAnimation(false)
-        self.interactiveAnimator?.finishAnimation(at: .end)
-//        self.interactiveAnimator?.stopAnimation(false)
-    }
-    public override func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
-        super.cancel(interactive: controller, isDismiss: isDismiss)
-        self.interactiveAnimator?.stopAnimation(false)
-        self.interactiveAnimator?.finishAnimation(at: .start)
-//        self.interactiveAnimator?.stopAnimation(true) 
+    public override func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.cancel(interactive: controller, velocity: velocity, isDismiss: isDismiss)
+        interactiveAnimator?.addCompletion({[weak self] position in
+            guard let `self` = self else { return }
+            if position == .start {
+                debugPrint("========")
+            }
+            self.interactiveAnimator = nil
+        })
+        self.interactiveAnimator?.isReversed = true
+        let velocityVector = CGVector(dx: velocity.x / 100, dy: velocity.y / 100)
+        let springParameters = UISpringTimingParameters(dampingRatio: 0.8, initialVelocity: velocityVector)
+        self.interactiveAnimator?.continueAnimation(withTimingParameters: springParameters, durationFactor: 1.0)
+        
     }
 }
-
-
-
-
+ 
 /// 构造不同的动画场景
 @available(iOS 10.0, *)
 public extension ModalContext {

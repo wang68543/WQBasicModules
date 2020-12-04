@@ -2,7 +2,7 @@
 //  TransitionItem.swift
 //  Pods-WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2020/8/10.
+//  Created by WQ on 2020/8/10.
 //
 
 import Foundation

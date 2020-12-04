@@ -2,7 +2,7 @@
 //  ModalDefaultAnimation.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/9/22.
+//  Created by WQ on 2020/9/22.
 //
 
 import Foundation

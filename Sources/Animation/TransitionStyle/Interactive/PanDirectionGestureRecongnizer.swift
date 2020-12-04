@@ -15,7 +15,8 @@ open class PanDirectionGestureRecongnizer: UIPanGestureRecognizer {
         guard let gestureView = self.view,
               !width.isZero else { return .zero }
         let offset = self.translation(in: gestureView)
-        return direction.translationOffset(with: offset)/width
+        let progress = direction.translationOffset(with: offset)/width
+        return max(0.001, min(0.999, progress))
     }
     private var translationLength: CGFloat {
         guard let gestureView = self.view else { return .zero }

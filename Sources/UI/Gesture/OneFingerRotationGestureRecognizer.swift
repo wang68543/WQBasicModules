@@ -2,7 +2,7 @@
 //  OneFingerRotationGestureRecognizer.swift
 //  WQBasicModules
 //
-//  Created by iMacHuaSheng on 2020/10/29.
+//  Created by WQ on 2020/10/29.
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 // 单指旋转手势

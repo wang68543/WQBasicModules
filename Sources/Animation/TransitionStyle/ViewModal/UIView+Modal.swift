@@ -2,7 +2,7 @@
 //  UIView+Modal.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/9/8.
+//  Created by WQ on 2020/9/8.
 //
 
 import Foundation

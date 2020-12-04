@@ -2,7 +2,7 @@
 //  TransitionStatesConfig.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/10/30.
+//  Created by WQ on 2020/10/30.
 //
 
 import Foundation

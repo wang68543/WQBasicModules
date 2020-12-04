@@ -2,7 +2,7 @@
 //  ModalPresentationContext.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/8/21.
+//  Created by WQ on 2020/8/21.
 //
 
 import UIKit
@@ -43,13 +43,13 @@ open class ModalPresentationContext: ModalContext {
         super.update(interactive: controller, progress: progress, isDismiss: isDismiss)
         self.intercatController?.update(progress)
     }
-    public override func end(interactive controller: WQLayoutController, isDismiss: Bool) {
-        super.end(interactive: controller, isDismiss: isDismiss)
+    public override func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.end(interactive: controller, velocity: velocity, isDismiss: isDismiss)
         self.intercatController?.finish()
         self.intercatController = nil
     }
-    public override func cancel(interactive controller: WQLayoutController, isDismiss: Bool) {
-        super.cancel(interactive: controller, isDismiss: isDismiss)
+    public override func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.cancel(interactive: controller, velocity: velocity, isDismiss: isDismiss)
         self.intercatController?.cancel()
         self.intercatController = nil
     }

@@ -2,7 +2,7 @@
 //  FlexBoxViewController.swift
 //  WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2019/6/10.
+//  Created by WQ on 2019/6/10.
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 

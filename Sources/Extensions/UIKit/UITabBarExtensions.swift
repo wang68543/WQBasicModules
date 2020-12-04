@@ -2,7 +2,7 @@
 //  UITabBarExtensions.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/7/30.
+//  Created by WQ on 2020/7/30.
 //
 #if canImport(UIKit) && !os(watchOS)
 import Foundation

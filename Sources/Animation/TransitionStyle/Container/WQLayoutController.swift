@@ -2,7 +2,7 @@
 //  WQLayoutContainerViewController.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/8/21.
+//  Created by WQ on 2020/8/21.
 //
 
 import UIKit 
@@ -17,8 +17,8 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     // interactive
     func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
     func began(interactive controller: WQLayoutController, isDismiss: Bool)
-    func end(interactive controller: WQLayoutController, isDismiss: Bool)
-    func cancel(interactive controller: WQLayoutController, isDismiss: Bool)
+    func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
+    func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
     
 }
 //@available(iOS 10.0, *)
@@ -65,26 +65,25 @@ public class WQLayoutController: UIViewController {
         switch gesture.state {
         case .began:
             self.context?.began(interactive: self, isDismiss: true)
+        break
         case .changed:
-//            if self.config.style.inParent {
-//                gesture.setTranslation(.zero, in: self.container)
-//            }
             self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
         case .ended:
-            let velocity = gesture.velocity(in: self.container)
-            var fast: Bool = false
+            let velocity = gesture.velocity(in: gesture.view)
+            let fast: Bool
             if gesture.direction.isHorizontal {
                 fast = abs(velocity.x) > 200
             } else {
                 fast = abs(velocity.y) > 200
             }
             if gesture.progress > 0.5 || fast {
-                self.context?.end(interactive: self, isDismiss: true)
+                self.context?.end(interactive: self, velocity: velocity, isDismiss: true)
             } else {
-                self.context?.cancel(interactive: self, isDismiss: true)
+                self.context?.cancel(interactive: self, velocity: velocity, isDismiss: true)
             }
         case .failed, .cancelled:
-            self.context?.cancel(interactive: self, isDismiss: true)
+            let velocity = gesture.velocity(in: gesture.view)
+            self.context?.cancel(interactive: self, velocity: velocity, isDismiss: true)
         default:
             break
         }

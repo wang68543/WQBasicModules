@@ -2,7 +2,7 @@
 //  ModalConfig.swift
 //  Pods
 //
-//  Created by iMacHuaSheng on 2020/10/30.
+//  Created by WQ on 2020/10/30.
 //  转场动画所需环境的参数
 
 import Foundation

@@ -2,8 +2,8 @@
 //  ScreenAdaptation.swift
 //  WaterMark
 //
-//  Created by iMacHuaSheng on 2020/7/3.
-//  Copyright © 2020 iMacHuaSheng. All rights reserved.
+//  Created by WQ on 2020/7/3.
+//  Copyright © 2020 WQ. All rights reserved.
 //
 
 import Foundation

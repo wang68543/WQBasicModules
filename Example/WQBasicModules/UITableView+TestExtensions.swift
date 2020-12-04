@@ -2,7 +2,7 @@
 //  UITableView+TestExtensions.swift
 //  WQBasicModules_Example
 //
-//  Created by iMacHuaSheng on 2020/5/9.
+//  Created by WQ on 2020/5/9.
 //  Copyright © 2020 CocoaPods. All rights reserved.
 //
 

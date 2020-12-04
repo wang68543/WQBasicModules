@@ -2,7 +2,7 @@
 //  URLExtensionsTest.swift
 //  WQBasicModules_Tests
 //
-//  Created by iMacHuaSheng on 2019/6/21.
+//  Created by WQ on 2019/6/21.
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
