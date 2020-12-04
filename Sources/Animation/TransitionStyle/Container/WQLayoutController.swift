@@ -15,11 +15,13 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
     
     // interactive
-    func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
-    func began(interactive controller: WQLayoutController, isDismiss: Bool)
-    func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
-    func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
+    func interactive(dismiss controller: WQLayoutController)
+    func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig)
     
+    func interactive(update controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
+    
+    func interactive(finish controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
+    func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
 }
 //@available(iOS 10.0, *)
 //extension WQLayoutControllerTransition {
@@ -64,10 +66,11 @@ public class WQLayoutController: UIViewController {
     @objc func panGestureAction(_ gesture: PanDirectionGestureRecongnizer) {
         switch gesture.state {
         case .began:
-            self.context?.began(interactive: self, isDismiss: true)
+            gesture.setTranslation(.zero, in: gesture.view)
+            self.context?.interactive(dismiss: self)
         break
         case .changed:
-            self.context?.update(interactive: self, progress: gesture.progress, isDismiss: true)
+            self.context?.interactive(update: self, progress: gesture.progress, isDismiss: true)
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
             let fast: Bool
@@ -77,13 +80,13 @@ public class WQLayoutController: UIViewController {
                 fast = abs(velocity.y) > 200
             }
             if gesture.progress > 0.5 || fast {
-                self.context?.end(interactive: self, velocity: velocity, isDismiss: true)
+                self.context?.interactive(finish: self, velocity: velocity, isDismiss: true)
             } else {
-                self.context?.cancel(interactive: self, velocity: velocity, isDismiss: true)
+                self.context?.interactive(cancel: self, velocity: velocity, isDismiss: true)
             }
         case .failed, .cancelled:
             let velocity = gesture.velocity(in: gesture.view)
-            self.context?.cancel(interactive: self, velocity: velocity, isDismiss: true)
+            self.context?.interactive(cancel: self, velocity: velocity, isDismiss: true)
         default:
             break
         }
@@ -118,10 +121,19 @@ public class WQLayoutController: UIViewController {
         context = ModalContext.modalContext(self.config, states: states)
         context?.show(self, statesConfig: states, completion: comletion)
     }
+    
+    public func startInteractive(_ states: StyleConfig) {
+        statesConfig = states
+        states.setupStates(self, config: self.config)
+        context = ModalContext.modalContext(self.config, states: states)
+//        context?.styleConfig = states
+    }
+    
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
         guard context?.hide(self, animated: flag, completion: completion) == false else {
             return
         }
+        guard !self.isBeingDismissed else { return }
         super.dismiss(animated: flag, completion: completion)
     }
     

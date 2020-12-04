@@ -135,7 +135,7 @@ public extension Date {
                 components.month = 1; endComponents.month = 12
                 fallthrough
             case .month:
-//                let days = daysInMonth(endComponents.year!, at: endComponents.month!)
+//                let days = daysInMonth(finishComponents.year!, at: endComponents.month!)
                 let days = calendar.numberOfDaysInMonth(for: self)
                 components.day = 1; endComponents.day = days
                 fallthrough

@@ -10,8 +10,9 @@ import UIKit
 @available(iOS 10.0, *)
 open class ModalPresentationContext: ModalContext {
     private var intercatController: UIPercentDrivenInteractiveTransition?
-    
+     
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
+        guard !controller.isBeingPresented else { return }
         super.show(controller, statesConfig: statesConfig, completion: completion)
         controller.modalPresentationStyle = .custom
         controller.transitioningDelegate = self
@@ -34,24 +35,46 @@ open class ModalPresentationContext: ModalContext {
         // 交给系统dismiss
         return false
     }
-    public override func began(interactive controller: WQLayoutController, isDismiss: Bool) {
-        super.began(interactive: controller, isDismiss: isDismiss)
+    
+    public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
+        super.interactive(present: controller, statesConfig: states)
+        controller.modalPresentationStyle = .custom
+        controller.transitioningDelegate = self
+        switch states.showStyle {
+        case .alert, .actionSheet:
+            self.animator.duration = 0.45
+        default:
+            break
+        }
+        controller.view.isUserInteractionEnabled = false
+        self.config.fromViewController?.present(controller, animated: true, completion: nil)
+    }
+    
+    public override func interactive(dismiss controller: WQLayoutController) {
+        super.interactive(dismiss: controller)
         intercatController = UIPercentDrivenInteractiveTransition()
         controller.dismiss(animated: true, completion: nil)
     }
-    public override func update(interactive controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
-        super.update(interactive: controller, progress: progress, isDismiss: isDismiss)
+    public override func interactive(update controller: WQLayoutController, progress: CGFloat, isDismiss: Bool) {
+        super.interactive(update: controller, progress: progress, isDismiss: isDismiss)
         self.intercatController?.update(progress)
     }
-    public override func end(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
-        super.end(interactive: controller, velocity: velocity, isDismiss: isDismiss)
+    public override func interactive(finish controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.interactive(finish: controller, velocity: velocity, isDismiss: isDismiss)
+        let provider = UISpringTimingParameters.completion(velocity)
+        self.intercatController?.timingCurve = provider
         self.intercatController?.finish()
-        self.intercatController = nil
+        if !isDismiss {
+            controller.view.isUserInteractionEnabled = true
+        }
+//        self.intercatController = nil
     }
-    public override func cancel(interactive controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
-        super.cancel(interactive: controller, velocity: velocity, isDismiss: isDismiss)
+    public override func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool) {
+        super.interactive(cancel: controller, velocity: velocity, isDismiss: isDismiss)
+        let provider = UISpringTimingParameters.completion(velocity)
+        self.intercatController?.timingCurve = provider
         self.intercatController?.cancel()
-        self.intercatController = nil
+//        self.intercatController = nil
     }
     
 }
@@ -74,33 +97,6 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
         return self.isInteractive ? self.intercatController : nil
     } 
 }
-//@available(iOS 10.0, *)
-//extension ModalPresentationContext: UIViewControllerInteractiveTransitioning {
-//    public func startInteractiveTransition(_ transitionContext: UIViewControllerContextTransitioning) {
-//        self.transitionContext = transitionContext
-//        guard let fromVC = transitionContext.viewController(forKey: .from),
-//            let toVC = transitionContext.viewController(forKey: .to) else {
-//                return
-//        }
-//        let isPresented = toVC.presentingViewController === fromVC
-//        if isPresented {
-//            let vcFinalFrame = transitionContext.finalFrame(for: toVC)
-//            let transitionView = transitionContext.containerView
-//                toVC.view.frame = vcFinalFrame
-//                transitionView.addSubview(toVC.view)
-//        }
-////        self.interactiveAnimator?.addCompletion { position in
-////            let completed = (position == .end)
-////            if (isPresented && !completed) || (!isPresented && completed) {
-////                toVC.view.removeFromSuperview()
-////            }
-////            transitionContext.completeTransition(completed)
-////            if !transitionContext.isInteractive {
-////                self.interactiveAnimator?.startAnimation()
-////            }
-////        }
-//    }
-//}
 @available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -143,12 +139,6 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
                 completionBlock()
             }
         }
-        
-    }
-//    func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-//        return
-//    }
-    public func animationEnded(_ transitionCompleted: Bool) {
         
     }
 }

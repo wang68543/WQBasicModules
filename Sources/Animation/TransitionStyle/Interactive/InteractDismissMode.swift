@@ -8,6 +8,7 @@
 import Foundation
 
 public enum PanDirection: Equatable {
+    case none
     case toTop
     case toBottom
     case toLeft
@@ -23,6 +24,7 @@ public enum InteractDismissMode: Equatable {
     /// 移动消失
     case pan(PanDirection)
 }
+ 
 extension PanDirection {
     var isHorizontal: Bool {
         return self == .toLeft || self == .toRight
@@ -38,10 +40,12 @@ extension PanDirection {
             return velocity.x > 0
         case .toRight:
             return velocity.x < 0
+        default:
+            return false
         }
     }
     /// 根据gesture 移动的point获取Value
-    func translationOffset(with translation: CGPoint) -> CGFloat {
+    func translateOffset(with translation: CGPoint) -> CGFloat {
         switch self {
         case .toBottom:
             return  max(translation.y, 0)
@@ -51,6 +55,8 @@ extension PanDirection {
             return  max(translation.x, 0)
         case .toTop:
             return  max(-translation.y, 0)
+        default:
+            return .zero
         }
     }
     

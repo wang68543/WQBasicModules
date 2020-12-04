@@ -21,8 +21,7 @@ public class ModalConfig {
     
     public init(_ style: ModalPresentation = .autoModal) {
         self.style = style
-        if let viewController = style.fromViewController  {
-            showControllerFrame = viewController.view.bounds
+        if let viewController = style.fromViewController { 
             fromViewController = viewController
         }
     }

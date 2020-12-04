@@ -82,7 +82,8 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
         alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
-        let config = ModalConfig(.modalInParent(self))
+//        let config = ModalConfig(.modalInParent(self))
+        let config = ModalConfig(.modalSystem(self))
 //        
         config.interactionDismiss = .pan(.toBottom)
 //        self.definesPresentationContext

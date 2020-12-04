@@ -50,7 +50,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         }
         
         if state == .show {
-            if !self.areAnimationEnable {
+            if !self.areAnimationEnable { //不动画
                 UIView.performWithoutAnimation {
                     if states.states.has(key: .didShow) {
                         states.states[.didShow]?.setup(for: .didShow)
@@ -71,7 +71,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                                 states.states[keyFrame]?.setup(for: keyFrame)
                             }
                         }
-                    } completion: { flag in
+                    } completion: { flag in 
                         completion?()
                     }
                 } else {
