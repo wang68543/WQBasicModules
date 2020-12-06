@@ -105,10 +105,23 @@ extension ModalNavigationContext: UINavigationControllerDelegate {
     }
     public func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         // 这里 afterScreenUpdates 为true的时候就不会走自定义的动画
-        if let view = fromVC.view.snapshotView(afterScreenUpdates: false) {
-            snapshotView = view
-            navigationController.view.addSubview(view)
+        if self.isModal {
+            if let view = navigationController.view.snapshotView(afterScreenUpdates: false) {
+                snapshotView = view
+            }
+        } else {
+            snapshotView?.removeFromSuperview()
         }
+//        else {
+//            if fromVC is UINavigationController {
+//                if let view = fromVC.view.snapshotView(afterScreenUpdates: false) {
+//                    snapshotView = view
+//                }
+//            } else if let view = fromVC.navigationController?.view.snapshotView(afterScreenUpdates: false) {
+//                snapshotView = view
+//            }
+//        }
+        
         return self
     }
 }
@@ -158,9 +171,11 @@ extension ModalNavigationContext: UIViewControllerAnimatedTransitioning {
         }
         let toVCView = transitionContext.view(forKey: .to)
         let transitionView = transitionContext.containerView
-//        if let snapshot = self.snapshotView {
-//            transitionView.addSubview(snapshot)
-//        }
+        
+        if let snapshot = self.snapshotView {
+            transitionView.addSubview(snapshot)
+        }
+        
         if let toView = toVCView {
             if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
                transitionView.addSubview(toView)
