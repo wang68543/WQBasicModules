@@ -12,7 +12,7 @@ public class ModalDefaultAnimation: ModalAnimation {
     
     public var areAnimationEnable: Bool = true
 
-    public var duration: TimeInterval = 0.45
+    public var duration: TimeInterval = .zero
     
     /// 这里只会调过来 两种ModalState
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
@@ -26,7 +26,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                     subViews.forEach { view.addSubview($0) }
                 }
             }
-            states.states[modalState]?.setup(for: modalState)
+            states.states.setup(forState: modalState)
             layoutController.container.layoutIfNeeded()
             layoutController.view.layoutIfNeeded()
             UIView.setAnimationsEnabled(areAnimationsEnabled)
@@ -34,7 +34,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         //以默认的动画更新
         func updateWithDefaultAnimation(_ modalState: ModalState) {
             UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
-                states.states[modalState]?.setup(for: modalState)
+                states.states.setup(forState: modalState)
             } completion: { flag in
                 // 移除动画的View
                 UIView.performWithoutAnimation {
@@ -53,9 +53,9 @@ public class ModalDefaultAnimation: ModalAnimation {
             if !self.areAnimationEnable { //不动画
                 UIView.performWithoutAnimation {
                     if states.states.has(key: .didShow) {
-                        states.states[.didShow]?.setup(for: .didShow)
+                        states.states.setup(forState: .didShow)
                     } else {
-                        states.states[.show]?.setup(for: .show)
+                        states.states.setup(forState: .show)
                     }
                 }
                 completion?()
@@ -68,7 +68,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                         for index in 0..<keys.count {
                             let keyFrame = keys[index]
                             UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
-                                states.states[keyFrame]?.setup(for: keyFrame)
+                                states.states.setup(forState: keyFrame)
                             }
                         }
                     } completion: { flag in 
@@ -81,7 +81,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         } else {//隐藏
             if !self.areAnimationEnable {
                 UIView.performWithoutAnimation {
-                    states.states[.hide]?.setup(for: .hide)
+                    states.states.setup(forState: .hide) 
                 }
                 completion?()
             } else {

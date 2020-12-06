@@ -18,29 +18,31 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func interactive(dismiss controller: WQLayoutController)
     func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig)
     
-    func interactive(update controller: WQLayoutController, progress: CGFloat, isDismiss: Bool)
+    func interactive(update controller: WQLayoutController, progress: CGFloat, isModal: Bool)
     
-    func interactive(finish controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
-    func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isDismiss: Bool)
-}
-//@available(iOS 10.0, *)
-//extension WQLayoutControllerTransition {
-//    func update(_ controller: WQLayoutController, progress: CGFloat) {
-//        debugPrint("===no implement")
-//    }
-//}
+    func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool)
+    func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool)
+} 
 @available(iOS 10.0, *)
 public class WQLayoutController: UIViewController {
+    public internal(set) var isMovingToWindow: Bool = false
+    public internal(set) var isMovingFromWindow: Bool = false
+    
+    public internal(set) var isPushing: Bool = false
+    public internal(set) var isPoping: Bool = false
+    
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false 
     public var context: ModalContext?
     
-    public let config: ModalConfig
-    public var statesConfig: StyleConfig?
+    public let config: ModalConfig 
+    ///背景View
+    public weak var backgroundView: UIView?
     
     public init(_ config: ModalConfig, subView: UIView) {
         self.config = config
         super.init(nibName: nil, bundle: nil)
+        self.setupBackgroudView()
         setup()
         self.container.addSubview(subView)
     }
@@ -48,6 +50,26 @@ public class WQLayoutController: UIViewController {
     internal func setup() { 
         self.view.addSubview(dimmingView)
         self.view.addSubview(self.container)
+    }
+    func setupBackgroudView() {
+        func addSnapshotView() {
+            if let snapshotView = config.style.snapshotTransitaion {
+                self.view.addSubview(snapshotView)
+                self.view.sendSubviewToBack(snapshotView)
+                self.backgroundView = snapshotView
+            }
+        }
+        if config.isShowWithNavigationController {
+            addSnapshotView()
+        }
+//        else {
+//            switch self.config.style {
+//            case .modalNavigation:
+//                addSnapshotView()
+//            default:
+//                break
+//            }
+//        }
     }
     lazy var tapGesture: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
@@ -70,7 +92,7 @@ public class WQLayoutController: UIViewController {
             self.context?.interactive(dismiss: self)
         break
         case .changed:
-            self.context?.interactive(update: self, progress: gesture.progress, isDismiss: true)
+            self.context?.interactive(update: self, progress: gesture.progress, isModal: false)
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
             let fast: Bool
@@ -80,13 +102,13 @@ public class WQLayoutController: UIViewController {
                 fast = abs(velocity.y) > 200
             }
             if gesture.progress > 0.5 || fast {
-                self.context?.interactive(finish: self, velocity: velocity, isDismiss: true)
+                self.context?.interactive(finish: self, velocity: velocity, isModal: false)
             } else {
-                self.context?.interactive(cancel: self, velocity: velocity, isDismiss: true)
+                self.context?.interactive(cancel: self, velocity: velocity, isModal: false)
             }
         case .failed, .cancelled:
             let velocity = gesture.velocity(in: gesture.view)
-            self.context?.interactive(cancel: self, velocity: velocity, isDismiss: true)
+            self.context?.interactive(cancel: self, velocity: velocity, isModal: false)
         default:
             break
         }
@@ -111,22 +133,24 @@ public class WQLayoutController: UIViewController {
             break
         }
     }
+    
     public override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        dimmingView.frame = self.view.bounds
+        backgroundView?.frame = self.view.bounds
+        dimmingView.frame = self.view.bounds  
     }
     public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
-        statesConfig = states
+//        statesConfig = states
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
         context?.show(self, statesConfig: states, completion: comletion)
     }
     
     public func startInteractive(_ states: StyleConfig) {
-        statesConfig = states
+//        statesConfig = states
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
-//        context?.styleConfig = states
+        context?.interactive(present: self, statesConfig: states)
     }
     
     public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {

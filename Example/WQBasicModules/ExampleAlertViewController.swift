@@ -21,6 +21,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         button.setTitleColor(UIColor.blue, for: .normal)
         button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
+       
 //        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
 //        self.view.addSubview(imageView)
 //        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor],
@@ -56,7 +57,10 @@ class ExampleAlertViewController: BaseExampleViewController {
 ////                }
 //        }
     }
-
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.navigationController?.setNavigationBarHidden(true, animated: false)
+//    }
     @objc func alertAction(_ sender: UIButton) {
 
         let alertView = UIView()
@@ -79,12 +83,19 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
 //        let animator = WQTransitionAnimator(items: items)
         let alertSubView = UIView()
+        
+        let button = UIButton()
+        button.frame = CGRect(x: 10, y: 500 - 90, width: 80, height: 80)
+        button.backgroundColor = UIColor.green
+        button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+        alertSubView.addSubview(button)
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
         alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
-//        let config = ModalConfig(.modalInParent(self))
-        let config = ModalConfig(.modalSystem(self))
-//        
+//        let config = ModalConfig(.modalInWindow)
+//        let config = ModalConfig(.modalSystem(self))
+        let config = ModalConfig(.modalNavigation(self.navigationController))
+//        config.isShowWithNavigationController = true
         config.interactionDismiss = .pan(.toBottom)
 //        self.definesPresentationContext
         alertSubView.wm.actionSheet(true, config: config)
@@ -103,7 +114,9 @@ class ExampleAlertViewController: BaseExampleViewController {
 //            alertView.wm.dismiss(true)
 //        }
     }
-
+    @objc func buttonAction(_ sender: UIButton) {
+        sender.superview?.wm.dismiss(style: true)
+    }
     func show() {
 //        let size = CGSize(width: 300, height: 100)
 //         alertView.backgroundColor = UIColor.green

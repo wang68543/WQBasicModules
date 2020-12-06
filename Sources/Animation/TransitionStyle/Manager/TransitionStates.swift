@@ -13,12 +13,29 @@ public enum ModalPresentation: Equatable {
     /// 这里要分
     case modalInParent(UIViewController)
     case modalInWindow
-    /// 以Nav rootViewController的形式present
-    case modalPresentWithNavRoot(UINavigationController)
     //TODO: 待实现
-    case push(UINavigationController?)
+    case modalNavigation(UINavigationController?)
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
+}
+extension ModalPresentation {
+    var snapshotTransitaion: UIView? {
+        switch self {
+        case .autoModal:
+            return self.autoAdaptationStyle.snapshotTransitaion
+        case .modalInWindow:
+            return WQUIHelp.topNormalWindow()?.snapshotView(afterScreenUpdates: true)
+        case .modalSystem:
+            return WQUIHelp.topNormalWindow()?.snapshotView(afterScreenUpdates: true)
+        case let .modalInParent(controller):
+            return controller.view.snapshotView(afterScreenUpdates: true)
+        case let .modalNavigation(navgationController):
+            if let nav = navgationController ?? WQUIHelp.topNavigationController() {
+                return nav.topViewController?.view.snapshotView(afterScreenUpdates: true)
+            }
+            return nil
+        }
+    }
 }
 public extension ModalPresentation {
     var inParent: Bool {
@@ -38,8 +55,8 @@ public extension ModalPresentation {
             return viewController ?? WQUIHelp.topVisibleViewController()
         case let .modalInParent(viewController):
             return viewController
-        case let .modalPresentWithNavRoot(navgationController):
-            return navgationController
+        case let .modalNavigation(navgationController):
+            return navgationController ?? WQUIHelp.topNavigationController() 
         case .autoModal:
             return self.autoAdaptationStyle.fromViewController
         default:
@@ -122,6 +139,15 @@ public enum ModalShowStyle {
    case custom([ModalState: ModalMapItems])
 }
 
+//public extension ModalShowStyle {
+//    func duration(_ dismiss: Bool) -> TimeInterval {
+//        if !dismiss {
+//            return 0.45
+//        } else {
+//            return 0.25
+//        }
+//    }
+//}
 /// 支持动画方式
 @available(iOS 10.0, *)
 public enum ModalAnimationStyle {

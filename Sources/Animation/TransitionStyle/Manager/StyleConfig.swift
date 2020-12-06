@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 /// 转场动画各种状态的配置
 @available(iOS 10.0, *)
 public class StyleConfig {
@@ -152,5 +151,12 @@ public extension StyleConfig {
         values[.didShow] = ModalTransform(container: didShowValue)
         values[.hide] = ModalTransform(container: hideValue)
         return values
+    }
+}
+
+
+extension Dictionary where Key == ModalState, Value == ModalMapItems {
+    func setup(forState state: ModalState) {
+        self[state]?.setup(for: state)
     }
 }

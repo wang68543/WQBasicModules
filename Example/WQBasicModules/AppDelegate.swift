@@ -35,6 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         testCodable()
         AppDelegate.date = Date()
+        let cls = UINavigationController.self
+        
         debugPrint("=======\(AppDelegate.date)")
 //        if #available(iOS 10.0, *) {
 //            let formatter = MeasurementFormatter()

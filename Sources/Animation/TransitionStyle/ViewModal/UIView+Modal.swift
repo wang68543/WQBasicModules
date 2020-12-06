@@ -107,7 +107,7 @@ public extension WQModules where Base: UIView {
     func present(_ container: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
     }
-    
+                                
     /// 拖拽显示
     func dragPresent(_ config: ModalConfig = .default,
                           states: StyleConfig) -> ModalContext? {
