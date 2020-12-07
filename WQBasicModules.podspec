@@ -77,6 +77,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Modal' do |ss|
         ss.dependency 'WQBasicModules/UI/Help'
+        ss.dependency 'WQBasicModules/Extensions/Foundation'
         ss.dependency 'WQBasicModules/Extensions/Module'
         ss.source_files = 'Sources/Modal/**/*.swift'
     end
