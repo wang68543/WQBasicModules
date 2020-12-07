@@ -4,7 +4,8 @@
 //
 //  Created by WQ on 2020/8/21.
 //
-import UIKit 
+import UIKit
+//https://blog.devtang.com/2016/03/13/iOS-transition-guide/
 @available(iOS 10.0, *)
 open class ModalContext: NSObject, WQLayoutControllerTransition {
     
@@ -15,13 +16,19 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     public private(set) var styleConfig: StyleConfig
     
     /// 当前是否正在交互
-    public private(set) var isInteractive: Bool = false
+    public private(set) var isInteractive: Bool = false {
+        didSet {
+            self.animator.isInteractive = isInteractive
+        }
+    }
     
     /// 当前是否正在弹窗
-    internal private(set) var isModal: Bool = false
+    internal private(set) var isShow: Bool = false
     
     /// 用于记录当前
     internal weak var navgationController: UINavigationController?
+    /// 记录交互时候的controller
+    internal weak var interactViewController: UIViewController?
     
     public init(_ config: ModalConfig, states: StyleConfig) {
         self.config = config
@@ -30,11 +37,12 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         super.init()
     }
     
+    // 动画的时间
     var animateDuration: TimeInterval {
         guard self.animator.duration == .zero else {
             return self.animator.duration
         }
-        if self.isModal {
+        if self.isShow {
             if self.styleConfig.states.has(key: .didShow) {
                 return 0.45
             } else {
@@ -44,15 +52,18 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
             return 0.25 
         }
     }
+    
     public func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
-        self.isModal = true
+        self.isShow = true
+        self.isInteractive = false
         self.styleConfig = statesConfig
         self.animator.duration = self.animateDuration
     }
     @discardableResult
     public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-        self.isModal = false
-        self.animator.areAnimationEnable = flag
+        self.isShow = false
+        self.isInteractive = false
+        self.animator.animationEnable = flag
         self.animator.duration = self.animateDuration
         return true
     }
@@ -60,23 +71,25 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     
     public func interactive(dismiss controller: WQLayoutController) {
         self.isInteractive = true
-        self.isModal = false
+        self.isShow = false
         self.animator.duration = self.animateDuration
+        self.animator.animationEnable = true
     }
     
     public func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
         self.isInteractive = true
-        self.isModal = true
+        self.isShow = true
         self.styleConfig = states
         self.animator.duration = self.animateDuration
+        self.animator.animationEnable = true
     }
-    public func interactive(update controller: WQLayoutController, progress: CGFloat, isModal: Bool) {
+    public func interactive(update progress: CGFloat) {
+        debugPrint("###########\(progress)")
     }
-    
-    public func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
+    public func interactive(finish velocity: CGPoint) {
         self.isInteractive = false
     }
-    public func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
+    public func interactive(cancel velocity: CGPoint) { 
         self.isInteractive = false
     }
     deinit {
@@ -97,95 +110,46 @@ public extension ModalContext {
     }
     
     func viewController(_ controller: WQLayoutController) -> UIViewController {
-        if self.config.isShowWithNavigationController {
-           return self.navgationController(controller)
+        if let interact = self.interactViewController { //记录的返回
+            return interact
+        } else if self.config.isShowWithNavigationController {
+           let nav = self.navgationController(controller)
+            self.interactViewController = nav
+           return nav
         } else {
+            self.interactViewController = controller
             return controller
         }
     }
+    
+    var layoutViewController: WQLayoutController? {
+        if self.interactViewController is WQLayoutController {
+            return self.interactViewController as? WQLayoutController
+        } else if let nav = self.interactViewController as? UINavigationController {
+            return nav.topViewController as? WQLayoutController
+        }
+        return nil
+    }
 }
+
 
 /// 主要用于驱动动画 含驱动管理
 @available(iOS 10.0, *)
 open class ModalDrivenContext: ModalContext {
     
     var interactiveAnimator: UIViewPropertyAnimator?
-    
-//    public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
-//        super.interactive(present: controller, statesConfig: states)
-//        // 初始化 显示状态
-//        let areAnimationsEnabled =  UIView.areAnimationsEnabled
-//        UIView.setAnimationsEnabled(false)
-//        if let views = states.snapShotAttachAnimatorViews[.willShow] {
-//            views.forEach { view, subViews in
-//                subViews.forEach { view.addSubview($0) }
-//            }
-//        }
-//        states.states[.willShow]?.setup(for: .willShow)
-//        controller.container.layoutIfNeeded()
-//        controller.view.layoutIfNeeded()
-//        UIView.setAnimationsEnabled(areAnimationsEnabled)
-//        //TODO: - 待实现 驱动动画过程
-//    }
-    public override func interactive(update controller: WQLayoutController, progress: CGFloat, isModal: Bool) {
-        super.interactive(update: controller, progress: progress, isModal: isModal)
+     
+    public override func interactive(update progress: CGFloat) {
+        super.interactive(update: progress)
         guard let animator = self.interactiveAnimator else { return }
         guard !animator.isRunning else { return }
         animator.fractionComplete = progress
-    }
+    } 
     
     func continueAnimation(_ velocity: CGPoint) {
         let provider = UISpringTimingParameters.completion(velocity)
         self.interactiveAnimator?.continueAnimation(withTimingParameters: provider, durationFactor: 1.0)
     }
-//    public override func interactive(dismiss controller: WQLayoutController) {
-//        super.interactive(dismiss: controller)
-//        if interactiveAnimator?.isRunning == true {
-//            interactiveAnimator?.stopAnimation(true)
-//        }
-//        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
-//            guard let `self` = self else { return }
-//            self.styleConfig.states[.hide]?.setup(for: .hide)
-//        })
-//    }
-//    
-//    func interactiveAnimateCompletion(_ controller: WQLayoutController, at position: UIViewAnimatingPosition, dismiss: Bool){
-//        if dismiss {
-//            if position == .end {
-//               self.hide(controller, animated: false, completion: nil)
-//            }
-//        } else {
-//            controller.view.isUserInteractionEnabled = true
-//        }
-//    }
-//    public override func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
-//        super.interactive(finish: controller, velocity: velocity, isModal: isDismiss)
-//        
-//        interactiveAnimator?.addCompletion({[weak self] position in
-//            guard let `self` = self else { return }
-//            self.interactiveAnimateCompletion(controller, at: position, dismiss: isDismiss)
-//            self.interactiveAnimator = nil
-//        })
-//        
-//        let provider = UISpringTimingParameters.completion(velocity)
-//        self.interactiveAnimator?.continueAnimation(withTimingParameters: provider, durationFactor: 1.0)
-//    }
-//    public override func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
-//        interactiveAnimator?.addCompletion({[weak self] position in
-//            guard let `self` = self else { return }
-//            if isDismiss {
-//                if position == .start {
-//                    debugPrint("========")
-//                }
-//            }   
-//            self.interactiveAnimator = nil
-//        })
-//        super.interactive(cancel: controller, velocity: velocity, isModal: isDismiss)
-//        self.interactiveAnimator?.isReversed = true
-//        let provider = UISpringTimingParameters.completion(velocity)
-//        self.interactiveAnimator?.continueAnimation(withTimingParameters: provider, durationFactor: 1.0)
-//        
-//    }
 }
 @available(iOS 10.0, *)
 extension UISpringTimingParameters {

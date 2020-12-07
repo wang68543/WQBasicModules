@@ -12,13 +12,12 @@ public protocol ModalAnimation: class {
     
     var duration: TimeInterval { get set }
     /// 是否可以动画
-    var areAnimationEnable: Bool { get set }
+    var animationEnable: Bool { get set }
+    /// 是否是正在交互中
+    var isInteractive: Bool { get set }
     
     func preprocessor(_ state: ModalState,
                       layoutController: WQLayoutController, 
                       states: StyleConfig,
-                      completion: Completion?)
-//
-//    func preprocessor(update manager: TransitionManager, _ percentageComplete: CGFloat)
- 
+                      completion: Completion?) 
 }

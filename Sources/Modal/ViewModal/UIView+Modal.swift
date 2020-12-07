@@ -109,14 +109,14 @@ public extension WQModules where Base: UIView {
     }
                                 
     /// 拖拽显示
-    func dragPresent(_ config: ModalConfig = .default,
-                          states: StyleConfig) -> ModalContext? {
+    func drag(present config: ModalConfig = .default,
+              states: StyleConfig) -> ModalContext? {
         let layout = WQLayoutController(config, subView: self.base)
         layout.startInteractive(states)
         return layout.context
     }
     
-    func dismiss(style: Bool, completion: ModalAnimation.Completion? = nil) {
-        self.base.layoutController?.dismiss(animated: style, completion: completion)
+    func dismissal(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
+        self.base.layoutController?.dismiss(animated: flag, completion: completion)
     }
 } 

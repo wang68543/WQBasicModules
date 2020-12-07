@@ -21,7 +21,8 @@ class ExampleAlertViewController: BaseExampleViewController {
         button.setTitleColor(UIColor.blue, for: .normal)
         button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
-       
+        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+        self.view.addGestureRecognizer(pan)
 //        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
 //        self.view.addSubview(imageView)
 //        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor],
@@ -61,6 +62,47 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        super.viewWillAppear(animated)
 //        self.navigationController?.setNavigationBarHidden(true, animated: false)
 //    }
+    private weak var context: ModalContext?
+    @objc func panAction(_ sender: UIPanGestureRecognizer) {
+        switch sender.state {
+        case .began:
+            let alertSubView = UIView()
+            
+            let button = UIButton()
+            button.frame = CGRect(x: 10, y: 500 - 90, width: 80, height: 80)
+            button.backgroundColor = UIColor.green
+            button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
+            alertSubView.addSubview(button)
+            alertSubView.backgroundColor = UIColor.blue
+            alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
+            let config = ModalConfig(.modalNavigation(self.navigationController))
+//            config.isShowWithNavigationController = true
+            config.interactionDismiss = .pan(.toLeft)
+//            var pan: [ModalState: PanPosition] = [:]
+//            PanPosition
+//            pan[.willShow] = PanPosition
+            context = alertSubView.wm.drag(present: config, states: .init(.pan(PanPosition.fromLeftIn(true))))
+        case .changed:
+            let offset = sender.translation(in: self.view).y
+            let progress = abs(offset/500.0)
+            debugPrint("====\(progress)")
+            context?.interactive(update: progress)
+            break
+        case .ended, .cancelled:
+            let offset = sender.translation(in: self.view).y
+            let progress = abs(offset/500.0)
+            let velocity = sender.velocity(in: self.view)
+            if progress > 0.5 {
+                context?.interactive(finish: velocity)
+            } else {
+                context?.interactive(cancel: velocity)
+            }
+            
+            
+        default:
+            break
+        }
+    }
     @objc func alertAction(_ sender: UIButton) {
 
         let alertView = UIView()
@@ -92,10 +134,11 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
         alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
-//        let config = ModalConfig(.modalInWindow)
+        let config = ModalConfig(.modalInWindow)
 //        let config = ModalConfig(.modalSystem(self))
-        let config = ModalConfig(.modalNavigation(self.navigationController))
-//        config.isShowWithNavigationController = true
+//        let config = ModalConfig(.modalInParent(self))
+//        let config = ModalConfig(.modalNavigation(self.navigationController))
+        config.isShowWithNavigationController = true
         config.interactionDismiss = .pan(.toBottom)
 //        self.definesPresentationContext
         alertSubView.wm.actionSheet(true, config: config)

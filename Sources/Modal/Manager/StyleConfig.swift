@@ -116,7 +116,8 @@ public extension StyleConfig {
         var values: [ModalState: ModalKeyPath] = [:]
         if self.dimming {
             values[.willShow] = ModalFloat(dimming: 0.0)
-            values[.show] = ModalFloat(dimming: 1.0)
+            values[.show] = ModalFloat(dimming: 0.85)
+            values[.didShow] = ModalFloat(dimming: 1.0)
             values[.hide] = values[.willShow]
         }
         return values
@@ -156,6 +157,7 @@ public extension StyleConfig {
 
 
 extension Dictionary where Key == ModalState, Value == ModalMapItems {
+    //TODO: - 这里要考虑 在设置didShow的时候 有的属性没有didShow状态只有show状态
     func setup(forState state: ModalState) {
         self[state]?.setup(for: state)
     }

@@ -28,16 +28,26 @@ open class ModalInParentContext:  ModalDrivenContext {
         }
     }
     public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
-        guard let parent = self.config.fromViewController else { return }
         let viewController = self.viewController(controller)
+        guard !viewController.isMovingToParent else { return }
+        super.interactive(present: controller, statesConfig: states)
+        guard let parent = self.config.fromViewController else { return }
+ 
         UIView.performWithoutAnimation {
-            parent.addChild(controller)
-            viewController.view.isUserInteractionEnabled = false
+            parent.addChild(viewController)
             viewController.view.frame = self.config.showControllerFrame
             parent.view.addSubview(viewController.view)
-            viewController.didMove(toParent: parent)
+            states.states.setup(forState: .willShow) 
         }
         super.interactive(present: controller, statesConfig: states)
+        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
+            guard let `self` = self else { return }
+            if self.styleConfig.states.has(key: .didShow) {
+                self.styleConfig.states.setup(forState: .didShow)
+            } else {
+                self.styleConfig.states.setup(forState: .show)
+            }
+        })
     }
 
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
@@ -69,47 +79,45 @@ open class ModalInParentContext:  ModalDrivenContext {
             self.styleConfig.states.setup(forState: .hide)
         })
     }
-    public override func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
+    public override func interactive(finish velocity: CGPoint) {
         interactiveAnimator?.addCompletion({[weak self] position in
             guard let `self` = self,
                   position == .end else { return }
-            if !isModal {
-                let viewController = self.viewController(controller)
-                viewController.view.removeFromSuperview()
-                viewController.removeFromParent()
+            if !self.isShow {
+                if let viewController = self.interactViewController {
+                    viewController.view.removeFromSuperview()
+                    viewController.removeFromParent()
+                }
             } else {
-                //TODO: - 待实现
+                if let parent = self.config.fromViewController,
+                   let viewController = self.interactViewController {
+                    viewController.didMove(toParent: parent)
+                }
             }
             self.interactiveAnimator = nil
         })
-        super.interactive(finish: controller, velocity: velocity, isModal: isModal)
+        super.interactive(finish: velocity)
         self.continueAnimation(velocity)
+        
     }
-    public override func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
+    public override func interactive(cancel velocity: CGPoint) {
         interactiveAnimator?.addCompletion({[weak self] position in
             guard let `self` = self else { return }
-            if !isModal {
+            if !self.isShow {
                 guard position == .start else { return }
-                if self.config.isShowWithNavigationController {
-                    controller.willMove(toParent: self.navgationController(controller))
-                } else {
-                    if let parent = self.config.fromViewController {
-                        controller.willMove(toParent: parent)
-                    }
-                }
-                debugPrint("========")
+                if let parent = self.config.fromViewController,
+                   let controller = self.interactViewController {
+                    controller.willMove(toParent: parent)
+                } 
             } else { // 取消的话 重新移除
-                //TODO: - 待实现
-//                UIView.performWithoutAnimation {
-//                    controller.willMove(toParent: nil)
-//                    controller.view.removeFromSuperview()
-//                    controller.removeFromParent()
-//                    controller.view.isUserInteractionEnabled = true
-//                }
+                if let viewController = self.interactViewController {
+                    viewController.view.removeFromSuperview()
+                    viewController.removeFromParent()
+                }
             }
             self.interactiveAnimator = nil
         })
-        super.interactive(cancel: controller, velocity: velocity, isModal: isModal)
+        super.interactive(cancel: velocity)
         self.interactiveAnimator?.isReversed = true
         self.continueAnimation(velocity)
     }

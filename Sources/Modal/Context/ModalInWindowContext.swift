@@ -72,15 +72,31 @@ public class ModalInWindowContext: ModalDrivenContext {
         guard !controller.isMovingToWindow else { return }
         controller.isMovingToWindow = true
         super.show(controller, statesConfig: statesConfig, completion: completion)
-        if self.config.isShowWithNavigationController {
-            getKeyWindow()?.addVisible(root: self.navgationController(controller))
-        } else {
-            getKeyWindow()?.addVisible(root: controller)
-        }
+        let viewController = self.viewController(controller)
+        getKeyWindow()?.addVisible(root: viewController)
         self.animator.preprocessor(.show, layoutController: controller, states: statesConfig) {
             controller.isMovingToWindow = false
             completion?()
         }
+    }
+    public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
+        guard !controller.isMovingToWindow else { return }
+        controller.isMovingToWindow = true
+        super.interactive(present: controller, statesConfig: states)
+        UIView.performWithoutAnimation {
+            let viewController = self.viewController(controller)
+            getKeyWindow()?.addVisible(root: viewController)
+            states.states.setup(forState: .willShow)
+        }
+        super.interactive(present: controller, statesConfig: states)
+        interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
+            guard let `self` = self else { return }
+            if self.styleConfig.states.has(key: .didShow) {
+                self.styleConfig.states.setup(forState: .didShow)
+            } else {
+                self.styleConfig.states.setup(forState: .show)
+            }
+        })
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
         guard !controller.isMovingFromWindow else { return true }
@@ -108,50 +124,37 @@ public class ModalInWindowContext: ModalDrivenContext {
             self.styleConfig.states.setup(forState: .hide)
         })
     }
-    public override func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
-        super.interactive(finish: controller, velocity: velocity, isModal: isModal)
+    public override func interactive(finish velocity: CGPoint) {
+        super.interactive(finish: velocity)
         self.interactiveAnimator?.addCompletion { [weak self] position in
             guard let `self` = self,
                   position == .end else { return }
-            if !isModal {
-                controller.isMovingFromWindow = false
+            if !self.isShow {
+                self.layoutViewController?.isMovingFromWindow = false
                 self.getKeyWindow()?.remove()
                 self.keyWindow = nil
             } else {
-                //TODO: -待实现
+                self.layoutViewController?.isMovingToWindow = false
             }
             self.interactiveAnimator = nil
         }
         self.continueAnimation(velocity)
     }
-    public override func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
-        super.interactive(cancel: controller, velocity: velocity, isModal: isModal)
-        self.interactiveAnimator?.addCompletion { position in
-            guard position == .start else { return }
-            if !isModal {
-                controller.isMovingFromWindow = false
+    public override func interactive(cancel velocity: CGPoint) {
+        super.interactive(cancel: velocity)
+        self.interactiveAnimator?.addCompletion { [weak self] position in
+            guard let `self` = self,
+                  position == .start else { return }
+            if !self.isShow {
+                self.layoutViewController?.isMovingFromWindow = false
             } else {
-                //TODO: -待实现
+                self.layoutViewController?.isMovingToWindow = false
+                self.getKeyWindow()?.remove()
+                self.keyWindow = nil
             }
             self.interactiveAnimator = nil
         }
         self.interactiveAnimator?.isReversed = true
         self.continueAnimation(velocity)
     }
-//    override func interactiveAnimateCompletion(_ controller: WQLayoutController, at position: UIViewAnimatingPosition, dismiss: Bool) {
-//        super.interactiveAnimateCompletion(controller, at: position, dismiss: dismiss)
-//        self.keyWindow?.remove()
-//        self.keyWindow = nil
-//        if dismiss {
-//            controller.isMovingFromWindow = false
-//        } else {
-//            controller.isMovingToWindow = false
-//        }
-//    }
-//    public override func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool) {
-//
-//    }
-//    deinit {
-//        debugPrint("\(self):" + #function + "♻️")
-//    }
 }

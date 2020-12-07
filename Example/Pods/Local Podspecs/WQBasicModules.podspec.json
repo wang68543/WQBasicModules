@@ -32,6 +32,9 @@
     {
       "name": "Core",
       "dependencies": {
+        "WQBasicModules/Modal": [
+
+        ],
         "WQBasicModules/Animation": [
 
         ],
@@ -97,21 +100,16 @@
       ]
     },
     {
-      "name": "Beta",
-      "subspecs": [
-        {
-          "name": "TransitionStyle",
-          "dependencies": {
-            "WQBasicModules/UI/Help": [
+      "name": "Modal",
+      "dependencies": {
+        "WQBasicModules/UI/Help": [
 
-            ],
-            "WQBasicModules/Extensions/Module": [
+        ],
+        "WQBasicModules/Extensions/Module": [
 
-            ]
-          },
-          "source_files": "Sources/Animation/TransitionStyle/**/*.swift"
-        }
-      ]
+        ]
+      },
+      "source_files": "Sources/Modal/**/*.swift"
     },
     {
       "name": "Extensions",

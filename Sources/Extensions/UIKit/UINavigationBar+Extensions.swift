@@ -8,7 +8,7 @@
 import Foundation
 public extension UINavigationBar {
     struct AssociatedKeys {
-       static let styleRawValue = UnsafeRawPointer(bitPattern: "wq.navigationBar.maxInputLength".hashValue)!
+       static let styleRawValue = UnsafeRawPointer(bitPattern: "wq.navigationBar.styleRawValue".hashValue)!
     }
     /// 隐藏导航栏 KVC
     var isHiddenShadow: Bool {

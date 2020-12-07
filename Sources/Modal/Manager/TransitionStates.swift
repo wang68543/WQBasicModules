@@ -13,7 +13,6 @@ public enum ModalPresentation: Equatable {
     /// 这里要分
     case modalInParent(UIViewController)
     case modalInWindow
-    //TODO: 待实现
     case modalNavigation(UINavigationController?)
     /// 根据当前场景自动选择 (优先system 其次parent 再window)
     case autoModal
@@ -31,7 +30,7 @@ extension ModalPresentation {
             return controller.view.snapshotView(afterScreenUpdates: true)
         case let .modalNavigation(navgationController):
             if let nav = navgationController ?? WQUIHelp.topNavigationController() {
-                return nav.topViewController?.view.snapshotView(afterScreenUpdates: true)
+                return nav.view.snapshotView(afterScreenUpdates: true)//.topViewController?
             }
             return nil
         }
@@ -48,7 +47,6 @@ public extension ModalPresentation {
     }
 }
 public extension ModalPresentation {
-    ///
     var fromViewController: UIViewController? {
         switch self {
         case let .modalSystem(viewController):
@@ -120,12 +118,7 @@ public extension ModalState {
     }
 }
 
-public enum HorizontalPanPosition {
-    case center, leading, trailing
-}
-public enum VerticalPanPosition {
-    case center, top, bottom
-}
+
 
 /// contentView的 最终显示方式
 public enum ModalShowStyle {
@@ -137,17 +130,7 @@ public enum ModalShowStyle {
    case pan([ModalState: PanPosition])
    /// 自定义显示位置
    case custom([ModalState: ModalMapItems])
-}
-
-//public extension ModalShowStyle {
-//    func duration(_ dismiss: Bool) -> TimeInterval {
-//        if !dismiss {
-//            return 0.45
-//        } else {
-//            return 0.25
-//        }
-//    }
-//}
+} 
 /// 支持动画方式
 @available(iOS 10.0, *)
 public enum ModalAnimationStyle {
@@ -157,11 +140,23 @@ public enum ModalAnimationStyle {
    /// 自定义states 默认动画
    case custom(ModalAnimation)
 }
+
+public enum HorizontalPanPosition {
+    case center, leading, trailing
+}
+public enum VerticalPanPosition {
+    case center, top, bottom
+}
 /// showing的时候 in
 public struct PanPosition {
-    let horizontal: HorizontalPanPosition
-    let vertical: VerticalPanPosition
+    public let horizontal: HorizontalPanPosition
+    public let vertical: VerticalPanPosition
+    init(_ horizontal: HorizontalPanPosition, vertical: VerticalPanPosition) {
+        self.horizontal = horizontal
+        self.vertical = vertical
+    }
 }
+
 public extension PanPosition {
     func frame(size: CGSize, container: CGSize, state: ModalState) -> CGRect {
         var origin: CGPoint = .zero
@@ -240,25 +235,37 @@ public extension PanPosition {
     }
 }
 public extension PanPosition {
-    static func bottomToCenter(_ autoReverse: Bool) -> [ModalState: PanPosition] {
+    
+    static func fromLeftIn(_ autoReverse: Bool) -> [ModalState: PanPosition] {
         var states: [ModalState: PanPosition] = [:]
-        states[.willShow] = PanPosition(horizontal: .center, vertical: .bottom)
-        states[.show] = PanPosition(horizontal: .center, vertical: .center)
+        states[.willShow] = PanPosition(.leading, vertical: .center)
+        states[.show] = PanPosition(.leading, vertical: .center)
         if autoReverse {
             states[.hide] = states[.willShow]
         } else {
-            states[.hide] = PanPosition(horizontal: .center, vertical: .top)
+            states[.hide] = PanPosition(.leading, vertical: .center)
+        }
+        return states
+    }
+    static func bottomToCenter(_ autoReverse: Bool) -> [ModalState: PanPosition] {
+        var states: [ModalState: PanPosition] = [:]
+        states[.willShow] = PanPosition(.center, vertical: .bottom)
+        states[.show] = PanPosition(.center, vertical: .center)
+        if autoReverse {
+            states[.hide] = states[.willShow]
+        } else {
+            states[.hide] = PanPosition(.center, vertical: .top)
         }
         return states
     }
     static func topToCenter(_ autoReverse: Bool) -> [ModalState: PanPosition] {
         var states: [ModalState: PanPosition] = [:]
-        states[.willShow] = PanPosition(horizontal: .center, vertical: .top)
-        states[.show] = PanPosition(horizontal: .center, vertical: .center)
+        states[.willShow] = PanPosition(.center, vertical: .top)
+        states[.show] = PanPosition(.center, vertical: .center)
         if autoReverse {
             states[.hide] = states[.willShow]
         } else {
-            states[.hide] = PanPosition(horizontal: .center, vertical: .bottom)
+            states[.hide] = PanPosition(.center, vertical: .bottom)
         }
         return states
     }

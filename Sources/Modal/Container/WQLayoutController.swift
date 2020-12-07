@@ -17,11 +17,10 @@ public protocol WQLayoutControllerTransition: NSObjectProtocol {
     // interactive
     func interactive(dismiss controller: WQLayoutController)
     func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig)
-    
-    func interactive(update controller: WQLayoutController, progress: CGFloat, isModal: Bool)
-    
-    func interactive(finish controller: WQLayoutController, velocity: CGPoint, isModal: Bool)
-    func interactive(cancel controller: WQLayoutController, velocity: CGPoint, isModal: Bool)
+     
+    func interactive(update progress: CGFloat) 
+    func interactive(finish velocity: CGPoint)
+    func interactive(cancel velocity: CGPoint)
 } 
 @available(iOS 10.0, *)
 public class WQLayoutController: UIViewController {
@@ -62,14 +61,14 @@ public class WQLayoutController: UIViewController {
         if config.isShowWithNavigationController {
             addSnapshotView()
         }
-//        else {
-//            switch self.config.style {
-//            case .modalNavigation:
-//                addSnapshotView()
-//            default:
-//                break
-//            }
-//        }
+        else {
+            switch self.config.style {
+            case .modalNavigation:
+                addSnapshotView()
+            default:
+                break
+            }
+        }
     }
     lazy var tapGesture: UITapGestureRecognizer = {
         let gesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureAction(_:)))
@@ -92,7 +91,7 @@ public class WQLayoutController: UIViewController {
             self.context?.interactive(dismiss: self)
         break
         case .changed:
-            self.context?.interactive(update: self, progress: gesture.progress, isModal: false)
+            self.context?.interactive(update: gesture.progress)
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
             let fast: Bool
@@ -102,13 +101,13 @@ public class WQLayoutController: UIViewController {
                 fast = abs(velocity.y) > 200
             }
             if gesture.progress > 0.5 || fast {
-                self.context?.interactive(finish: self, velocity: velocity, isModal: false)
+                self.context?.interactive(finish: velocity)
             } else {
-                self.context?.interactive(cancel: self, velocity: velocity, isModal: false)
+                self.context?.interactive(cancel: velocity)
             }
         case .failed, .cancelled:
             let velocity = gesture.velocity(in: gesture.view)
-            self.context?.interactive(cancel: self, velocity: velocity, isModal: false)
+            self.context?.interactive(cancel: velocity)
         default:
             break
         }
@@ -140,14 +139,12 @@ public class WQLayoutController: UIViewController {
         dimmingView.frame = self.view.bounds  
     }
     public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
-//        statesConfig = states
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
         context?.show(self, statesConfig: states, completion: comletion)
     }
     
-    public func startInteractive(_ states: StyleConfig) {
-//        statesConfig = states
+    public func startInteractive(_ states: StyleConfig) { 
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
         context?.interactive(present: self, statesConfig: states)

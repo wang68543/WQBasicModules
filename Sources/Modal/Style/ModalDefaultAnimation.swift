@@ -10,9 +10,12 @@ import Foundation
 public class ModalDefaultAnimation: ModalAnimation {
  
     
-    public var areAnimationEnable: Bool = true
+    public var animationEnable: Bool = true
 
+    /// .zero 取context 里面默认的
     public var duration: TimeInterval = .zero
+    
+    public var isInteractive: Bool = false
     
     /// 这里只会调过来 两种ModalState
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
@@ -50,7 +53,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         }
         
         if state == .show {
-            if !self.areAnimationEnable { //不动画
+            if !self.animationEnable { //不动画
                 UIView.performWithoutAnimation {
                     if states.states.has(key: .didShow) {
                         states.states.setup(forState: .didShow)
@@ -61,25 +64,33 @@ public class ModalDefaultAnimation: ModalAnimation {
                 completion?()
             } else {
                 prepareStatesWithoutAnimation(.willShow)
-                if states.states.has(key: .didShow) {
-                    let keys: [ModalState] = [.show, .didShow]
-                    UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
-                        let unit = time/TimeInterval(keys.count)
-                        for index in 0..<keys.count {
-                            let keyFrame = keys[index]
-                            UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
-                                states.states.setup(forState: keyFrame)
-                            }
-                        }
-                    } completion: { flag in 
-                        completion?()
+                if self.isInteractive { // 交互显示(拖拽)
+                    if states.states.has(key: .didShow) {
+                        updateWithDefaultAnimation(.didShow)
+                    } else {
+                        updateWithDefaultAnimation(.show)
                     }
                 } else {
-                    updateWithDefaultAnimation(.show)
+                    if states.states.has(key: .didShow) {
+                        let keys: [ModalState] = [.show, .didShow]
+                        UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
+                            let unit = time/TimeInterval(keys.count)
+                            for index in 0..<keys.count {
+                                let keyFrame = keys[index]
+                                UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
+                                    states.states.setup(forState: keyFrame)
+                                }
+                            }
+                        } completion: { flag in
+                            completion?()
+                        }
+                    } else {
+                        updateWithDefaultAnimation(.show)
+                    }
                 }
             }
         } else {//隐藏
-            if !self.areAnimationEnable {
+            if !self.animationEnable {
                 UIView.performWithoutAnimation {
                     states.states.setup(forState: .hide) 
                 }

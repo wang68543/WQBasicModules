@@ -31,7 +31,7 @@ Pod::Spec.new do |s|
   
   
   s.subspec 'Core' do |ss|
-#      ss.dependency 'WQBasicModules/Function'
+      ss.dependency 'WQBasicModules/Modal'
       ss.dependency 'WQBasicModules/Animation'
       ss.dependency 'WQBasicModules/Extensions'
       ss.dependency 'WQBasicModules/Tool'
@@ -74,14 +74,13 @@ Pod::Spec.new do |s|
         end
 
     end
-
-    s.subspec 'Beta' do |ss|
-        ss.subspec 'TransitionStyle' do |sss|
-            sss.dependency 'WQBasicModules/UI/Help'
-            sss.dependency 'WQBasicModules/Extensions/Module'
-            sss.source_files = 'Sources/Animation/TransitionStyle/**/*.swift'
-        end
+    
+    s.subspec 'Modal' do |ss|
+        ss.dependency 'WQBasicModules/UI/Help'
+        ss.dependency 'WQBasicModules/Extensions/Module'
+        ss.source_files = 'Sources/Modal/**/*.swift'
     end
+    
     s.subspec 'Extensions' do |ss|
         ss.subspec 'Module' do |sss|
             sss.source_files = 'Sources/Extensions/Module/*.swift'
