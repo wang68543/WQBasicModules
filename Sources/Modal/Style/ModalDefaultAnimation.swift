@@ -36,7 +36,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         }
         //以默认的动画更新
         func updateWithDefaultAnimation(_ modalState: ModalState) {
-            UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews]) {
+            UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews, .curveEaseOut]) {
                 states.states.setup(forState: modalState)
             } completion: { flag in
                 // 移除动画的View

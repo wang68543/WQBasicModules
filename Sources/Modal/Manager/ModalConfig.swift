@@ -32,10 +32,10 @@ public class ModalConfig {
             }
         }
     }
-    deinit {
-        // 这里如果使用常量是不会释放的 例如: 下面的default
-        debugPrint("\(self):" + #function + "♻️")
-    }
+//    deinit {
+//        // 这里如果使用常量是不会释放的 例如: 下面的default
+//        debugPrint("\(self):" + #function + "♻️")
+//    }
 }
 public extension ModalConfig {
     static let `default` = ModalConfig() 

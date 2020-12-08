@@ -109,8 +109,7 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
             if (isPresented && !success) {
                 toVC.view.removeFromSuperview()
             }
-            transitionContext.completeTransition(success)
-            debugPrint("===context回调")
+            transitionContext.completeTransition(success) 
         }
         let toVCView = transitionContext.view(forKey: .to)
         let transitionView = transitionContext.containerView

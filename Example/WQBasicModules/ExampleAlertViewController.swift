@@ -138,10 +138,11 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        let config = ModalConfig(.modalSystem(self))
 //        let config = ModalConfig(.modalInParent(self))
 //        let config = ModalConfig(.modalNavigation(self.navigationController))
-        config.isShowWithNavigationController = true
+//        config.isShowWithNavigationController = true
         config.interactionDismiss = .pan(.toBottom)
 //        self.definesPresentationContext
-        alertSubView.wm.actionSheet(true, config: config)
+//        alertSubView.wm.actionSheet(true, config: config)
+        alertSubView.wm.alert(true, config: config)
 //        alertSubView.wm.alert(true)
 //        let postions = PanPosition.bottomToCenter(true)
 //        let style = StyleConfig(.pan(postions), anmation: .default)
@@ -158,7 +159,7 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        }
     }
     @objc func buttonAction(_ sender: UIButton) {
-        sender.superview?.wm.dismiss(style: true)
+        sender.superview?.wm.dismissal(true)
     }
     func show() {
 //        let size = CGSize(width: 300, height: 100)

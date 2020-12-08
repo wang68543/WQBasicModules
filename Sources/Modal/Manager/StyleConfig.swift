@@ -40,9 +40,9 @@ public class StyleConfig {
         } 
         states = sts
     }
-    deinit {
-        debugPrint("\(self):" + #function + "♻️")
-    }
+//    deinit {
+//        debugPrint("\(self):" + #function + "♻️")
+//    }
 }
 @available(iOS 10.0, *)
 public extension StyleConfig {
@@ -72,6 +72,7 @@ public extension StyleConfig {
                 references.combine([.willShow: willShowFrame])
                 references.combine(diming)
                 references.combine(tranforms)
+                references.combine(self.alertAlpha())
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
@@ -122,7 +123,14 @@ public extension StyleConfig {
         }
         return values
     }
-    
+    private func alertAlpha() -> [ModalState: ModalKeyPath] {
+        var values: [ModalState: ModalKeyPath] = [:]
+        values[.willShow] = ModalFloat(container: 0.0)
+        values[.show] = ModalFloat(container: 1.0)
+        values[.didShow] = ModalFloat(container: 1.0)
+        values[.hide] = values[.willShow]
+        return values
+    }
     private func alertTransform() -> [ModalState: ModalKeyPath] {
         let initalValue = CGAffineTransform(scaleX: 0.5, y: 0.5)
         let showValue = CGAffineTransform(scaleX: 1.05, y: 1.05)

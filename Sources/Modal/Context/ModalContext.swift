@@ -36,20 +36,25 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         animator = states.animator
         super.init()
     }
-    
+    /// 是否使用默认时间
+    private var isDefaultDuration: Bool = false
     // 动画的时间
     var animateDuration: TimeInterval {
-        guard self.animator.duration == .zero else {
-            return self.animator.duration
+        if self.animator.duration == .zero {
+            isDefaultDuration = true
         }
-        if self.isShow {
-            if self.styleConfig.states.has(key: .didShow) {
-                return 0.45
+        if isDefaultDuration {
+            if self.isShow {
+                if self.styleConfig.states.has(key: .didShow) {
+                    return 0.45
+                } else {
+                    return 0.25
+                }
             } else {
                 return 0.25
             }
         } else {
-            return 0.25 
+            return self.animator.duration
         }
     }
     
@@ -84,7 +89,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         self.animator.animationEnable = true
     }
     public func interactive(update progress: CGFloat) {
-        debugPrint("###########\(progress)")
+//        debugPrint("###########\(progress)")
     }
     public func interactive(finish velocity: CGPoint) {
         self.isInteractive = false
@@ -92,9 +97,9 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     public func interactive(cancel velocity: CGPoint) { 
         self.isInteractive = false
     }
-    deinit {
-       debugPrint("\(self):" + #function + "♻️")
-    }
+//    deinit {
+//       debugPrint("\(self):" + #function + "♻️")
+//    }
 }
 
 @available(iOS 10.0, *)

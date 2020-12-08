@@ -178,11 +178,11 @@ public class WQLayoutController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-//        #if WDEBUG
-        debugPrint("\(self):" + #function + "♻️")
-//        #endif
-    } 
+//    deinit {
+////        #if WDEBUG
+//        debugPrint("\(self):" + #function + "♻️")
+////        #endif
+//    } 
 }
 
 @available(iOS 10.0, *)
