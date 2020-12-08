@@ -5,35 +5,7 @@
 //  Created by WQ on 2019/11/28.
 //
 #if canImport(UIKit) && !os(watchOS)
-import Foundation
-public extension UINavigationBar {
-    struct AssociatedKeys {
-       static let styleRawValue = UnsafeRawPointer(bitPattern: "wq.navigationBar.styleRawValue".hashValue)!
-    }
-    /// 隐藏导航栏 KVC
-    var isHiddenShadow: Bool {
-        set {
-            if let value = value(forKey: "hidesShadow") as? Bool,
-              value != newValue {
-                self.setValue(newValue, forKey: "hidesShadow")
-            } 
-        }
-        get {
-            return (self.value(forKey: "hidesShadow") as? Bool) ?? false 
-        }
-    }
-    
-    /// 用于 保存当前UINavigationBar 的自定义风格 便于比较
-    var styleRawValue: Int {
-        set {
-            objc_setAssociatedObject(self, AssociatedKeys.styleRawValue, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-        get {
-            objc_getAssociatedObject(self, AssociatedKeys.styleRawValue) as? Int ?? -1
-        }
-    }
-}
-
+import Foundation 
 // MARK: - Methods
 public extension UINavigationBar {
 //    导航栏 滑动返回淡入淡出

@@ -95,7 +95,7 @@ public class WQLayoutController: UIViewController {
         case .ended:
             let velocity = gesture.velocity(in: gesture.view)
             let fast: Bool
-            if gesture.direction.isHorizontal {
+            if gesture.lockDirection.isHorizontal {
                 fast = abs(velocity.x) > 200
             } else {
                 fast = abs(velocity.y) > 200
@@ -125,7 +125,7 @@ public class WQLayoutController: UIViewController {
             tapGesture.delegate = self
             self.view.addGestureRecognizer(tapGesture)
         case let .pan(direction):
-            panGesture.direction = direction
+            panGesture.lockDirection = direction
             self.container.addGestureRecognizer(panGesture)
             break
         default:

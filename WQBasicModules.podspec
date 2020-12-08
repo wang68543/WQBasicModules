@@ -108,10 +108,7 @@ Pod::Spec.new do |s|
      s.subspec 'Tool' do |ss|
          ss.subspec 'Cache' do |sss|
              sss.source_files = 'Sources/Tool/Cache/*.swift'
-         end
-#         ss.subspec 'JsonCodable' do |sss|
-#            sss.source_files = 'Sources/Tool/JsonCodable/*.swift'
-#         end
+         end 
      end
      
      s.subspec 'UI' do |ss|

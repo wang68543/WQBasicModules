@@ -160,6 +160,7 @@ class ExampleAlertViewController: BaseExampleViewController {
     }
     @objc func buttonAction(_ sender: UIButton) {
         sender.superview?.wm.dismissal(true)
+        
     }
     func show() {
 //        let size = CGSize(width: 300, height: 100)
