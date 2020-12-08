@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.3.5'
+  s.version          = '0.3.6'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
@@ -108,7 +108,7 @@ Pod::Spec.new do |s|
      s.subspec 'Tool' do |ss|
          ss.subspec 'Cache' do |sss|
              sss.source_files = 'Sources/Tool/Cache/*.swift'
-         end 
+         end
      end
      
      s.subspec 'UI' do |ss|
