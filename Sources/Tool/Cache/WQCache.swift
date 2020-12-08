@@ -116,6 +116,7 @@ public class WQCache {
             return nil
         }
     }
+    
     deinit {
         pthread_rwlock_destroy(&lock)
     }

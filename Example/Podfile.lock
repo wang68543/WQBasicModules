@@ -1,61 +1,65 @@
 PODS:
-  - WQBasicModules (0.3.5):
-    - WQBasicModules/Core (= 0.3.5)
-  - WQBasicModules/Animation (0.3.5):
-    - WQBasicModules/Animation/Layer (= 0.3.5)
-    - WQBasicModules/Animation/Transitioning (= 0.3.5)
-    - WQBasicModules/Animation/Views (= 0.3.5)
-  - WQBasicModules/Animation/Layer (0.3.5)
-  - WQBasicModules/Animation/Transitioning (0.3.5):
+  - WQBasicModules (0.3.6):
+    - WQBasicModules/Core (= 0.3.6)
+  - WQBasicModules/Animation (0.3.6):
+    - WQBasicModules/Animation/Layer (= 0.3.6)
+    - WQBasicModules/Animation/Transitioning (= 0.3.6)
+    - WQBasicModules/Animation/Views (= 0.3.6)
+  - WQBasicModules/Animation/Layer (0.3.6)
+  - WQBasicModules/Animation/Transitioning (0.3.6):
     - WQBasicModules/Extensions/Module
     - WQBasicModules/UI/Help
-  - WQBasicModules/Animation/Views (0.3.5):
+  - WQBasicModules/Animation/Views (0.3.6):
     - WQBasicModules/Animation/Layer
-  - WQBasicModules/Core (0.3.5):
+  - WQBasicModules/Beta (0.3.6):
+    - WQBasicModules/Beta/Localize (= 0.3.6)
+  - WQBasicModules/Beta/Localize (0.3.6)
+  - WQBasicModules/Core (0.3.6):
     - WQBasicModules/Animation
     - WQBasicModules/Extensions
     - WQBasicModules/Modal
     - WQBasicModules/Tool
     - WQBasicModules/UI
-  - WQBasicModules/Extensions (0.3.5):
-    - WQBasicModules/Extensions/CoreGrapics (= 0.3.5)
-    - WQBasicModules/Extensions/Date (= 0.3.5)
-    - WQBasicModules/Extensions/Foundation (= 0.3.5)
-    - WQBasicModules/Extensions/Module (= 0.3.5)
-    - WQBasicModules/Extensions/String (= 0.3.5)
-    - WQBasicModules/Extensions/UIKit (= 0.3.5)
-  - WQBasicModules/Extensions/CoreGrapics (0.3.5)
-  - WQBasicModules/Extensions/Date (0.3.5):
+  - WQBasicModules/Extensions (0.3.6):
+    - WQBasicModules/Extensions/CoreGrapics (= 0.3.6)
+    - WQBasicModules/Extensions/Date (= 0.3.6)
+    - WQBasicModules/Extensions/Foundation (= 0.3.6)
+    - WQBasicModules/Extensions/Module (= 0.3.6)
+    - WQBasicModules/Extensions/String (= 0.3.6)
+    - WQBasicModules/Extensions/UIKit (= 0.3.6)
+  - WQBasicModules/Extensions/CoreGrapics (0.3.6)
+  - WQBasicModules/Extensions/Date (0.3.6):
     - WQBasicModules/Extensions/Foundation
-  - WQBasicModules/Extensions/Foundation (0.3.5)
-  - WQBasicModules/Extensions/Module (0.3.5)
-  - WQBasicModules/Extensions/String (0.3.5)
-  - WQBasicModules/Extensions/UIKit (0.3.5):
+  - WQBasicModules/Extensions/Foundation (0.3.6)
+  - WQBasicModules/Extensions/Module (0.3.6)
+  - WQBasicModules/Extensions/String (0.3.6)
+  - WQBasicModules/Extensions/UIKit (0.3.6):
     - WQBasicModules/Extensions/Module
-  - WQBasicModules/FunModule/ImagePicker (0.3.5)
-  - WQBasicModules/Modal (0.3.5):
+  - WQBasicModules/FunModule/ImagePicker (0.3.6)
+  - WQBasicModules/Modal (0.3.6):
     - WQBasicModules/Extensions/Foundation
     - WQBasicModules/Extensions/Module
     - WQBasicModules/UI/Help
-  - WQBasicModules/Tool (0.3.5):
-    - WQBasicModules/Tool/Cache (= 0.3.5)
-  - WQBasicModules/Tool/Cache (0.3.5)
-  - WQBasicModules/UI (0.3.5):
-    - WQBasicModules/UI/Custom (= 0.3.5)
-    - WQBasicModules/UI/FlowLayout (= 0.3.5)
-    - WQBasicModules/UI/Function (= 0.3.5)
-    - WQBasicModules/UI/Gesture (= 0.3.5)
-    - WQBasicModules/UI/Help (= 0.3.5)
-  - WQBasicModules/UI/Custom (0.3.5):
+  - WQBasicModules/Tool (0.3.6):
+    - WQBasicModules/Tool/Cache (= 0.3.6)
+  - WQBasicModules/Tool/Cache (0.3.6)
+  - WQBasicModules/UI (0.3.6):
+    - WQBasicModules/UI/Custom (= 0.3.6)
+    - WQBasicModules/UI/FlowLayout (= 0.3.6)
+    - WQBasicModules/UI/Function (= 0.3.6)
+    - WQBasicModules/UI/Gesture (= 0.3.6)
+    - WQBasicModules/UI/Help (= 0.3.6)
+  - WQBasicModules/UI/Custom (0.3.6):
     - WQBasicModules/Extensions/Module
-  - WQBasicModules/UI/FlowLayout (0.3.5)
-  - WQBasicModules/UI/Function (0.3.5)
-  - WQBasicModules/UI/Gesture (0.3.5)
-  - WQBasicModules/UI/Help (0.3.5):
+  - WQBasicModules/UI/FlowLayout (0.3.6)
+  - WQBasicModules/UI/Function (0.3.6)
+  - WQBasicModules/UI/Gesture (0.3.6)
+  - WQBasicModules/UI/Help (0.3.6):
     - WQBasicModules/Extensions/Module
 
 DEPENDENCIES:
   - WQBasicModules (from `../`)
+  - WQBasicModules/Beta (from `../`)
   - WQBasicModules/FunModule/ImagePicker (from `../`)
 
 EXTERNAL SOURCES:
@@ -63,8 +67,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 403e1a252f1684925bb98c05d00d07741fa4538a
+  WQBasicModules: f78518662deeed39489dcadc29ba6c1188d58987
 
-PODFILE CHECKSUM: 4a21daad0ac4dc00f2d23e144a5e583ceb4c70a8
+PODFILE CHECKSUM: 5bc279e13cd321b466cdedbd18a91cb0520e4620
 
 COCOAPODS: 1.10.0

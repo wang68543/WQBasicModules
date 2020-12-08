@@ -38,6 +38,20 @@ public extension UserDefault where T == Date {
         self.init(getter, setter: setter)
     }
 }
+public extension UserDefault where T == String {
+    init(_ key: String, default value: T, standard: UserDefaults = UserDefaults.standard) {
+        let setter: FunSetter = { standard.set($0, forKey: key) }
+        let getter: FunGetter = { standard.string(forKey: key) ?? value }
+        self.init(getter, setter: setter)
+    }
+}
+public extension UserDefault where T == Data? {
+    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+        let setter: FunSetter = { standard.set($0, forKey: key) }
+        let getter: FunGetter = { standard.data(forKey: key) }
+        self.init(getter, setter: setter)
+    }
+}
 public extension UserDefault where T == Int {
     init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }

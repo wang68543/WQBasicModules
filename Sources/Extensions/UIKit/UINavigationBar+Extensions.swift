@@ -26,7 +26,7 @@ public extension UINavigationBar {
     /// SwifterSwift: Make navigation bar transparent.
     ///
     /// - Parameter tint: tint color (default is .white).
-    //https://www.hangge.com/blog/cache/detail_2067.html
+    // https://www.hangge.com/blog/cache/detail_2067.html
     func makeTransparent(withTint tint: UIColor = .white) {
         isTranslucent = true
         backgroundColor = .clear

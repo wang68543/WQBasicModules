@@ -8,7 +8,7 @@
 import Foundation
  
 public extension UIView {
-    struct AssociatedKeys {
+   private struct AssociatedKeys {
         static let layoutFittingMaxmiumSize = UnsafeRawPointer(bitPattern: "wq.view.properties.layoutFittingMaxmiumSize".hashValue)!
     }
     var modalSize: CGSize {
