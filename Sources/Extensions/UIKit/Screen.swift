@@ -6,24 +6,26 @@
 //
 import Foundation
 #if canImport(UIKit)
-//#if canUse(UIApplication)
-//#if os(iOS)
-//#if targetEnvironment(iOSApplicationExtension)
-import UIKit
-@available(iOSApplicationExtension, unavailable)
+import UIKit 
 public struct Screen {
     public static let bounds = UIScreen.main.bounds
     public static let size = UIScreen.main.bounds.size
     public static let scale = UIScreen.main.scale
     public static let width = UIScreen.main.bounds.width
     public static let height = UIScreen.main.bounds.height
+    /// 主要用于适配小屏幕
+    public static let isWidth320 = width == 320
+    
     /// 1像素线条的宽度
     public static let lineWidth = 1 / UIScreen.main.scale
     /// 绘制1像素线条时候的偏移
     public static let lineAdjustOffset = (1 / UIScreen.main.scale) / 2
-    
-    /// 屏幕的 周边限制显示区域 (因为这里在非刘海屏上面首次) 
-    public static let safeAreaInsets: UIEdgeInsets = {
+}
+
+@available(iOSApplicationExtension, unavailable)
+public extension Screen {
+    /// 屏幕的 周边限制显示区域 (因为这里在非刘海屏上面首次)
+    static let safeAreaInsets: UIEdgeInsets = {
         var instets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
         if #available(iOS 11.0, tvOS 11.0, *) {
             #if targetEnvironment(macCatalyst)

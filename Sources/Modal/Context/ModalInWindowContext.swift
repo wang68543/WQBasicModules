@@ -21,7 +21,7 @@ public class WQModalWindow: UIWindow {
                 preKey.makeKeyAndVisible()
             }
         }
-        debugPrint("\(self):" + #function + "♻️")
+//        debugPrint("\(self):" + #function + "♻️")
     }
 }
 public extension WQModalWindow {

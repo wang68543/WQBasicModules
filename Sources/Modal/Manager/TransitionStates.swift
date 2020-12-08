@@ -116,9 +116,7 @@ public extension ModalState {
             return true
         }
     }
-}
-
-
+} 
 
 /// contentView的 最终显示方式
 public enum ModalShowStyle {
