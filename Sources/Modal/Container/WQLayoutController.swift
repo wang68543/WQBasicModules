@@ -209,29 +209,20 @@ extension WQLayoutController {
               let keyboardValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
-        if note.name == UIResponder.keyboardWillHideNotification {
+        guard note.name == UIResponder.keyboardWillChangeFrameNotification else {
             self.container.transform = .identity
-        } else {
-            var keyboardEndFrame = view.convert(keyboardValue, from: view.window)
-            keyboardEndFrame.origin.y = keyboardEndFrame.origin.y - self.config.adjustOffsetDistanceKeyboard
-            
-            let intersection = self.container.frame.intersection(keyboardEndFrame)
-            if self.container.transform.isIdentity {
-                if !intersection.isNull {
-                    let transform = CGAffineTransform(translationX: .zero, y: -intersection.height)
-                    self.container.transform = transform
-                }
-                // 未遮挡
-            } else {
-                if intersection.isNull {
-                    self.container.transform = .identity
-                } else {
-                    let transform = CGAffineTransform(translationX: .zero, y: -intersection.height)
-                    self.container.transform = transform
-                }
-            }
-            
+            return
         }
+        var keyboardEndFrame = view.convert(keyboardValue, from: view.window)
+        keyboardEndFrame.origin.y = keyboardEndFrame.origin.y - self.config.adjustOffsetDistanceKeyboard
+        
+        let intersection = self.container.frame.intersection(keyboardEndFrame)
+        guard !intersection.isNull else {
+            self.container.transform = .identity
+            return
+        }
+        let transform = CGAffineTransform(translationX: .zero, y: -intersection.height)
+        self.container.transform = transform
     }
     
 }
