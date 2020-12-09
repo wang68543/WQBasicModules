@@ -115,7 +115,9 @@ public class WQLayoutController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.addGesture()
+        self.addKeyboardObserver()
     }
+    
     
     private func addGesture() {
         switch self.config.interactionDismiss {
@@ -178,13 +180,60 @@ public class WQLayoutController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    deinit {
-////        #if WDEBUG
+    deinit {
+        removeKeyboardObserver()
+//        #if WDEBUG
 //        debugPrint("\(self):" + #function + "♻️")
-////        #endif
-//    } 
+//        #endif
+    }
 }
-
+// MARK: - --Keyboard KVO
+@available(iOS 10.0, *)
+extension WQLayoutController {
+    /// 添加键盘通知
+    func addKeyboardObserver() {
+        let center = NotificationCenter.default
+        center.addObserver(self, selector: #selector(adjustForKeyboard(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        center.addObserver(self, selector: #selector(adjustForKeyboard(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeKeyboardObserver() {
+        let center = NotificationCenter.default
+        center.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        center.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func adjustForKeyboard(_ note: Notification) {
+        guard let userInfo = note.userInfo,
+              let keyboardValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        if note.name == UIResponder.keyboardWillHideNotification {
+            self.container.transform = .identity
+        } else {
+            var keyboardEndFrame = view.convert(keyboardValue, from: view.window)
+            keyboardEndFrame.origin.y = keyboardEndFrame.origin.y - self.config.adjustOffsetDistanceKeyboard
+            
+            let intersection = self.container.frame.intersection(keyboardEndFrame)
+            if self.container.transform.isIdentity {
+                if !intersection.isNull {
+                    let transform = CGAffineTransform(translationX: .zero, y: -intersection.height)
+                    self.container.transform = transform
+                }
+                // 未遮挡
+            } else {
+                if intersection.isNull {
+                    self.container.transform = .identity
+                } else {
+                    let transform = CGAffineTransform(translationX: .zero, y: -intersection.height)
+                    self.container.transform = transform
+                }
+            }
+            
+        }
+    }
+    
+}
 @available(iOS 10.0, *)
 extension WQLayoutController: UIGestureRecognizerDelegate {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {

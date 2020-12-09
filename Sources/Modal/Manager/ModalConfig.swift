@@ -23,6 +23,9 @@ public class ModalConfig {
     /// 导航控制器的类型 默认
     public var navgationControllerType = UINavigationController.self
     
+    /// 当有键盘的时候 键盘距离底部的距离
+    public var adjustOffsetDistanceKeyboard: CGFloat = .zero
+    
     public init(_ style: ModalPresentation = .autoModal) {
         self.style = style
         if let viewController = style.fromViewController { 
