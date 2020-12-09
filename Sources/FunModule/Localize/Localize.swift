@@ -33,29 +33,29 @@ open class Localize {
    
     /// App 当前需要使用的语言
     public var currentLanguage: String {
-        let languages = availableLanguages(true)
-        let language = trackSystemLanguage ? systemLanguage : userLanguage ?? defaultLanguage
-        
+        let availables = availableLanguages(true)
+        let lan = trackSystemLanguage ? systemLanguage : userLanguage ?? defaultLanguage
+        guard let language = lan,
+              !availables.isEmpty else {
+            return availables.first ?? "en"
+        } 
         if self.isIngnoreRegionForUnkownLanguage { // 模糊查找
-            if let lan = language {
-                if languages.contains(lan) {
-                    return lan
-                } else if let index = languages.firstIndex(where: {$0.hasPrefix(lan)}) {
-                    return languages[index]
-                } else {
-                    if let pre = lan.components(separatedBy: "-").first,
-                       let index = languages.firstIndex(where: { $0.components(separatedBy: "-").first == pre }) {
-                        return languages[index]
-                    }
+            if availables.contains(language) {
+                return language
+            } else if let index = availables.firstIndex(where: {$0.hasPrefix(language)}) {
+                return availables[index]
+            } else {
+                if let pre = language.components(separatedBy: "-").first,
+                   let index = availables.firstIndex(where: { $0.components(separatedBy: "-").first == pre }) {
+                    return availables[index]
                 }
             }
         } else {
-            if let lan = language,
-               languages.contains(lan) {
-                return lan
+            if availables.contains(language) { // 精确查找 未找到使用 可用的第一个
+                return language
             }
         }
-        return languages.first ?? "en" // 所有的语言都没有 默认英文
+        return availables.first! // 所有的语言都没有 默认英文
     }
     /// 用户选择的语言(主要用于App内自己设置语言)
     public var userLanguage: String? {
