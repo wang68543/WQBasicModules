@@ -58,6 +58,7 @@ public class WQLayoutController: UIViewController {
                 self.backgroundView = snapshotView
             }
         }
+        // 制作假透明场景
         if config.isShowWithNavigationController {
             addSnapshotView()
         }
