@@ -28,6 +28,7 @@ open class Localize {
     open func register(_ bundleCls: AnyClass = LocalizeBundle.self) {
         object_setClass(Bundle.main, bundleCls)
     }
+    
     public private(set) var currentBundle: Bundle?
    
     /// App 当前需要使用的语言
