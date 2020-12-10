@@ -11,9 +11,9 @@ open class Localize {
     private static let defaultLanguageKey = "UserLocalizeDefaultLanguage"
     private static let userLanguageKey = "UserLocalizeLanguage"
     public static let LLanguageDidChangeNotification = Notification.Name("LLanguageDidChangeNotification")
-    static let shared = Localize()
+    public static let shared = Localize()
     /// 是否是跟随App系统设置里面的语言
-    public var trackSystemLanguage: Bool = false {
+    public var trackSystemLanguage: Bool = true {
         didSet {
             setCurrentBundle()
         }
@@ -62,14 +62,15 @@ open class Localize {
         set {
             UserDefaults.standard.set(newValue, forKey: Localize.userLanguageKey)
             UserDefaults.standard.synchronize()
-            setCurrentBundle()
+            /// 禁止跟随系统语言
+            self.trackSystemLanguage = false
         }
         get {
             return UserDefaults.standard.string(forKey: Localize.userLanguageKey)
         }
     }
     
-    /// 缺省语言
+    /// 缺省语言 当没有对应的时候
     public var defaultLanguage: String? {
         set {
             UserDefaults.standard.set(newValue, forKey: Localize.defaultLanguageKey)

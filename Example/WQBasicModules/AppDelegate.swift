@@ -52,7 +52,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //            debugPrint(formatter.string(from: storage))
 //        }
       
-        
+        Localize.shared.register()
+        debugPrint("测试".localized)
         return true
     }
     
