@@ -61,20 +61,15 @@
       }
     },
     {
-      "name": "Beta",
-      "subspecs": [
-        {
-          "name": "Localize",
-          "source_files": "Sources/FunModule/Localize/*.swift"
-        }
-      ]
-    },
-    {
       "name": "FunModule",
       "subspecs": [
         {
           "name": "ImagePicker",
           "source_files": "Sources/FunModule/ImagePicker/*.swift"
+        },
+        {
+          "name": "Localize",
+          "source_files": "Sources/FunModule/Localize/*.swift"
         }
       ]
     },
