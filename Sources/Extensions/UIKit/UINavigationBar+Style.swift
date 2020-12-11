@@ -5,7 +5,7 @@
 //  Created by iMacHuaSheng on 2020/12/8.
 //
 #if canImport(UIKit) && !os(watchOS)
-import Foundation
+import Foundation 
 
 public struct UINavigationBarStyle: RawRepresentable, Equatable {
     public typealias RawValue = String
@@ -15,11 +15,16 @@ public struct UINavigationBarStyle: RawRepresentable, Equatable {
         self.rawValue = rawValue
     } 
 }
+
 public extension UINavigationBarStyle {
     static let none = UINavigationBarStyle(rawValue: "none")
     /// 透明
     static let translucent = UINavigationBarStyle(rawValue: "translucent")
+    
+    /// 白色
+    static let white = UINavigationBarStyle(rawValue: "white")
 }
+
 
 public extension UINavigationBar {
     private struct AssociatedKeys {
