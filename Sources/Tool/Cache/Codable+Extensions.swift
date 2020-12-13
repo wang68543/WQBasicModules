@@ -25,8 +25,8 @@ import Foundation
 
 public extension Decodable {
     /// 从缓存中读取
-    static func readValue(_ stand: UserDefaults = UserDefaults.standard,
-                          decoder: JSONDecoder = JSONDecoder(),
+    static func readValue(_ stand: UserDefaults = .standard,
+                          decoder: JSONDecoder = .init(),
                           with ext: String = "") throws -> Self? {
         let name = String(describing: self)
         let key = userDefaultsCacheKey(name, with: ext)
@@ -35,7 +35,7 @@ public extension Decodable {
     }
     
     /// 转为模型或者转为
-    static func model(from data: Data, decoder: JSONDecoder = JSONDecoder(), in key: String? = nil) throws -> Self {
+    static func model(from data: Data, decoder: JSONDecoder = .init(), in key: String? = nil) throws -> Self {
         if let kStr = key {
             let obj = try JSONSerialization.jsonObject(with: data, options: [])
             return try self.model(from: obj, decoder: decoder, in: kStr)
@@ -64,7 +64,7 @@ public extension Decodable {
         #endif
     }
     /// 转为
-    static func model(from json: Any, decoder: JSONDecoder = JSONDecoder(), in key: String? = nil) throws -> Self {
+    static func model(from json: Any, decoder: JSONDecoder = .init(), in key: String? = nil) throws -> Self {
         if let data = json as? Data {
             return try self.model(from: data, decoder: decoder, in: key)
         } else {
@@ -86,8 +86,8 @@ public extension Decodable {
 }
 public extension Encodable {
     /// 存储数值到UserDefault中
-    func saveValue(_ stand: UserDefaults = UserDefaults.standard,
-                   encoder: JSONEncoder = JSONEncoder(),
+    func saveValue(_ stand: UserDefaults = .standard,
+                   encoder: JSONEncoder = .init(),
                    with ext: String = "") throws {
         let data = try encoder.encode(self)
         let name = String(describing: type(of: self))
@@ -96,7 +96,7 @@ public extension Encodable {
     }
     
     /// 当前模型转为Data
-    func data(_ encoder: JSONEncoder = JSONEncoder()) throws -> Data {
+    func toJSON(_ encoder: JSONEncoder = .init()) throws -> Data {
         #if !DEBUG
         return try encoder.encode(self)
         #else
@@ -109,8 +109,8 @@ public extension Encodable {
         #endif
     }
     /// 转为jsonString
-    func jsonString(_ encoder: JSONEncoder = JSONEncoder(), encoding: String.Encoding = .utf8) throws -> String? {
-        let data = try self.data(encoder)
+    func toJSONString(_ encoder: JSONEncoder = .init(), encoding: String.Encoding = .utf8) throws -> String? {
+        let data = try self.toJSON(encoder)
         return String(data: data, encoding: encoding)
     }
 }
