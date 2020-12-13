@@ -7,133 +7,134 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		010A259BF3267FF0CFE815F537BC3B29 /* WQTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4048844CD7BA2D250FBDAB7BA7812 /* WQTextView.swift */; };
-		0481336DE0D95097BE5EE481EF6D6DC3 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF471C52FE1DB3BA60244427BBEE1310 /* UIView+Extensions.swift */; };
-		0526C88D39A58A99A47BB6054E34DCD9 /* WQPanBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC1C92811B9FFE846D35071EC80CA77 /* WQPanBehavior.swift */; };
-		06A3CCC4632DC6F2C1CBEFB41CF78D46 /* UIButton+CountDwon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EC7806C5E53261CDC0240E0B9BC94 /* UIButton+CountDwon.swift */; };
-		0AE7D0EB56222B1AE14883DBD3A8A0DC /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = C298E9B49229BEBC367DE9DE314C89E7 /* Date+Format.swift */; };
-		0C4D4399C2E57D9876322B344CAD64D3 /* ModalKeyPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2592DB940CF97D8A64AFC1E3761F7724 /* ModalKeyPath+Extensions.swift */; };
-		0D43A1A00581EC54AAA9431E096A531C /* WQDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94EC1C35C4C79EC32DA412BE83F69AD /* WQDateFormatter.swift */; };
-		0EEB7AD77F02AD20B0C30C20EC6FA9A1 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF21F7340BCF227DD2604DC86805BEF /* UIImageView+Extensions.swift */; };
-		0F914E6C41323C0834A4CDD533C4C49A /* Date+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F111D85D459E31A4FBCD050D39B4D8 /* Date+Utilities.swift */; };
-		11E9FA52CA40558F8196A6A15E4C8478 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D4651625ED2F47F81417553DB5FA2 /* UINavigationBar+Extensions.swift */; };
-		12C217CDE7C1F490BD7533FC30D911B6 /* NotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1621B57AC9F6C578453F2786F4643E /* NotificationCenter+Extensions.swift */; };
-		170AFA7ABFC4E10CBE63A226ECC36236 /* ModalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658CF17991D9DCAC4E0413F25A1F5BFD /* ModalConfig.swift */; };
-		1A4E2CB6041B64700903EEFA084052D9 /* UIView+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC516093BAFB9585D48C82CBF035D51E /* UIView+Modal.swift */; };
-		1D4BFCAF7EE290CF70DB2AAE9F40ECA1 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1900FE4ADD629B76AA0F28B691055BAD /* Calendar+Extensions.swift */; };
-		1DFF1D93533C262B96FD3A434933F734 /* OneFingerRotationGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2702DF199F033F3B4959C187575E17 /* OneFingerRotationGestureRecognizer.swift */; };
-		27042F4D1BC89DF7CF0F1D316D676D9F /* WQModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D53F68FADAEFE3501D536A1DACFF396 /* WQModules.swift */; };
-		28BBB92CC860C0252DE0D10351ADEC55 /* UIView+WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477150F601666C9C24779E6F4866373C /* UIView+WQUIHelp.swift */; };
+		06E3F1655C8FEC0D8693D455CD08206C /* WQLayoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB57FEA563DDDA481287BA27E4D5E9 /* WQLayoutController.swift */; };
+		0C570B800FE294C80E17D7F6E0318BB1 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD6D4747E177E1D571D9091452EA30F /* UIButton+Extensions.swift */; };
+		0DBA504804685571DFAAC6F5889DA8CB /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4893A0F3612597617A6EE22B2E75F4 /* TransitionContext.swift */; };
+		0E328573FD79FBABF678A163030CC232 /* WQContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33B30793EC848E29EA500275C13943A /* WQContainerView.swift */; };
+		0F6AF1EB6736B14CA240C1FD67AB3EA7 /* ModalInWindowContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F939A2409762D576A941EA9076A8A1D0 /* ModalInWindowContext.swift */; };
+		1089566A7945590F7126F3DA2E778189 /* TransitionStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791ED3357EA8466824A6FA09E651B83 /* TransitionStates.swift */; };
+		12608703953D5685D99A4E416099CFBD /* InteractDismissMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4792811C8842F8044CAAAE3B01A7B91 /* InteractDismissMode.swift */; };
+		16C48D646378EC906189374629031A45 /* FileManager+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C09D05E03B89644276922238064E94B /* FileManager+Path.swift */; };
+		16FA090F24DEE7C73A069D7ED86AF63D /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97B1746C4933008C5095871D12950CC /* Bundle+Extensions.swift */; };
+		1853F0A571C0EA8A2CA029EC97E842D0 /* UserDefaults+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30884B4302FDEEE3176C135AAE835E7 /* UserDefaults+Wrapper.swift */; };
+		216815571B62A4307522187DD08F008A /* UITextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF79C1BB6CD3893438CED18D6CBBB21 /* UITextView+Extensions.swift */; };
+		23F37AE9544536D351DD5C05455B0AA0 /* WQFlexLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FDF72625AAE04A2ACFC165E299E7FE /* WQFlexLayoutAttributes.swift */; };
+		26D83C729B4A8428B0B9A5C34D36EBD6 /* WQTransitionAnimator+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898BFB3302CB69E76BA04CF6CC1237A /* WQTransitionAnimator+Convenience.swift */; };
+		29BCFC3C6253693E502EEE37577A96F6 /* OneFingerRotationGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C2702DF199F033F3B4959C187575E17 /* OneFingerRotationGestureRecognizer.swift */; };
+		2A49BFD37DA1DD59FF7FEC001138D1D5 /* Data+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3449DAA16D4D58700EAFA7246436FF63 /* Data+Security.swift */; };
 		2B49831E49E42E97F0062BF4BD140F9C /* Pods-WQBasicModules_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 35AEBA25FD7D6B61A2F477F20AF7CD8C /* Pods-WQBasicModules_Example-dummy.m */; };
-		2CDF2B0F8A7AAB4882BFCEFA71C29A37 /* FileManager+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C09D05E03B89644276922238064E94B /* FileManager+Path.swift */; };
-		2FAC866AE1013FE140755C171120ECF3 /* WQTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E52EC4132D7D90D6375CFEA32851D48 /* WQTextField.swift */; };
-		305A1620FA4ED0BADEA096F3FC0199F1 /* WQFlexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92DD37A700A9549336F20673C00A641 /* WQFlexable.swift */; };
-		3109C1BA922AB57B6AB697B98666B777 /* LocalizeBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2896A0DD4A974AEAF0D98D8CE5DBBC87 /* LocalizeBundle.swift */; };
-		31D4605113A5F06357FFFEB6758AD2A2 /* WQKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147B29EA532C7CF806A0DA2A29A6324 /* WQKeyboardManager.swift */; };
-		32893DF4571FD9E27523849AD3B7E46B /* UIViewController+WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2C96208426484D19BC3F38833BBCDA /* UIViewController+WQUIHelp.swift */; };
-		3498FE8A829E29BEC3EFA62FB2C29851 /* WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B180F140D082D505EC38D0CF7CCB /* WQUIHelp.swift */; };
-		34D84DD488A65352609D098554055753 /* WQWebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4445D7E4A5AAA7EB2D0A36C776DE8053 /* WQWebController.swift */; };
-		35F7CB2705BE927261B3E1EE41B9F842 /* WQMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94A2E2599B8FBBC636D8B5BA774811F /* WQMemoryCache.swift */; };
-		3668DA16C49F2B1C038B8767C8A6F130 /* InteractDismissMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4792811C8842F8044CAAAE3B01A7B91 /* InteractDismissMode.swift */; };
-		369774ECD92A3A6F5DE1AC3644BEFD4A /* ScreenAdaptation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9C93DF0FE0A7156477F9563D67F20E /* ScreenAdaptation.swift */; };
-		378D4DD734307ABA9BB4145935ADCFC5 /* WQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AC6C0874485C3E73BE4DA923F132E7 /* WQWebView.swift */; };
-		39EB377FA8C6BDBC5675A5E38BEB152E /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975C0B80B6CC31696E1C1BCEB87499CE /* UIWindow+Extensions.swift */; };
-		3AAC2ED9245BCC5003EE80CC6B21603C /* UserDefaults+Wrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A30884B4302FDEEE3176C135AAE835E7 /* UserDefaults+Wrapper.swift */; };
-		3D281C11970EB343B124416C4F2757D4 /* WQTransitionWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8289508220033853E8F9E2D251E36 /* WQTransitionWindow.swift */; };
-		424E8760FD0102301D89F411609DFB5A /* WQArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698414918C8F5A612B778472D134C4AD /* WQArchive.swift */; };
-		42A7D1D9F9D4AD0A2DA2C5EA50161A65 /* Geometric+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B712C9400D9445A67B97511784D154 /* Geometric+Utils.swift */; };
-		46B08EB08E8696050D9334CB677D5D93 /* ModalPresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFDFFFCCBC43DDD864B464A06736C4C /* ModalPresentationContext.swift */; };
-		48B53455E7E417A60BDD44A2E21B0A39 /* WQStarControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCF8818C4115E5085C6CFCC009F652B /* WQStarControl.swift */; };
-		4B0DD44D9E0BDB5C854E91C60F41772F /* PageViewController+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C7E97428C5885D87BBA3AD72936B60 /* PageViewController+UIScrollViewDelegate.swift */; };
-		53DDFB4D7D3F711E2D95295BF69FC171 /* WQTransitionAnimatedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6129FB5606184160656E64C025C8EE0B /* WQTransitionAnimatedItem.swift */; };
-		561AC4207A7C7A58CE23A6D2D9A684DA /* ModalAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC91FCA527759ED41EBBAA2D7133D639 /* ModalAnimation.swift */; };
-		5C8C901E19CBFFBB8ED951C956672953 /* ModalInParentContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1B9A2FF430CC43006140B25662956C /* ModalInParentContext.swift */; };
-		5F3BBC45402ACB66B0892121D4D13A69 /* WQLayoutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB57FEA563DDDA481287BA27E4D5E9 /* WQLayoutController.swift */; };
-		5FE80CBD0948598B2A43D6E7B8CD46F4 /* WQFlexbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD0A0743B2E71CE2373280FA1B8EE9 /* WQFlexbox.swift */; };
-		60849CCE946C665CACFFC27B05A64673 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CDB3E094DAB8BC7579FE1393F71CA4 /* UITableView+Extensions.swift */; };
-		6143B93FA160FE22B8B9C41F519EFF78 /* UIImage+Cutting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F71E2742EEF6EA85C527BCC7326B9A6 /* UIImage+Cutting.swift */; };
-		6226A3E3E3FE92C23B597A1D1EB7CB5E /* WQAutoIncreaseTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186E27CDDAE4D9BF3254F8D48FDB515B /* WQAutoIncreaseTextView.swift */; };
-		637F3902C739472D33CCB2BBC3865A82 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B8F33B31C9E096DE090B21623B3764 /* UIDevice+Extensions.swift */; };
-		65366A7A27C434B633BE3D3845421A6D /* TransitionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4893A0F3612597617A6EE22B2E75F4 /* TransitionContext.swift */; };
-		6654E1BAEB95E37AD0B5811E6EDBD8E0 /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F11133CE61D31296CD85B9C0592AB6 /* Path.swift */; };
-		6680823069C4E418A561CEE7CE1DFFCF /* UISearchBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AF469D5E9C358F57BFF769045F7D8 /* UISearchBar+Extensions.swift */; };
-		693271F2272389186466C5E501EEE72A /* SerialShowQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4248D7815636610CCB428B575C6C034 /* SerialShowQueue.swift */; };
-		696818E16596B8DB3982E1FCE961A2FF /* Bundle+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97B1746C4933008C5095871D12950CC /* Bundle+Extensions.swift */; };
-		6A2C864C62F92C5B8100FBF589385E6E /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17491958242336C8FDE3455500ED1F56 /* Localize.swift */; };
-		6B05FD625F3C711AF41F13E4463B3AC4 /* ModalContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D73D52CFF4DCA150C434E906CFE955 /* ModalContext.swift */; };
-		6B47AD89497ED9FA5AD38E56C288E8D6 /* ModalDefaultAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8F89CD6C4911A670428859680D5E6B /* ModalDefaultAnimation.swift */; };
-		6DA4CF992EBD24D461D208175DFDA07D /* Codable+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049153FF665055F1C4EF96DDA49811B /* Codable+Default.swift */; };
-		6E4A4AFA7F86BFD21C769DA2F26ABEF1 /* UINavigationBar+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C657EADAB542B5A83247AEB8E0EF59 /* UINavigationBar+Style.swift */; };
-		742EB934EE3A0BDEB2E38879754804E3 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2B730CDA3B9D03784F67B77D564AE8 /* Screen.swift */; };
-		750E84F3DF8093BB038DE9E77E3527A1 /* CodableDefaultValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38BDF0B9FCDAC0D829C0AA9C2C7E401 /* CodableDefaultValueProvider.swift */; };
-		77F7E35CAE93E9F9DB274520C766966F /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F351A61311ACA77BD48D2DBE86E1C4 /* Dictionary+Extensions.swift */; };
-		78FC98273F1F5020ACC6D82B7B081FE7 /* WQAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DFA1594225C5D2670A157FB3B1297 /* WQAlertView.swift */; };
-		7A02FC62B544FD14CA59E5F71E4D46C7 /* WQPropertyDriven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F309F3B388E329D31AF848A65CDF /* WQPropertyDriven.swift */; };
-		7D86EC3907C3B4FFF5E7055FB96A495C /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D2896AA4180D2449669324EAE89E8D /* String+Regex.swift */; };
-		85B29CA458E13AD50060B999B97F9D36 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDA87905C49E9FA1E821A98B12AEA37 /* String+Extensions.swift */; };
-		875C611561D3CC62F387F9A2EFD1D395 /* TransitionStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = A791ED3357EA8466824A6FA09E651B83 /* TransitionStates.swift */; };
-		8790A1BDB7E225AE72DAFD772333FA28 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E099DE823F86F52F148799B9D1E60EA /* PageViewController.swift */; };
-		8C6ED711D6DA58BF8F1C1865112B1D4C /* WQBasicModules-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 548570E174F49DC7B727B59877C7A5ED /* WQBasicModules-dummy.m */; };
-		8F5568F027F63F4539431FB84260309B /* ModalKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD8B932DEB9704C34D2F8629F466C90 /* ModalKeyPath.swift */; };
-		8FB6CE891614BF6DB1975CAD68DDC8DE /* UIView+Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8982F6F26BF8B403EAA9D9FBB8C1DC15 /* UIView+Transitionable.swift */; };
-		969E96244682370E37A0C95253B2D1FA /* WQContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33B30793EC848E29EA500275C13943A /* WQContainerView.swift */; };
-		9B6DE51B0D58BFF66DC65B36E46D5FA7 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5880F8814FBF7B46D6E760E3D8AD7345 /* UserDefaults+Extensions.swift */; };
-		9C2D442F5568248E2E4C83D77300E130 /* WQTransitionAnimator+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0898BFB3302CB69E76BA04CF6CC1237A /* WQTransitionAnimator+Convenience.swift */; };
-		9C518A921406406C94AB227783247F6E /* WQTransitionAnimatedItem+Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A031AE78B320A40B0DC99DCBD80EA16 /* WQTransitionAnimatedItem+Transitionable.swift */; };
-		9F24428F445B8472F51BD54DDC643FB5 /* WQTransitionDriven.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94C9AB8BEAEB103D8A0F09E8361986C /* WQTransitionDriven.swift */; };
-		9F57635AB7C32C9501E8F09476D82EE3 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABD6D4747E177E1D571D9091452EA30F /* UIButton+Extensions.swift */; };
-		9FB3BE868FE3A01DE53765943521E9C4 /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7741D634ABBBBC95BDF1A04B73FBE45 /* UIImageView+Animations.swift */; };
-		A291B270675078386F5FE71EBB580E5A /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B88B83BDCED543B8CDFBA9DAAB4708 /* URL+Extensions.swift */; };
-		A3CFD3D0F40A8595B3D617B2CA4C875B /* ModalInWindowContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = F939A2409762D576A941EA9076A8A1D0 /* ModalInWindowContext.swift */; };
-		A66CC74B63CA483F0E6FFA3377FF97E5 /* UITextView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF79C1BB6CD3893438CED18D6CBBB21 /* UITextView+Extensions.swift */; };
+		2BDB818E6EE831BA8F13B6249AF6F5A3 /* WQTransitionAnimator+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76C566E900416D1F47AFD04A6FFD6 /* WQTransitionAnimator+Style.swift */; };
+		30CC60F9C369A52798B6D9F99420BD50 /* SerialShowTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A1A7ACDE69F56A7DEC57CB841CD382 /* SerialShowTransition.swift */; };
+		332D46C10032C048CC0D1BF3F23B54DC /* WQDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F94EC1C35C4C79EC32DA412BE83F69AD /* WQDateFormatter.swift */; };
+		3681DB014BC5C8AC12FA46BE7539F490 /* WQButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B981BB77604937B6312E8B27EEC1D /* WQButton.swift */; };
+		36A8B82C0E8F5F13EADA82A487F8BC38 /* WQTransitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B37C784F28E7860A9159FE237C748 /* WQTransitionable.swift */; };
+		3C5D43460A76D470761C06612C957ED7 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276BA3B9763D3906EB39F510B17189C1 /* UIApplication+Extensions.swift */; };
+		3FA389B4D647B36A56C9CD3F6902F61B /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688A5D364C8C3BBC72F1EE334168EC8 /* UILabel+Extensions.swift */; };
+		3FE7B5C5E70DCC45F356ECFF403AA47E /* ModalDefaultAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8F89CD6C4911A670428859680D5E6B /* ModalDefaultAnimation.swift */; };
+		41FA882D778527CD9FB4ED076385252B /* NSPredicate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC96E572DF4F5B72C4696F405B13A4B /* NSPredicate+Extensions.swift */; };
+		472D808EF7DA73E3333ED64D46E64161 /* WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B180F140D082D505EC38D0CF7CCB /* WQUIHelp.swift */; };
+		49D0EBCD356998128204F5CD1C7C4F60 /* Date+Format.swift in Sources */ = {isa = PBXBuildFile; fileRef = C298E9B49229BEBC367DE9DE314C89E7 /* Date+Format.swift */; };
+		4A281DFD1DC1F70C33B3314B178F6D28 /* Calendar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1900FE4ADD629B76AA0F28B691055BAD /* Calendar+Extensions.swift */; };
+		4C7C8C3F77C37A2BA5B8F7079F3B88E7 /* WQTransitionable+ContainerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B578B981A293CB6B54536D5BC9E56DE /* WQTransitionable+ContainerNavigation.swift */; };
+		52036D54A12E0CC6E076FA5CB010003F /* CodableDefaultValueProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38BDF0B9FCDAC0D829C0AA9C2C7E401 /* CodableDefaultValueProvider.swift */; };
+		529E311C9B027E61A0BD770960929B4F /* String+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801A684419B150741DA118F83F098CAC /* String+Security.swift */; };
+		5616B7940E6BE09A1954060A1FEA88F8 /* PanDirectionGestureRecongnizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EE18E73232064D082F311F87083428 /* PanDirectionGestureRecongnizer.swift */; };
+		5635BE3B8225F75016E1F18D858FF79F /* UITabBarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FEC35A743AC1658EDC5EE3876C854 /* UITabBarExtensions.swift */; };
+		5CE7682E45C06A8BE1680B5ADB9B0D34 /* WQTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E52EC4132D7D90D6375CFEA32851D48 /* WQTextField.swift */; };
+		5D08C089A04AE573262CE56B5683FE43 /* Date+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F111D85D459E31A4FBCD050D39B4D8 /* Date+Utilities.swift */; };
+		5F30A4FC2BB38D7812B82FC3398DD1B4 /* WQTransitionAnimatedItem+Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A031AE78B320A40B0DC99DCBD80EA16 /* WQTransitionAnimatedItem+Transitionable.swift */; };
+		62E60AF848F5F4838E17890742F5D1A8 /* UIImageView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7741D634ABBBBC95BDF1A04B73FBE45 /* UIImageView+Animations.swift */; };
+		654A8E391F108B26E5F67BE73DAA8066 /* WQStarControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BCF8818C4115E5085C6CFCC009F652B /* WQStarControl.swift */; };
+		663CA26F301D2DD7C914A3992D265F86 /* Geometric+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41B712C9400D9445A67B97511784D154 /* Geometric+Utils.swift */; };
+		69FA0B1B3A514340CACB08487C46EED9 /* UINavigationBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605D4651625ED2F47F81417553DB5FA2 /* UINavigationBar+Extensions.swift */; };
+		69FBE50AEACD463E8A5CB9D1CAAC8920 /* WQModules.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D53F68FADAEFE3501D536A1DACFF396 /* WQModules.swift */; };
+		6E18EE98E78E10010464D660946D58C4 /* WQTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44E4048844CD7BA2D250FBDAB7BA7812 /* WQTextView.swift */; };
+		6EBBD9517922179C9369D7B3FAC44C28 /* ModalContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D73D52CFF4DCA150C434E906CFE955 /* ModalContext.swift */; };
+		6F2524AF15CE6E0182F0843709D68C59 /* LocalizeBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 728410337CCFC74937BD309595B70C1E /* LocalizeBundle.swift */; };
+		7071E70778F1BA3089AA68EE56DA89FF /* WQFlexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92DD37A700A9549336F20673C00A641 /* WQFlexable.swift */; };
+		70CDADE9BE299D1BA25835061F564DA8 /* WQMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94A2E2599B8FBBC636D8B5BA774811F /* WQMemoryCache.swift */; };
+		73A92F81A3DE25FDE6D0C5FFEDA89D31 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7909A00FDFA5D969A6B76E1133F8D88 /* Data+Extensions.swift */; };
+		740AB284AB75E825E8C113B5829DF781 /* ModalInParentContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1B9A2FF430CC43006140B25662956C /* ModalInParentContext.swift */; };
+		7776B07F8B4F841B069B443E8349F5E5 /* WQBasicModules-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFA3C4DB33DE0967C02B00BC5C42CBB /* WQBasicModules-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		79C0C871E53DB95E495BA44E78FAC263 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F389835B5C40278DBCF09C58298A5DA /* UIViewController+Extensions.swift */; };
+		7E72E1C93603631CA68F1AFCD23BDE03 /* String+Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61375E01B99B536B7AF6B8C12A98E9D6 /* String+Localize.swift */; };
+		7F14789C6CED14866863CE581D9D19E3 /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BBE6137D2C510C212CC4E8CB99F671 /* UITableViewCell+Extensions.swift */; };
+		82009D4559880F44C77EC44E0770EB0F /* UISearchBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B7AF469D5E9C358F57BFF769045F7D8 /* UISearchBar+Extensions.swift */; };
+		835416FB79D3056802193F6D888CD558 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B6DD0EF9B9BAEF64C8B26F7BD880E6 /* UITextField+Extensions.swift */; };
+		84366E46C5BA829ED545AC5334AD5981 /* UITableView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76CDB3E094DAB8BC7579FE1393F71CA4 /* UITableView+Extensions.swift */; };
+		84EC28271467B9E30BA88AD3C64CB87E /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF471C52FE1DB3BA60244427BBEE1310 /* UIView+Extensions.swift */; };
+		85F368F6DD4C6575C18EE4A0C6552DE4 /* UIView+WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 477150F601666C9C24779E6F4866373C /* UIView+WQUIHelp.swift */; };
+		86CDFFC0AAC2ACCB8C434C9B7EEDFB1D /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46526ADF45A62A9FE449333908B67FAB /* NSAttributedString+Extensions.swift */; };
+		878E92709A717EEFBCB6BC5A400ACD4C /* ModalAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC91FCA527759ED41EBBAA2D7133D639 /* ModalAnimation.swift */; };
+		89415BB1CE7854A69F25771007CA3F43 /* UIImage+Cutting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F71E2742EEF6EA85C527BCC7326B9A6 /* UIImage+Cutting.swift */; };
+		89556BF36C78634574EFA20935C84F87 /* WQTransitionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28B6FF018B2DDB707F94BA636F4867B /* WQTransitionOption.swift */; };
+		8CC2EB24F25421FBE1FE69A6961AF186 /* WQTransitionDriven.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94C9AB8BEAEB103D8A0F09E8361986C /* WQTransitionDriven.swift */; };
+		8D4301191E477FA5422074A302C1D272 /* WQCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD31D00B5EB3CC46473FCE78E0526A3A /* WQCache.swift */; };
+		8E4D66CA27884B216A91C1D0E49F0173 /* IBDesignable+Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 722DF5733B7530F8581B8626A9E8B816 /* IBDesignable+Localize.swift */; };
+		8E73950174B6974E3116C39FDF5F4087 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5880F8814FBF7B46D6E760E3D8AD7345 /* UserDefaults+Extensions.swift */; };
+		8EB106185C244646564973AF04B691AC /* UIViewController+WQUIHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E2C96208426484D19BC3F38833BBCDA /* UIViewController+WQUIHelp.swift */; };
+		8F3ED36B3E7F3345369768740267F895 /* Date+Convenience .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F0ADB4937BD3DA0BDE2E74AA73758 /* Date+Convenience .swift */; };
+		9120830F066A3F631D61062F3A611EB3 /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF21F7340BCF227DD2604DC86805BEF /* UIImageView+Extensions.swift */; };
+		9214E3DFE829DDDA19177CBF6272BF2C /* UIButton+CountDwon.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2EC7806C5E53261CDC0240E0B9BC94 /* UIButton+CountDwon.swift */; };
+		9419292EED0C5051D6038040B8A1A26C /* Codable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D720FF82C5317949D555CF6D378C1 /* Codable+Extensions.swift */; };
+		952A52B85349B4311EA4C9119155C9E5 /* UIColor+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45EB2CE36EE84D2178C0F8742FD11C5 /* UIColor+Utilities.swift */; };
+		978B45AA89EC676E8E2C596F3C2272E0 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E099DE823F86F52F148799B9D1E60EA /* PageViewController.swift */; };
+		9C7DE1DD712CE8F264975DDB4D80C8A5 /* Codable+Default.swift in Sources */ = {isa = PBXBuildFile; fileRef = B049153FF665055F1C4EF96DDA49811B /* Codable+Default.swift */; };
+		9DBA236E5ABD2DB565010426F4D8C362 /* UIDevice+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B8F33B31C9E096DE090B21623B3764 /* UIDevice+Extensions.swift */; };
+		9DCFEEC1CA8B178AD9F180260273AEE2 /* ModalKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD8B932DEB9704C34D2F8629F466C90 /* ModalKeyPath.swift */; };
+		9F0D0C1048DFBB77E5B35273BECC7B9E /* WQKeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5147B29EA532C7CF806A0DA2A29A6324 /* WQKeyboardManager.swift */; };
+		A0F32A5FE95B057CF4E19BF0945C835E /* WQTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C7DCB72DD3B1C7579CC75D8AEB236 /* WQTransitionAnimator.swift */; };
+		A403FFC1D0C9FF14557D6D25B24A2657 /* WQTransitionWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B8289508220033853E8F9E2D251E36 /* WQTransitionWindow.swift */; };
+		A43E8A77D4B196B24DC62F3BC27FE19E /* UINavigationBar+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C657EADAB542B5A83247AEB8E0EF59 /* UINavigationBar+Style.swift */; };
+		A6097EEE0D48BD5B1C294EA918CC7F9D /* ModalPresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFDFFFCCBC43DDD864B464A06736C4C /* ModalPresentationContext.swift */; };
 		A6A0E257F6A2C0DE2D91A7A2E402A48D /* Pods-WQBasicModules_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B01041401E034001BF86DBF71A8322FA /* Pods-WQBasicModules_Tests-dummy.m */; };
-		A8DE34D5B390769B6B4662CC217544F8 /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46526ADF45A62A9FE449333908B67FAB /* NSAttributedString+Extensions.swift */; };
-		ABF951C521632C8DD38381566CCDE09A /* WQFlexLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36FDF72625AAE04A2ACFC165E299E7FE /* WQFlexLayoutAttributes.swift */; };
-		ACC564784EEC3803EEF104B81B9DB7D9 /* Data+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7909A00FDFA5D969A6B76E1133F8D88 /* Data+Extensions.swift */; };
-		B4552D9AD6A75250FD6E8CFFBEE4806D /* CALayer+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A7C7CEBDD5B8362EE63937D805682A /* CALayer+Animations.swift */; };
-		B50C87B45C83BEFFBBB7D6F2FC21C351 /* WQButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B981BB77604937B6312E8B27EEC1D /* WQButton.swift */; };
-		B912AFC4D793BA16B35AAC5B2C4DD1DA /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F389835B5C40278DBCF09C58298A5DA /* UIViewController+Extensions.swift */; };
-		BABDE41AEC6D36F8DFE5C0DD5459E22C /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6A6F31257BD37E583673B090A510D6 /* UIImage+Extensions.swift */; };
-		BDA4E97E75EDC028C61A0998E2F48A5E /* UITabBarExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 438FEC35A743AC1658EDC5EE3876C854 /* UITabBarExtensions.swift */; };
-		C022D9F8C11A103894C3690FA0BDEF6D /* DispatchQueue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA23A6F7255593095A1DD3013485B2D /* DispatchQueue+Extensions.swift */; };
-		C7727A8F4421515688C3875E598E7C63 /* WQTransitionAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507C7DCB72DD3B1C7579CC75D8AEB236 /* WQTransitionAnimator.swift */; };
-		CB91E462319343C907BEDC9B250DA154 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8B6DD0EF9B9BAEF64C8B26F7BD880E6 /* UITextField+Extensions.swift */; };
-		D0AADEE87EE494615F9C234ECC87AC00 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698B72FBC1550605DBA60311F9D83A0 /* UINavigationController+Extensions.swift */; };
-		D277FE66653368FB8943FF871C9F21FF /* WQCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD31D00B5EB3CC46473FCE78E0526A3A /* WQCache.swift */; };
+		AC2ED36B9BAFCA07AFA7AA69C804C493 /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975C0B80B6CC31696E1C1BCEB87499CE /* UIWindow+Extensions.swift */; };
+		AD76A1F160B2B881DA16A7427BA50E7A /* WQWebController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4445D7E4A5AAA7EB2D0A36C776DE8053 /* WQWebController.swift */; };
+		B55622623545E0FAE1FB5A9C12365815 /* PageViewController+UIScrollViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9C7E97428C5885D87BBA3AD72936B60 /* PageViewController+UIScrollViewDelegate.swift */; };
+		B7E7966604E1E80F0494763B06E2C36A /* StyleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66216F9B9B080B5738B83368BA9E6EC5 /* StyleConfig.swift */; };
+		B8D4C16EB4B0A7247E90D2DE62A432B7 /* UIView+Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC516093BAFB9585D48C82CBF035D51E /* UIView+Modal.swift */; };
+		BB0C41CF197A22CFCA5311ED9466E0F4 /* Dictionary+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F351A61311ACA77BD48D2DBE86E1C4 /* Dictionary+Extensions.swift */; };
+		BD418F61DC9CB90F3F1F310FB97687B1 /* CALayer+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A7C7CEBDD5B8362EE63937D805682A /* CALayer+Animations.swift */; };
+		CE368F1E9B4D4E342FD49F73B792CBA2 /* String+Regex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0D2896AA4180D2449669324EAE89E8D /* String+Regex.swift */; };
+		CFF0D095B66204A2CF07CDF4D998DE4D /* Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F11133CE61D31296CD85B9C0592AB6 /* Path.swift */; };
+		D016F03CD635B377FBBBB7F776E279CD /* ScreenAdaptation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9C93DF0FE0A7156477F9563D67F20E /* ScreenAdaptation.swift */; };
+		D1741143DD6FB00329E7278EA9C61B68 /* WQKeyboardManager+Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716D6ECCACAE7C8A3557C9FF86E29BF3 /* WQKeyboardManager+Values.swift */; };
+		D23BB7E30A222D12BC4F400AFE04538F /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6698B72FBC1550605DBA60311F9D83A0 /* UINavigationController+Extensions.swift */; };
+		D2E45D1DA3EC47EC1731C34AF24F5C81 /* NotificationCenter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF1621B57AC9F6C578453F2786F4643E /* NotificationCenter+Extensions.swift */; };
 		D55562D3CC6113B19A93DDBB2B5BF614 /* Pods-WQBasicModules_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0D2E19E293A871B143B89A4F40FE8C9D /* Pods-WQBasicModules_Example-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D733BF3E0D7F19571B055A13BBF90891 /* WQKeyboardManager+Values.swift in Sources */ = {isa = PBXBuildFile; fileRef = 716D6ECCACAE7C8A3557C9FF86E29BF3 /* WQKeyboardManager+Values.swift */; };
-		D736B07768315E46DFF206A8C5926CFF /* WQTransitionable+ContainerNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B578B981A293CB6B54536D5BC9E56DE /* WQTransitionable+ContainerNavigation.swift */; };
-		D9077F071C43E63D9ECB78F06ADC74CC /* WQBasicModules-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BFA3C4DB33DE0967C02B00BC5C42CBB /* WQBasicModules-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D92F76A487468BB624E376B5BB9B7260 /* Date+Convenience .swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F0ADB4937BD3DA0BDE2E74AA73758 /* Date+Convenience .swift */; };
-		D9AC17BBD0209DE7332606D4F852CDAA /* UIVIewController+SelectPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DABEEF96198DCD1CF307AA64444FE8DC /* UIVIewController+SelectPicture.swift */; };
-		DAF8350D0111998F20F2E1E7272F3DE1 /* ModalNavigationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B218182A0EC053B9E0764CD31C242E2 /* ModalNavigationContext.swift */; };
-		DE78C71577A32814FFEED826C1510B3E /* SerialShowTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72A1A7ACDE69F56A7DEC57CB841CD382 /* SerialShowTransition.swift */; };
-		DF6EB7F70F0E82E9BEF47D1AB59E505F /* UIColor+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45EB2CE36EE84D2178C0F8742FD11C5 /* UIColor+Utilities.swift */; };
-		E39A0B3D755AD4F72D7DB17955DD2B88 /* PanDirectionGestureRecongnizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10EE18E73232064D082F311F87083428 /* PanDirectionGestureRecongnizer.swift */; };
-		E4233099DC931BE035B6D991023350B2 /* WQTransitionAnimator+Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD76C566E900416D1F47AFD04A6FFD6 /* WQTransitionAnimator+Style.swift */; };
-		E4DCD68E14BB47E6254A3BB32D49CE7B /* UITableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BBE6137D2C510C212CC4E8CB99F671 /* UITableViewCell+Extensions.swift */; };
-		E60A4C2C56F0A9383B28210589F061CE /* String+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801A684419B150741DA118F83F098CAC /* String+Security.swift */; };
-		E6AB756089471603894495B9DABC4641 /* NSPredicate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FC96E572DF4F5B72C4696F405B13A4B /* NSPredicate+Extensions.swift */; };
-		E82F048AE0544D2DB980488079F05146 /* StyleConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66216F9B9B080B5738B83368BA9E6EC5 /* StyleConfig.swift */; };
-		F11A6A943C5F76A31FDA17E6F8907F71 /* WQTransitionOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = A28B6FF018B2DDB707F94BA636F4867B /* WQTransitionOption.swift */; };
-		F355614F0D95F6A2908DF8FC23CA91E2 /* Codable+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0D720FF82C5317949D555CF6D378C1 /* Codable+Extensions.swift */; };
-		F53C3D1FFD583C3EC04AC1CB2037572B /* WQTransitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D0B37C784F28E7860A9159FE237C748 /* WQTransitionable.swift */; };
-		F786E7C7ADD8C6F64818EC1030FCE8D8 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276BA3B9763D3906EB39F510B17189C1 /* UIApplication+Extensions.swift */; };
-		F924EFAFB8F432D425AB72F49DFFBD0D /* Data+Security.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3449DAA16D4D58700EAFA7246436FF63 /* Data+Security.swift */; };
-		F96D2A3C73AE40EA782770FDCDB4D399 /* String+Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B1F5A4075DD66EA3EE2430C3EA180E /* String+Localize.swift */; };
-		FCF9F7CDA1DD8B17EE809E7C65EE3600 /* WQTransitionable+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71CE3BDFFA38F2E1282C985992A706 /* WQTransitionable+Transition.swift */; };
-		FE2CD4930034F0C6A1F24EED370A10F6 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C688A5D364C8C3BBC72F1EE334168EC8 /* UILabel+Extensions.swift */; };
+		D7A02ACC8E2E0762A28A5DEE0C027E06 /* ModalKeyPath+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2592DB940CF97D8A64AFC1E3761F7724 /* ModalKeyPath+Extensions.swift */; };
+		DF3E73DABA847E52115FA58969D9C276 /* WQAutoIncreaseTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186E27CDDAE4D9BF3254F8D48FDB515B /* WQAutoIncreaseTextView.swift */; };
+		E0DE40A27C1FD662F43ACA928D310BD5 /* WQBasicModules-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 548570E174F49DC7B727B59877C7A5ED /* WQBasicModules-dummy.m */; };
+		E21A9C0FF057B837806F9F47DE02C309 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F6A6F31257BD37E583673B090A510D6 /* UIImage+Extensions.swift */; };
+		E7F6EB442CD3EE44704E0692B700BC93 /* ModalConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658CF17991D9DCAC4E0413F25A1F5BFD /* ModalConfig.swift */; };
+		E96EBC15683C114F9647DC24BA13C6A1 /* WQAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A85DFA1594225C5D2670A157FB3B1297 /* WQAlertView.swift */; };
+		EB6088E0B2B411B637851E548FAC73E7 /* DispatchQueue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BA23A6F7255593095A1DD3013485B2D /* DispatchQueue+Extensions.swift */; };
+		EE34316DA0E81DB32AD34AADFEADBAF0 /* Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2B730CDA3B9D03784F67B77D564AE8 /* Screen.swift */; };
+		EE90E8D761CB90D41186582F7F185DB3 /* WQTransitionable+Transition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B71CE3BDFFA38F2E1282C985992A706 /* WQTransitionable+Transition.swift */; };
+		EFD69FE192E5A1EDD8BE3B11B031C17E /* WQWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AC6C0874485C3E73BE4DA923F132E7 /* WQWebView.swift */; };
+		F04F8754100A284726AE57D6BE47AA49 /* WQArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698414918C8F5A612B778472D134C4AD /* WQArchive.swift */; };
+		F068EDD021635AA66B760A4D7E104B8D /* WQPanBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC1C92811B9FFE846D35071EC80CA77 /* WQPanBehavior.swift */; };
+		F28B22897D2E7D3BABBC425EFFE9D667 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B88B83BDCED543B8CDFBA9DAAB4708 /* URL+Extensions.swift */; };
+		F37B1D0E86C162E234497955552A6647 /* WQFlexbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCAD0A0743B2E71CE2373280FA1B8EE9 /* WQFlexbox.swift */; };
+		F5350CA2799D200C561D8DCD9536B003 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFDA87905C49E9FA1E821A98B12AEA37 /* String+Extensions.swift */; };
+		F7D393F15BB14CD975EAF730FF0360EE /* UIVIewController+SelectPicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFF0D4DD9E7F9494FCAB3F087418E414 /* UIVIewController+SelectPicture.swift */; };
+		F81EF8E8286BE368BF441E14E9E40AD6 /* SerialShowQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4248D7815636610CCB428B575C6C034 /* SerialShowQueue.swift */; };
+		F992F32ABF9FEDF3440362CD5886CBBF /* WQTransitionAnimatedItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6129FB5606184160656E64C025C8EE0B /* WQTransitionAnimatedItem.swift */; };
+		F9D10EB551E0F5DE02B6A84FA173F976 /* WQPropertyDriven.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9908F309F3B388E329D31AF848A65CDF /* WQPropertyDriven.swift */; };
+		F9E795A04BE86234ED2D33FA128C8D4A /* UIView+Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8982F6F26BF8B403EAA9D9FBB8C1DC15 /* UIView+Transitionable.swift */; };
+		FAFCE7EEB3930DFCCE1593691BCB0A79 /* Localize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A741FC7E23AC6D2A6EBA9E2553B2603 /* Localize.swift */; };
+		FB150DDBFE214CEA6F324547BE140ED5 /* ModalNavigationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B218182A0EC053B9E0764CD31C242E2 /* ModalNavigationContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		337440957B22ACA74B4BBCEABFE749BE /* PBXContainerItemProxy */ = {
+		785FF40CEC02FCC4CFD69CD8555A7902 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 5EC73C139A36272D22D1274666CCF988;
 			remoteInfo = WQBasicModules;
 		};
-		C0706BA2E89DA0A8E8A2A41D746F0CB7 /* PBXContainerItemProxy */ = {
+		F7BCE279EED711A7B27E5F8FEDB4A1FD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
@@ -149,7 +150,6 @@
 		0E099DE823F86F52F148799B9D1E60EA /* PageViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PageViewController.swift; path = Sources/UI/Function/PageViewController.swift; sourceTree = "<group>"; };
 		0FC96E572DF4F5B72C4696F405B13A4B /* NSPredicate+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "NSPredicate+Extensions.swift"; path = "Sources/Extensions/Foundation/NSPredicate+Extensions.swift"; sourceTree = "<group>"; };
 		10EE18E73232064D082F311F87083428 /* PanDirectionGestureRecongnizer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PanDirectionGestureRecongnizer.swift; sourceTree = "<group>"; };
-		17491958242336C8FDE3455500ED1F56 /* Localize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Localize.swift; path = Sources/FunModule/Localize/Localize.swift; sourceTree = "<group>"; };
 		186E27CDDAE4D9BF3254F8D48FDB515B /* WQAutoIncreaseTextView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQAutoIncreaseTextView.swift; path = Sources/UI/Custom/WQAutoIncreaseTextView.swift; sourceTree = "<group>"; };
 		1900FE4ADD629B76AA0F28B691055BAD /* Calendar+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Calendar+Extensions.swift"; path = "Sources/Extensions/Date/Calendar+Extensions.swift"; sourceTree = "<group>"; };
 		1BCF8818C4115E5085C6CFCC009F652B /* WQStarControl.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQStarControl.swift; path = Sources/UI/Custom/WQStarControl.swift; sourceTree = "<group>"; };
@@ -158,9 +158,9 @@
 		1FACECB32F2EE7F20153415C63ABDB86 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
 		2592DB940CF97D8A64AFC1E3761F7724 /* ModalKeyPath+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ModalKeyPath+Extensions.swift"; sourceTree = "<group>"; };
 		276BA3B9763D3906EB39F510B17189C1 /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIApplication+Extensions.swift"; path = "Sources/Extensions/UIKit/UIApplication+Extensions.swift"; sourceTree = "<group>"; };
-		2896A0DD4A974AEAF0D98D8CE5DBBC87 /* LocalizeBundle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalizeBundle.swift; path = Sources/FunModule/Localize/LocalizeBundle.swift; sourceTree = "<group>"; };
 		2932CDB70A515106C24E9AF6CA2ABD7C /* WQBasicModules.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = WQBasicModules.debug.xcconfig; sourceTree = "<group>"; };
 		2A6C49C8C35CBE0CEF82E5F2FCC4F6A9 /* libPods-WQBasicModules_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-WQBasicModules_Tests.a"; path = "libPods-WQBasicModules_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A741FC7E23AC6D2A6EBA9E2553B2603 /* Localize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Localize.swift; path = Sources/FunModule/Localize/Localize.swift; sourceTree = "<group>"; };
 		2E52EC4132D7D90D6375CFEA32851D48 /* WQTextField.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTextField.swift; path = Sources/UI/Custom/WQTextField.swift; sourceTree = "<group>"; };
 		3449DAA16D4D58700EAFA7246436FF63 /* Data+Security.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Data+Security.swift"; path = "Sources/Extensions/Foundation/Data+Security.swift"; sourceTree = "<group>"; };
 		35AEBA25FD7D6B61A2F477F20AF7CD8C /* Pods-WQBasicModules_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-WQBasicModules_Example-dummy.m"; sourceTree = "<group>"; };
@@ -192,6 +192,7 @@
 		5F8F89CD6C4911A670428859680D5E6B /* ModalDefaultAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModalDefaultAnimation.swift; sourceTree = "<group>"; };
 		605D4651625ED2F47F81417553DB5FA2 /* UINavigationBar+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UINavigationBar+Extensions.swift"; path = "Sources/Extensions/UIKit/UINavigationBar+Extensions.swift"; sourceTree = "<group>"; };
 		6129FB5606184160656E64C025C8EE0B /* WQTransitionAnimatedItem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitionAnimatedItem.swift; path = Sources/Animation/Transitioning/WQTransitionAnimatedItem.swift; sourceTree = "<group>"; };
+		61375E01B99B536B7AF6B8C12A98E9D6 /* String+Localize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Localize.swift"; path = "Sources/FunModule/Localize/String+Localize.swift"; sourceTree = "<group>"; };
 		63CCBA45F18FF037BBCE05F8417A3F93 /* Pods-WQBasicModules_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-WQBasicModules_Example-resources.sh"; sourceTree = "<group>"; };
 		658CF17991D9DCAC4E0413F25A1F5BFD /* ModalConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ModalConfig.swift; sourceTree = "<group>"; };
 		66216F9B9B080B5738B83368BA9E6EC5 /* StyleConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StyleConfig.swift; sourceTree = "<group>"; };
@@ -206,8 +207,9 @@
 		6D0B37C784F28E7860A9159FE237C748 /* WQTransitionable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitionable.swift; path = Sources/Animation/Transitioning/WQTransitionable.swift; sourceTree = "<group>"; };
 		6D4F0ADB4937BD3DA0BDE2E74AA73758 /* Date+Convenience .swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Date+Convenience .swift"; path = "Sources/Extensions/Date/Date+Convenience .swift"; sourceTree = "<group>"; };
 		716D6ECCACAE7C8A3557C9FF86E29BF3 /* WQKeyboardManager+Values.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "WQKeyboardManager+Values.swift"; path = "Sources/UI/Help/WQKeyboardManager+Values.swift"; sourceTree = "<group>"; };
+		722DF5733B7530F8581B8626A9E8B816 /* IBDesignable+Localize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "IBDesignable+Localize.swift"; path = "Sources/FunModule/Localize/IBDesignable+Localize.swift"; sourceTree = "<group>"; };
+		728410337CCFC74937BD309595B70C1E /* LocalizeBundle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LocalizeBundle.swift; path = Sources/FunModule/Localize/LocalizeBundle.swift; sourceTree = "<group>"; };
 		72A1A7ACDE69F56A7DEC57CB841CD382 /* SerialShowTransition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SerialShowTransition.swift; path = Sources/Animation/Transitioning/SerialShowTransition.swift; sourceTree = "<group>"; };
-		76B1F5A4075DD66EA3EE2430C3EA180E /* String+Localize.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "String+Localize.swift"; path = "Sources/FunModule/Localize/String+Localize.swift"; sourceTree = "<group>"; };
 		76CDB3E094DAB8BC7579FE1393F71CA4 /* UITableView+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UITableView+Extensions.swift"; path = "Sources/Extensions/UIKit/UITableView+Extensions.swift"; sourceTree = "<group>"; };
 		7EFF4E7FBBA0E668B354CAD5877ED945 /* Pods-WQBasicModules_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-WQBasicModules_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		7F6A6F31257BD37E583673B090A510D6 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+Extensions.swift"; path = "Sources/Extensions/UIKit/UIImage+Extensions.swift"; sourceTree = "<group>"; };
@@ -262,7 +264,7 @@
 		D33B30793EC848E29EA500275C13943A /* WQContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WQContainerView.swift; sourceTree = "<group>"; };
 		D6C657EADAB542B5A83247AEB8E0EF59 /* UINavigationBar+Style.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UINavigationBar+Style.swift"; path = "Sources/Extensions/UIKit/UINavigationBar+Style.swift"; sourceTree = "<group>"; };
 		D94C9AB8BEAEB103D8A0F09E8361986C /* WQTransitionDriven.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WQTransitionDriven.swift; path = Sources/Animation/Transitioning/WQTransitionDriven.swift; sourceTree = "<group>"; };
-		DABEEF96198DCD1CF307AA64444FE8DC /* UIVIewController+SelectPicture.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIVIewController+SelectPicture.swift"; path = "Sources/FunModule/ImagePicker/UIVIewController+SelectPicture.swift"; sourceTree = "<group>"; };
+		DFF0D4DD9E7F9494FCAB3F087418E414 /* UIVIewController+SelectPicture.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIVIewController+SelectPicture.swift"; path = "Sources/FunModule/ImagePicker/UIVIewController+SelectPicture.swift"; sourceTree = "<group>"; };
 		E38BDF0B9FCDAC0D829C0AA9C2C7E401 /* CodableDefaultValueProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CodableDefaultValueProvider.swift; path = Sources/Tool/Cache/CodableDefaultValueProvider.swift; sourceTree = "<group>"; };
 		E6571685DE7E73515D8725E959BE8F16 /* libPods-WQBasicModules_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-WQBasicModules_Example.a"; path = "libPods-WQBasicModules_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8B88B83BDCED543B8CDFBA9DAAB4708 /* URL+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "URL+Extensions.swift"; path = "Sources/Extensions/Foundation/URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -284,13 +286,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0346339E9ED9643A2CF8984415650176 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		6B133C884DFDCF65BD31754A26A58E23 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -299,6 +294,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		8931CDC98333682CCBCAB55ACFC4E784 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EAAE2B61897651C5DDFD550F48FC664C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -426,6 +428,14 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
+		55AFDDD8FCA003E5C29EFDE50C057F77 /* ImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				DFF0D4DD9E7F9494FCAB3F087418E414 /* UIVIewController+SelectPicture.swift */,
+			);
+			name = ImagePicker;
+			sourceTree = "<group>";
+		};
 		5816EF10C0D0ABCBC9752C0E9C4C3CE8 /* Cache */ = {
 			isa = PBXGroup;
 			children = (
@@ -470,15 +480,6 @@
 			name = Gesture;
 			sourceTree = "<group>";
 		};
-		71A539B8518CE546C26E1937AED6AE92 /* FunModule */ = {
-			isa = PBXGroup;
-			children = (
-				9D5EE720BD511BF9267C8EE85D39836C /* ImagePicker */,
-				D7BC7FE2A8441152D575D6D1B4398658 /* Localize */,
-			);
-			name = FunModule;
-			sourceTree = "<group>";
-		};
 		78791A02DAF9B5660DA5AD16041CA132 /* Layer */ = {
 			isa = PBXGroup;
 			children = (
@@ -487,12 +488,21 @@
 			name = Layer;
 			sourceTree = "<group>";
 		};
+		7C116FE59FC5BFF84B7A6CC23324E79D /* FunModule */ = {
+			isa = PBXGroup;
+			children = (
+				55AFDDD8FCA003E5C29EFDE50C057F77 /* ImagePicker */,
+				941D0AB1773A70AB5A2126D69C1E70C9 /* Localize */,
+			);
+			name = FunModule;
+			sourceTree = "<group>";
+		};
 		7CDB8AC28E113D3E5F32895522CB06E3 /* WQBasicModules */ = {
 			isa = PBXGroup;
 			children = (
 				2366A46739B059FF1FFB2E6E1922061B /* Animation */,
 				175504B3E2C966D7441FBBD633CFF1DA /* Extensions */,
-				71A539B8518CE546C26E1937AED6AE92 /* FunModule */,
+				7C116FE59FC5BFF84B7A6CC23324E79D /* FunModule */,
 				446258E2DE95913E1B2FBE664A25181A /* Modal */,
 				45AF8B648ABD061F7A1A5F7DF815B0E0 /* Pod */,
 				EFD53C170BC28637E9668D3AE9901558 /* Support Files */,
@@ -576,12 +586,15 @@
 			path = Sources/Modal/ViewModal;
 			sourceTree = "<group>";
 		};
-		9D5EE720BD511BF9267C8EE85D39836C /* ImagePicker */ = {
+		941D0AB1773A70AB5A2126D69C1E70C9 /* Localize */ = {
 			isa = PBXGroup;
 			children = (
-				DABEEF96198DCD1CF307AA64444FE8DC /* UIVIewController+SelectPicture.swift */,
+				722DF5733B7530F8581B8626A9E8B816 /* IBDesignable+Localize.swift */,
+				2A741FC7E23AC6D2A6EBA9E2553B2603 /* Localize.swift */,
+				728410337CCFC74937BD309595B70C1E /* LocalizeBundle.swift */,
+				61375E01B99B536B7AF6B8C12A98E9D6 /* String+Localize.swift */,
 			);
-			name = ImagePicker;
+			name = Localize;
 			sourceTree = "<group>";
 		};
 		A116FA9D8F3028CB4F91A6D0BBEA4006 /* Manager */ = {
@@ -680,16 +693,6 @@
 			name = String;
 			sourceTree = "<group>";
 		};
-		D7BC7FE2A8441152D575D6D1B4398658 /* Localize */ = {
-			isa = PBXGroup;
-			children = (
-				17491958242336C8FDE3455500ED1F56 /* Localize.swift */,
-				2896A0DD4A974AEAF0D98D8CE5DBBC87 /* LocalizeBundle.swift */,
-				76B1F5A4075DD66EA3EE2430C3EA180E /* String+Localize.swift */,
-			);
-			name = Localize;
-			sourceTree = "<group>";
-		};
 		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -769,18 +772,18 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		222E375AF5E8AA01346866787755CD97 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D9077F071C43E63D9ECB78F06ADC74CC /* WQBasicModules-umbrella.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		41F9C60B7EBB3275F5A51DE21995F6AE /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		46AAE4E187FD4D55C468F322536CE300 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7776B07F8B4F841B069B443E8349F5E5 /* WQBasicModules-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,7 +809,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				5C55E71F261185518BA5FAEB56268980 /* PBXTargetDependency */,
+				5A5FB2E8EF8159BC3F38EE664EE102C4 /* PBXTargetDependency */,
 			);
 			name = "Pods-WQBasicModules_Example";
 			productName = "Pods-WQBasicModules_Example";
@@ -824,7 +827,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				7559B5A697790DA425FB616C6E70D77B /* PBXTargetDependency */,
+				32557BF32303C0ECEAC4DAED730BBCD1 /* PBXTargetDependency */,
 			);
 			name = "Pods-WQBasicModules_Tests";
 			productName = "Pods-WQBasicModules_Tests";
@@ -833,12 +836,12 @@
 		};
 		5EC73C139A36272D22D1274666CCF988 /* WQBasicModules */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = FF18D1D79C24A04A6A3CA1638587BCCE /* Build configuration list for PBXNativeTarget "WQBasicModules" */;
+			buildConfigurationList = 75A297482D8F53B310D3AEB580536C3E /* Build configuration list for PBXNativeTarget "WQBasicModules" */;
 			buildPhases = (
-				222E375AF5E8AA01346866787755CD97 /* Headers */,
-				42E6E573F9F86044102FE8A0DA8C13C6 /* Sources */,
-				0346339E9ED9643A2CF8984415650176 /* Frameworks */,
-				A67DADAF18B56DC683F169ED15C307C3 /* Copy generated compatibility header */,
+				46AAE4E187FD4D55C468F322536CE300 /* Headers */,
+				B3ACBCEBCEDD6F2A3F3E5A15531EA376 /* Sources */,
+				EAAE2B61897651C5DDFD550F48FC664C /* Frameworks */,
+				1A894675D0D08015CF37C8E4553E8A08 /* Copy generated compatibility header */,
 			);
 			buildRules = (
 			);
@@ -879,7 +882,7 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A67DADAF18B56DC683F169ED15C307C3 /* Copy generated compatibility header */ = {
+		1A894675D0D08015CF37C8E4553E8A08 /* Copy generated compatibility header */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -906,130 +909,131 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		42E6E573F9F86044102FE8A0DA8C13C6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				696818E16596B8DB3982E1FCE961A2FF /* Bundle+Extensions.swift in Sources */,
-				B4552D9AD6A75250FD6E8CFFBEE4806D /* CALayer+Animations.swift in Sources */,
-				1D4BFCAF7EE290CF70DB2AAE9F40ECA1 /* Calendar+Extensions.swift in Sources */,
-				6DA4CF992EBD24D461D208175DFDA07D /* Codable+Default.swift in Sources */,
-				F355614F0D95F6A2908DF8FC23CA91E2 /* Codable+Extensions.swift in Sources */,
-				750E84F3DF8093BB038DE9E77E3527A1 /* CodableDefaultValueProvider.swift in Sources */,
-				ACC564784EEC3803EEF104B81B9DB7D9 /* Data+Extensions.swift in Sources */,
-				F924EFAFB8F432D425AB72F49DFFBD0D /* Data+Security.swift in Sources */,
-				D92F76A487468BB624E376B5BB9B7260 /* Date+Convenience .swift in Sources */,
-				0AE7D0EB56222B1AE14883DBD3A8A0DC /* Date+Format.swift in Sources */,
-				0F914E6C41323C0834A4CDD533C4C49A /* Date+Utilities.swift in Sources */,
-				77F7E35CAE93E9F9DB274520C766966F /* Dictionary+Extensions.swift in Sources */,
-				C022D9F8C11A103894C3690FA0BDEF6D /* DispatchQueue+Extensions.swift in Sources */,
-				2CDF2B0F8A7AAB4882BFCEFA71C29A37 /* FileManager+Path.swift in Sources */,
-				42A7D1D9F9D4AD0A2DA2C5EA50161A65 /* Geometric+Utils.swift in Sources */,
-				3668DA16C49F2B1C038B8767C8A6F130 /* InteractDismissMode.swift in Sources */,
-				6A2C864C62F92C5B8100FBF589385E6E /* Localize.swift in Sources */,
-				3109C1BA922AB57B6AB697B98666B777 /* LocalizeBundle.swift in Sources */,
-				561AC4207A7C7A58CE23A6D2D9A684DA /* ModalAnimation.swift in Sources */,
-				170AFA7ABFC4E10CBE63A226ECC36236 /* ModalConfig.swift in Sources */,
-				6B05FD625F3C711AF41F13E4463B3AC4 /* ModalContext.swift in Sources */,
-				6B47AD89497ED9FA5AD38E56C288E8D6 /* ModalDefaultAnimation.swift in Sources */,
-				5C8C901E19CBFFBB8ED951C956672953 /* ModalInParentContext.swift in Sources */,
-				A3CFD3D0F40A8595B3D617B2CA4C875B /* ModalInWindowContext.swift in Sources */,
-				0C4D4399C2E57D9876322B344CAD64D3 /* ModalKeyPath+Extensions.swift in Sources */,
-				8F5568F027F63F4539431FB84260309B /* ModalKeyPath.swift in Sources */,
-				DAF8350D0111998F20F2E1E7272F3DE1 /* ModalNavigationContext.swift in Sources */,
-				46B08EB08E8696050D9334CB677D5D93 /* ModalPresentationContext.swift in Sources */,
-				12C217CDE7C1F490BD7533FC30D911B6 /* NotificationCenter+Extensions.swift in Sources */,
-				A8DE34D5B390769B6B4662CC217544F8 /* NSAttributedString+Extensions.swift in Sources */,
-				E6AB756089471603894495B9DABC4641 /* NSPredicate+Extensions.swift in Sources */,
-				1DFF1D93533C262B96FD3A434933F734 /* OneFingerRotationGestureRecognizer.swift in Sources */,
-				4B0DD44D9E0BDB5C854E91C60F41772F /* PageViewController+UIScrollViewDelegate.swift in Sources */,
-				8790A1BDB7E225AE72DAFD772333FA28 /* PageViewController.swift in Sources */,
-				E39A0B3D755AD4F72D7DB17955DD2B88 /* PanDirectionGestureRecongnizer.swift in Sources */,
-				6654E1BAEB95E37AD0B5811E6EDBD8E0 /* Path.swift in Sources */,
-				742EB934EE3A0BDEB2E38879754804E3 /* Screen.swift in Sources */,
-				369774ECD92A3A6F5DE1AC3644BEFD4A /* ScreenAdaptation.swift in Sources */,
-				693271F2272389186466C5E501EEE72A /* SerialShowQueue.swift in Sources */,
-				DE78C71577A32814FFEED826C1510B3E /* SerialShowTransition.swift in Sources */,
-				85B29CA458E13AD50060B999B97F9D36 /* String+Extensions.swift in Sources */,
-				F96D2A3C73AE40EA782770FDCDB4D399 /* String+Localize.swift in Sources */,
-				7D86EC3907C3B4FFF5E7055FB96A495C /* String+Regex.swift in Sources */,
-				E60A4C2C56F0A9383B28210589F061CE /* String+Security.swift in Sources */,
-				E82F048AE0544D2DB980488079F05146 /* StyleConfig.swift in Sources */,
-				65366A7A27C434B633BE3D3845421A6D /* TransitionContext.swift in Sources */,
-				875C611561D3CC62F387F9A2EFD1D395 /* TransitionStates.swift in Sources */,
-				F786E7C7ADD8C6F64818EC1030FCE8D8 /* UIApplication+Extensions.swift in Sources */,
-				06A3CCC4632DC6F2C1CBEFB41CF78D46 /* UIButton+CountDwon.swift in Sources */,
-				9F57635AB7C32C9501E8F09476D82EE3 /* UIButton+Extensions.swift in Sources */,
-				DF6EB7F70F0E82E9BEF47D1AB59E505F /* UIColor+Utilities.swift in Sources */,
-				637F3902C739472D33CCB2BBC3865A82 /* UIDevice+Extensions.swift in Sources */,
-				6143B93FA160FE22B8B9C41F519EFF78 /* UIImage+Cutting.swift in Sources */,
-				BABDE41AEC6D36F8DFE5C0DD5459E22C /* UIImage+Extensions.swift in Sources */,
-				9FB3BE868FE3A01DE53765943521E9C4 /* UIImageView+Animations.swift in Sources */,
-				0EEB7AD77F02AD20B0C30C20EC6FA9A1 /* UIImageView+Extensions.swift in Sources */,
-				FE2CD4930034F0C6A1F24EED370A10F6 /* UILabel+Extensions.swift in Sources */,
-				11E9FA52CA40558F8196A6A15E4C8478 /* UINavigationBar+Extensions.swift in Sources */,
-				6E4A4AFA7F86BFD21C769DA2F26ABEF1 /* UINavigationBar+Style.swift in Sources */,
-				D0AADEE87EE494615F9C234ECC87AC00 /* UINavigationController+Extensions.swift in Sources */,
-				6680823069C4E418A561CEE7CE1DFFCF /* UISearchBar+Extensions.swift in Sources */,
-				BDA4E97E75EDC028C61A0998E2F48A5E /* UITabBarExtensions.swift in Sources */,
-				60849CCE946C665CACFFC27B05A64673 /* UITableView+Extensions.swift in Sources */,
-				E4DCD68E14BB47E6254A3BB32D49CE7B /* UITableViewCell+Extensions.swift in Sources */,
-				CB91E462319343C907BEDC9B250DA154 /* UITextField+Extensions.swift in Sources */,
-				A66CC74B63CA483F0E6FFA3377FF97E5 /* UITextView+Extensions.swift in Sources */,
-				0481336DE0D95097BE5EE481EF6D6DC3 /* UIView+Extensions.swift in Sources */,
-				1A4E2CB6041B64700903EEFA084052D9 /* UIView+Modal.swift in Sources */,
-				8FB6CE891614BF6DB1975CAD68DDC8DE /* UIView+Transitionable.swift in Sources */,
-				28BBB92CC860C0252DE0D10351ADEC55 /* UIView+WQUIHelp.swift in Sources */,
-				B912AFC4D793BA16B35AAC5B2C4DD1DA /* UIViewController+Extensions.swift in Sources */,
-				D9AC17BBD0209DE7332606D4F852CDAA /* UIVIewController+SelectPicture.swift in Sources */,
-				32893DF4571FD9E27523849AD3B7E46B /* UIViewController+WQUIHelp.swift in Sources */,
-				39EB377FA8C6BDBC5675A5E38BEB152E /* UIWindow+Extensions.swift in Sources */,
-				A291B270675078386F5FE71EBB580E5A /* URL+Extensions.swift in Sources */,
-				9B6DE51B0D58BFF66DC65B36E46D5FA7 /* UserDefaults+Extensions.swift in Sources */,
-				3AAC2ED9245BCC5003EE80CC6B21603C /* UserDefaults+Wrapper.swift in Sources */,
-				78FC98273F1F5020ACC6D82B7B081FE7 /* WQAlertView.swift in Sources */,
-				424E8760FD0102301D89F411609DFB5A /* WQArchive.swift in Sources */,
-				6226A3E3E3FE92C23B597A1D1EB7CB5E /* WQAutoIncreaseTextView.swift in Sources */,
-				8C6ED711D6DA58BF8F1C1865112B1D4C /* WQBasicModules-dummy.m in Sources */,
-				B50C87B45C83BEFFBBB7D6F2FC21C351 /* WQButton.swift in Sources */,
-				D277FE66653368FB8943FF871C9F21FF /* WQCache.swift in Sources */,
-				969E96244682370E37A0C95253B2D1FA /* WQContainerView.swift in Sources */,
-				0D43A1A00581EC54AAA9431E096A531C /* WQDateFormatter.swift in Sources */,
-				305A1620FA4ED0BADEA096F3FC0199F1 /* WQFlexable.swift in Sources */,
-				5FE80CBD0948598B2A43D6E7B8CD46F4 /* WQFlexbox.swift in Sources */,
-				ABF951C521632C8DD38381566CCDE09A /* WQFlexLayoutAttributes.swift in Sources */,
-				D733BF3E0D7F19571B055A13BBF90891 /* WQKeyboardManager+Values.swift in Sources */,
-				31D4605113A5F06357FFFEB6758AD2A2 /* WQKeyboardManager.swift in Sources */,
-				5F3BBC45402ACB66B0892121D4D13A69 /* WQLayoutController.swift in Sources */,
-				35F7CB2705BE927261B3E1EE41B9F842 /* WQMemoryCache.swift in Sources */,
-				27042F4D1BC89DF7CF0F1D316D676D9F /* WQModules.swift in Sources */,
-				0526C88D39A58A99A47BB6054E34DCD9 /* WQPanBehavior.swift in Sources */,
-				7A02FC62B544FD14CA59E5F71E4D46C7 /* WQPropertyDriven.swift in Sources */,
-				48B53455E7E417A60BDD44A2E21B0A39 /* WQStarControl.swift in Sources */,
-				2FAC866AE1013FE140755C171120ECF3 /* WQTextField.swift in Sources */,
-				010A259BF3267FF0CFE815F537BC3B29 /* WQTextView.swift in Sources */,
-				D736B07768315E46DFF206A8C5926CFF /* WQTransitionable+ContainerNavigation.swift in Sources */,
-				FCF9F7CDA1DD8B17EE809E7C65EE3600 /* WQTransitionable+Transition.swift in Sources */,
-				F53C3D1FFD583C3EC04AC1CB2037572B /* WQTransitionable.swift in Sources */,
-				9C518A921406406C94AB227783247F6E /* WQTransitionAnimatedItem+Transitionable.swift in Sources */,
-				53DDFB4D7D3F711E2D95295BF69FC171 /* WQTransitionAnimatedItem.swift in Sources */,
-				9C2D442F5568248E2E4C83D77300E130 /* WQTransitionAnimator+Convenience.swift in Sources */,
-				E4233099DC931BE035B6D991023350B2 /* WQTransitionAnimator+Style.swift in Sources */,
-				C7727A8F4421515688C3875E598E7C63 /* WQTransitionAnimator.swift in Sources */,
-				9F24428F445B8472F51BD54DDC643FB5 /* WQTransitionDriven.swift in Sources */,
-				F11A6A943C5F76A31FDA17E6F8907F71 /* WQTransitionOption.swift in Sources */,
-				3D281C11970EB343B124416C4F2757D4 /* WQTransitionWindow.swift in Sources */,
-				3498FE8A829E29BEC3EFA62FB2C29851 /* WQUIHelp.swift in Sources */,
-				34D84DD488A65352609D098554055753 /* WQWebController.swift in Sources */,
-				378D4DD734307ABA9BB4145935ADCFC5 /* WQWebView.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		92A1C219D323441035AF7C28DCD3A100 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				2B49831E49E42E97F0062BF4BD140F9C /* Pods-WQBasicModules_Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B3ACBCEBCEDD6F2A3F3E5A15531EA376 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				16FA090F24DEE7C73A069D7ED86AF63D /* Bundle+Extensions.swift in Sources */,
+				BD418F61DC9CB90F3F1F310FB97687B1 /* CALayer+Animations.swift in Sources */,
+				4A281DFD1DC1F70C33B3314B178F6D28 /* Calendar+Extensions.swift in Sources */,
+				9C7DE1DD712CE8F264975DDB4D80C8A5 /* Codable+Default.swift in Sources */,
+				9419292EED0C5051D6038040B8A1A26C /* Codable+Extensions.swift in Sources */,
+				52036D54A12E0CC6E076FA5CB010003F /* CodableDefaultValueProvider.swift in Sources */,
+				73A92F81A3DE25FDE6D0C5FFEDA89D31 /* Data+Extensions.swift in Sources */,
+				2A49BFD37DA1DD59FF7FEC001138D1D5 /* Data+Security.swift in Sources */,
+				8F3ED36B3E7F3345369768740267F895 /* Date+Convenience .swift in Sources */,
+				49D0EBCD356998128204F5CD1C7C4F60 /* Date+Format.swift in Sources */,
+				5D08C089A04AE573262CE56B5683FE43 /* Date+Utilities.swift in Sources */,
+				BB0C41CF197A22CFCA5311ED9466E0F4 /* Dictionary+Extensions.swift in Sources */,
+				EB6088E0B2B411B637851E548FAC73E7 /* DispatchQueue+Extensions.swift in Sources */,
+				16C48D646378EC906189374629031A45 /* FileManager+Path.swift in Sources */,
+				663CA26F301D2DD7C914A3992D265F86 /* Geometric+Utils.swift in Sources */,
+				8E4D66CA27884B216A91C1D0E49F0173 /* IBDesignable+Localize.swift in Sources */,
+				12608703953D5685D99A4E416099CFBD /* InteractDismissMode.swift in Sources */,
+				FAFCE7EEB3930DFCCE1593691BCB0A79 /* Localize.swift in Sources */,
+				6F2524AF15CE6E0182F0843709D68C59 /* LocalizeBundle.swift in Sources */,
+				878E92709A717EEFBCB6BC5A400ACD4C /* ModalAnimation.swift in Sources */,
+				E7F6EB442CD3EE44704E0692B700BC93 /* ModalConfig.swift in Sources */,
+				6EBBD9517922179C9369D7B3FAC44C28 /* ModalContext.swift in Sources */,
+				3FE7B5C5E70DCC45F356ECFF403AA47E /* ModalDefaultAnimation.swift in Sources */,
+				740AB284AB75E825E8C113B5829DF781 /* ModalInParentContext.swift in Sources */,
+				0F6AF1EB6736B14CA240C1FD67AB3EA7 /* ModalInWindowContext.swift in Sources */,
+				D7A02ACC8E2E0762A28A5DEE0C027E06 /* ModalKeyPath+Extensions.swift in Sources */,
+				9DCFEEC1CA8B178AD9F180260273AEE2 /* ModalKeyPath.swift in Sources */,
+				FB150DDBFE214CEA6F324547BE140ED5 /* ModalNavigationContext.swift in Sources */,
+				A6097EEE0D48BD5B1C294EA918CC7F9D /* ModalPresentationContext.swift in Sources */,
+				D2E45D1DA3EC47EC1731C34AF24F5C81 /* NotificationCenter+Extensions.swift in Sources */,
+				86CDFFC0AAC2ACCB8C434C9B7EEDFB1D /* NSAttributedString+Extensions.swift in Sources */,
+				41FA882D778527CD9FB4ED076385252B /* NSPredicate+Extensions.swift in Sources */,
+				29BCFC3C6253693E502EEE37577A96F6 /* OneFingerRotationGestureRecognizer.swift in Sources */,
+				B55622623545E0FAE1FB5A9C12365815 /* PageViewController+UIScrollViewDelegate.swift in Sources */,
+				978B45AA89EC676E8E2C596F3C2272E0 /* PageViewController.swift in Sources */,
+				5616B7940E6BE09A1954060A1FEA88F8 /* PanDirectionGestureRecongnizer.swift in Sources */,
+				CFF0D095B66204A2CF07CDF4D998DE4D /* Path.swift in Sources */,
+				EE34316DA0E81DB32AD34AADFEADBAF0 /* Screen.swift in Sources */,
+				D016F03CD635B377FBBBB7F776E279CD /* ScreenAdaptation.swift in Sources */,
+				F81EF8E8286BE368BF441E14E9E40AD6 /* SerialShowQueue.swift in Sources */,
+				30CC60F9C369A52798B6D9F99420BD50 /* SerialShowTransition.swift in Sources */,
+				F5350CA2799D200C561D8DCD9536B003 /* String+Extensions.swift in Sources */,
+				7E72E1C93603631CA68F1AFCD23BDE03 /* String+Localize.swift in Sources */,
+				CE368F1E9B4D4E342FD49F73B792CBA2 /* String+Regex.swift in Sources */,
+				529E311C9B027E61A0BD770960929B4F /* String+Security.swift in Sources */,
+				B7E7966604E1E80F0494763B06E2C36A /* StyleConfig.swift in Sources */,
+				0DBA504804685571DFAAC6F5889DA8CB /* TransitionContext.swift in Sources */,
+				1089566A7945590F7126F3DA2E778189 /* TransitionStates.swift in Sources */,
+				3C5D43460A76D470761C06612C957ED7 /* UIApplication+Extensions.swift in Sources */,
+				9214E3DFE829DDDA19177CBF6272BF2C /* UIButton+CountDwon.swift in Sources */,
+				0C570B800FE294C80E17D7F6E0318BB1 /* UIButton+Extensions.swift in Sources */,
+				952A52B85349B4311EA4C9119155C9E5 /* UIColor+Utilities.swift in Sources */,
+				9DBA236E5ABD2DB565010426F4D8C362 /* UIDevice+Extensions.swift in Sources */,
+				89415BB1CE7854A69F25771007CA3F43 /* UIImage+Cutting.swift in Sources */,
+				E21A9C0FF057B837806F9F47DE02C309 /* UIImage+Extensions.swift in Sources */,
+				62E60AF848F5F4838E17890742F5D1A8 /* UIImageView+Animations.swift in Sources */,
+				9120830F066A3F631D61062F3A611EB3 /* UIImageView+Extensions.swift in Sources */,
+				3FA389B4D647B36A56C9CD3F6902F61B /* UILabel+Extensions.swift in Sources */,
+				69FA0B1B3A514340CACB08487C46EED9 /* UINavigationBar+Extensions.swift in Sources */,
+				A43E8A77D4B196B24DC62F3BC27FE19E /* UINavigationBar+Style.swift in Sources */,
+				D23BB7E30A222D12BC4F400AFE04538F /* UINavigationController+Extensions.swift in Sources */,
+				82009D4559880F44C77EC44E0770EB0F /* UISearchBar+Extensions.swift in Sources */,
+				5635BE3B8225F75016E1F18D858FF79F /* UITabBarExtensions.swift in Sources */,
+				84366E46C5BA829ED545AC5334AD5981 /* UITableView+Extensions.swift in Sources */,
+				7F14789C6CED14866863CE581D9D19E3 /* UITableViewCell+Extensions.swift in Sources */,
+				835416FB79D3056802193F6D888CD558 /* UITextField+Extensions.swift in Sources */,
+				216815571B62A4307522187DD08F008A /* UITextView+Extensions.swift in Sources */,
+				84EC28271467B9E30BA88AD3C64CB87E /* UIView+Extensions.swift in Sources */,
+				B8D4C16EB4B0A7247E90D2DE62A432B7 /* UIView+Modal.swift in Sources */,
+				F9E795A04BE86234ED2D33FA128C8D4A /* UIView+Transitionable.swift in Sources */,
+				85F368F6DD4C6575C18EE4A0C6552DE4 /* UIView+WQUIHelp.swift in Sources */,
+				79C0C871E53DB95E495BA44E78FAC263 /* UIViewController+Extensions.swift in Sources */,
+				F7D393F15BB14CD975EAF730FF0360EE /* UIVIewController+SelectPicture.swift in Sources */,
+				8EB106185C244646564973AF04B691AC /* UIViewController+WQUIHelp.swift in Sources */,
+				AC2ED36B9BAFCA07AFA7AA69C804C493 /* UIWindow+Extensions.swift in Sources */,
+				F28B22897D2E7D3BABBC425EFFE9D667 /* URL+Extensions.swift in Sources */,
+				8E73950174B6974E3116C39FDF5F4087 /* UserDefaults+Extensions.swift in Sources */,
+				1853F0A571C0EA8A2CA029EC97E842D0 /* UserDefaults+Wrapper.swift in Sources */,
+				E96EBC15683C114F9647DC24BA13C6A1 /* WQAlertView.swift in Sources */,
+				F04F8754100A284726AE57D6BE47AA49 /* WQArchive.swift in Sources */,
+				DF3E73DABA847E52115FA58969D9C276 /* WQAutoIncreaseTextView.swift in Sources */,
+				E0DE40A27C1FD662F43ACA928D310BD5 /* WQBasicModules-dummy.m in Sources */,
+				3681DB014BC5C8AC12FA46BE7539F490 /* WQButton.swift in Sources */,
+				8D4301191E477FA5422074A302C1D272 /* WQCache.swift in Sources */,
+				0E328573FD79FBABF678A163030CC232 /* WQContainerView.swift in Sources */,
+				332D46C10032C048CC0D1BF3F23B54DC /* WQDateFormatter.swift in Sources */,
+				7071E70778F1BA3089AA68EE56DA89FF /* WQFlexable.swift in Sources */,
+				F37B1D0E86C162E234497955552A6647 /* WQFlexbox.swift in Sources */,
+				23F37AE9544536D351DD5C05455B0AA0 /* WQFlexLayoutAttributes.swift in Sources */,
+				D1741143DD6FB00329E7278EA9C61B68 /* WQKeyboardManager+Values.swift in Sources */,
+				9F0D0C1048DFBB77E5B35273BECC7B9E /* WQKeyboardManager.swift in Sources */,
+				06E3F1655C8FEC0D8693D455CD08206C /* WQLayoutController.swift in Sources */,
+				70CDADE9BE299D1BA25835061F564DA8 /* WQMemoryCache.swift in Sources */,
+				69FBE50AEACD463E8A5CB9D1CAAC8920 /* WQModules.swift in Sources */,
+				F068EDD021635AA66B760A4D7E104B8D /* WQPanBehavior.swift in Sources */,
+				F9D10EB551E0F5DE02B6A84FA173F976 /* WQPropertyDriven.swift in Sources */,
+				654A8E391F108B26E5F67BE73DAA8066 /* WQStarControl.swift in Sources */,
+				5CE7682E45C06A8BE1680B5ADB9B0D34 /* WQTextField.swift in Sources */,
+				6E18EE98E78E10010464D660946D58C4 /* WQTextView.swift in Sources */,
+				4C7C8C3F77C37A2BA5B8F7079F3B88E7 /* WQTransitionable+ContainerNavigation.swift in Sources */,
+				EE90E8D761CB90D41186582F7F185DB3 /* WQTransitionable+Transition.swift in Sources */,
+				36A8B82C0E8F5F13EADA82A487F8BC38 /* WQTransitionable.swift in Sources */,
+				5F30A4FC2BB38D7812B82FC3398DD1B4 /* WQTransitionAnimatedItem+Transitionable.swift in Sources */,
+				F992F32ABF9FEDF3440362CD5886CBBF /* WQTransitionAnimatedItem.swift in Sources */,
+				26D83C729B4A8428B0B9A5C34D36EBD6 /* WQTransitionAnimator+Convenience.swift in Sources */,
+				2BDB818E6EE831BA8F13B6249AF6F5A3 /* WQTransitionAnimator+Style.swift in Sources */,
+				A0F32A5FE95B057CF4E19BF0945C835E /* WQTransitionAnimator.swift in Sources */,
+				8CC2EB24F25421FBE1FE69A6961AF186 /* WQTransitionDriven.swift in Sources */,
+				89556BF36C78634574EFA20935C84F87 /* WQTransitionOption.swift in Sources */,
+				A403FFC1D0C9FF14557D6D25B24A2657 /* WQTransitionWindow.swift in Sources */,
+				472D808EF7DA73E3333ED64D46E64161 /* WQUIHelp.swift in Sources */,
+				AD76A1F160B2B881DA16A7427BA50E7A /* WQWebController.swift in Sources */,
+				EFD69FE192E5A1EDD8BE3B11B031C17E /* WQWebView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1044,21 +1048,45 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5C55E71F261185518BA5FAEB56268980 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WQBasicModules;
-			target = 5EC73C139A36272D22D1274666CCF988 /* WQBasicModules */;
-			targetProxy = 337440957B22ACA74B4BBCEABFE749BE /* PBXContainerItemProxy */;
-		};
-		7559B5A697790DA425FB616C6E70D77B /* PBXTargetDependency */ = {
+		32557BF32303C0ECEAC4DAED730BBCD1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Pods-WQBasicModules_Example";
 			target = 1AF522D3B841B317D5F968F04A86BFE0 /* Pods-WQBasicModules_Example */;
-			targetProxy = C0706BA2E89DA0A8E8A2A41D746F0CB7 /* PBXContainerItemProxy */;
+			targetProxy = F7BCE279EED711A7B27E5F8FEDB4A1FD /* PBXContainerItemProxy */;
+		};
+		5A5FB2E8EF8159BC3F38EE664EE102C4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = WQBasicModules;
+			target = 5EC73C139A36272D22D1274666CCF988 /* WQBasicModules */;
+			targetProxy = 785FF40CEC02FCC4CFD69CD8555A7902 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		206ED3F7F7F0ADB8EFE275B5F998BEA8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2932CDB70A515106C24E9AF6CA2ABD7C /* WQBasicModules.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/WQBasicModules/WQBasicModules-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MODULEMAP_FILE = Headers/Public/WQBasicModules/WQBasicModules.modulemap;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = WQBasicModules;
+				PRODUCT_NAME = WQBasicModules;
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.3;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		31518A51384BC615D6FB0D8D4BAC49F7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AC112D581106122CC62DCA4E09667544 /* Pods-WQBasicModules_Example.release.xcconfig */;
@@ -1082,7 +1110,7 @@
 			};
 			name = Release;
 		};
-		4653F482BCDCC21B2EB8351D68948C0C /* Release */ = {
+		3AA0D0BCCEBB0006EE13F972DA943738 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EE44CAB5171DCB7DAF358A1C04CBB977 /* WQBasicModules.release.xcconfig */;
 			buildSettings = {
@@ -1278,30 +1306,6 @@
 			};
 			name = Debug;
 		};
-		EB22A57BBA72DE217A8A37915F013BE3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2932CDB70A515106C24E9AF6CA2ABD7C /* WQBasicModules.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/WQBasicModules/WQBasicModules-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MODULEMAP_FILE = Headers/Public/WQBasicModules/WQBasicModules.modulemap;
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = WQBasicModules;
-				PRODUCT_NAME = WQBasicModules;
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.3;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
 		FC2689657E848BD8786CDB263651FC80 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = F3211399CB72B93D2E5A20BC418DDF52 /* Pods-WQBasicModules_Example.debug.xcconfig */;
@@ -1336,6 +1340,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		75A297482D8F53B310D3AEB580536C3E /* Build configuration list for PBXNativeTarget "WQBasicModules" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				206ED3F7F7F0ADB8EFE275B5F998BEA8 /* Debug */,
+				3AA0D0BCCEBB0006EE13F972DA943738 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		932FF3D5318657DB0F3E972379F7D70A /* Build configuration list for PBXNativeTarget "Pods-WQBasicModules_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1350,15 +1363,6 @@
 			buildConfigurations = (
 				FC2689657E848BD8786CDB263651FC80 /* Debug */,
 				31518A51384BC615D6FB0D8D4BAC49F7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		FF18D1D79C24A04A6A3CA1638587BCCE /* Build configuration list for PBXNativeTarget "WQBasicModules" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				EB22A57BBA72DE217A8A37915F013BE3 /* Debug */,
-				4653F482BCDCC21B2EB8351D68948C0C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

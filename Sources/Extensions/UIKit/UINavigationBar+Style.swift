@@ -25,7 +25,20 @@ public extension UINavigationBarStyle {
     static let white = UINavigationBarStyle(rawValue: "white")
 }
 
-
+public extension UINavigationBarStyle {
+    var tintColor: UIColor {
+        switch <#value#> {
+        case <#pattern#>:
+            <#code#>
+        default:
+            <#code#>
+        }
+    }
+    var barTintColor: UIColor {
+        
+    }
+    static func tintColor(for )
+}
 public extension UINavigationBar {
     private struct AssociatedKeys {
        static let styleRawValue = UnsafeRawPointer(bitPattern: "wq.navigationBar.styleRawValue".hashValue)!
@@ -48,13 +61,33 @@ public extension UINavigationBar {
         set {
             let oldValue = objc_getAssociatedObject(self, AssociatedKeys.styleRawValue) as? UINavigationBarStyle ?? .none
             guard oldValue != newValue else { return }
-            if newValue == .translucent {
-                self.makeTransparent()
-            }
             objc_setAssociatedObject(self, AssociatedKeys.styleRawValue, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
         get {
             objc_getAssociatedObject(self, AssociatedKeys.styleRawValue) as? UINavigationBarStyle ?? .none
+        }
+    }
+    
+    /// 导航栏透明
+    func setElementsAlpha(_ alpha: CGFloat) {
+        if let leftViews = self.value(forKey: "_leftViews") as? [UIView] {
+            leftViews.forEach { $0.alpha = alpha }
+        }
+        if let rightViews = self.value(forKey: "_rightViews") as? [UIView] {
+            rightViews.forEach { $0.alpha = alpha }
+        }
+        if let titleView = self.value(forKey: "_titleView") as? UIView {
+            titleView.alpha = alpha
+        }
+        self.subviews.forEach { obj in
+            if let cls = NSClassFromString("UINavigationItemView"),
+               obj.isKind(of: cls) {
+                obj.alpha = alpha
+            }
+            if let cls = NSClassFromString("_UINavigationBarBackIndicatorView"),
+               obj.isKind(of: cls) {
+                obj.alpha = alpha
+            }
         }
     }
 }
