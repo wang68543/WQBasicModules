@@ -47,16 +47,16 @@ Pod::Spec.new do |s|
   end
   
   
-  s.subspec 'Beta' do |ss|
-      ss.subspec 'Localize' do |sss|
-          sss.source_files = 'Sources/FunModule/Localize/*.swift'
-      end
-  end
+#  s.subspec 'Beta' do |ss| 
+#  end
   
   
   s.subspec 'FunModule' do |ss|
       ss.subspec 'ImagePicker' do |sss|
           sss.source_files = 'Sources/FunModule/ImagePicker/*.swift'
+      end
+      ss.subspec 'Localize' do |sss|
+          sss.source_files = 'Sources/FunModule/Localize/*.swift'
       end
   end
   

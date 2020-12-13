@@ -10,19 +10,27 @@ import Foundation
 open class Localize {
     private static let defaultLanguageKey = "UserLocalizeDefaultLanguage"
     private static let userLanguageKey = "UserLocalizeLanguage"
+    private static let trackSystemLanguageKey = "LTrackSystemLanguage"
     public static let LLanguageDidChangeNotification = Notification.Name("LLanguageDidChangeNotification")
     public static let shared = Localize()
     /// 是否是跟随App系统设置里面的语言
-    public var trackSystemLanguage: Bool = true {
-        didSet {
-            setCurrentBundle()
+    public static var trackSystemLanguage: Bool {
+        set {
+            UserDefaults.standard.set(newValue, forKey: trackSystemLanguageKey)
+            UserDefaults.standard.synchronize()
+            Localize.shared.setCurrentBundle()
+        }
+        get {
+            return UserDefaults.standard.bool(forKey: trackSystemLanguageKey)
         }
     }
     /// 当多个区域使用类似的语言的时候 若当前App 需要使用的语言  App bundle 中午对应的 就找相似的 (例如 如果当前App 支持中文简体 但是App设置里面是繁体 当前属性为true 就会返回简体 否则返回默认)
-    public var isIngnoreRegionForUnkownLanguage: Bool = true
+    public var isFuzzyMatchLanguage: Bool = true
     
     init() {
+        UserDefaults.standard.register(defaults: [Localize.trackSystemLanguageKey: true])
         setCurrentBundle()
+        
     }
     /// 注册bundle
     open func register(_ bundleCls: AnyClass = LocalizeBundle.self) {
@@ -34,25 +42,19 @@ open class Localize {
     /// App 当前需要使用的语言
     public var currentLanguage: String {
         let availables = availableLanguages(true)
-        let lan = trackSystemLanguage ? systemLanguage : userLanguage ?? defaultLanguage
+        let lan = Localize.trackSystemLanguage ? systemLanguage : userLanguage ?? defaultLanguage
         guard let language = lan,
               !availables.isEmpty else {
             return availables.first ?? "en"
-        } 
-        if self.isIngnoreRegionForUnkownLanguage { // 模糊查找
-            if availables.contains(language) {
-                return language
-            } else if let index = availables.firstIndex(where: {$0.hasPrefix(language)}) {
+        }
+        guard !availables.contains(language) else {
+            return language //可用的语言中包含当前语言
+        }
+        if self.isFuzzyMatchLanguage { // 模糊查找
+            if let index = availables.firstIndex(where: {$0.hasPrefix(language)}) {
                 return availables[index]
-            } else {
-                if let pre = language.components(separatedBy: "-").first,
-                   let index = availables.firstIndex(where: { $0.components(separatedBy: "-").first == pre }) {
-                    return availables[index]
-                }
-            }
-        } else {
-            if availables.contains(language) { // 精确查找 未找到使用 可用的第一个
-                return language
+            } else if let index = availables.firstIndex(where: { Localize.isSame(lhs: $0, rhs: language, fuzzy: true) }) {
+                return availables[index]
             }
         }
         return availables.first! // 所有的语言都没有 默认英文
@@ -63,14 +65,14 @@ open class Localize {
             UserDefaults.standard.set(newValue, forKey: Localize.userLanguageKey)
             UserDefaults.standard.synchronize()
             /// 禁止跟随系统语言
-            self.trackSystemLanguage = false
+            Localize.trackSystemLanguage = false
         }
         get {
             return UserDefaults.standard.string(forKey: Localize.userLanguageKey)
         }
     }
     
-    /// 缺省语言 当没有对应的时候
+    /// 缺省语言 App内没有适配对应的语言的时候 取用
     public var defaultLanguage: String? {
         set {
             UserDefaults.standard.set(newValue, forKey: Localize.defaultLanguageKey)
@@ -112,5 +114,25 @@ open class Localize {
             return displayName
         }
         return String()
+    }
+}
+public extension Localize {
+    
+    /// 查询当前是否是某个语言
+    /// - Parameters:
+    ///   - lan: 语言
+    ///   - fuzzy: 是否是模糊匹配
+    func matchCurrent(language lan: String, fuzzy: Bool = true) -> Bool {
+        return Localize.isSame(lhs: lan, rhs: currentLanguage, fuzzy: fuzzy)
+    }
+}
+
+public extension Localize {
+    static func isSame(lhs: String, rhs: String, fuzzy: Bool) -> Bool {
+        if fuzzy {
+           return lhs.components(separatedBy: "-").first == rhs.components(separatedBy: "-").first
+        } else {
+            return lhs == rhs
+        }
     }
 }
