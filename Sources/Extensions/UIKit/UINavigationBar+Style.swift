@@ -24,21 +24,6 @@ public extension UINavigationBarStyle {
     /// 白色
     static let white = UINavigationBarStyle(rawValue: "white")
 }
-
-public extension UINavigationBarStyle {
-    var tintColor: UIColor {
-        switch <#value#> {
-        case <#pattern#>:
-            <#code#>
-        default:
-            <#code#>
-        }
-    }
-    var barTintColor: UIColor {
-        
-    }
-    static func tintColor(for )
-}
 public extension UINavigationBar {
     private struct AssociatedKeys {
        static let styleRawValue = UnsafeRawPointer(bitPattern: "wq.navigationBar.styleRawValue".hashValue)!
@@ -80,12 +65,10 @@ public extension UINavigationBar {
             titleView.alpha = alpha
         }
         self.subviews.forEach { obj in
-            if let cls = NSClassFromString("UINavigationItemView"),
-               obj.isKind(of: cls) {
+            if object_isClass(NSClassFromString("UINavigationItemView")) {
                 obj.alpha = alpha
             }
-            if let cls = NSClassFromString("_UINavigationBarBackIndicatorView"),
-               obj.isKind(of: cls) {
+            if object_isClass(NSClassFromString("_UINavigationBarBackIndicatorView")) {
                 obj.alpha = alpha
             }
         }

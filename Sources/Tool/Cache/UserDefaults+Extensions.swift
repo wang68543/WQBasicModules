@@ -47,7 +47,7 @@ public extension UserDefaults {
     ///   - key: Identifier of the object.
     ///   - encoder: Custom JSONEncoder instance. Defaults to `JSONEncoder()`.
     func set<T>(object: T, forKey key: String, usingEncoder encoder: JSONEncoder = JSONEncoder()) where T: Encodable {
-        if let data = try? object.data(encoder) {
+        if let data = try? object.toJSON(encoder) {
             self.set(data, forKey: key)
         } else {
             self.removeObject(forKey: key)
