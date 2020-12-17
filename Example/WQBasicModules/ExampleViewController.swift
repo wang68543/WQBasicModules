@@ -20,7 +20,8 @@ class ExampleViewController: UITableViewController {
          ["自增长TextView": "AutoHeightTableViewController"],
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"],
-         ["页面分栏": "PageScrollViewController"]]
+         ["页面分栏": "PageScrollViewController"],
+         ["页面分栏2": "PageContentViewController"]]
     ]
 
 //    let sections2: [String] = ["WQUI", "Transitioning","WQUI", "Transitioning"]
