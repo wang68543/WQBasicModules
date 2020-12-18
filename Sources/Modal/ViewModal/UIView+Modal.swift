@@ -89,13 +89,53 @@ public extension WQModules where Base: UIView {
 public extension WQModules where Base: UIView { 
     func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)
+        states.animator.animationEnable = flag
         self.present(config, states: states, completion: completion)
     }
     
     func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.actionSheet, anmation: .default)
+        states.animator.animationEnable = flag
         self.present(config, states: states, completion: completion)
     }
+    
+    /// pop弹出框
+    /// - Parameters:
+    ///   - sender: 从哪个view 弹出
+    ///   - aliment: 弹出框与sender的对齐方式
+    func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
+        let rect: CGRect
+        if config.style.inParent {
+            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else {
+                return
+            }
+            rect = frame
+        } else {
+            guard let frame = sender.superview?.convert(sender.frame, to: nil) else { //全局显示
+                return
+            }
+            rect = frame
+        } 
+        let anchorPoint: CGPoint
+        let position: CGPoint
+        
+        switch aliment {
+        case .leading:
+            position = CGPoint(x: rect.minX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        case .middle:
+            position = CGPoint(x: rect.midX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        case .trailing:
+            position = CGPoint(x: rect.maxX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 1.0, y: 0.0)
+        }
+        let states = StyleConfig(.popup(position, anchorPoint, .down))
+        states.animator.animationEnable = flag
+        present(config, states: states, completion: completion)
+    }
+     
+    
     /// 弹窗
     func present(_ config: ModalConfig = .default,
                  states: StyleConfig,

@@ -19,7 +19,13 @@ public class ModalDefaultAnimation: ModalAnimation {
     
     /// 这里只会调过来 两种ModalState
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
-        let time = self.duration
+        let time = self.duration 
+        func layoutIfNeeded() {
+            layoutController.container.layoutIfNeeded()
+            layoutController.view.layoutIfNeeded()
+            layoutController.view.updateConstraintsIfNeeded()
+            layoutController.container.updateConstraintsIfNeeded()
+        }
         //无动画状态更新
         func prepareStatesWithoutAnimation(_ modalState: ModalState) {
             let areAnimationsEnabled =  UIView.areAnimationsEnabled
@@ -30,14 +36,14 @@ public class ModalDefaultAnimation: ModalAnimation {
                 }
             }
             states.states.setup(forState: modalState)
-            layoutController.container.layoutIfNeeded()
-            layoutController.view.layoutIfNeeded()
+            layoutIfNeeded()
             UIView.setAnimationsEnabled(areAnimationsEnabled)
         }
         //以默认的动画更新
         func updateWithDefaultAnimation(_ modalState: ModalState) {
             UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews, .curveEaseOut]) {
                 states.states.setup(forState: modalState)
+                layoutIfNeeded()
             } completion: { flag in
                 // 移除动画的View
                 UIView.performWithoutAnimation {
@@ -60,6 +66,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                     } else {
                         states.states.setup(forState: .show)
                     }
+                    layoutIfNeeded()
                 }
                 completion?()
             } else {
@@ -79,6 +86,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                                 let keyFrame = keys[index]
                                 UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
                                     states.states.setup(forState: keyFrame)
+                                    layoutIfNeeded()
                                 }
                             }
                         } completion: { flag in
@@ -92,7 +100,8 @@ public class ModalDefaultAnimation: ModalAnimation {
         } else {//隐藏
             if !self.animationEnable {
                 UIView.performWithoutAnimation {
-                    states.states.setup(forState: .hide) 
+                    states.states.setup(forState: .hide)
+                    layoutIfNeeded()
                 }
                 completion?()
             } else {

@@ -25,7 +25,7 @@ open class PageView: UIView {
         pageController.delegate = self
         pageController.dataSource = self
     }
-    /// 验证是否有效
+    /// 验证索引是否有效
     public func isValidate(_ index: Int) -> Bool {
         fatalError("子类实现")
     }

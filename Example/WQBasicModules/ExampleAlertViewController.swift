@@ -127,22 +127,25 @@ class ExampleAlertViewController: BaseExampleViewController {
         let alertSubView = UIView()
         
         let button = UIButton()
-        button.frame = CGRect(x: 10, y: 500 - 90, width: 80, height: 80)
+        button.frame = CGRect(x: 10, y: 300 - 90, width: 80, height: 80)
         button.backgroundColor = UIColor.green
         button.addTarget(self, action: #selector(buttonAction(_:)), for: .touchUpInside)
         alertSubView.addSubview(button)
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
-        alertSubView.bounds = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 50, height: 500)
-        let config = ModalConfig(.modalInWindow)
-//        let config = ModalConfig(.modalSystem(self))
+        alertSubView.bounds = CGRect(x: 0, y: 0, width: 100, height: 300)
+//        let config = ModalConfig(.modalInWindow)
+        let config = ModalConfig(.modalSystem(self))
 //        let config = ModalConfig(.modalInParent(self))
 //        let config = ModalConfig(.modalNavigation(self.navigationController))
 //        config.isShowWithNavigationController = true
-        config.interactionDismiss = .pan(.toBottom)
+        config.interactionDismiss = .tapOutSide
 //        self.definesPresentationContext
 //        alertSubView.wm.actionSheet(true, config: config)
-        alertSubView.wm.alert(true, config: config)
+//        alertSubView.wm.alert(true, config: config)
+//        let rect = self.view.convert(sender.frame, to: nil)
+//        let states = StyleConfig(.popup(CGPoint(x: rect.maxX, y: rect.maxY), CGPoint(x: 1.0, y: 0.0), .down))
+        alertSubView.wm.popDown(from: sender, aliment: .trailing, flag: true)
 //        alertSubView.wm.alert(true)
 //        let postions = PanPosition.bottomToCenter(true)
 //        let style = StyleConfig(.pan(postions), anmation: .default)
