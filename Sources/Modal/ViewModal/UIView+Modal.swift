@@ -6,18 +6,6 @@
 //
 
 import Foundation
-public protocol ResponseViewRelatatedEvent: NSObjectProtocol {
-    func viewWillAppear(_ animated: Bool)
-    func viewDidAppear(_ animated: Bool)
-    func viewWillDisappear(_ animated: Bool)
-    func viewDidDisappear(_ animated: Bool)
-}
-public extension ResponseViewRelatatedEvent where Self: UIView {
-    func viewWillAppear(_ animated: Bool) { }
-    func viewDidAppear(_ animated: Bool) { }
-    func viewWillDisappear(_ animated: Bool) { }
-    func viewDidDisappear(_ animated: Bool) { }
-}
 public extension UIView {
    private struct AssociatedKeys {
         static let layoutFittingMaxmiumSize = UnsafeRawPointer(bitPattern: "wq.view.properties.layoutFittingMaxmiumSize".hashValue)!

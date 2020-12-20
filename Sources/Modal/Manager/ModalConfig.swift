@@ -12,7 +12,7 @@ public class ModalConfig {
     /// 当前在结构中的 viewController
     internal weak var fromViewController: UIViewController? 
     /// 是否要调用生命周期
-    public var layoutControllerLifeCycleable: Bool = false
+    public var controllerEventManagement: Bool = false
     /// 用户交互消失的方式
     public var interactionDismiss: InteractDismissMode = .none
     /// 容器控制器的View显示frame

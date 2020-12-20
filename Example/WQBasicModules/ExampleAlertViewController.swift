@@ -178,7 +178,7 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        alertView.addSubview(alertSubView)
         alertSubView.bounds = CGRect(x: 0, y: 0, width: 100, height: 300)
 //        let config = ModalConfig(.modalInWindow)
-        let config = ModalConfig(.modalInParent(self))
+        let config = ModalConfig(.modalSystem(self))
         config.isSequenceModal = true
 //        let config = ModalConfig(.modalInParent(self))
 //        let config = ModalConfig(.modalNavigation(self.navigationController))

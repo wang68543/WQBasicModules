@@ -24,33 +24,29 @@ public class FILOModalQueue: NSObject {
             /// 之前的 先暂停
             last.layoutController.ctxHide(animated: false) {
                 showItem()
-            }
+            } 
         }
     }
     
-//    public func hiddenCompletion(with controller: WQLayoutController) {
-//        guard controller == items.first?.layoutController else {
-//            return
-//        }
-//        items.removeFirst()
-//        guard let showItem = items.first else { return }
-//        showItem.layoutController.modal(showItem.states, comletion: showItem.completion)
-//    }
     public func dismiss(_ controller: WQLayoutController, flag: Bool, completion: (() -> Void)?) {
         if items.isEmpty {
             controller.ctxHide(animated: flag, completion: completion)
-        } else {
-            let item = items.removeLast()
+        } else  {
+            guard let index = items.lastIndex(where: {$0.layoutController === controller }) else {
+                return
+            }
+            let item = items.remove(at: index)
             item.layoutController.ctxHide(animated: flag) {
-                completion?()
                 if let last = self.items.last {
                     item.states.animator.animationEnable = false
-                    last.layoutController.ctxShow(item.states, comletion: item.completion)
+                    last.layoutController.ctxShow(item.states, comletion: nil)
                 }
+                
             }
         }
     }
 }
+
 @available(iOS 10.0, *)
 internal class FIFOModalItem: NSObject {
     let layoutController: WQLayoutController

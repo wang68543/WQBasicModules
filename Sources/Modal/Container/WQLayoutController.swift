@@ -31,6 +31,8 @@ public class WQLayoutController: UIViewController {
     public internal(set) var isPoping: Bool = false
     /// 是否是按照顺序显示+-
     internal private(set) var isSequSequenceShow: Bool = false
+    
+    private var shouldEventManagement: Bool = false
     // viewWillAppear viewWillDisappear viewDidDisappear
     public var lifeCycleable: Bool = false 
     public var context: ModalContext?
@@ -114,6 +116,38 @@ public class WQLayoutController: UIViewController {
             break
         }
     }
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.shouldEventManagement {
+            self.config.fromViewController?.beginAppearanceTransition(false, animated: animated)
+        }
+        self.container.viewWillAppear(animated)
+        debugPrint(#function)
+    }
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if self.shouldEventManagement {
+            self.config.fromViewController?.endAppearanceTransition()
+        }
+        self.container.viewDidAppear(animated)
+        debugPrint(#function)
+    }
+    public override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.shouldEventManagement {
+            self.config.fromViewController?.beginAppearanceTransition(true, animated: animated)
+        }
+        self.container.viewWillDisappear(animated)
+        debugPrint(#function)
+    }
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if self.shouldEventManagement {
+            self.config.fromViewController?.endAppearanceTransition()
+        }
+        self.container.viewDidDisappear(animated)
+        debugPrint(#function)
+    }
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.addGesture()
@@ -145,6 +179,7 @@ public class WQLayoutController: UIViewController {
     public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
         states.setupStates(self, config: self.config)
         context = ModalContext.modalContext(self.config, states: states)
+        self.shouldEventManagement = self.config.controllerEventManagement
         if !self.config.isSequenceModal {
             ctxShow(states, comletion: comletion)
         } else {
@@ -200,9 +235,9 @@ public class WQLayoutController: UIViewController {
     
     deinit {
         removeKeyboardObserver()
-//        #if WDEBUG
-//        debugPrint("\(self):" + #function + "♻️")
-//        #endif
+        #if WDEBUG
+        debugPrint("\(self):" + #function + "♻️")
+        #endif
     }
 }
 // MARK: - --Keyboard KVO
