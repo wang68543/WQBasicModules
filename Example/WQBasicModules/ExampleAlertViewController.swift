@@ -133,9 +133,10 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertSubView.addSubview(button)
         alertSubView.backgroundColor = UIColor.blue
 //        alertView.addSubview(alertSubView)
-        alertSubView.bounds = CGRect(x: 0, y: 0, width: 100, height: 300)
+        alertSubView.frame = CGRect(x: 0, y: 0, width: 100, height: 300)
 //        let config = ModalConfig(.modalInWindow)
         let config = ModalConfig(.modalSystem(self))
+        config.isSequenceModal = true
 //        let config = ModalConfig(.modalInParent(self))
 //        let config = ModalConfig(.modalNavigation(self.navigationController))
 //        config.isShowWithNavigationController = true
@@ -145,7 +146,11 @@ class ExampleAlertViewController: BaseExampleViewController {
 //        alertSubView.wm.alert(true, config: config)
 //        let rect = self.view.convert(sender.frame, to: nil)
 //        let states = StyleConfig(.popup(CGPoint(x: rect.maxX, y: rect.maxY), CGPoint(x: 1.0, y: 0.0), .down))
-        alertSubView.wm.popDown(from: sender, aliment: .trailing, flag: true)
+//        alertSubView.wm.popDown(from: sender, aliment: .trailing, flag: true)
+        alertSubView.wm.alert(true, config: config, completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            self.showModal2()
+        }
 //        alertSubView.wm.alert(true)
 //        let postions = PanPosition.bottomToCenter(true)
 //        let style = StyleConfig(.pan(postions), anmation: .default)
@@ -161,7 +166,36 @@ class ExampleAlertViewController: BaseExampleViewController {
 //            alertView.wm.dismiss(true)
 //        }
     }
+    func showModal2() {
+        let alertSubView = UIView()
+        
+        let button = UIButton()
+        button.frame = CGRect(x: 10, y: 300 - 90, width: 80, height: 80)
+        button.backgroundColor = UIColor.blue
+        button.addTarget(self, action: #selector(buttonAction2(_:)), for: .touchUpInside)
+        alertSubView.addSubview(button)
+        alertSubView.backgroundColor = UIColor.green
+//        alertView.addSubview(alertSubView)
+        alertSubView.bounds = CGRect(x: 0, y: 0, width: 100, height: 300)
+//        let config = ModalConfig(.modalInWindow)
+        let config = ModalConfig(.modalInParent(self))
+        config.isSequenceModal = true
+//        let config = ModalConfig(.modalInParent(self))
+//        let config = ModalConfig(.modalNavigation(self.navigationController))
+//        config.isShowWithNavigationController = true
+        config.interactionDismiss = .tapOutSide
+//        self.definesPresentationContext
+//        alertSubView.wm.actionSheet(true, config: config)
+//        alertSubView.wm.alert(true, config: config)
+//        let rect = self.view.convert(sender.frame, to: nil)
+//        let states = StyleConfig(.popup(CGPoint(x: rect.maxX, y: rect.maxY), CGPoint(x: 1.0, y: 0.0), .down))
+        alertSubView.wm.alert(true, config: config, completion: nil)
+    }
     @objc func buttonAction(_ sender: UIButton) {
+        sender.superview?.wm.dismissal(true)
+        
+    }
+    @objc func buttonAction2(_ sender: UIButton) {
         sender.superview?.wm.dismissal(true)
         
     }

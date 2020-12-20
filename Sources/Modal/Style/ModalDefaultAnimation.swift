@@ -22,7 +22,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         let time = self.duration 
         func layoutIfNeeded() {
             layoutController.container.layoutIfNeeded()
-            layoutController.view.layoutIfNeeded()
+            layoutController.view.layoutIfNeeded() 
             layoutController.view.updateConstraintsIfNeeded()
             layoutController.container.updateConstraintsIfNeeded()
         }

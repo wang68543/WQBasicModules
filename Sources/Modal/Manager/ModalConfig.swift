@@ -25,6 +25,8 @@ public class ModalConfig {
     
     /// 当有键盘的时候 键盘距离底部的距离
     public var adjustOffsetDistanceKeyboard: CGFloat = .zero
+    /// 是否按照顺序显示
+    public var isSequenceModal: Bool = false
     
     public init(_ style: ModalPresentation = .autoModal) {
         self.style = style
@@ -35,11 +37,8 @@ public class ModalConfig {
             }
         }
     }
-//    deinit {
-//        // 这里如果使用常量是不会释放的 例如: 下面的default
-//        debugPrint("\(self):" + #function + "♻️")
-//    }
-}
-public extension ModalConfig {
-    static let `default` = ModalConfig() 
+    deinit {
+        // 这里如果使用常量是不会释放的 例如: 下面的default
+        debugPrint("\(self):" + #function + "♻️")
+    }
 }

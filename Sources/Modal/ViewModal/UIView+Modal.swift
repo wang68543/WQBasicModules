@@ -6,7 +6,18 @@
 //
 
 import Foundation
- 
+public protocol ResponseViewRelatatedEvent: NSObjectProtocol {
+    func viewWillAppear(_ animated: Bool)
+    func viewDidAppear(_ animated: Bool)
+    func viewWillDisappear(_ animated: Bool)
+    func viewDidDisappear(_ animated: Bool)
+}
+public extension ResponseViewRelatatedEvent where Self: UIView {
+    func viewWillAppear(_ animated: Bool) { }
+    func viewDidAppear(_ animated: Bool) { }
+    func viewWillDisappear(_ animated: Bool) { }
+    func viewDidDisappear(_ animated: Bool) { }
+}
 public extension UIView {
    private struct AssociatedKeys {
         static let layoutFittingMaxmiumSize = UnsafeRawPointer(bitPattern: "wq.view.properties.layoutFittingMaxmiumSize".hashValue)!
@@ -87,13 +98,13 @@ public extension WQModules where Base: UIView {
 }
 @available(iOS 10.0, *)
 public extension WQModules where Base: UIView { 
-    func alert(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
+    func alert(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)
         states.animator.animationEnable = flag
         self.present(config, states: states, completion: completion)
     }
     
-    func actionSheet(_ flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
+    func actionSheet(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.actionSheet, anmation: .default)
         states.animator.animationEnable = flag
         self.present(config, states: states, completion: completion)
@@ -103,7 +114,7 @@ public extension WQModules where Base: UIView {
     /// - Parameters:
     ///   - sender: 从哪个view 弹出
     ///   - aliment: 弹出框与sender的对齐方式
-    func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .default, completion: ModalAnimation.Completion? = nil) {
+    func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let rect: CGRect
         if config.style.inParent {
             guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else {
@@ -137,7 +148,7 @@ public extension WQModules where Base: UIView {
      
     
     /// 弹窗
-    func present(_ config: ModalConfig = .default,
+    func present(_ config: ModalConfig = .init(),
                  states: StyleConfig,
                  completion: ModalAnimation.Completion? = nil) {
         let layout = WQLayoutController(config, subView: self.base)
@@ -149,7 +160,7 @@ public extension WQModules where Base: UIView {
     }
                                 
     /// 拖拽显示
-    func drag(present config: ModalConfig = .default,
+    func drag(present config: ModalConfig = .init(),
               states: StyleConfig) -> ModalContext? {
         let layout = WQLayoutController(config, subView: self.base)
         layout.startInteractive(states)
