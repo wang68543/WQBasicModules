@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.3.7'
+  s.version          = '0.3.8'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
