@@ -12,7 +12,7 @@ public class ModalConfig {
     /// 当前在结构中的 viewController
     internal weak var fromViewController: UIViewController? 
     /// 是否要调用生命周期
-    public var layoutControllerLifeCycleable: Bool = false
+    public var controllerEventManagement: Bool = false
     /// 用户交互消失的方式
     public var interactionDismiss: InteractDismissMode = .none
     /// 容器控制器的View显示frame
@@ -25,6 +25,8 @@ public class ModalConfig {
     
     /// 当有键盘的时候 键盘距离底部的距离
     public var adjustOffsetDistanceKeyboard: CGFloat = .zero
+    /// 是否按照顺序显示
+    public var isSequenceModal: Bool = false
     
     public init(_ style: ModalPresentation = .autoModal) {
         self.style = style
@@ -35,11 +37,8 @@ public class ModalConfig {
             }
         }
     }
-//    deinit {
-//        // 这里如果使用常量是不会释放的 例如: 下面的default
-//        debugPrint("\(self):" + #function + "♻️")
-//    }
-}
-public extension ModalConfig {
-    static let `default` = ModalConfig() 
+    deinit {
+        // 这里如果使用常量是不会释放的 例如: 下面的default
+        debugPrint("\(self):" + #function + "♻️")
+    }
 }

@@ -88,25 +88,84 @@ public extension StyleConfig {
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
-        case let .pan(positions):
-           if let willShowPostion = positions[.willShow],
-            let showPostion = positions[.show],
-            let hidePosition = positions[.hide] {
-            let containerFrame = showPostion.frame(size: size, container: controllerSize, state: .show)
-            let willShowPoint = willShowPostion.center(size: size, container: controllerSize, state: .willShow)
-            let showPoint = showPostion.center(size: size, container: controllerSize, state: .show)
-            let hidePoint = hidePosition.center(size: size, container: controllerSize, state: .hide)
-            let diming = self.dimingReference()
-            let willShowFrame = ModalRect(container: containerFrame)
-            let tranforms = self.panTransform(willShowPoint, show: showPoint, hide: hidePoint)
-            var references: [ModalState: [ModalKeyPath]] = [:]
-            references.combine([.willShow: willShowFrame])
-            references.combine(diming)
-            references.combine(tranforms)
-            for (key, items) in references {
-                values[key] = [ModalMapItem(layout, refrences: items)]
-            }
-           }
+            case let .pan(positions):
+               if let willShowPostion = positions[.willShow],
+                let showPostion = positions[.show],
+                let hidePosition = positions[.hide] {
+                let containerFrame = showPostion.frame(size: size, container: controllerSize, state: .show)
+                let willShowPoint = willShowPostion.center(size: size, container: controllerSize, state: .willShow)
+                let showPoint = showPostion.center(size: size, container: controllerSize, state: .show)
+                let hidePoint = hidePosition.center(size: size, container: controllerSize, state: .hide)
+                let diming = self.dimingReference()
+                let willShowFrame = ModalRect(container: containerFrame)
+                let tranforms = self.panTransform(willShowPoint, show: showPoint, hide: hidePoint)
+                var references: [ModalState: [ModalKeyPath]] = [:]
+                references.combine([.willShow: willShowFrame])
+                references.combine(diming)
+                references.combine(tranforms)
+                for (key, items) in references {
+                    values[key] = [ModalMapItem(layout, refrences: items)]
+                }
+               }
+            case let .popup(position, anchorPoint, direction):
+                
+                let origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
+                
+                func horizontalExpend(_ anchorPtX: CGFloat) -> CGRect {
+                    if anchorPtX < 0.5 { // 向右展开
+                        return CGRect(x: origin.x, y: origin.y, width: .zero, height: size.height)
+                    } else if anchorPtX > 0.5 { // 向左展开
+                        return CGRect(x: origin.x+size.width, y: origin.y, width: .zero, height: size.height)
+                    } else {
+                        return CGRect(x: origin.x+size.width*0.5, y: origin.y, width: .zero, height: size.height)
+                    }
+                }
+                func verticalExpend(_ anchorPtY: CGFloat) -> CGRect {
+                    if anchorPtY < 0.5 { // 向下展开
+                        return CGRect(x: origin.x, y: origin.y, width: size.width, height: .zero)
+                    } else if anchorPtY > 0.5 { // 向上展开
+                        return CGRect(x: origin.x, y: origin.y+size.height, width: size.width, height: .zero)
+                    } else {
+                        return CGRect(x: origin.x, y: origin.y+size.height*0.5, width: size.width, height: .zero)
+                    }
+                }
+                
+                let willShowFrame: CGRect
+                switch direction {
+                case .left:
+                    willShowFrame = horizontalExpend(1.0)
+                case .down:
+                    willShowFrame = verticalExpend(0.0)
+                case .right:
+                    willShowFrame = horizontalExpend(0.0)
+                case .up:
+                    willShowFrame = verticalExpend(1.0)
+                case .horizontalMiddle:
+                    willShowFrame = horizontalExpend(0.5)
+                case .verticalMiddle:
+                    willShowFrame = verticalExpend(0.5)
+                case .horizontalAuto:
+                    willShowFrame = horizontalExpend(anchorPoint.x)
+                case .verticalAuto:
+                    willShowFrame = verticalExpend(anchorPoint.y)
+                }
+                
+                let diming = self.dimingReference()
+                
+                let didShowFrame = CGRect(origin: origin, size: size)
+                let scale: CGFloat = 1.03
+                let showFrame = CGRect(x: origin.x - (size.width * (scale - 1.0))*0.5, y: origin.y - (size.height * (scale - 1.0))*0.5, width: size.width*scale, height: size.height*scale)
+                
+                let willShow = ModalRect(container: willShowFrame)
+                let show = ModalRect(container: showFrame)
+                let didShow = ModalRect(container: didShowFrame)
+                
+                var references: [ModalState: [ModalKeyPath]] = [:]
+                references.combine([.willShow: willShow, .show: show, .didShow: didShow, .hide: willShow])
+                references.combine(diming)
+                for (key, items) in references {
+                    values[key] = [ModalMapItem(layout, refrences: items)]
+                }
             default:
                 break
             }

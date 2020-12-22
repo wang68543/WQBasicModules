@@ -7,6 +7,20 @@
 
 import Foundation
 import UIKit
+public protocol ResponseViewRelatatedEvent: NSObjectProtocol {
+    func viewWillAppear(_ animated: Bool)
+    func viewDidAppear(_ animated: Bool)
+    func viewWillDisappear(_ animated: Bool)
+    func viewDidDisappear(_ animated: Bool)
+}
+
+public extension ResponseViewRelatatedEvent where Self: UIView {
+    func viewWillAppear(_ animated: Bool) { }
+    func viewDidAppear(_ animated: Bool) { }
+    func viewWillDisappear(_ animated: Bool) { }
+    func viewDidDisappear(_ animated: Bool) { }
+}
+
 public class WQContainerView: UIView {
     var currentView: UIView? {
         return self.subviews.last
@@ -33,5 +47,34 @@ public class WQContainerView: UIView {
         if view == nil && !self.bounds.isEmpty { return self.bounds.size }
         guard let subView = view ?? self.subviews.first else { return .zero }
         return subView.modalSize
+    }
+}
+public extension WQContainerView {
+    func viewWillAppear(_ animated: Bool) {
+        guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {
+            return
+        }
+        reponsd.viewWillAppear(animated)
+    }
+    func viewDidAppear(_ animated: Bool) {
+        guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {
+            return
+        }
+        reponsd.viewDidAppear(animated)
+        
+    }
+    func viewWillDisappear(_ animated: Bool) {
+        guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {
+            return
+        }
+        reponsd.viewWillDisappear(animated)
+        
+    }
+    func viewDidDisappear(_ animated: Bool) {
+        guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {
+            return
+        }
+        reponsd.viewDidDisappear(animated)
+        
     }
 }

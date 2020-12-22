@@ -97,9 +97,9 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
     public func interactive(cancel velocity: CGPoint) { 
         self.isInteractive = false
     }
-//    deinit {
-//       debugPrint("\(self):" + #function + "♻️")
-//    }
+    deinit {
+       debugPrint("\(self):" + #function + "♻️")
+    }
 }
 
 @available(iOS 10.0, *)
