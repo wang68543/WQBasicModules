@@ -17,30 +17,31 @@ public extension Data {
         for i in 0..<len { result = result.appendingFormat("%02X", digest[i]) }
         digest.deallocate()
         return result
-    } 
-//    @available(*, deprecated, message: "use encodedDES")
-//    func DES(encodeWithKey key: String) -> Data? {
-//        return (self as NSData).desEncode(key)
-//    }
-//    @available(*, deprecated, message: "use decodedDES")
-//    func DES(decodeWithKey key: String) -> Data? {
-//         return (self as NSData).desDecode(key)
-//    }
-//    @available(*, deprecated, message: "use encodedAES256")
-//    func AES256(encodeWithKey key: String) -> Data? {
-//        return (self as NSData).aes256Encode(key)
-//    }
-//    @available(*, deprecated, message: "use decodedAES256")
-//    func AES256(decodeWithKey key: String) -> Data? {
-//         return (self as NSData).aes256Decode(key)
-//    }
-    
+    }
 }
 
 // MARK: - -- binary
 public extension Data {
+    
+    /// hex string to data
+    init?(hex string: String) { 
+        guard let chars = string.cString(using: .utf8),
+              !chars.isEmpty else { return nil }
+        let length = chars.count / 2
+        var data = Data(capacity: length)
+        var byteChars: [CChar] = Array(repeating: .zero, count: 3)
+        var byte: UInt8 = .zero
+        for idx in 0..<length {
+            byteChars[0] = chars[idx*2]
+            byteChars[1] = chars[idx*2+1]
+            byte = UInt8(strtoul(byteChars, nil, 16))
+            data.append(&byte, count: 1)
+         }
+         self = data
+    }
+    
+    /// var bytes: [UInt8] = [0xDE, 0xAD, 0xBE, 0xEF, 0x42]
     var bytes: [UInt8] {
-        // return map { UInt8($0) }
         return [UInt8](self)
     }
     /// 16进制字符串

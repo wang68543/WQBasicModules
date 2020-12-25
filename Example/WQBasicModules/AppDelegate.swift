@@ -38,6 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.date = Date()
         let cls = UINavigationController.self
         
+        let data = Data(hex: "ajcd")
+        debugPrint(data?.bytes)
         debugPrint("=======\(AppDelegate.date)")
 //        if #available(iOS 10.0, *) {
 //            let formatter = MeasurementFormatter()

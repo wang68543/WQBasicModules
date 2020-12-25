@@ -22,7 +22,8 @@ public class ModalReference<Root, Value>: ModalKeyPath {
      guard let item = target as? Root else { return }
      item[keyPath: keyPath] = value
    } 
-} 
+}
+
 @available(iOS 10.0, *)
 public class ModalRect: ModalReference<WQLayoutController, CGRect> { }
 @available(iOS 10.0, *)

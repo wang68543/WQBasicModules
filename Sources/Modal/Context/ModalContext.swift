@@ -36,6 +36,7 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         animator = states.animator
         super.init()
     }
+    
     /// 是否使用默认时间
     private var isDefaultDuration: Bool = false
     // 动画的时间

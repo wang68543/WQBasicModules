@@ -56,6 +56,7 @@ public extension StyleConfig {
         self.addState(target, values: [value], state: state)
     }
 }
+
 @available(iOS 10.0, *)
 public extension StyleConfig {
     func setupStates(_ layout: WQLayoutController, config: ModalConfig) {

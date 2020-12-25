@@ -36,8 +36,8 @@ public extension Screen {
             /// 12 Pro Max/12 Pro/12 top: 47, 12 Mini top: 50
             if let window = UIApplication.shared.delegate?.window ?? win {
                 instets = window.safeAreaInsets
-                if instets.top == 0 {
-                    if instets.bottom > 0 { //刘海屏
+                if instets.top == .zero {
+                    if instets.bottom > .zero { //刘海屏
                         instets.top = max(44.0, UIApplication.shared.statusBarFrame.height)
                     } else {
                         instets.top = max(20.0, UIApplication.shared.statusBarFrame.height)

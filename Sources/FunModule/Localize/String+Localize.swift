@@ -7,7 +7,8 @@
 //
 
 import Foundation
-public extension String { 
+public extension String {
+    
     var localized: String {
         return self.localized()
      }
