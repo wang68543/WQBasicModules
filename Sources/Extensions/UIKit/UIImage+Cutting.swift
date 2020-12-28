@@ -24,54 +24,54 @@ public extension UIImage {
     ///   - path: 裁剪路径
     ///   - mode: 裁切模式
     /// - Returns: 裁剪后的图片
-    @available(*, deprecated, message: "use UIImage.render")
-    func clip(_ rect: CGRect, path: CGPath, mode: CGPathFillRule = .winding) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-        guard let ref = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        ref.beginPath()
-        ref.addPath(path)
-        ref.closePath()
-        ref.clip(using: mode)
-        self.draw(in: rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image
-    }
+//    @available(*, deprecated, message: "use UIImage.render")
+//    func clip(_ rect: CGRect, path: CGPath, mode: CGPathFillRule = .winding) -> UIImage? {
+//        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+//        guard let ref = UIGraphicsGetCurrentContext() else {
+//            return nil
+//        }
+//        ref.beginPath()
+//        ref.addPath(path)
+//        ref.closePath()
+//        ref.clip(using: mode)
+//        self.draw(in: rect)
+//        let image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+//        return image
+//    }
     
     /// 裁剪图片(解决textView里面的文字用cgimage 无法截取)
-    @available(*, deprecated, message: "use UIImage.render")
-    func clip(toRect cropRect: CGRect, viewSize: CGSize? = nil) -> UIImage? {
-        var imgViewScale: CGFloat = 1.0
-        if let vSize = viewSize {
-            imgViewScale = max(self.size.width / vSize.width,
-                               self.size.height / vSize.height)
-        }
-        /**
-         * // Perform cropping in Core Graphics
-         guard let cutImageRef = self.cgImage?.cropping(to:cropZone) else {
-             return nil
-         }
-         */
-        // Scale cropRect to handle images larger than shown-on-screen size
-        let cropZone = CGRect(x:cropRect.origin.x * imgViewScale,
-                              y:cropRect.origin.y * imgViewScale,
-                              width:cropRect.size.width * imgViewScale,
-                              height:cropRect.size.height * imgViewScale)
-       UIGraphicsBeginImageContextWithOptions(cropZone.size, false, UIScreen.main.scale)
-       self.draw(in: CGRect(x: -cropRect.minX, y: -cropRect.minY, width: self.size.width, height: self.size.height))
-       let image = UIGraphicsGetImageFromCurrentImageContext()
-       UIGraphicsEndImageContext()
-       return image
-
-    }
+//    @available(*, deprecated, message: "use UIImage.render")
+//    func clip(toRect cropRect: CGRect, viewSize: CGSize? = nil) -> UIImage? {
+//        var imgViewScale: CGFloat = 1.0
+//        if let vSize = viewSize {
+//            imgViewScale = max(self.size.width / vSize.width,
+//                               self.size.height / vSize.height)
+//        }
+//        /**
+//         * // Perform cropping in Core Graphics
+//         guard let cutImageRef = self.cgImage?.cropping(to:cropZone) else {
+//             return nil
+//         }
+//         */
+//        // Scale cropRect to handle images larger than shown-on-screen size
+//        let cropZone = CGRect(x:cropRect.origin.x * imgViewScale,
+//                              y:cropRect.origin.y * imgViewScale,
+//                              width:cropRect.size.width * imgViewScale,
+//                              height:cropRect.size.height * imgViewScale)
+//       UIGraphicsBeginImageContextWithOptions(cropZone.size, false, UIScreen.main.scale)
+//       self.draw(in: CGRect(x: -cropRect.minX, y: -cropRect.minY, width: self.size.width, height: self.size.height))
+//       let image = UIGraphicsGetImageFromCurrentImageContext()
+//       UIGraphicsEndImageContext()
+//       return image
+//
+//    }
     /// 绘制圆或椭圆图片
-    func drawInCircle(_ size: CGSize) -> UIImage? {
-        let rect = CGRect(origin: .zero, size: size)
-        let path = UIBezierPath(ovalIn: rect)
-       return clip(rect, path: path.cgPath, mode: .winding)
-    }
+//    func drawInCircle(_ size: CGSize) -> UIImage? {
+//        let rect = CGRect(origin: .zero, size: size)
+//        let path = UIBezierPath(ovalIn: rect)
+//       return clip(rect, path: path.cgPath, mode: .winding)
+//    }
     
 //    /// 指定宽或高缩放到适当的大小
 //    ///

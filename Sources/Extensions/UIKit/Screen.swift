@@ -8,11 +8,11 @@ import Foundation
 #if canImport(UIKit)
 import UIKit 
 public struct Screen {
-    public static let bounds = UIScreen.main.bounds
-    public static let size = UIScreen.main.bounds.size
     public static let scale = UIScreen.main.scale
-    public static let width = UIScreen.main.bounds.width
-    public static let height = UIScreen.main.bounds.height
+    public static let bounds = UIScreen.main.bounds
+    public static let size = bounds.size 
+    public static let width = size.width
+    public static let height = size.height
     /// 主要用于适配小屏幕
     public static let isWidth320 = width == 320
     

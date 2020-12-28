@@ -24,6 +24,17 @@ import Foundation
 }
 
 public extension Decodable {
+//    #if canImport(Foundation)
+//    /// SwifterSwift: Parsing the model in Decodable type
+//    /// - Parameters:
+//    ///   - data: Data.
+//    ///   - decoder: JSONDecoder. Initialized by default
+//    init?(from data: Data, using decoder: JSONDecoder = .init(), in key: String? = nil) {
+//        guard let parsed = try? decoder.decode(Self.self, from: data) else { return nil }
+//        self = parsed
+//    }
+//    #endif
+    
     /// 从缓存中读取
     static func readValue(_ stand: UserDefaults = .standard,
                           decoder: JSONDecoder = .init(),
