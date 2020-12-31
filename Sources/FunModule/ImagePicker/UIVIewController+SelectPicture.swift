@@ -86,7 +86,8 @@ public extension UIViewController {
             if status.isAvailable {
                 let imagePicker = UIImagePickerController()
                 imagePicker.sourceType = type
-                imagePicker.delegate = self
+                config?(imagePicker)
+                imagePicker.delegate = self 
                 self.present(imagePicker, animated: true, completion: nil)
                 objc_setAssociatedObject(self, AssociatedKeys.imageInfoKey, completion, .OBJC_ASSOCIATION_COPY_NONATOMIC)
             } else {

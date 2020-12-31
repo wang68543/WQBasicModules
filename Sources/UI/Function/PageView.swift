@@ -17,7 +17,9 @@ open class PageView: UIView {
     public internal(set) var currentIndex: Int = .max
     
     public var pageDidChange: ((Int) -> (Void))?
-     
+    /// 重复
+//    public var isLoop: Bool = false
+    
     public init(_ pageController: UIPageViewController) {
         self.pageController = pageController
         super.init(frame: .zero)

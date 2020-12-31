@@ -37,15 +37,4 @@ public extension Date {
     private func previousUnit(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         return self.dateByAdding(-1, unit: unit, with: calendar)
     }
-}
-public extension Int {
-//    var secondsDate: Date {
-//        return Date
-//    }
-}
-public extension Double {
-    
-}
-public extension Float {
-    
-}
+} 
