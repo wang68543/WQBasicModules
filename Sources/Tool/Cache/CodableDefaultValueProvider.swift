@@ -51,7 +51,24 @@ public extension Bool {
         public static let defaultValue = true
     }
 }
+/**
+    struct Video: Codable {
+     enum State: String, Codable, CodableDefaultValue {
+         case streaming
+         case archived
+         case unknown
+         
+         static let defaultValue = Video.State.unknown
+     }
+     @CodableDefault.IntOne var id: Int
+     @CodableDefault.Empty var title: String
+     @CodableDefault.False var commentEnabled: Bool
+     @CodableDefault.True var publicVideo: Bool
 
+     @CodableDefault<State> var state: State
+     
+    }
+ */
 public extension CodableDefault {
     // Bool
     typealias True = CodableDefault<Bool.True>

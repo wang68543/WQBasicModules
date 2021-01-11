@@ -46,6 +46,25 @@ fileprivate func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, le
         return hash
 }
 public extension String {
+    /// 转换拼音
+    /// - Parameter stripDiacritics: 是否去除音标
+    ///   - trimming: 是否去除拼音间的间隔
+    func pinYin(_ stripDiacritics: Bool = true, trimming: Bool = true) -> String {
+        guard let contents = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, self as CFString) else {
+            return self
+        }
+        CFStringTransform(contents, nil, kCFStringTransformMandarinLatin, false) //转化成拼音
+        if stripDiacritics {
+            CFStringTransform(contents, nil, kCFStringTransformStripDiacritics, false) //去除音标
+        }
+        let string = contents as String
+        if trimming {
+            return string.replacingOccurrences(of: " ", with: "")
+        } else {
+            return string
+        } 
+    }
+    
     /// md5加密 默认小写
     func md5String(lower: Bool = true) -> String {
         guard let utf8 = cString(using: .utf8) else { return String() }
@@ -97,7 +116,7 @@ public extension String {
         CCHmac(algorithm.hmacAlgorithm, cKey, strlen(cKey), cData, strlen(cData), &result)
         let hmacData = Data(bytes: result, count: len)
         return hmacData.base64EncodedString(options: .lineLength76Characters)
-       }
+    }
 //    @available(*, deprecated, message: "use sha1String")
 //    func oc_sha1() -> String {
 //        return (self as NSString).sha1()
