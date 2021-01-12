@@ -91,6 +91,16 @@ public extension UIImage {
 //        }
 //       return reDraw(CGRect(origin: .zero, size: CGSize(width: drawW, height: drawH)))
 //    }
+    /// 裁剪
+    func crop(in rect: CGRect) -> UIImage? {
+        let path = UIBezierPath(rect: rect)
+       return self.render(to: self.size, opaque: false, contentMode: .center, clipPath: path, clipRule: .evenOdd)
+    }
+    /// 裁剪
+    func crop(with path: UIBezierPath) -> UIImage? {
+        return self.render(to: self.size, opaque: false, contentMode: .center, clipPath: path, clipRule: .evenOdd)
+    }
+    
 }
 public extension Array where Element: UIImage {
     ///
