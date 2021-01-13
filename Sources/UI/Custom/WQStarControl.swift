@@ -195,6 +195,7 @@ private extension WQStarControl {
             drawStar(rect, progress: progress, context: context)
         }
   }
+    //https://medium.com/%E5%BD%BC%E5%BE%97%E6%BD%98%E7%9A%84-swift-ios-app-%E9%96%8B%E7%99%BC%E5%95%8F%E9%A1%8C%E8%A7%A3%E7%AD%94%E9%9B%86/%E5%88%A9%E7%94%A8-cgaffinetransform-%E6%8E%A7%E5%88%B6%E5%85%83%E4%BB%B6%E7%B8%AE%E6%94%BE-%E4%BD%8D%E7%A7%BB-%E6%97%8B%E8%BD%89%E7%9A%84%E4%B8%89%E7%A8%AE%E6%96%B9%E6%B3%95-dca1abbf9590 可参照这个 
     // 算法参照: https://blog.csdn.net/djh123456021/article/details/78306250
     //swiftlint:disable function_body_length
     func drawStar(_ rect: CGRect, progress: CGFloat, context: CGContext) {
