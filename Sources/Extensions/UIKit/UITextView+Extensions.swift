@@ -8,11 +8,11 @@
 import Foundation
 public extension UITextView {
     private struct AssociatedKeys {
-        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textView.maxInputLength".hashValue)!
+        static let maxTextSizeKey = UnsafeRawPointer(bitPattern: "wq.textView.maxTextSize".hashValue)!
     }
     
     /// 当textview一次输入的文字过多的时候 前后跳动问题无法解决
-    var maxInputLength: Int? {
+    var maxTextSize: Int? {
         set {
             if newValue == nil {
                 self.removeObserver()
@@ -20,13 +20,13 @@ public extension UITextView {
                 self.addObserver()
             }
             #if arch(arm64) || arch(x86_64)
-            objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, AssociatedKeys.maxTextSizeKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
             #else
-            objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_COPY)
+            objc_setAssociatedObject(self, AssociatedKeys.maxTextSizeKey, newValue, .OBJC_ASSOCIATION_COPY)
             #endif 
         }
         get {
-            return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int
+            return objc_getAssociatedObject(self, AssociatedKeys.maxTextSizeKey) as? Int
         }
     }
     
@@ -40,9 +40,10 @@ public extension UITextView {
     private func removeObserver() {
         NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: self)
     }
+    //https://zltunes.github.io/2019/04/14/uitextview-max-length/
     @objc
     func textDidChange() {
-        guard let length = self.maxInputLength,
+        guard let length = self.maxTextSize,
             let string = self.text, string.count > length else {
                 return
         }

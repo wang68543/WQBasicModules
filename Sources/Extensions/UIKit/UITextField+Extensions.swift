@@ -8,10 +8,10 @@
 import UIKit
 public extension UITextField {
     private struct AssociatedKeys {
-        static let maxInputLengthKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxInputLength".hashValue)! 
+        static let maxTextSizeKey = UnsafeRawPointer(bitPattern: "wq.textFiled.maxTextSize".hashValue)!
     }
     /// 限制最大输入长度
-    var maxInputLength: Int? {
+    var maxTextSize: Int? {
         set {
             if newValue == nil {
                 self.removeObserver()
@@ -19,13 +19,13 @@ public extension UITextField {
                 self.addObserver()
             }
             #if arch(arm64) || arch(x86_64)
-            objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            objc_setAssociatedObject(self, AssociatedKeys.maxTextSizeKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
             #else
-            objc_setAssociatedObject(self, AssociatedKeys.maxInputLengthKey, newValue, .OBJC_ASSOCIATION_COPY)
+            objc_setAssociatedObject(self, AssociatedKeys.maxTextSizeKey, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
         }
         get {
-           return objc_getAssociatedObject(self, AssociatedKeys.maxInputLengthKey) as? Int
+           return objc_getAssociatedObject(self, AssociatedKeys.maxTextSizeKey) as? Int
         }
     }
     
@@ -42,7 +42,7 @@ public extension UITextField {
     
     @objc
     func textDidChange() {
-        guard let length = self.maxInputLength,
+        guard let length = self.maxTextSize,
         let string = self.text, string.count > length else {
             return
         }

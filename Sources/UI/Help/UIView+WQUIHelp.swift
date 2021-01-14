@@ -39,7 +39,7 @@ extension UIView {
         return self.viewController?.keyboardManager
     }
     /// 转为全局坐标
-    public var frameInFullScreen: CGRect {
+    public var frameConvertToFullScreen: CGRect {
         guard let fatherView = self.superview else {
             return .zero
         }
