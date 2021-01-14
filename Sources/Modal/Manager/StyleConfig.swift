@@ -12,8 +12,8 @@ import Foundation
 public class StyleConfig {
     /// 各个状态的配置
     public var states: [ModalState: ModalMapItems]
-    /// 是否需要遮罩
-    public var dimming: Bool = true
+//    /// 是否需要遮罩
+//    public var dimming: Bool = true
    /// states
     public let showStyle: ModalShowStyle
     /// 动画方式 ModalDefaultAnimation
@@ -65,26 +65,31 @@ public extension StyleConfig {
         let controllerSize = config.showControllerFrame.size
         switch self.showStyle {
             case .alert:
-                let diming = self.dimingReference()
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: (controllerSize.height - size.height)*0.5, width: size.width, height: size.height)
                 let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.alertTransform()
                 var references: [ModalState: [ModalKeyPath]] = [:]
                 references.combine([.willShow: willShowFrame])
-                references.combine(diming)
+                if config.dimming {
+                    let diming = self.dimingReference()
+                    references.combine(diming)
+                }
                 references.combine(tranforms)
                 references.combine(self.alertAlpha())
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
             case .actionSheet:
-                let diming = self.dimingReference()
+                
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
                 let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.actionSheetTransform(size, container: controllerSize)
                 var references: [ModalState: [ModalKeyPath]] = [:]
                 references.combine([.willShow: willShowFrame])
-                references.combine(diming)
+                if config.dimming {
+                    let diming = self.dimingReference()
+                    references.combine(diming)
+                }
                 references.combine(tranforms)
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
@@ -97,12 +102,14 @@ public extension StyleConfig {
                 let willShowPoint = willShowPostion.center(size: size, container: controllerSize, state: .willShow)
                 let showPoint = showPostion.center(size: size, container: controllerSize, state: .show)
                 let hidePoint = hidePosition.center(size: size, container: controllerSize, state: .hide)
-                let diming = self.dimingReference()
                 let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.panTransform(willShowPoint, show: showPoint, hide: hidePoint)
                 var references: [ModalState: [ModalKeyPath]] = [:]
                 references.combine([.willShow: willShowFrame])
-                references.combine(diming)
+                if config.dimming {
+                    let diming = self.dimingReference()
+                    references.combine(diming)
+                }
                 references.combine(tranforms)
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
@@ -149,9 +156,7 @@ public extension StyleConfig {
                     willShowFrame = horizontalExpend(anchorPoint.x)
                 case .verticalAuto:
                     willShowFrame = verticalExpend(anchorPoint.y)
-                }
-                
-                let diming = self.dimingReference()
+                }  
                 
                 let didShowFrame = CGRect(origin: origin, size: size)
                 let scale: CGFloat = 1.03
@@ -163,7 +168,10 @@ public extension StyleConfig {
                 
                 var references: [ModalState: [ModalKeyPath]] = [:]
                 references.combine([.willShow: willShow, .show: show, .didShow: didShow, .hide: willShow])
-                references.combine(diming)
+                if config.dimming {
+                    let diming = self.dimingReference()
+                    references.combine(diming)
+                }
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
@@ -175,12 +183,10 @@ public extension StyleConfig {
     
    private func dimingReference() -> [ModalState: ModalKeyPath] {
         var values: [ModalState: ModalKeyPath] = [:]
-        if self.dimming {
-            values[.willShow] = ModalFloat(dimming: 0.0)
-            values[.show] = ModalFloat(dimming: 0.85)
-            values[.didShow] = ModalFloat(dimming: 1.0)
-            values[.hide] = values[.willShow]
-        }
+        values[.willShow] = ModalFloat(dimming: 0.0)
+        values[.show] = ModalFloat(dimming: 0.85)
+        values[.didShow] = ModalFloat(dimming: 1.0)
+        values[.hide] = values[.willShow]
         return values
     }
     private func alertAlpha() -> [ModalState: ModalKeyPath] {

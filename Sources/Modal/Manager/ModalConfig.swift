@@ -23,6 +23,9 @@ public class ModalConfig {
     /// 导航控制器的类型 默认
     public var navgationControllerType = UINavigationController.self
     
+    /// 是否需要遮罩
+    public var dimming: Bool = true
+    
     /// 当有键盘的时候 键盘距离底部的距离
     public var adjustOffsetDistanceKeyboard: CGFloat = .zero
     /// 是否按照顺序显示
