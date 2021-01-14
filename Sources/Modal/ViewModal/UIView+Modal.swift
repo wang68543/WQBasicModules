@@ -98,43 +98,6 @@ public extension WQModules where Base: UIView {
         self.present(config, states: states, completion: completion)
     }
     
-    /// pop弹出框
-    /// - Parameters:
-    ///   - sender: 从哪个view 弹出
-    ///   - aliment: 弹出框与sender的对齐方式
-    func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
-        let rect: CGRect
-        if config.style.inParent {
-            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else {
-                return
-            }
-            rect = frame
-        } else {
-            guard let frame = sender.superview?.convert(sender.frame, to: nil) else { //全局显示
-                return
-            }
-            rect = frame
-        } 
-        let anchorPoint: CGPoint
-        let position: CGPoint
-        
-        switch aliment {
-        case .leading:
-            position = CGPoint(x: rect.minX, y: rect.maxY)
-            anchorPoint = CGPoint(x: 0.0, y: 0.0)
-        case .middle:
-            position = CGPoint(x: rect.midX, y: rect.maxY)
-            anchorPoint = CGPoint(x: 0.5, y: 0.0)
-        case .trailing:
-            position = CGPoint(x: rect.maxX, y: rect.maxY)
-            anchorPoint = CGPoint(x: 1.0, y: 0.0)
-        }
-        let states = StyleConfig(.popup(position, anchorPoint, .down))
-        states.animator.animationEnable = flag
-        present(config, states: states, completion: completion)
-    }
-     
-    
     /// 弹窗
     func present(_ config: ModalConfig = .init(),
                  states: StyleConfig,
@@ -159,3 +122,50 @@ public extension WQModules where Base: UIView {
         self.base.layoutController?.dismiss(animated: flag, completion: completion)
     }
 } 
+
+@available(iOS 10.0, *)
+public extension WQModules where Base: UIView {
+    /// pop弹出框
+    /// - Parameters:
+    ///   - sender: 从哪个view 弹出
+    ///   - aliment: 弹出框与sender的对齐方式
+    func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
+        let rect: CGRect
+        if config.style.inParent {
+            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else {
+                return
+            }
+            rect = frame
+        } else {//全局显示
+            guard let frame = sender.superview?.convert(sender.frame, to: nil) else {
+                return
+            }
+            rect = frame
+        }
+        self.popDown(to: rect, aliment: aliment, flag: flag, config: config, completion: completion)
+    }
+    
+    /// 向下展开
+    /// - Parameters:
+    ///   - rect: 在目标容器中显示的区域
+    ///   - aliment: contentView 与Rect对齐的位置
+    ///   - flag: 是否动画
+    func popDown(to rect: CGRect, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
+        let anchorPoint: CGPoint
+        let position: CGPoint 
+        switch aliment {
+        case .leading:
+            position = CGPoint(x: rect.minX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        case .middle:
+            position = CGPoint(x: rect.midX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        case .trailing:
+            position = CGPoint(x: rect.maxX, y: rect.maxY)
+            anchorPoint = CGPoint(x: 1.0, y: 0.0)
+        }
+        let states = StyleConfig(.popup(position, anchorPoint, .down))
+        states.animator.animationEnable = flag
+        present(config, states: states, completion: completion)
+    }
+}

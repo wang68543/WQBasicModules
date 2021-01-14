@@ -38,6 +38,13 @@ extension UIView {
     public var keyboardManager: WQKeyboardManager? {
         return self.viewController?.keyboardManager
     }
+    /// 转为全局坐标
+    public var frameInFullScreen: CGRect {
+        guard let fatherView = self.superview else {
+            return .zero
+        }
+        return fatherView.convert(self.frame, to: nil)
+    }
 }
 extension UIView {
     /// 列出当前View的所有输入框
