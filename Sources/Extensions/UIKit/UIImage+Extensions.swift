@@ -408,4 +408,61 @@ public extension UIImage {
     }
 }
 
+public extension UIImage {
+    func rotation(_ orientation: UIImage.Orientation) -> UIImage? {
+        let rotate: CGFloat
+        let translateX: CGFloat
+        let translateY: CGFloat
+        let scaleX: CGFloat
+        let scaleY: CGFloat
+        let rect: CGRect
+        switch (orientation) {
+        case .left:
+            rect = CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width)
+            rotate = CGFloat.pi/2.0
+            translateX = 0
+            translateY = -rect.size.width
+            scaleY = rect.size.width/rect.size.height
+            scaleX = rect.size.height/rect.size.width
+        case .right:
+            rotate = CGFloat.pi/2.0*3.0
+            rect = CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width)
+            translateX = -rect.size.height
+            translateY = 0
+            scaleY = rect.size.width/rect.size.height
+            scaleX = rect.size.height/rect.size.width
+        case .down:
+            rotate = CGFloat.pi
+            rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
+            translateX = -rect.size.width
+            translateY = -rect.size.height
+            scaleX = 1.0
+            scaleY = 1.0 
+        default:
+            rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
+            rotate = 0.0;
+            translateX = 0;
+            translateY = 0
+            scaleX = 1.0
+            scaleY = 1.0
+        }
+        
+       UIGraphicsBeginImageContext(rect.size);
+        guard let cgImg = self.cgImage,
+              let context = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return nil
+        }
+       //做CTM变换
+        context.translateBy(x: 0.0, y: rect.size.height)
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.rotate(by: rotate)
+        context.translateBy(x: translateX, y: translateY)
+        context.scaleBy(x: scaleX, y: scaleY)
+        context.draw(cgImg, in: rect)
+        let newPic = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newPic
 
+    }
+}
