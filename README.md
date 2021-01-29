@@ -31,5 +31,9 @@ WQBasicModules is available under the MIT license. See the LICENSE file for more
 ### issue
 当多个target使用不同的subspec的时候,请将podfile中的
 ```ruby 
-use_frameworks! 改为 use_modular_headers!
+1. use_frameworks! 改为 use_modular_headers!
+```
+2. 旧版本的弹窗需要单独引入 
+```ruby 
+    pod 'WQBasicModules/Animation/Transitioning' 
 ```

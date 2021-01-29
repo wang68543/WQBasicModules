@@ -32,7 +32,6 @@ Pod::Spec.new do |s|
   
   s.subspec 'Core' do |ss|
       ss.dependency 'WQBasicModules/Modal'
-      #旧版本的弹窗需要单独引入 ss.dependency 'WQBasicModules/Animation/Transitioning'
       ss.dependency 'WQBasicModules/Animation/Layer'
       ss.dependency 'WQBasicModules/Animation/Views'
       ss.dependency 'WQBasicModules/Extensions'
