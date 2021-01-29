@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.3.8'
+  s.version          = '0.3.9'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
@@ -32,7 +32,9 @@ Pod::Spec.new do |s|
   
   s.subspec 'Core' do |ss|
       ss.dependency 'WQBasicModules/Modal'
-      ss.dependency 'WQBasicModules/Animation'
+      #旧版本的弹窗需要单独引入 ss.dependency 'WQBasicModules/Animation/Transitioning'
+      ss.dependency 'WQBasicModules/Animation/Layer'
+      ss.dependency 'WQBasicModules/Animation/Views'
       ss.dependency 'WQBasicModules/Extensions'
       ss.dependency 'WQBasicModules/Tool'
       ss.dependency 'WQBasicModules/UI'
