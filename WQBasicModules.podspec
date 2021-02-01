@@ -114,6 +114,7 @@ Pod::Spec.new do |s|
     
      s.subspec 'Tool' do |ss|
          ss.subspec 'Cache' do |sss|
+             sss.dependency 'WQBasicModules/Extensions/Foundation'
              sss.source_files = 'Sources/Tool/Cache/*.swift'
          end
      end
