@@ -8,10 +8,7 @@
 
 import Foundation
 open class Localize {
-    private static let defaultLanguageKey = "UserLocalizeDefaultLanguage"
-    private static let userLanguageKey = "UserLocalizeLanguage"
-    private static let trackSystemLanguageKey = "LTrackSystemLanguage"
-    public static let LLanguageDidChangeNotification = Notification.Name("LLanguageDidChangeNotification")
+
     public static let shared = Localize()
     /// 是否是跟随App系统设置里面的语言
     public static var trackSystemLanguage: Bool {
@@ -135,4 +132,14 @@ public extension Localize {
             return lhs == rhs
         }
     }
+}
+/// - keys
+private extension Localize {
+    static let defaultLanguageKey = "UserLocalizeDefaultLanguage"
+    static let userLanguageKey = "UserLocalizeLanguage"
+    static let trackSystemLanguageKey = "LTrackSystemLanguage"
+}
+/// - Notification Name
+public extension Localize {
+    static let LLanguageDidChangeNotification = Notification.Name("LLanguageDidChangeNotification")
 }

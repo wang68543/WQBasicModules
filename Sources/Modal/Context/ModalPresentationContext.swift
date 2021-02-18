@@ -22,16 +22,17 @@ open class ModalPresentationContext: ModalContext {
         parent?.present(viewController, animated: flag, completion: completion)
        
     }
-    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) { // -> Bool
         let viewController = self.viewController(controller)
-        guard !viewController.isBeingDismissed else { return false }
+        guard !viewController.isBeingDismissed else { return }
         super.hide(controller, animated: flag, completion: completion)
         if self.config.isShowWithNavigationController {
             viewController.dismiss(animated: flag, completion: completion)
-            return true
+//            return true
         } else {
+            controller.dismiss(animated: flag, completion: completion)
             // 交给系统dismiss
-            return false
+//            return false
         }
     }
     
@@ -77,6 +78,7 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
     }
 
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        debugPrint("===========回调了============")
         return self
     }
 
@@ -91,13 +93,15 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
 }
 @available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
+    /// 如果没有动画不走这里
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        if !self.animator.animationEnable {
-            return 0.01
-        }
+//        if !self.animator.animationEnable {
+//            return 0.01
+//        }
         return self.animator.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        debugPrint("===========回调了============")
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
                 return

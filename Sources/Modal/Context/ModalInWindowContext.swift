@@ -98,8 +98,8 @@ public class ModalInWindowContext: ModalDrivenContext {
             }
         })
     }
-    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-        guard !controller.isMovingFromWindow else { return true }
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) { // -> Bool
+        guard !controller.isMovingFromWindow else { return }
         controller.isMovingFromWindow = true
         super.hide(controller, animated: flag, completion: completion)
         self.animator.preprocessor(.hide, layoutController: controller, states: self.styleConfig) { [weak self] in
@@ -110,7 +110,7 @@ public class ModalInWindowContext: ModalDrivenContext {
             self.keyWindow = nil
             self.navgationController = nil
         }
-        return true
+//        return true
     }
     public override func interactive(dismiss controller: WQLayoutController) {
         guard !controller.isMovingFromWindow else { return }

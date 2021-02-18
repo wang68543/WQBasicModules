@@ -8,7 +8,7 @@
 import Foundation
 
 final public class WQUIHelp {
-    class func topNormalWindow() -> UIWindow? {
+    public class func topNormalWindow() -> UIWindow? {
         let app = UIApplication.shared
         #if targetEnvironment(macCatalyst)
         var topWindow = UIApplication.shared.windows.last

@@ -19,10 +19,11 @@ class ExampleAlertViewController: BaseExampleViewController {
         self.view.addSubview(button)
         button.setTitle("点击弹出", for: .normal)
         button.setTitleColor(UIColor.blue, for: .normal)
-        button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(alertAction(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(alertViewAction), for: .touchUpInside)
         button.frame = CGRect(x: 100, y: 200, width: 100, height: 50)
-        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
-        self.view.addGestureRecognizer(pan)
+//        let pan = UIPanGestureRecognizer(target: self, action: #selector(panAction(_:)))
+//        self.view.addGestureRecognizer(pan)
 //        imageView.frame = CGRect(x: 300, y: 300, width: 60, height: 60)
 //        self.view.addSubview(imageView)
 //        imageView.image = UIImage(radialGradient: [UIColor.red.cgColor, UIColor.clear.cgColor],
@@ -102,6 +103,28 @@ class ExampleAlertViewController: BaseExampleViewController {
         default:
             break
         }
+    }
+    
+    @objc func alertViewAction() {
+        let alertView = UIView()
+        let button = UIButton()
+        button.frame = CGRect(x: 10, y: 300 - 90, width: 80, height: 80)
+        button.backgroundColor = UIColor.green
+        button.addTarget(self, action: #selector(dismissAlertAction(_:)), for: .touchUpInside)
+        alertView.addSubview(button)
+        alertView.backgroundColor = UIColor.random
+//        alertView.addSubview(alertSubView)
+//        let config = ModalConfig(.modalInParent(self.navigationController!))
+//        config.isSequenceModal = true
+        alertView.frame = CGRect(x: 0, y: 0, width: 100, height: 300)
+        alertView.wm.alert(true)//, config: config, completion: nil
+    }
+    @objc func dismissAlertAction(_ sender: UIButton) {
+        guard let view = sender.superview else { return }
+        view.wm.dismissal(false)
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+//            self.alertViewAction()
+//        }
     }
     @objc func alertAction(_ sender: UIButton) {
 

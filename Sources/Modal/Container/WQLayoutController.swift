@@ -12,7 +12,8 @@ import UIKit
 @available(iOS 10.0, *)
 public protocol WQLayoutControllerTransition: NSObjectProtocol {
     func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: ModalAnimation.Completion?)
-    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?) -> Bool
+    // -> Bool
+    func hide(_ controller: WQLayoutController, animated flag: Bool, completion: ModalAnimation.Completion?)
     
     // interactive
     func interactive(dismiss controller: WQLayoutController)
@@ -38,7 +39,7 @@ public class WQLayoutController: UIViewController {
     public var context: ModalContext?
     
     public let config: ModalConfig 
-    ///背景View
+    ///背景View 主要用于假透明背景
     public weak var backgroundView: UIView?
     
     public init(_ config: ModalConfig, subView: UIView) {
@@ -192,11 +193,18 @@ public class WQLayoutController: UIViewController {
         context?.show(self, statesConfig: states, completion: comletion)
     }
     internal func ctxHide(animated flag: Bool, completion: (() -> Void)?) {
-        guard context?.hide(self, animated: flag, completion: completion) == false else {
-            return
-        }
-        guard !self.isBeingDismissed else { return }
-        super.dismiss(animated: flag, completion: completion)
+        context?.hide(self, animated: flag, completion: completion)
+//        guard context?.hide(self, animated: flag, completion: completion) == false else {
+//            return
+//        }
+//        guard !self.isBeingDismissed else { return }
+//        if !flag {
+//            UIView.performWithoutAnimation {
+//                super.dismiss(animated: flag, completion: completion)
+//            }
+//        } else {
+//            super.dismiss(animated: flag, completion: completion)
+//        }
     }
     
     public func startInteractive(_ states: StyleConfig) { 
@@ -205,13 +213,20 @@ public class WQLayoutController: UIViewController {
         context?.interactive(present: self, statesConfig: states)
     }
     
-    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+    public func hidden(animated flag: Bool, completion: (() -> Void)? = nil) {
         if self.isSequSequenceShow {
             FILOModalQueue.shared.dismiss(self, flag: flag, completion: completion)
         } else {
             ctxHide(animated: flag, completion: completion)
         }
     }
+//    public override func dismiss(animated flag: Bool, completion: (() -> Void)? = nil) {
+//        if self.isSequSequenceShow {
+//            FILOModalQueue.shared.dismiss(self, flag: flag, completion: completion)
+//        } else {
+//            ctxHide(animated: flag, completion: completion)
+//        }
+//    }
     
     // MARK: -- -UI属性
     internal lazy var dimmingView: UIView = {
@@ -235,9 +250,9 @@ public class WQLayoutController: UIViewController {
     
     deinit {
         removeKeyboardObserver()
-        #if WDEBUG
+//        #if WDEBUG
         debugPrint("\(self):" + #function + "♻️")
-        #endif
+//        #endif
     }
 }
 // MARK: - --Keyboard KVO

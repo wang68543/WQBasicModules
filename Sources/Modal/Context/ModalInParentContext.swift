@@ -50,10 +50,10 @@ open class ModalInParentContext:  ModalDrivenContext {
         })
     }
 
-    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-        let handleDismiss = true
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) { // -> Bool
+//        let handleDismiss = true
         let viewController = self.viewController(controller)
-        guard !viewController.isMovingFromParent else { return handleDismiss }
+        guard !viewController.isMovingFromParent else { return }
         super.hide(controller, animated: flag, completion: completion)
         func completionCallback() {
             viewController.view.removeFromSuperview()
@@ -64,7 +64,7 @@ open class ModalInParentContext:  ModalDrivenContext {
         self.animator.preprocessor(.hide, layoutController: controller, states: self.styleConfig) {
             completionCallback()
         }
-         return handleDismiss
+//         return handleDismiss
     }
     public override func interactive(dismiss controller: WQLayoutController) {
         let viewController = self.viewController(controller)

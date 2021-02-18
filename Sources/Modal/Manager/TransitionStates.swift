@@ -65,7 +65,9 @@ public extension ModalPresentation {
     var autoAdaptationStyle: ModalPresentation {
         switch self {
         case .autoModal:
-            if let topVisible = WQUIHelp.topVisibleViewController() {
+            //,!topVisible.isBeingDismissed 
+            if let topVisible = WQUIHelp.topVisibleViewController(),
+               !topVisible.isBeingDismissed {
                 if topVisible.presentedViewController == nil {
                     return .modalSystem(topVisible)
                 } else {

@@ -31,9 +31,9 @@ public class ModalNavigationContext: ModalContext {
         nav.delegate = self
         nav.pushViewController(controller, animated: flag)
     }
-    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
-        guard let nav = currentNavigationController else { return true }
-        guard !controller.isPoping else { return true }
+    public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) { // -> Bool
+        guard let nav = currentNavigationController else { return }
+        guard !controller.isPoping else { return }
         controller.isPoping = true
         let flag = self.animator.animationEnable
         super.hide(controller, animated: flag, completion: completion)
@@ -50,7 +50,7 @@ public class ModalNavigationContext: ModalContext {
             nav.popViewController(animated: flag)
             CATransaction.commit()
         }
-        return true
+//        return true
     }
 
     public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {

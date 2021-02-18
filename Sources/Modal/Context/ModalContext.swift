@@ -65,13 +65,13 @@ open class ModalContext: NSObject, WQLayoutControllerTransition {
         self.styleConfig = statesConfig
         self.animator.duration = self.animateDuration
     }
-    @discardableResult
-    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) -> Bool {
+//    @discardableResult
+    public func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) {//-> Bool
         self.isShow = false
         self.isInteractive = false
         self.animator.animationEnable = flag
         self.animator.duration = self.animateDuration
-        return true
+//        return true
     }
     
     
