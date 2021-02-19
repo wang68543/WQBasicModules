@@ -19,20 +19,45 @@ open class ModalPresentationContext: ModalContext {
         super.show(controller, statesConfig: statesConfig, completion: completion)
         viewController.modalPresentationStyle = .custom
         viewController.transitioningDelegate = self
-        parent?.present(viewController, animated: flag, completion: completion)
-       
+        if flag {
+            parent?.present(viewController, animated: flag, completion: completion)
+        } else {
+            controller.view.frame = self.config.showControllerFrame
+            parent?.present(viewController, animated: flag, completion: {
+                self.show(fromVC: parent, toVC: viewController, completion: completion)
+            })
+        }
     }
     public override func hide(_ controller: WQLayoutController, animated flag: Bool, completion: (() -> Void)?) { // -> Bool
         let viewController = self.viewController(controller)
         guard !viewController.isBeingDismissed else { return }
         super.hide(controller, animated: flag, completion: completion)
-        if self.config.isShowWithNavigationController {
-            viewController.dismiss(animated: flag, completion: completion)
-//            return true
-        } else {
-            controller.dismiss(animated: flag, completion: completion)
-            // 交给系统dismiss
-//            return false
+        if flag {
+            if self.config.isShowWithNavigationController {
+                viewController.dismiss(animated: flag, completion: completion)
+            } else {
+                controller.dismiss(animated: flag, completion: completion)
+            }
+        } else { // 解决 非动画的时候 问题
+            let group = DispatchGroup()
+            group.enter()
+            self.hide(fromVC: controller, toVC: self.config.fromViewController) {
+                group.leave()
+            }
+            if self.config.isShowWithNavigationController {
+                group.enter()
+                viewController.dismiss(animated: flag) {
+                    group.leave()
+                }
+            } else {
+                group.enter()
+                controller.dismiss(animated: flag) {
+                    group.leave()
+                }
+            }
+            group.notify(queue: .main) {
+                completion?()
+            }
         }
     }
     
@@ -78,7 +103,6 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
     }
 
     public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        debugPrint("===========回调了============")
         return self
     }
 
@@ -95,13 +119,9 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
     /// 如果没有动画不走这里
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-//        if !self.animator.animationEnable {
-//            return 0.01
-//        }
         return self.animator.duration
     }
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        debugPrint("===========回调了============")
         guard let fromVC = transitionContext.viewController(forKey: .from),
             let toVC = transitionContext.viewController(forKey: .to) else {
                 return
@@ -123,29 +143,38 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
                transitionView.addSubview(toView)
             }
         }
-        
         if isPresented {
             toVCView?.frame = vcFinalFrame
-            if self.config.isShowWithNavigationController,
-               let nav = toVC as? UINavigationController,
-               let showViewController = nav.topViewController as? WQLayoutController {
-                self.animator.preprocessor(.show, layoutController: showViewController, states: styleConfig, completion: completionBlock)
-            } else if let showViewController = toVC as? WQLayoutController {
-                self.animator.preprocessor(.show, layoutController: showViewController, states: styleConfig, completion: completionBlock)
-            } else {
-                completionBlock()
-            } 
+            self.show(fromVC: fromVC, toVC: toVC, completion: completionBlock)
         } else {
-            if self.config.isShowWithNavigationController,
-               let nav = fromVC as? UINavigationController,
-               let showViewController = nav.topViewController as? WQLayoutController {
-                self.animator.preprocessor(.hide, layoutController: showViewController, states: styleConfig, completion: completionBlock)
-            } else if let showViewController = fromVC as? WQLayoutController {
-                self.animator.preprocessor(.hide, layoutController: showViewController, states: styleConfig, completion: completionBlock)
-            } else {
-                completionBlock()
-            }
+            self.hide(fromVC: fromVC, toVC: toVC, completion: completionBlock)
         }
         
+    }
+}
+
+@available(iOS 10.0, *)
+extension ModalPresentationContext {
+    func show(fromVC: UIViewController?, toVC: UIViewController?, completion: (() -> Void)?) {
+        if self.config.isShowWithNavigationController,
+           let nav = toVC as? UINavigationController,
+           let showViewController = nav.topViewController as? WQLayoutController {
+            self.animator.preprocessor(.show, layoutController: showViewController, states: styleConfig, completion: completion)
+        } else if let showViewController = toVC as? WQLayoutController {
+            self.animator.preprocessor(.show, layoutController: showViewController, states: styleConfig, completion: completion)
+        } else {
+            completion?()
+        }
+    }
+    func hide(fromVC: UIViewController?, toVC: UIViewController?, completion: (() -> Void)?) {
+        if self.config.isShowWithNavigationController,
+           let nav = fromVC as? UINavigationController,
+           let showViewController = nav.topViewController as? WQLayoutController {
+            self.animator.preprocessor(.hide, layoutController: showViewController, states: styleConfig, completion: completion)
+        } else if let showViewController = fromVC as? WQLayoutController {
+            self.animator.preprocessor(.hide, layoutController: showViewController, states: styleConfig, completion: completion)
+        } else {
+            completion?()
+        }
     }
 }

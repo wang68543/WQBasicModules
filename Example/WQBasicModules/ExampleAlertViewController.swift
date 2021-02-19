@@ -114,7 +114,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertView.addSubview(button)
         alertView.backgroundColor = UIColor.random
 //        alertView.addSubview(alertSubView)
-//        let config = ModalConfig(.modalInParent(self.navigationController!))
+        let config = ModalConfig(.modalInParent(self.navigationController!))
 //        config.isSequenceModal = true
         alertView.frame = CGRect(x: 0, y: 0, width: 100, height: 300)
         alertView.wm.alert(true)//, config: config, completion: nil
@@ -122,8 +122,12 @@ class ExampleAlertViewController: BaseExampleViewController {
     @objc func dismissAlertAction(_ sender: UIButton) {
         guard let view = sender.superview else { return }
         view.wm.dismissal(false)
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+//        {
 //            self.alertViewAction()
+//        }
+        self.alertViewAction()
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+           
 //        }
     }
     @objc func alertAction(_ sender: UIButton) {

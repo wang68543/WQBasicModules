@@ -61,6 +61,7 @@ public class ModalDefaultAnimation: ModalAnimation {
         if state == .show {
             if !self.animationEnable { //不动画
                 UIView.performWithoutAnimation {
+                    states.states.setup(forState: .willShow)
                     if states.states.has(key: .didShow) {
                         states.states.setup(forState: .didShow)
                     } else {
