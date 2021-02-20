@@ -40,7 +40,9 @@ extension WQPresentationable {
             UIView.animate(withDuration: duration, animations: animateOperation)
         }
     }
-    public func push(to toView: UIView, options: UIView.AnimationOptions = .transitionFlipFromRight, completion: ((Bool) -> Void)? = nil) {
+    public func push(to toView: UIView,
+                     options: UIView.AnimationOptions = .transitionFlipFromRight,
+                     completion: ((Bool) -> Void)? = nil) {
         if self.childViews.isEmpty {
             self.addContainerSubview(toView)
             self.childViews.append(toView)

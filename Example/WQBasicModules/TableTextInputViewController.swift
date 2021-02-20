@@ -28,7 +28,10 @@ class TableTextInputViewController: UIViewController {
         }
     override func layoutSubviews() {
         super.layoutSubviews()
-        textFiled.frame = CGRect(x: 10, y: 10, width: self.contentView.bounds.width - 30, height: self.contentView.bounds.height - 15)
+        textFiled.frame = CGRect(x: 10,
+                                 y: 10,
+                                 width: self.contentView.bounds.width - 30,
+                                 height: self.contentView.bounds.height - 15)
         self.line.bounds = CGRect(x: 0, y: 0, width: self.contentView.bounds.width, height: 1)
         self.line.center = self.textFiled.center
     }

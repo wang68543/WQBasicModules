@@ -26,69 +26,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
     //https://www.gitignore.io/api/objective-c
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
         debugPrint("======\("中国".pinYin())")
         debugPrint("\(Int.max)")
         debugPrint("\(CGFloat.greatestFiniteMagnitude)")
-        let example = ExampleViewController() 
+        let example = ExampleViewController()
         let nav = UINavigationController(rootViewController: example)
         example.view.backgroundColor = UIColor.white
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
-        testCodable()
+//        testCodable()
         AppDelegate.date = Date()
-        let cls = UINavigationController.self
-        
-        let data = Data(hex: "ajcd")
-        debugPrint(data?.bytes)
-        debugPrint("=======\(AppDelegate.date)")
-//        if #available(iOS 10.0, *) {
-//            let formatter = MeasurementFormatter()
-//            formatter.unitOptions = .providedUnit
-////            formatter.
-//            formatter.unitStyle = .short
-//            let number = NumberFormatter()
-//            number.allowsFloats = true
-//            number.generatesDecimalNumbers = true
-//            formatter.numberFormatter = number
-//            let storage = Measurement<UnitStorage>(value: 2024, unit: UnitStorage.kilobytes).converted(to: .megabytes)
-//             // 69.345 mph
-//            debugPrint(formatter.string(from: storage))
-//        }
-      
         Localize.shared.register()
         debugPrint("测试".localized)
         return true
     }
-    
-    
-   
 
-    func testCodable() {
-        let json = #"{"id": 12345, "title": "My First Video", "state": "reversed"}"#
-//        let value = try! JSONDecoder().decode(Video.self, from: json.data(using: .utf8)!)
-        let value = try! Video.model(from: json.data(using: .utf8)!)
-        
-    }
+//    func testCodable() {
+//        let json = #"{"id": 12345, "title": "My First Video", "state": "reversed"}"#
+////        let value = try! JSONDecoder().decode(Video.self, from: json.data(using: .utf8)!)
+//        let value = try! Video.model(from: json.data(using: .utf8)!)
+//        
+//    }
 
 }
-struct Video: Codable {
-    enum State: String, Codable, CodableDefaultValue {
-        case streaming
-        case archived
-        case unknown
-        
-        static let defaultValue = Video.State.unknown
-    }
-    @CodableDefault.IntOne var id: Int
-    @CodableDefault.Empty var title: String
-    @CodableDefault.False var commentEnabled: Bool
-    @CodableDefault.True var publicVideo: Bool
-
-    @CodableDefault<State> var state: State
-    
-}
-extension Video {
-    static let `default` = Video(id: 111, title: "test", commentEnabled: false, publicVideo: false, state: .archived)
-}
+//struct Video: Codable {
+//    enum State: String, Codable, CodableDefaultValue {
+//        case streaming
+//        case archived
+//        case unknown
+//        static let defaultValue = Video.State.unknown
+//    }
+//    @CodableDefault.IntOne var id: Int
+//    @CodableDefault.Empty var title: String
+//    @CodableDefault.False var commentEnabled: Bool
+//    @CodableDefault.True var publicVideo: Bool
+//
+//    @CodableDefault<State> var state: State
+//}
+//extension Video {
+//    static let `default` = Video(id: 111, title: "test", commentEnabled: false, publicVideo: false, state: .archived)
+//}

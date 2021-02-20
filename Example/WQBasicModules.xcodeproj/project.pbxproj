@@ -25,7 +25,6 @@
 		06FB146421ED78FC00A85B03 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FB146321ED78FC00A85B03 /* TabBarViewController.swift */; };
 		06FFDA0121F9A1E900688974 /* TableTextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06FFDA0021F9A1E900688974 /* TableTextInputViewController.swift */; };
 		1D15753EFE8257E8FB7F1043 /* libPods-WQBasicModules_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B24C7170A9418A909513D04 /* libPods-WQBasicModules_Tests.a */; };
-		2D61CD182088864300C0279A /* NSDate+UtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D61CD172088864300C0279A /* NSDate+UtilitiesTests.swift */; };
 		5E1AA8592352362D0010513D /* AutoHeightTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1AA8582352362D0010513D /* AutoHeightTableViewController.swift */; };
 		5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBA1B5221995EB800B780FB /* SecondViewController.swift */; };
 		5EBA5CB021BF6854001C46D9 /* TestWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EBA5CAF21BF6854001C46D9 /* TestWebViewController.swift */; };
@@ -77,7 +76,6 @@
 		100E52012C00E78715F6B892 /* WQBasicModules.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = WQBasicModules.podspec; path = ../WQBasicModules.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1B24C7170A9418A909513D04 /* libPods-WQBasicModules_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-WQBasicModules_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CFC840ADB19128D172F1E64 /* Pods-WQBasicModules_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WQBasicModules_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WQBasicModules_Example/Pods-WQBasicModules_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		2D61CD172088864300C0279A /* NSDate+UtilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDate+UtilitiesTests.swift"; sourceTree = "<group>"; };
 		3CD3776B07B2C25D48161932 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		5E1AA8582352362D0010513D /* AutoHeightTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoHeightTableViewController.swift; sourceTree = "<group>"; };
 		5EBA1B5221995EB800B780FB /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 			isa = PBXGroup;
 			children = (
 				871B9B9822BCC9F900E562F1 /* FoundationTests */,
-				2D61CD172088864300C0279A /* NSDate+UtilitiesTests.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -304,6 +301,7 @@
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 				B8AD20C010B6F2BA153896FC /* [CP] Copy Pods Resources */,
+				8795098025E0A65000A62281 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -425,6 +423,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8795098025E0A65000A62281 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		B8AD20C010B6F2BA153896FC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -500,7 +515,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D61CD182088864300C0279A /* NSDate+UtilitiesTests.swift in Sources */,
 				871B9B9A22BCCA3E00E562F1 /* URLExtensionsTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

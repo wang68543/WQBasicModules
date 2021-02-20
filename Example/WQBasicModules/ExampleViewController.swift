@@ -41,14 +41,6 @@ class ExampleViewController: UITableViewController {
     weak var btn: SecondViewController.DownButton?
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let frame: CGRect = .zero
-//        let frames = TSReference(value: CGRect.zero, keyPath: \WQLayoutController.container.frame)
-////        let keypath = /WQLayoutContainerViewController.containerView.frame
-//        let start = TSReferenceRect(value: .zero, keyPath: \WQLayoutController.container.frame)
-//        
-//        
-//        let viewController = WQLayoutController()
-         
         ExampleViewCell.register(for: self.tableView)
 //          let test:ViewController.TestModel? = WQCache.default.object(forKey: "test")
 //         let model:ViewCåontroller.TestModel? = WQCache.default["test"]
@@ -63,17 +55,6 @@ class ExampleViewController: UITableViewController {
             debugPrint(days)
         }
         debugPrint("123456".md5String())
-//        "123456".md5(lower: true)
-//        debugPrint("123456".hmac(algorithm: CCHmacAlgorithm(kCCHmacAlgMD5), key: ""))
-//        let preDate = date?.previousWeek()
-//        debugPrint(preDate?.toString(.kMMddHHmm))
-//        let str = #"SELF MATCHES "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1]\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx]))$""#
-//        let str = #"^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$"#
-////        let predicate = NSPredicate(format: str)
-//        let predicate = NSPredicate(format: "SELF MATCHES \"\(str)\"")
-//        if predicate.evaluate(with: "421281199010135718")  {
-//            debugPrint("正确的身份证号码")
-//        }
         if "421281199010135718".isLegalIDCard {
             debugPrint("正确的身份证号码")
         }
@@ -109,8 +90,7 @@ class ExampleViewController: UITableViewController {
             print(address)
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
-        let appName = UIApplication.shared.displayName
-        
+//        let appName = UIApplication.shared.displayName
 //        self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
@@ -120,8 +100,7 @@ class ExampleViewController: UITableViewController {
 //            self.sections = self.sections2
 //            self.sources = self.sources2
 //            self.tableView.reloadData()
-//        }
-//        self.tableView.test_lastSeparatorSingleLine(lineColor: UIColor.red, edge: UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+//        } 
     }
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()

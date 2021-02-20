@@ -18,7 +18,6 @@ class TabBarViewController: UITabBarController {
 //        let viewController = WQLayoutController()
 //        viewController[keyPath: frame] = CGRect.zero
 //        viewController[keyPath: backgroundColor] = UIColor.clear
-        
 //        viewController[keyPath: name]
         // Do any additional setup after loading the view.
     }

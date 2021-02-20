@@ -26,13 +26,16 @@ class PageContentViewController: UIViewController {
         viewController3.view.backgroundColor = .purple
         let viewController4 = UIViewController()
         viewController4.view.backgroundColor = .systemPink
-        let conrollers = [viewController1, viewController2, viewController3, viewController4, viewController5, viewController6]
+        let conrollers = [viewController1,
+                          viewController2,
+                          viewController3,
+                          viewController4,
+                          viewController5,
+                          viewController6]
         pageContentView = PageContentView(conrollers, index: 0, orientation: .vertical)
         self.view.addSubview(pageContentView)
         self.addChild(pageContentView.pageController)
-        
-        
-    } 
+    }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         pageContentView.frame = self.view.bounds

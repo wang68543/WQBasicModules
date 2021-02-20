@@ -71,7 +71,9 @@ extension PanContainerView: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.animator.removeAllBehaviors()
     }
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                   withVelocity velocity: CGPoint,
+                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 //        let position = CGPoint(x: self.panView.frame.midX, y: self.frame.minY)
 //        let top = self.targetPoints.first!
 //        let bottom = self.targetPoints.last!
@@ -112,7 +114,7 @@ extension PanContainerView: WQPanViewable {
             let pan = WQPanBehavior(with: panView)
             panBehavior = pan
         }
-        let targetPoint: CGPoint = CGPoint(x: targetContentOffset.x, y: targetContentOffset.y + panView.frame.height * 0.5)
+        let targetPoint = CGPoint(x: targetContentOffset.x, y: targetContentOffset.y + panView.frame.height * 0.5)
 
         panBehavior.targetPoint = targetPoint
 

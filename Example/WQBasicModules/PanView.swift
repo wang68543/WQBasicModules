@@ -44,7 +44,7 @@ extension PanView {
     }
 //    func findSubViews(for view: UIView) -> [UIView] {
 //        var views: [UIView] = []
-////        views.append(view.subviews)
+//        views.append(view.subviews)
 //        
 //    }
     func addObserver(for scrollView: UIScrollView) {
@@ -62,8 +62,10 @@ extension PanView {
             self.willBeginDragging()
         } else if sender.state == .ended {
             var velocity = sender.velocity(in: self.superview)
-            let minY = self.targetCenterY.filter({ $0 < toY }).min(by: {toY - $0 < toY - $1}) ?? self.targetCenterY.first!
-            let maxY = self.targetCenterY.filter({ $0 > toY }).min(by: {$0 - toY < $1 - toY}) ?? self.targetCenterY.last!
+            let minY = self.targetCenterY.filter({ $0 < toY })
+                .min(by: {toY - $0 < toY - $1}) ?? self.targetCenterY.first!
+            let maxY = self.targetCenterY.filter({ $0 > toY })
+                .min(by: {$0 - toY < $1 - toY}) ?? self.targetCenterY.last!
             velocity.x = 0
             var tatgetOffsetY: CGFloat
             if velocity.y < 0 {// 向上滑
@@ -101,7 +103,8 @@ extension PanView {
     }
 }
 extension PanView: UIGestureRecognizerDelegate {
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         if let otherView = otherGestureRecognizer.view,
             otherView.isKind(of: UIScrollView.self) {
             return true

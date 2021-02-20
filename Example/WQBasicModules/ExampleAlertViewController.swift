@@ -54,9 +54,9 @@ class ExampleAlertViewController: BaseExampleViewController {
 //                self.navigationController?.pushViewController(star, animated: true)
 //            }
 //
-////               DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4) {
-////                    alertView.wm.dismiss(true)
-////                }
+//               DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 4) {
+//                    alertView.wm.dismiss(true)
+//                }
 //        }
     }
 //    override func viewWillAppear(_ animated: Bool) {
@@ -68,7 +68,6 @@ class ExampleAlertViewController: BaseExampleViewController {
         switch sender.state {
         case .began:
             let alertSubView = UIView()
-            
             let button = UIButton()
             button.frame = CGRect(x: 10, y: 500 - 90, width: 80, height: 80)
             button.backgroundColor = UIColor.green
@@ -88,7 +87,6 @@ class ExampleAlertViewController: BaseExampleViewController {
             let progress = abs(offset/500.0)
             debugPrint("====\(progress)")
             context?.interactive(update: progress)
-            break
         case .ended, .cancelled:
             let offset = sender.translation(in: self.view).y
             let progress = abs(offset/500.0)
@@ -98,13 +96,10 @@ class ExampleAlertViewController: BaseExampleViewController {
             } else {
                 context?.interactive(cancel: velocity)
             }
-            
-            
         default:
             break
         }
     }
-    
     @objc func alertViewAction() {
         let alertView = UIView()
         let button = UIButton()
@@ -113,46 +108,16 @@ class ExampleAlertViewController: BaseExampleViewController {
         button.addTarget(self, action: #selector(dismissAlertAction(_:)), for: .touchUpInside)
         alertView.addSubview(button)
         alertView.backgroundColor = UIColor.random
-//        alertView.addSubview(alertSubView)
-        let config = ModalConfig(.modalInParent(self.navigationController!))
-//        config.isSequenceModal = true
         alertView.frame = CGRect(x: 0, y: 0, width: 100, height: 300)
         alertView.wm.alert(true)//, config: config, completion: nil
     }
     @objc func dismissAlertAction(_ sender: UIButton) {
         guard let view = sender.superview else { return }
         view.wm.dismissal(false)
-//        {
-//            self.alertViewAction()
-//        }
         self.alertViewAction()
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-           
-//        }
     }
     @objc func alertAction(_ sender: UIButton) {
-
-        let alertView = UIView()
-
-//        let subView = UIView()
-//        alertView.addSubview(subView)
-////        subView.snp.makeConstraints { make in
-//////            make.edges.equalToSuperview()
-////            make.left.equalToSuperview().offset(25)
-////            make.right.equalToSuperview().offset(-25)
-////            make.top.bottom.equalToSuperview()
-////        }
-//        let size = CGSize(width: 200, height: 200)
-//        alertView.backgroundColor = UIColor.red
-//        let presentedFrame = UIScreen.main.bounds
-//        let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: presentedFrame.height * 0.5, width: size.width, height: 0)
-//
-//        let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
-//
-//        let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
-//        let animator = WQTransitionAnimator(items: items)
         let alertSubView = UIView()
-        
         let button = UIButton()
         button.frame = CGRect(x: 10, y: 300 - 90, width: 80, height: 80)
         button.backgroundColor = UIColor.green
@@ -178,24 +143,9 @@ class ExampleAlertViewController: BaseExampleViewController {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
             self.showModal2()
         }
-//        alertSubView.wm.alert(true)
-//        let postions = PanPosition.bottomToCenter(true)
-//        let style = StyleConfig(.pan(postions), anmation: .default)
-//
-////        alertSubView.present(config, states: style)
-//        alertSubView.wm.actionSheet(true, config: config)
-//        let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-////        presention.show(animated: true, in: nil, completion: nil)
-//        presention.interactionDismissDirection = .down
-//         presention.tapDimmingViewDismissable = true
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-//
-//            alertView.wm.dismiss(true)
-//        }
     }
     func showModal2() {
         let alertSubView = UIView()
-        
         let button = UIButton()
         button.frame = CGRect(x: 10, y: 300 - 90, width: 80, height: 80)
         button.backgroundColor = UIColor.blue
@@ -220,11 +170,9 @@ class ExampleAlertViewController: BaseExampleViewController {
     }
     @objc func buttonAction(_ sender: UIButton) {
         sender.superview?.wm.dismissal(true)
-        
     }
     @objc func buttonAction2(_ sender: UIButton) {
         sender.superview?.wm.dismissal(true)
-        
     }
     func show() {
 //        let size = CGSize(width: 300, height: 100)
@@ -233,16 +181,23 @@ class ExampleAlertViewController: BaseExampleViewController {
 //         let dismiss = CGRect(x: (presentedFrame.width - size.width) * 0.5,
 //                              y: presentedFrame.height * 0.5, width: size.width, height: 0)
 //
-//         let show = CGRect(x: (presentedFrame.width - size.width) * 0.5, y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
+//         let show = CGRect(x: (presentedFrame.width - size.width) * 0.5,
+//        y: (presentedFrame.height - size.height) * 0.5, width: size.width, height: size.height)
 //
-//         let items = Array(default: WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
+//         let items = Array(default:
+//        WQAnimatedItem(containerFrame: dismiss, show: show, dismiss: dismiss), viewFrame: presentedFrame)
 //         let animator = WQTransitionAnimator(items: items)
 //         let alertSubView = UIView()
 //         alertSubView.backgroundColor = UIColor.blue
 //         alertView.addSubview(alertSubView)
 //         alertSubView.frame = CGRect(x: 20, y: 20, width: 50, height: 50)
-//         let presention = WQTransitionable(subView: alertView, animator: animator, presentedFrame: CGRect(x: 0, y: 64, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height - 64))
-////         presention.show(animated: true, in: nil, completion: nil)
+//         let presention = WQTransitionable(subView: alertView,
+//        animator: animator,
+//        presentedFrame: CGRect(x: 0,
+//        y: 64,
+//        width: UIScreen.main.bounds.width,
+//        height: UIScreen.main.bounds.height - 64))
+//         presention.show(animated: true, in: nil, completion: nil)
 //         presention.interactionDismissDirection = .down
 //          presention.tapDimmingViewDismissable = true
 //        let nav = UINavigationController(rootViewController: presention)

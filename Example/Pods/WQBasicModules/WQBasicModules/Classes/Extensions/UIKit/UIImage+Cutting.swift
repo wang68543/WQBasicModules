@@ -73,7 +73,10 @@ public extension Array where Element: UIImage {
     ///   - clipPath: 绘制之后的裁剪尺寸
     ///   - direction: 图片排列方向 0先从上到下 从左到右  1先从左到右 从上到下 (默认0)
     /// - Returns: image
-    func splice(_ drawSize: CGSize, defaultColor: CGColor? = nil, clipPath: CGPath? = nil, direction: Int = 0) -> UIImage? {
+    func splice(_ drawSize: CGSize,
+                defaultColor: CGColor? = nil,
+                clipPath: CGPath? = nil,
+                direction: Int = 0) -> UIImage? {
         let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(drawSize, true, scale)
         if let color = defaultColor,
