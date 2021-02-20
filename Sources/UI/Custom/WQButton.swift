@@ -21,13 +21,12 @@ open class WQButton: UIButton {
         }
     }
     /// 是否允许标题换行
-   public var isAllowWrap: Bool = false {
+    public var isAllowWrap: Bool = false {
         didSet {
             self.titleLabel?.numberOfLines = isAllowWrap ? 0 : 1
             setNeedsLayout()
         }
     }
-    
     public var titleAlignment: TitleAlignment = .left {
         didSet {
              setNeedsLayout()
@@ -291,9 +290,7 @@ private extension WQButton {
         return fitSize
     }
     func addTitleLabelFontObservation() {
-        guard self.titleFontObservation == nil else {
-            return
-        }
+        guard self.titleFontObservation == nil else { return }
         if let font = self.titleLabel?.font {
             self.titleFont = font
         }
