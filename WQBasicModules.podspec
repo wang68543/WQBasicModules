@@ -98,6 +98,7 @@ Pod::Spec.new do |s|
         end
         ss.subspec 'UIKit' do |sss|
             sss.dependency 'WQBasicModules/Extensions/Module'
+            sss.dependency 'WQBasicModules/Extensions/CoreGrapics'
             sss.source_files = 'Sources/Extensions/UIKit/*.swift'
         end
         ss.subspec 'Foundation' do |sss|

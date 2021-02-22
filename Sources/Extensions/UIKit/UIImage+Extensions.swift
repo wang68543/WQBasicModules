@@ -16,7 +16,7 @@ public extension UIImage {
     /// - Parameters:
     ///   - color: image fill color.
     ///   - size: image size.
-    convenience init(color: UIColor, size: CGSize) {
+    convenience init?(color: UIColor, size: CGSize) {
         UIGraphicsBeginImageContextWithOptions(size, false, 1)
         defer {
             UIGraphicsEndImageContext()
@@ -24,8 +24,7 @@ public extension UIImage {
         color.setFill()
         UIRectFill(CGRect(origin: .zero, size: size)) 
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
-            self.init()
-            return
+            return nil
         }
         self.init(cgImage: aCgImage)
     }
@@ -39,7 +38,7 @@ public extension UIImage {
     ///   - end: 线性终点
     ///   - locations: 分割点
     ///   - options: 绘制方式,DrawsBeforeStartLocation 开始位置之前就进行绘制，到结束位置之后不再绘制， DrawsAfterEndLocation开始位置之前不进行绘制，到结束点之后继续填充
-    convenience init(linearGradient colors: [CGColor],
+    convenience init?(linearGradient colors: [CGColor],
                      size: CGSize,
                      startPoint start: CGPoint = CGPoint(x: 0.5, y: 1),
                      endPoint end: CGPoint = CGPoint(x: 0.5, y: 1),
@@ -50,24 +49,21 @@ public extension UIImage {
             UIGraphicsEndImageContext()
         }
         guard let context = UIGraphicsGetCurrentContext() else {
-            self.init()
-            return
+            return nil
         }
         let rgb = CGColorSpaceCreateDeviceRGB()
         let components: [CGFloat] = colors.flatMap { color -> [CGFloat] in
             return color.components ?? []
         }
         guard let gradient = CGGradient(colorSpace: rgb, colorComponents: components, locations: locations, count: colors.count) else {
-            self.init()
-            return
+            return nil
         }
         // 第四个参数是定义渐变是否超越起始点和终止点
         let startPoint = CGPoint(x: start.x * size.width, y: start.y * size.height)
         let endPoint = CGPoint(x: end.x * size.width, y: end.y * size.height)
         context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
-            self.init()
-            return
+            return nil
         } 
         self.init(cgImage: aCgImage)
     }
@@ -82,7 +78,7 @@ public extension UIImage {
     ///   - end: 终点位置（通常和起始点相同，否则会有偏移）
     ///   - eRadius: 终点半径（也就是渐变的扩散长度）
     ///   - options: 绘制方式,DrawsBeforeStartLocation 开始位置之前就进行绘制，到结束位置之后不再绘制， DrawsAfterEndLocation开始位置之前不进行绘制，到结束点之后继续填充
-    convenience init(radialGradient colors: [CGColor],
+    convenience init?(radialGradient colors: [CGColor],
                      size: CGSize,
                      startCenter start: CGPoint = CGPoint(x: 0.5, y: 0.5),
                      startRaidus sRadius: CGFloat = 0,
@@ -93,17 +89,13 @@ public extension UIImage {
         defer {
             UIGraphicsEndImageContext()
         }
-        guard let context = UIGraphicsGetCurrentContext() else {
-            self.init()
-            return
-        }
+        guard let context = UIGraphicsGetCurrentContext() else { return nil }
         let rgb = CGColorSpaceCreateDeviceRGB()
         let components: [CGFloat] = colors.flatMap { color -> [CGFloat] in
             return color.components ?? []
         }
         guard let gradient = CGGradient(colorSpace: rgb, colorComponents: components, locations: nil, count: colors.count) else {
-            self.init()
-            return
+            return nil
         }
         // 第四个参数是定义渐变是否超越起始点和终止点
         let startPoint = CGPoint(x: start.x * size.width, y: start.y * size.height)
@@ -115,8 +107,7 @@ public extension UIImage {
                                    endRadius: eRadius,
                                    options: options)
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
-            self.init()
-            return
+            return nil
         }
         self.init(cgImage: aCgImage)
     }
@@ -125,19 +116,13 @@ public extension UIImage {
     /// - Parameters:
     ///   - text: 文字内容
     ///   - size: 图片尺寸
-    convenience init(text: String, size: CGSize = CGSize(width: 100, height: 100)) {
-        guard let filter = CIFilter(name: "CIQRCodeGenerator") else {
-            self.init()
-            return
-        }
+    convenience init?(text: String, size: CGSize = CGSize(width: 100, height: 100)) {
+        guard let filter = CIFilter(name: "CIQRCodeGenerator"),
+              let data = text.data(using: .utf8) else { return nil }
         filter.setDefaults()
-        let data = text.data(using: .utf8)
         filter.setValue(data, forKey: "inputMessage")
         filter.setValue("Q", forKey: "inputCorrectionLevel")
-        guard let ciImage = filter.outputImage else {
-            self.init()
-            return
-        }
+        guard let ciImage = filter.outputImage else { return nil }
         let extent = ciImage.extent.integral
         let scale = min(size.width / extent.width, size.height / extent.height)
         let width = Int(extent.width * scale)
@@ -152,23 +137,16 @@ public extension UIImage {
                                space: spaceGray,
                                bitmapInfo: alpha)
         // 创建 bitmap
-        guard let bitmapRef = bitmap else {
-               self.init()
-               return
-        }
+        guard let bitmapRef = bitmap else { return nil }
         let context = CIContext(options: nil)
         guard let bitmapImg = context.createCGImage(ciImage, from: extent) else {
-            self.init()
-            return
+            return nil
         }
         bitmapRef.interpolationQuality = .none
         bitmapRef.scaleBy(x: scale, y: scale)
         bitmapRef.draw(bitmapImg, in: extent)
-        guard let scaleImage = bitmapRef.makeImage() else {
-            self.init()
-            return
-        }
-         self.init(cgImage: scaleImage)
+        guard let scaleImage = bitmapRef.makeImage() else { return nil }
+        self.init(cgImage: scaleImage)
     }
 }
 public extension UIImage {
@@ -186,12 +164,10 @@ public extension UIImage {
             cornerRadius = maxRadius
         }
         
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        
+        UIGraphicsBeginImageContextWithOptions(size, false, scale) 
         let rect = CGRect(origin: .zero, size: size)
         UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius).addClip()
         draw(in: rect)
-        
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
@@ -258,9 +234,7 @@ public extension UIImage {
      subscript (point ptX: Int, _ ptY: Int) -> UIColor? {
         guard ptX >= 0 && ptX <= Int(size.width) && ptY >= 0 && ptY <= Int(size.height) else { return nil }
         guard let provider = self.cgImage?.dataProvider,
-        let data = CFDataGetBytePtr(provider.data) else {
-            return nil
-        }
+        let data = CFDataGetBytePtr(provider.data) else { return nil }
         let numberOfComponents = 4
         let pixelData = ((Int(size.width) * ptY) + ptX) * numberOfComponents
         let red = CGFloat(data[pixelData]) / 255.0
@@ -326,10 +300,11 @@ public extension UIImage {
                 clipPath: UIBezierPath? = nil,
                 clipRule: CGPathFillRule = .evenOdd) -> UIImage? {
         
-        let rect = self.aspectRatio(size, contentMode: contentMode)
+        let rect = self.size.aspectRatio(size, contentMode: contentMode)
         
         func drawContext(_ context: CGContext?) {
-            if let path = clipPath?.cgPath, let ctx = context {
+            guard let ctx = context else { return }
+            if let path = clipPath?.cgPath {
                 ctx.beginPath()
                 ctx.addPath(path)
                 ctx.closePath()
@@ -352,60 +327,7 @@ public extension UIImage {
             UIGraphicsEndImageContext()
             return image
         }
-    }
-    
-    /// 根据不同模式适配宽高比
-    func aspectRatio(_ aspectRatio: CGSize, contentMode: UIView.ContentMode) -> CGRect {
-        guard size.width*size.height != 0 && aspectRatio.height*aspectRatio.width != 0  else {
-            return CGRect.zero
-        }
-        switch contentMode {
-        case .scaleToFill:
-            return CGRect(origin: .zero, size: aspectRatio)
-        case .scaleAspectFit: //按照最小的比例居中
-            let scaleW = aspectRatio.width/size.width
-            let scaleH = aspectRatio.height/size.height
-            let scale = min(scaleW, scaleH)
-            let scaleSize = CGSize(width: size.width*scale, height: size.height*scale)
-            let origin = CGPoint(x: (aspectRatio.width - scaleSize.width) * 0.5, y: (aspectRatio.height - scaleSize.height) * 0.5)
-            return CGRect(origin: origin, size: scaleSize)
-        case .scaleAspectFill: //按照最大的比例居中
-            let scaleW = aspectRatio.width/size.width
-            let scaleH = aspectRatio.height/size.height
-            let scale = max(scaleW, scaleH)
-            let scaleSize = CGSize(width: size.width*scale, height: size.height*scale)
-            let origin = CGPoint(x: (aspectRatio.width - scaleSize.width) * 0.5, y: (aspectRatio.height - scaleSize.height) * 0.5)
-            return CGRect(origin: origin, size: scaleSize)
-        case .center:
-            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: (aspectRatio.height - size.height) * 0.5)
-            return CGRect(origin: origin, size: size)
-        case .top:
-            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: 0.0)
-            return CGRect(origin: origin, size: size)
-        case .bottom:
-            let origin = CGPoint(x: (aspectRatio.width - size.width) * 0.5, y: aspectRatio.height - size.height)
-            return CGRect(origin: origin, size: size)
-        case .left:
-            let origin = CGPoint(x: 0, y: (aspectRatio.height - size.height) * 0.5)
-            return CGRect(origin: origin, size: size)
-        case .right:
-            let origin = CGPoint(x: aspectRatio.width - size.width, y: (aspectRatio.height - size.height) * 0.5)
-            return CGRect(origin: origin, size: size)
-        case .topLeft:
-            return CGRect(origin: .zero, size: size)
-        case .topRight:
-            let origin = CGPoint(x: aspectRatio.width - size.width, y: 0.0)
-            return CGRect(origin: origin, size: size)
-        case .bottomLeft:
-            let origin = CGPoint(x: 0.0, y: aspectRatio.height - size.height)
-            return CGRect(origin: origin, size: size)
-        case .bottomRight:
-            let origin = CGPoint(x: aspectRatio.width - size.width, y: aspectRatio.height - size.height)
-            return CGRect(origin: origin, size: size)
-        default:
-            return .zero
-        }
-    }
+    } 
 }
 
 public extension UIImage {
