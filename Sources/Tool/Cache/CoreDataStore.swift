@@ -9,8 +9,8 @@ import UIKit
 import CoreData
 
 open class CoreDataStore {
-    let manager: CoreDataManager
-    init(_ manager: CoreDataManager) {
+    public let manager: CoreDataManager
+    public init(_ manager: CoreDataManager) {
         self.manager = manager
     }
     
@@ -18,7 +18,7 @@ open class CoreDataStore {
         let request = NSFetchRequest<T>()
         request.predicate = predicate
         let moc = self.manager.mainManageContext
-        request.entity = NSEntityDescription.entity(forEntityName: "SKFile", in: moc)
+        request.entity = NSEntityDescription.entity(forEntityName: entityName(for: T.self), in: moc)
         request.includesSubentities = false
         do {
             let count = try moc.count(for: request)
@@ -27,10 +27,9 @@ open class CoreDataStore {
             return .zero
         }
     }
- 
      
     /// Inside `CoreDataBasedContentStore`
-    private func load<T>(
+    public func load<T>(
       by predicate: NSPredicate? = nil,
       limit: Int? = nil,
         descriptors: [NSSortDescriptor]? = nil) -> [T] where T: NSManagedObject {
@@ -38,16 +37,13 @@ open class CoreDataStore {
       /// Can not use `T.fetchRequest()` here.
       /// Either convert the `NSFetchRequest<NSFetchRequestResult>`
       /// to `NSFetchRequest<T>` explicitly or use the following `init`:
-        let fetchRequest = NSFetchRequest<T>(entityName: String(describing: T.self))
+        let fetchRequest = NSFetchRequest<T>(entityName: entityName(for: T.self))
       do {
         fetchRequest.predicate = predicate
-
         if let limit = limit {
           fetchRequest.fetchLimit = limit
         }
-
         fetchRequest.sortDescriptors = descriptors
-
         return try context.fetch(fetchRequest)
       }
       catch {
@@ -64,12 +60,19 @@ open class CoreDataStore {
             return []
         }
     }
-    public func has<T>(of type: T) -> Bool where T: NSManagedObject {
-        let name = String(describing: T.self)
-        let context = self.manager.mainManageContext
-        self.numberOfItems(object: T) 
+    public func has<T>(of type: T) -> Bool where T: NSManagedObject { 
+        let request = NSFetchRequest<T>()
+        let moc = self.manager.mainManageContext
+        request.entity = NSEntityDescription.entity(forEntityName: entityName(for: T.self), in: moc)
+        request.includesSubentities = false
+        do {
+            let count = try moc.count(for: request)
+            return count > .zero
+        } catch {
+            return false
+        }
     }
-    public func entityName<T: NSManagedObject>(for type: T) -> String  {
+    public func entityName<T>(for type: T) -> String  {
         return String(describing: T.self)
     }
 }
