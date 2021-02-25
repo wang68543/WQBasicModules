@@ -49,8 +49,7 @@ open class CoreDataStore {
       catch {
         return []
       }
-    }
-    
+    } 
     public func fetchObjects<T: NSManagedObject>(_ request: NSFetchRequest<T>, context: NSManagedObjectContext? = nil) -> [T] {
         let moc = context ?? self.manager.mainManageContext
         do {
