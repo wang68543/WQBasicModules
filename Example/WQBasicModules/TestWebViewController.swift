@@ -19,7 +19,7 @@ class TestWebViewController: UIViewController {
         self.view.addSubview(webView)
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        self.webView.load(URLRequest(url: URL(string: "http://adfile.wifi8.com/uploads/test/outputbb/index.html")!))
+        self.webView.load(URLRequest(url: URL(string: "http://metro.wifi8.com/upload/privacy.html")!))
 //        self.webView.loadRequest(URLRequest(url: URL(string: "http://adfile.wifi8.com/uploads/zip/20210219/index.html")!))
 //        self.webView.loadRequest(URLRequest(url: URL(string: "https://www.baidu.com/")!))
 //        self.webView.titleDidChange = { [weak self] webTitle in
