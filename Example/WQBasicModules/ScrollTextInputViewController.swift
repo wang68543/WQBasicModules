@@ -19,7 +19,7 @@ class ScrollTextInputViewController: UIViewController {
         if #available(iOS 11.0, *) {
             self.scrollView.contentInsetAdjustmentBehavior = .never
         }
-        
+          
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
