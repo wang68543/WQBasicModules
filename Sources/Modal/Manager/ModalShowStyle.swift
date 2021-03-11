@@ -61,24 +61,7 @@ public enum ModalShowStyle {
    case popup(CGPoint, CGPoint, PopDirection)
    /// 自定义显示位置
    case custom([ModalState: ModalMapItems])
-}
- 
-//public extension ModalShowStyle {
-//    func frame(_ size: CGSize, container: CGSize, state: ModalState) -> CGRect {
-//        switch self {
-//        case let .popup(position, anchorPoint, isHorizontalExpend):
-//            var origin: CGPoint = .zero
-//            origin.x = position.x - anchorPoint.x * size.width
-//            origin.y = position.y - anchorPoint.y * size.height
-//           
-//            return CGRect(origin: origin, size: size)
-//        default:
-//            //TODO: - 待实现
-//            break
-//        }
-//        return .zero
-//    }
-//} 
+} 
 public enum PanHorizontal {
     case center, leading, trailing
 }

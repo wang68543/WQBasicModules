@@ -119,7 +119,6 @@ public extension WQModules where Base: UIView {
     }
     
     func dismissal(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
-//        self.base.layoutController?.dismiss(animated: flag, completion: completion)
         self.base.layoutController?.hidden(animated: flag, completion: completion)
     }
 } 

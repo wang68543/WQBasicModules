@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.date = Date()
         Localize.shared.register()
         debugPrint("测试".localized)
+    
         return true
     }
 
