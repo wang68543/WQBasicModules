@@ -106,9 +106,30 @@ public class ModalDefaultAnimation: ModalAnimation {
                 }
                 completion?()
             } else {
-                prepareStatesWithoutAnimation(.willHide)
-                /// 更新隐藏
-                updateWithDefaultAnimation(.hide)
+//                prepareStatesWithoutAnimation(.willHide)
+//                /// 更新隐藏
+//                updateWithDefaultAnimation(.hide)
+                if self.isInteractive { // 交互显示(拖拽)
+                    updateWithDefaultAnimation(.hide)
+                } else {
+                    if states.states.has(key: .willHide) {
+                        let keys: [ModalState] = [.willHide, .hide]
+                        UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
+                            let unit = time/TimeInterval(keys.count)
+                            for index in 0..<keys.count {
+                                let keyFrame = keys[index]
+                                UIView.addKeyframe(withRelativeStartTime: unit*TimeInterval(index), relativeDuration: unit) {
+                                    states.states.setup(forState: keyFrame)
+                                    layoutIfNeeded()
+                                }
+                            }
+                        } completion: { flag in
+                            completion?()
+                        }
+                    } else {
+                        updateWithDefaultAnimation(.hide)
+                    }
+                }
             }
             
         }
