@@ -28,8 +28,7 @@ public extension StyleConfig {
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
-            case .actionSheet:
-                
+            case .actionSheet: 
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
                 let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.actionSheetTransform(size, container: controllerSize)

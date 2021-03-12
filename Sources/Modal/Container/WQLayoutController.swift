@@ -177,8 +177,7 @@ public class WQLayoutController: UIViewController {
         backgroundView?.frame = self.view.bounds
         dimmingView.frame = self.view.bounds  
     }
-    public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) {
-        states.setupStates(self, config: self.config)
+    public func modal(_ states: StyleConfig, comletion: ModalAnimation.Completion? = nil) { 
         context = ModalContext.modalContext(self.config, states: states)
         self.shouldEventManagement = self.config.controllerEventManagement
         if !self.config.isSequenceModal {
@@ -207,8 +206,7 @@ public class WQLayoutController: UIViewController {
 //        }
     }
     
-    public func startInteractive(_ states: StyleConfig) { 
-        states.setupStates(self, config: self.config)
+    public func startInteractive(_ states: StyleConfig) {
         context = ModalContext.modalContext(self.config, states: states)
         context?.interactive(present: self, statesConfig: states)
     }

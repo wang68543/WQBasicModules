@@ -85,41 +85,44 @@ public extension WQModules where Base: UIView {
     }
 }
 @available(iOS 10.0, *)
-public extension WQModules where Base: UIView { 
-    func alert(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
-        let states = StyleConfig(.alert, anmation: .default)
-        states.animator.animationEnable = flag
-        self.present(config, states: states, completion: completion)
-    }
-    
-    func actionSheet(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
-        let states = StyleConfig(.actionSheet, anmation: .default)
-        states.animator.animationEnable = flag
-        self.present(config, states: states, completion: completion)
-    }
-    
+public extension WQModules where Base: UIView {
     /// 弹窗
     func present(_ config: ModalConfig = .init(),
                  states: StyleConfig,
                  completion: ModalAnimation.Completion? = nil) {
         let layout = WQLayoutController(config, subView: self.base)
+        // 配置默认配置
+        states.setupStates(layout, config: config)
         present(layout, states: states, completion: completion)
     }
     
     func present(_ container: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
     }
-                                
+    // 消失
+    func dismissal(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
+        self.base.layoutController?.hidden(animated: flag, completion: completion)
+    }
+}
+@available(iOS 10.0, *)
+public extension WQModules where Base: UIView { 
+    func alert(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
+        let states = StyleConfig(.alert, anmation: .default)
+        states.animator.animationEnable = flag
+        self.present(config, states: states, completion: completion)
+    }
+    /// 底部居中弹出
+    func actionSheet(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
+        let states = StyleConfig(.actionSheet, anmation: .default)
+        states.animator.animationEnable = flag
+        self.present(config, states: states, completion: completion)
+    }
     /// 拖拽显示
     func drag(present config: ModalConfig = .init(),
               states: StyleConfig) -> ModalContext? {
         let layout = WQLayoutController(config, subView: self.base)
         layout.startInteractive(states)
         return layout.context
-    }
-    
-    func dismissal(_ flag: Bool, completion: ModalAnimation.Completion? = nil) {
-        self.base.layoutController?.hidden(animated: flag, completion: completion)
     }
 } 
 
@@ -132,7 +135,7 @@ public extension WQModules where Base: UIView {
     func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let rect: CGRect
         if config.style.inParent {
-            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else {
+            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else { //转换为当前控制器的坐标
                 return
             }
             rect = frame

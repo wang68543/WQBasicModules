@@ -38,8 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        testCodable()
         AppDelegate.date = Date()
         Localize.shared.register()
-        debugPrint("测试".localized)
-    
+        debugPrint("测试".localized) 
         return true
     }
 

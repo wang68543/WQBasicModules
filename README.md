@@ -9,7 +9,6 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-## Requirements
 
 ## Installation
 
@@ -19,21 +18,18 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'WQBasicModules'
 ```
+主要功能
+================
+>说明:这个库是日常工作中累积的工具类以及总结封装的一些使用工具,所有的模块应用于以往的项目,后续也会不断优化以及新增.
 
-## Author
- wang68543@163.com
 
-## License
-
-WQBasicModules is available under the MIT license. See the LICENSE file for more info.
-# WQBasicModules
-
-### issue
-当多个target使用不同的subspec的时候,请将podfile中的
+可能遇到的问题解决方案 
+================
+1. 当多个target使用不同的subspec的时候,请将podfile中的
 ```ruby 
-1. use_frameworks! 改为 use_modular_headers!
+use_frameworks! 改为 use_modular_headers!
 ```
-2. 旧版本的弹窗需要单独引入 
+2. 旧版本的Modal弹窗需要单独引入 
 ```ruby 
-    pod 'WQBasicModules/Animation/Transitioning' 
+ pod 'WQBasicModules/Animation/Transitioning' 
 ```
