@@ -48,7 +48,13 @@ public extension UserDefault where T == String {
 public extension UserDefault where T == Data? {
     init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
-        let getter: FunGetter = { standard.data(forKey: key) }
+        let getter: FunGetter = {
+            let data = standard.data(forKey: key)
+            if data == nil || data == UserDefaults.nullValue {
+                return nil
+            }
+            return data
+        }
         self.init(getter, setter: setter)
     }
 }

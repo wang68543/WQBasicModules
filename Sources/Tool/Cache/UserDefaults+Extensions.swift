@@ -37,6 +37,7 @@ public extension UserDefaults {
     /// - Returns: Codable object for key (if exists).
     func object<T>(_ key: String, usingDecoder decoder: JSONDecoder = JSONDecoder()) -> T? where T: Codable {
         guard let data = data(forKey: key) else { return nil }
+        guard data != UserDefaults.nullValue else { return nil }
         return try? T.model(from: data, decoder: decoder)
     }
     
@@ -54,4 +55,7 @@ public extension UserDefaults {
         }
         
     }
+}
+extension UserDefaults {
+    static let nullValue = "null".data(using: .utf8)!
 }
