@@ -59,6 +59,9 @@ Pod::Spec.new do |s|
       ss.subspec 'Localize' do |sss|
           sss.source_files = 'Sources/FunModule/Localize/*.swift'
       end
+      ss.subspec 'Bluetooth' do |sss|
+          sss.source_files = 'Sources/FunModule/Bluetooth/*.swift'
+      end
   end
   
 #  s.subspec 'Function' do |ss|
