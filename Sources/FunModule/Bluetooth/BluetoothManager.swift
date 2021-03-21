@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreBluetooth
-open class BluetoothManager {
+open class BluetoothManager: NSObject {
     lazy var centralMgr: CBCentralManager = {
         let mgr = CBCentralManager(delegate: nil, queue: nil)
         return mgr
