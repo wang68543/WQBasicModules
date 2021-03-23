@@ -25,28 +25,28 @@ public struct UserDefault<T> {
     } 
 }
 public extension UserDefault where T: Codable {
-    init(_ key: String, default value: T, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, default value: T, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set(object: $0, forKey: key) }
         let getter: FunGetter = { standard.object(key) ?? value }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == Date {
-    init(_ key: String, default value: T, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, default value: T = Date(), standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { standard.date(forKey: key) ?? value }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == String {
-    init(_ key: String, default value: T, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, default value: T = "", standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { standard.string(forKey: key) ?? value }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == Data? {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = {
             let data = standard.data(forKey: key)
@@ -59,35 +59,35 @@ public extension UserDefault where T == Data? {
     }
 }
 public extension UserDefault where T == Int {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { standard.integer(forKey: key) }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == Int64 {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { Int64(standard.integer(forKey: key)) }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == Double {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { standard.double(forKey: key) }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == CGFloat {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { CGFloat(standard.double(forKey: key)) }
         self.init(getter, setter: setter)
     }
 }
 public extension UserDefault where T == Bool {
-    init(_ key: String, standard: UserDefaults = UserDefaults.standard) {
+    init(_ key: String, standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }
         let getter: FunGetter = { standard.bool(forKey: key) }
         self.init(getter, setter: setter)

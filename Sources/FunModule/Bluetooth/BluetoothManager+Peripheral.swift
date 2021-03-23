@@ -108,9 +108,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
     
     public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
         
-    }
-
-    
+    } 
     public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if let identifier = self.waitToConnectPeripheral,
            let uuid = UUID(uuidString: identifier) {
@@ -139,15 +137,6 @@ extension BluetoothManager: CBCentralManagerDelegate {
             let services: [CBUUID] = peripheral.services?.map(\.uuid) ?? []
             retrievePeripheral(peripheral.identifier, services: services)
         }
-    }
-
-    @available(iOS 13.0, *)
-    public func centralManager(_ central: CBCentralManager, connectionEventDidOccur event: CBConnectionEvent, for peripheral: CBPeripheral) {
-        
-    } 
-    @available(iOS 13.0, *)
-    public func centralManager(_ central: CBCentralManager, didUpdateANCSAuthorizationFor peripheral: CBPeripheral) {
-        
     }
 }
 // connect
