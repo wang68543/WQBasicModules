@@ -8,7 +8,7 @@
 import Foundation
 import CoreBluetooth
 // scan
-public extension BluetoothManager {
+public extension CBServerManager {
     
     
     func connect(_ peripheral: CBPeripheral, options: [String: Any]? = nil) {
@@ -52,7 +52,7 @@ public extension BluetoothManager {
             self.connect(dev, options: nil)
         } else {
             //扫描
-            scan(nil, options: nil, peripheral: peripheral)
+            discovery(nil, options: nil, peripheral: peripheral)
         }
     }
     
@@ -61,7 +61,7 @@ public extension BluetoothManager {
     ///   - services: 设备的服务
     ///   - options: 扫描设备的参数
     ///   - peripheral: 自动连接的设备名称
-    func scan(_ services: [CBUUID]?, options: [String: Any]?, peripheral: UUID? = nil) {
+    func discovery(_ services: [CBUUID]?, options: [String: Any]?, peripheral: UUID? = nil) {
         objc_sync_enter(self)
         self.waitToConnectPeripheral = peripheral?.uuidString
         if centralMgr.state != .poweredOn {
@@ -77,19 +77,19 @@ public extension BluetoothManager {
     // 设备连接的状态改变了
     func peripheral(_ peripheral: CBPeripheral, stateDidChange state: CBPeripheralState) {
         DispatchQueue.main.async {
-            NotificationCenter.default.post(name: BluetoothManager.peripheralStateDidChange, object: peripheral, userInfo: nil)
+            NotificationCenter.default.post(name: CBServerManager.peripheralStateDidChange, object: peripheral, userInfo: nil)
         }
     }
     
 }
-extension BluetoothManager: CBCentralManagerDelegate {
+extension CBServerManager: CBCentralManagerDelegate {
  
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
             let identifier = UUID(uuidString: self.waitToConnectPeripheral ?? "")
             if self.waitBLePoweredOnToScan || identifier != nil {
-                self.scan(nil, options: nil, peripheral: identifier)
+                self.discovery(nil, options: nil, peripheral: identifier)
             }
         case .poweredOff:
             // TODO: 测试流程
@@ -117,7 +117,7 @@ extension BluetoothManager: CBCentralManagerDelegate {
                 self.connect(peripheral, options: nil)
             }
         } else {
-            NotificationCenter.default.post(name: BluetoothManager.didReceivedAdvertisement, object: peripheral, userInfo: ["data": advertisementData, "rssi": RSSI])
+            NotificationCenter.default.post(name: CBServerManager.didReceivedAdvertisement, object: peripheral, userInfo: ["data": advertisementData, "rssi": RSSI])
         }
     }
     // connect api success
@@ -140,6 +140,6 @@ extension BluetoothManager: CBCentralManagerDelegate {
     }
 }
 // connect
-public extension BluetoothManager {
+public extension CBServerManager {
     
 }

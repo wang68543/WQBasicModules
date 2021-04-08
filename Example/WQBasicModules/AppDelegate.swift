@@ -37,8 +37,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 //        testCodable()
         AppDelegate.date = Date()
-        Localize.shared.register()
-        debugPrint("测试".localized) 
+        Localize.shared.register() 
+        debugPrint("测试".localized)
+        
         return true
     }
 
