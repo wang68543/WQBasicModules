@@ -14,28 +14,28 @@ public let oneWeekSeconds: TimeInterval = 7 * oneDaySeconds
 
 public extension Date {// MARK: - Components
     func year(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.year], from: self).year!
+        return calendar.component(.year, from: self)
     }
     func month(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.month], from: self).month!
+        return calendar.component(.month, from: self)
     }
     func day(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.day], from: self).day!
+        return calendar.component(.day, from: self)
     }
     func hour(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.hour], from: self).hour!
+        return calendar.component(.hour, from: self)
     }
     func minute(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.minute], from: self).minute!
+        return calendar.component(.minute, from: self)
     }
     func second(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.second], from: self).second!
+        return calendar.component(.second, from: self)
     }
     func weekday(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.weekday], from: self).weekday!
+        return calendar.component(.weekday, from: self)
     }
     func weekOfYear(_ calendar: Calendar = .current) -> Int {
-        return calendar.dateComponents([.weekOfYear], from: self).weekOfYear!
+        return calendar.component(.weekOfYear, from: self)
     }
     func timeZone(_ calendar: Calendar = .current) -> TimeZone {
         return calendar.dateComponents([.timeZone], from: self).timeZone!
@@ -52,15 +52,17 @@ public extension Date {
     ///   - year: in year
     ///   - calendar: caculate calendar
     /// - Returns: the first day in week (Sun)
-    static func date(of week: Int, in year: Int, with calendar: Calendar = .current) -> Date? {
+    init?(week: Int, in year: Int, with calendar: Calendar = .current) {
         let  dateComponments = DateComponents(year: year, month: 1, day: 1, hour: 0, minute: 0, second: 0, nanosecond: 0)
-        let yearStartDate = calendar.date(from: dateComponments)
-        guard let startDate = yearStartDate else {
+        guard let start = calendar.date(from: dateComponments) else {
             return nil
         }
-        let component = calendar.component(.weekday, from: startDate)
+        let component = calendar.component(.weekday, from: start)
         let interval = (week - 1) * 7 - (component - 1)
-        return calendar.date(byAdding: .day, value: interval, to: startDate)
+        guard let date = calendar.date(byAdding: .day, value: interval, to: start) else {
+            return nil
+        }
+        self = date
     }
     
     /// distance unit counts between two date
@@ -127,78 +129,73 @@ public extension Date {
             success = calendar.dateInterval(of: unit, start: &startDate, interval: &interval, for: self)
         }
         if !success {
-            var components = calendar.dateComponents(Date.commentFlags, from: self)
-            var endComponents = components
-            // swiftlint:disable fallthrough
-            switch unit {
-            case .year:
-                components.month = 1; endComponents.month = 12
-                fallthrough
-            case .month:
-//                let days = daysInMonth(finishComponents.year!, at: endComponents.month!)
-                let days = calendar.numberOfDaysInMonth(for: self)
-                components.day = 1; endComponents.day = days
-                fallthrough
-            case .day, .weekday:
-                components.hour = 0; endComponents.hour = 23
-                fallthrough
-            case .hour:
-                components.minute = 0; endComponents.minute = 59
-                fallthrough
-            case .minute:
-                components.second = 0; endComponents.second = 59
-                fallthrough
-            default:
-                break
-            }
-            // swiftlint:enable fallthrough
-            startDate = calendar.date(from: components)!
-            var endDate = calendar.date(from: endComponents)!
-            if unit == .weekday {
-                let weekDay = components.weekday!
-                startDate -= TimeInterval(weekDay) * oneDaySeconds
-                endDate += TimeInterval(7 - weekDay) * oneDaySeconds
-            }
-            interval = endDate.timeIntervalSince(startDate)
+           return _range(unit, with: calendar)
+        } else {
+            return (begin: startDate, length: interval)
         }
-        return (begin:startDate, length:interval)
+    }
+    private func _range(_ unit: Calendar.Component,
+                        with calendar: Calendar = .current) -> DateUnitRange {
+        var startDate: Date = self
+        var interval: TimeInterval = 0
+        var components = calendar.dateComponents(Date.commentFlags, from: self)
+        var endComponents = components
+        // swiftlint:disable fallthrough
+        switch unit {
+        case .year:
+            components.month = 1; endComponents.month = 12
+            fallthrough
+        case .month:
+            let days = calendar.numberOfDaysInMonth(for: self)
+            components.day = 1; endComponents.day = days
+            fallthrough
+        case .day, .weekday:
+            components.hour = 0; endComponents.hour = 23
+            fallthrough
+        case .hour:
+            components.minute = 0; endComponents.minute = 59
+            fallthrough
+        case .minute:
+            components.second = 0; endComponents.second = 59
+            fallthrough
+        default:
+            break
+        }
+        startDate = calendar.date(from: components)!
+        var endDate = calendar.date(from: endComponents)!
+        if unit == .weekday {
+            let weekDay = components.weekday!
+            startDate -= TimeInterval(weekDay) * oneDaySeconds
+            endDate += TimeInterval(7 - weekDay) * oneDaySeconds
+        }
+        interval = endDate.timeIntervalSince(startDate)
+        return (begin: startDate, length: interval)
     }
     /// min seconds in date unit
     /// 计算一周的开始以及结束时间点用weekOfYear
     ///
     /// - Returns: min date in unit
-    func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func start(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
         return range(unit, with: calendar).begin
     }
     /// max seconds in date unit
     /// 计算一周的开始以及结束时间点用weekOfYear
     ///
     /// - Returns: max date in unit
-    func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func end(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
         let dateUnit = range(unit, with: calendar)
         return dateUnit.begin + TimeInterval(dateUnit.length - 1)
     }
-    /// forward a date unit time
-    ///
-    /// - Returns: before time min date
-    @available(*, deprecated, message: "use previousDate(:,with:)")
-    func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
-        let beforeDate = dateStart(unit, with: calendar)
-        let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
-        return beforeDate - interval
-    }
     /// 前一个日期
-    func previousDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
-        let beforeDate = dateStart(unit, with: calendar)
+    func previous(_ unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
+        let beforeDate = start(unit, in: calendar)
         let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
         return beforeDate - interval
     }
-    /// behind a date unit time
-    ///
-    /// - Returns: after time min date
-    func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
-        return dateEnd(unit, with: calendar) + 1
+    func next(date unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
+        return end(unit, in: calendar) + 1
     }
+    
     
     /// smaller unit counts in larger unit
     ///
@@ -218,7 +215,6 @@ public extension Date {
                 bigUnit = .month
             case .month, .weekOfYear:
                 bigUnit = .year
-                
             default:
                 fatalError("此类型的单位计算不支持")
             }
@@ -244,8 +240,7 @@ public extension Date {
         return calendar.date(byAdding: components, to: self)!
     }
 }
-public extension Date {// MARK: - Compare
-    
+public extension Date {// MARK: - Compare 
     func isToday(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInToday(self)
     }
@@ -255,7 +250,12 @@ public extension Date {// MARK: - Compare
     func isTomorrow(with calendar: Calendar = .current) -> Bool {
         return calendar.isDateInTomorrow(self)
     }
-    
+    func isWeekend(with calendar: Calendar = .current) -> Bool {
+        return calendar.isDateInWeekend(self)
+    }
+    func isWorkday(with calendar: Calendar = .current) -> Bool {
+        return !isWeekend(with: calendar)
+    }
     func isThisWeek(with calendar: Calendar = .current) -> Bool {
         return calendar.isDate(self, equalTo: Date(), toGranularity: .weekOfYear)
     }
@@ -281,7 +281,6 @@ public extension Date {// MARK: - Compare
     }
     func isNextYear(with calendar: Calendar = .current) -> Bool {
         let nextDate = Date().dateByAdding(1, unit: .year, with: calendar)
-        
          return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
     func isLastYear(with calendar: Calendar = .current) -> Bool {
@@ -352,7 +351,43 @@ public extension Date {
         return units
     }
 }
-
+//https://www.hackingwithswift.com/example-code/language/how-to-use-available-to-deprecate-old-apis
+// MARK: -- -Deprecated
 public extension Date {
-//    var to
+    @available(*, deprecated, renamed: "previous(_:in:)")
+    func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let beforeDate = dateStart(unit, with: calendar)
+        let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
+        return beforeDate - interval
+    }
+    @available(*, deprecated, renamed: "previous(_:in:)")
+    func previousDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let beforeDate = dateStart(unit, with: calendar)
+        let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
+        return beforeDate - interval
+    }
+    @available(*, deprecated, renamed: "next(_:in:)")
+    func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        return dateEnd(unit, with: calendar) + 1
+    }
+    @available(*, deprecated, renamed: "start(_:in:)")
+    func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        return range(unit, with: calendar).begin
+    }
+    @available(*, deprecated, renamed: "end(_:in:)")
+    func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+        let dateUnit = range(unit, with: calendar)
+        return dateUnit.begin + TimeInterval(dateUnit.length - 1)
+    }
+    @available(*, deprecated, renamed: "init(week:in:with:)")
+    static func date(of week: Int, in year: Int, with calendar: Calendar = .current) -> Date? {
+        let  dateComponments = DateComponents(year: year, month: 1, day: 1, hour: 0, minute: 0, second: 0, nanosecond: 0)
+        let yearStartDate = calendar.date(from: dateComponments)
+        guard let startDate = yearStartDate else {
+            return nil
+        }
+        let component = calendar.component(.weekday, from: startDate)
+        let interval = (week - 1) * 7 - (component - 1)
+        return calendar.date(byAdding: .day, value: interval, to: startDate)
+    }
 }
