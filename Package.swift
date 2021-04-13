@@ -8,20 +8,20 @@
 
 import PackageDescription
 
-let package = Package(
-    name: "WQBasicModules",
-    platforms: [
-        .iOS(.v8)
-    ],
-    products: [
-        .library(
-            name: "WQBasicModules",
-            targets: ["WQBasicModules"])
-    ],
-    targets: [
-        .target(
-            name: "WQBasicModules",
-            path: "Sources/Classes")
-    ],
-    swiftLanguageVersions: [.v4, .v5]
-)
+//let package = Package(
+//    name: "WQBasicModules",
+//    platforms: [
+//        .iOS(.v8)
+//    ],
+//    products: [
+//        .library(
+//            name: "WQBasicModules",
+//            targets: ["WQBasicModules"])
+//    ],
+//    targets: [
+//        .target(
+//            name: "WQBasicModules",
+//            path: "Sources")
+//    ],
+//    swiftLanguageVersions: [.v4, .v5]
+//)
