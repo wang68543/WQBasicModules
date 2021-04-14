@@ -41,7 +41,7 @@ class SecondViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let button = DownButton()
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "s"), color: UIColor.red) { (_, _) -> Bool in
 

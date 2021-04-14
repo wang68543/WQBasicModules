@@ -9,7 +9,7 @@
 //  https://developer.apple.com/library/archive/documentation/NetworkingInternetWeb/Conceptual/CoreBluetooth_concepts/AboutCoreBluetooth/Introduction.html#//apple_ref/doc/uid/TP40013257-CH1-SW1
 import Foundation
 import CoreBluetooth
-open class BluetoothManager: NSObject {
+open class CBServerManager: NSObject {
     public lazy var centralMgr: CBCentralManager = {
         let mgr = CBCentralManager(delegate: nil, queue: nil)
         return mgr
@@ -23,7 +23,7 @@ open class BluetoothManager: NSObject {
     internal var waitBLePoweredOnToScan: Bool = false
     
 }
-public extension BluetoothManager {
+public extension CBServerManager {
     /// 设备的连接状态改变
     static let peripheralStateDidChange = Notification.Name(rawValue: "peripheralStateDidChangeNotification")
     /// 接收到设备的广播通知

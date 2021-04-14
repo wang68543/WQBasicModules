@@ -1,11 +1,12 @@
 //
-//  Package.swift
+//  Package@swift-5.3.swift
 //  WQBasicModules
 //
-//  Created by WQ on 2019/6/26.
-//  Copyright © 2019 CocoaPods. All rights reserved.
+//  Created by iMacHuaSheng on 2021/4/13.
+//  Copyright © 2021 CocoaPods. All rights reserved.
 //
 
+// swift-tools-version:5.3
 import PackageDescription
 
 let package = Package(
