@@ -709,6 +709,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/WQBasicModules/WQBasicModules.modulemap\"",
+				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D WDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sgv.HandMetro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -738,6 +742,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
+				OTHER_CFLAGS = (
+					"$(inherited)",
+					"-fmodule-map-file=\"${PODS_CONFIGURATION_BUILD_DIR}/WQBasicModules/WQBasicModules.modulemap\"",
+				);
 				OTHER_SWIFT_FLAGS = "$(inherited) -D COCOAPODS -D WDEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sgv.HandMetro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
