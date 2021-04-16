@@ -44,8 +44,16 @@ open class LaunchManager: NSObject {
 //    }
 
     func setup() {
-        UIWindow
+          
 //        removeOnly()
+        window = UIWindow(frame: UIScreen.main.bounds)
+        window?.rootViewController = ShowWindowController()
+        window?.rootViewController?.view.backgroundColor = .clear
+        window?.rootViewController?.view.isUserInteractionEnabled = false
+        window?.windowLevel = UIWindow.Level.statusBar + 1
+        window?.isHidden = false
+        window?.alpha = 1
+//        window?.addSubview(<#T##view: UIView##UIView#>)
         
 //        window = UIWindow(frame: UIScreen.mainScreen.bounds)
     }

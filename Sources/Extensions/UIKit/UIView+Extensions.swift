@@ -51,7 +51,7 @@ public extension UIView {
     }
     
     /// 截屏
-    func snapshot(_ size: CGSize = .zero) -> UIImage? {
+    func snapshot(_ size: CGSize = .zero) -> UIImage? { 
         let drawSize = (size == .zero) ? self.bounds.size : size
         // 这里的截屏起始点 是从(0,0)开始的 只绘制bound的区域 其余区域黑屏
         UIGraphicsBeginImageContextWithOptions(drawSize, false, UIScreen.main.scale)
