@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.date = Date()
         Localize.shared.register() 
         debugPrint("测试".localized)
-//        LaunchImage().launchImages()
+        LaunchImage().launchImage   
         return true
     }
 
