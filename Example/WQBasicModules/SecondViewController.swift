@@ -31,7 +31,6 @@ class SecondViewController: UIViewController {
     }
     class HeaderFooterView: UICollectionReusableView {
         static let reuseIdentifier: String = "HeaderFooterView"
-
     } 
     class DownButton: UIButton {
 

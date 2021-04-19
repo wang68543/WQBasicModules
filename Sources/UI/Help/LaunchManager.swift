@@ -47,13 +47,22 @@ open class LaunchManager: NSObject {
         window?.isHidden = true
         window = nil
     }
+    public func pushViewController(_ viewController: UIViewController, animated: Bool) {
+         let nav = WQUIHelp.topNavigationController()
+        nav?.pushViewController(viewController, animated: animated)
+    }
     public func dismiss(duration: TimeInterval = 0.25, option: UIView.AnimationOptions = [], completion: (() -> Void)?) {
         guard let _window = window else { return }
-        UIView.transition(with: _window, duration: duration, options: option) {
-            _window.alpha = 0.0
-        } completion: { _ in
+        if option == [] {
             self.removeOnly()
             completion?()
+        } else {
+            UIView.transition(with: _window, duration: duration, options: option) {
+                _window.alpha = 0.0
+            } completion: { _ in
+                self.removeOnly()
+                completion?()
+            }
         }
     }
     public func dismissLite(_ duration: TimeInterval = 0.25, completion: (() -> Void)?)  {
@@ -67,5 +76,4 @@ open class LaunchManager: NSObject {
         }
     }
     
-
 }
