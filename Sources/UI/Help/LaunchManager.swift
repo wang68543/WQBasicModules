@@ -34,13 +34,14 @@ open class LaunchManager: NSObject {
         viewController.view.isUserInteractionEnabled = false
         window?.windowLevel = UIWindow.Level.statusBar + 1
         window?.isHidden = false
-        window?.backgroundColor = .clear
+//        window?.backgroundColor = .clear
         window?.alpha = 1 
     }
     public func launchWindow(with view: UIView) {
         launchWindow()
         view.frame = UIScreen.main.bounds
         window?.addSubview(view)
+        window?.sendSubviewToBack(view)
     }
     func removeOnly() {
         window?.subviews.forEach { $0.removeFromSuperview() }
