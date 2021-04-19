@@ -12,22 +12,34 @@ open class ShowWindowController: UIViewController {
         return false
     }
     open override var prefersHomeIndicatorAutoHidden: Bool {
-        return false
+        return true
+    }
+    open override var prefersStatusBarHidden: Bool {
+        return true
     }
 }
 open class LaunchManager: NSObject {
-    var window: UIWindow?
+    public static let `default` = LaunchManager()
+    
+    public private(set) var window: UIWindow?
+    /// 展示复制启动屏
+    public func showLaunchWindow(with viewController: UIViewController = ShowWindowController()) {
+        let imageView = UIImageView(image: LaunchImage.snapshotLaunch)
+        launchWindow(with: imageView)
+    }
     public func launchWindow(with viewController: UIViewController = ShowWindowController()) {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = viewController
-        window?.rootViewController?.view.backgroundColor = .clear
-        window?.rootViewController?.view.isUserInteractionEnabled = false
+        viewController.view.backgroundColor = .clear
+        viewController.view.isUserInteractionEnabled = false
         window?.windowLevel = UIWindow.Level.statusBar + 1
         window?.isHidden = false
-        window?.alpha = 1
+        window?.backgroundColor = .clear
+        window?.alpha = 1 
     }
     public func launchWindow(with view: UIView) {
         launchWindow()
+        view.frame = UIScreen.main.bounds
         window?.addSubview(view)
     }
     func removeOnly() {

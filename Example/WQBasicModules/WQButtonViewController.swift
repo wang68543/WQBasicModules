@@ -14,6 +14,10 @@ class WQButtonViewController: UIViewController {
         super.viewDidLoad()
         self.setupButtons()
         self.setupMultiButtons()
+//        let image = LaunchImage.snapshotLaunch
+//        let imageView = UIImageView(image: image)
+//        self.view.addSubview(imageView)
+//        imageView.frame = UIScreen.main.bounds
     }
 
     func setupButtons() {

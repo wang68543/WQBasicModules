@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // curl -o .gitignore https://www.gitignore.io/api/swift 添加.gitignore
     //https://www.gitignore.io/api/objective-c
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        LaunchManager.default.showLaunchWindow()
         debugPrint("======\("中国".pinYin())")
         debugPrint("\(Int.max)")
         debugPrint("\(CGFloat.greatestFiniteMagnitude)")
@@ -39,7 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.date = Date()
         Localize.shared.register() 
         debugPrint("测试".localized)
-        LaunchImage().launchImage   
+        
+//        LaunchImage().launchImage
         return true
     }
 

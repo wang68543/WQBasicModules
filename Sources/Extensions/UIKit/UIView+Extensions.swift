@@ -55,10 +55,9 @@ public extension UIView {
         let drawSize = (size == .zero) ? self.bounds.size : size
         // 这里的截屏起始点 是从(0,0)开始的 只绘制bound的区域 其余区域黑屏
         UIGraphicsBeginImageContextWithOptions(drawSize, false, UIScreen.main.scale)
-        guard let context = UIGraphicsGetCurrentContext() else {
-            return nil
-        }
-        layer.render(in: context)
+//        guard let context = UIGraphicsGetCurrentContext() else { return nil }
+//        layer.render(in: context)
+        self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
