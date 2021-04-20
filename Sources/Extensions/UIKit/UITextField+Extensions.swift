@@ -25,7 +25,7 @@ public extension UITextField {
             #endif
         }
         get {
-           return objc_getAssociatedObject(self, AssociatedKeys.maxTextSizeKey) as? Int
+            objc_getAssociatedObject(self, AssociatedKeys.maxTextSizeKey) as? Int
         }
     }
     

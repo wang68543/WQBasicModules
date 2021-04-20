@@ -20,7 +20,7 @@ public extension CALayer {
             objc_setAssociatedObject(self, AnimationKeys.isAnimating, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return (objc_getAssociatedObject(self, AnimationKeys.isAnimating) as? Bool) ?? false
+             (objc_getAssociatedObject(self, AnimationKeys.isAnimating) as? Bool) ?? false
         }
     }
     

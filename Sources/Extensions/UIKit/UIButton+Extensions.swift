@@ -16,7 +16,7 @@ public extension UIButton {
             objc_setAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval, newValue, .OBJC_ASSOCIATION_ASSIGN) 
         }
         get {
-           return objc_getAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval) as? TimeInterval ?? 0
+            objc_getAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval) as? TimeInterval ?? 0
         }
     }
     /// 便捷的设置button的标题

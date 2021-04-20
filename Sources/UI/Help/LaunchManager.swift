@@ -24,24 +24,23 @@ open class LaunchManager: NSObject {
     public private(set) var window: UIWindow?
     /// 展示复制启动屏
     public func showLaunchWindow(with viewController: UIViewController = ShowWindowController()) {
-        let imageView = UIImageView(image: LaunchImage.snapshotLaunch)
-        launchWindow(with: imageView)
+        let image = LaunchImage.snapshotLaunch
+        let imageView = UIImageView(image: image)
+        imageView.frame = UIScreen.main.bounds
+        launchWindow(with: viewController)
+        window?.addSubview(imageView)
+        window?.sendSubviewToBack(imageView)
     }
     public func launchWindow(with viewController: UIViewController = ShowWindowController()) {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = viewController
         viewController.view.backgroundColor = .clear
         viewController.view.isUserInteractionEnabled = false
-        window?.windowLevel = UIWindow.Level.statusBar + 1
+        // windowLevel可以调整多个window的显示层级 
+        window?.windowLevel = UIWindow.Level.statusBar + 1 //Level.statusBar + 1
         window?.isHidden = false
-//        window?.backgroundColor = .clear
+        window?.backgroundColor = .clear
         window?.alpha = 1 
-    }
-    public func launchWindow(with view: UIView) {
-        launchWindow()
-        view.frame = UIScreen.main.bounds
-        window?.addSubview(view)
-        window?.sendSubviewToBack(view)
     }
     func removeOnly() {
         window?.subviews.forEach { $0.removeFromSuperview() }

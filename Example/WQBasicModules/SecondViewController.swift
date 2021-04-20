@@ -185,7 +185,6 @@ extension SecondViewController.DownButton {
 
         }
         get {
-
             if let count = objc_getAssociatedObject(self, CountDownKeys.totalCount) as? String {
                 return count
             } else {

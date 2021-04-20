@@ -9,7 +9,7 @@ import Foundation
 public extension UserDefaults {
     subscript(key: String) -> Any? {
         get {
-            return object(forKey: key)
+            object(forKey: key)
         }
         set {
             set(newValue, forKey: key)

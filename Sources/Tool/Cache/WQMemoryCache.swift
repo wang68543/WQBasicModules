@@ -205,7 +205,7 @@ open class WQMemoryCache<ValueType: Any>: NSObject {
             }
         }
         get {
-            return self.object(forKey: key)
+            self.object(forKey: key)
         }
     }
 }

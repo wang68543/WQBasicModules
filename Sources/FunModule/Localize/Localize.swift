@@ -18,7 +18,7 @@ open class Localize {
             Localize.shared.setCurrentBundle()
         }
         get {
-            return UserDefaults.standard.bool(forKey: trackSystemLanguageKey)
+            UserDefaults.standard.bool(forKey: trackSystemLanguageKey)
         }
     }
     /// 当多个区域使用类似的语言的时候 若当前App 需要使用的语言  App bundle 中午对应的 就找相似的 (例如 如果当前App 支持中文简体 但是App设置里面是繁体 当前属性为true 就会返回简体 否则返回默认)
@@ -65,7 +65,7 @@ open class Localize {
             Localize.trackSystemLanguage = false
         }
         get {
-            return UserDefaults.standard.string(forKey: Localize.userLanguageKey)
+            UserDefaults.standard.string(forKey: Localize.userLanguageKey)
         }
     }
     
@@ -77,7 +77,7 @@ open class Localize {
             setCurrentBundle()
         }
         get {
-            return UserDefaults.standard.string(forKey: Localize.defaultLanguageKey)
+            UserDefaults.standard.string(forKey: Localize.defaultLanguageKey)
         }
     }
     /// 系统当前的语言(iOS13以前) 或者设置里面对应的App的语言(iOS13之后)

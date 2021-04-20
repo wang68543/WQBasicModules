@@ -168,7 +168,7 @@ public extension WQCache {
             self.asyncSet(newValue, forKey: key)
         }
         get {
-            return self.object(forKey: key)
+            self.object(forKey: key)
         }
     }
     func path(for key: String, isDirectory: Bool = false) -> URL {

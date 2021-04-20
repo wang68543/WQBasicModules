@@ -58,7 +58,7 @@ public extension WQModules where Base: UIView {
             self.base.layoutFittingMaxmiumSize = size
         }
         get {
-            return self.base.layoutFittingMaxmiumSize.width
+             self.base.layoutFittingMaxmiumSize.width
         }
     }
     /// 弹窗尺寸自
@@ -70,7 +70,7 @@ public extension WQModules where Base: UIView {
             self.base.layoutFittingMaxmiumSize = size
         }
         get {
-            return base.layoutFittingMaxmiumSize.height
+             base.layoutFittingMaxmiumSize.height
         }
     }
     
@@ -80,7 +80,7 @@ public extension WQModules where Base: UIView {
             self.base.bounds.size = newValue
         }
         get {
-            return self.base.bounds.size
+            self.base.bounds.size
         }
     }
 }

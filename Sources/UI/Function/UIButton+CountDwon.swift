@@ -52,7 +52,7 @@ public extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.isCanCancel, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
-            return objc_getAssociatedObject(self, CountDownKeys.isCanCancel) as? Bool ?? false
+            objc_getAssociatedObject(self, CountDownKeys.isCanCancel) as? Bool ?? false
         }
     }
     /// 是否需要继续倒计时(用于离开页面之后再回来)
@@ -163,7 +163,7 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.timerSource, newValue, .OBJC_ASSOCIATION_RETAIN)
         }
         get {
-            return objc_getAssociatedObject(self, CountDownKeys.timerSource) as? DispatchSourceTimer
+            objc_getAssociatedObject(self, CountDownKeys.timerSource) as? DispatchSourceTimer
         }
     }
    var totalCount: UInt {
@@ -180,7 +180,7 @@ private extension UIButton {
             }
         }
         get { 
-           return objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt ?? 0
+          objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt ?? 0
         }
     }
     var countDownCompletion: CountDownCompletion? {
@@ -188,7 +188,7 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.completion, newValue, .OBJC_ASSOCIATION_COPY)
         }
         get {
-            return objc_getAssociatedObject(self, CountDownKeys.completion) as? CountDownCompletion
+           objc_getAssociatedObject(self, CountDownKeys.completion) as? CountDownCompletion
         }
     }
     var execute: IntervalExecute? {
@@ -196,7 +196,7 @@ private extension UIButton {
             objc_setAssociatedObject(self, CountDownKeys.execute, newValue, .OBJC_ASSOCIATION_COPY)
         }
         get {
-            return objc_getAssociatedObject(self, CountDownKeys.execute) as? IntervalExecute
+             objc_getAssociatedObject(self, CountDownKeys.execute) as? IntervalExecute
         }
     }
     var timeKey: String? {
@@ -208,7 +208,7 @@ private extension UIButton {
             }
         }
         get {
-            return objc_getAssociatedObject(self, CountDownKeys.timeKey) as? String
+           objc_getAssociatedObject(self, CountDownKeys.timeKey) as? String
         }
     }
 }
