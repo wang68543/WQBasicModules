@@ -142,5 +142,11 @@ Pod::Spec.new do |s|
          ss.subspec 'Gesture' do |sss|
              sss.source_files = 'Sources/UI/Gesture/*.swift'
          end
+         ss.subspec 'Launch' do |sss|
+             sss.dependency 'WQBasicModules/Extensions/Foundation'
+             sss.dependency 'WQBasicModules/Extensions/UIKit'
+             sss.dependency 'WQBasicModules/UI/Help'
+             sss.source_files = 'Sources/UI/Launch/*.swift'
+         end
      end
 end

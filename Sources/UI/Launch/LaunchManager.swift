@@ -35,7 +35,7 @@ open class LaunchManager: NSObject {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = viewController
         viewController.view.backgroundColor = .clear
-        viewController.view.isUserInteractionEnabled = false
+//        viewController.view.isUserInteractionEnabled = false
         // windowLevel可以调整多个window的显示层级 
         window?.windowLevel = UIWindow.Level.statusBar + 1 //Level.statusBar + 1
         window?.isHidden = false

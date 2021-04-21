@@ -48,6 +48,7 @@ PODS:
     - WQBasicModules/UI/Function (= 0.3.9)
     - WQBasicModules/UI/Gesture (= 0.3.9)
     - WQBasicModules/UI/Help (= 0.3.9)
+    - WQBasicModules/UI/Launch (= 0.3.9)
   - WQBasicModules/UI/Custom (0.3.9):
     - WQBasicModules/Extensions/Module
   - WQBasicModules/UI/FlowLayout (0.3.9)
@@ -55,6 +56,10 @@ PODS:
   - WQBasicModules/UI/Gesture (0.3.9)
   - WQBasicModules/UI/Help (0.3.9):
     - WQBasicModules/Extensions/Module
+  - WQBasicModules/UI/Launch (0.3.9):
+    - WQBasicModules/Extensions/Foundation
+    - WQBasicModules/Extensions/UIKit
+    - WQBasicModules/UI/Help
 
 DEPENDENCIES:
   - WQBasicModules (from `../`)
@@ -65,7 +70,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  WQBasicModules: 99a42e8b508860ae8afab22ce3dbd82304c74423
+  WQBasicModules: bc1310e74218f22cfd7812b14563cc1ec7da4858
 
 PODFILE CHECKSUM: 72a854ce709390dc691bf81a2d54f50522ba0286
 

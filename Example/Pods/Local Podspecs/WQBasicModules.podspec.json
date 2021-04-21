@@ -214,6 +214,21 @@
         {
           "name": "Gesture",
           "source_files": "Sources/UI/Gesture/*.swift"
+        },
+        {
+          "name": "Launch",
+          "dependencies": {
+            "WQBasicModules/Extensions/Foundation": [
+
+            ],
+            "WQBasicModules/Extensions/UIKit": [
+
+            ],
+            "WQBasicModules/UI/Help": [
+
+            ]
+          },
+          "source_files": "Sources/UI/Launch/*.swift"
         }
       ]
     }
