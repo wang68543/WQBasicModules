@@ -27,14 +27,14 @@ public class WQModalWindow: UIWindow {
 public extension WQModalWindow {
     /// 添加根控制器 并且让window显示
     func addVisible(root viewController: UIViewController) {
-        self.previousKeyWindow = WQUIHelp.topNormalWindow()
+        self.previousKeyWindow = UIWindow.topNormal
         self.rootViewController = viewController
         if !self.isKeyWindow { //重复设置root
           self.makeKeyAndVisible()
         }
     }
     func remove() {
-        let win = WQUIHelp.topNormalWindow()
+        let win = UIWindow.topNormal
         if let preKey = self.previousKeyWindow,
            win === self {
             if preKey.isHidden {
@@ -57,7 +57,7 @@ public class ModalInWindowContext: ModalDrivenContext {
     func getKeyWindow() -> WQModalWindow? {
         if keyWindow == nil {
             let win = WQModalWindow()
-            let view = WQUIHelp.topNormalWindow()
+            let view = UIWindow.topNormal
             if let snapshot = view?.snapshotView(afterScreenUpdates: true) {
                 UIView.performWithoutAnimation {
                     win.addSubview(snapshot)

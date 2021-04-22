@@ -7,32 +7,16 @@
 
 import Foundation
 
-final public class WQUIHelp {
-    public class func topNormalWindow() -> UIWindow? {
-        let app = UIApplication.shared
-        #if targetEnvironment(macCatalyst)
-        var topWindow = UIApplication.shared.windows.last
-        #else
-        var topWindow = UIApplication.shared.keyWindow
-        #endif 
-        topWindow = topWindow ?? app.delegate?.window ?? app.windows.last(where: { $0.windowLevel == .normal })
-        return topWindow
-    }
+final public class WQUIHelp { 
      
     public class func topVisibleViewController() -> UIViewController? {
-        return topNormalWindow()?.rootViewController?.topVisible()
+        return UIWindow.topNormal?.rootViewController?.topVisible()
     }
     
     public class func topNavigationController() -> UINavigationController? {
-        return topNormalWindow()?.rootViewController?.topNavigationController()
+        return UIWindow.topNormal?.rootViewController?.topNavigationController()
     }
     
 }
 
-public func wm_topNavigationController() -> UINavigationController? {
-    return WQUIHelp.topNavigationController()
-}
 
-public func wm_topVisibleViewController() -> UIViewController? {
-    return WQUIHelp.topVisibleViewController()
-}

@@ -32,32 +32,32 @@ open class LaunchManager: NSObject {
         window?.sendSubviewToBack(imageView)
     }
     public func launchWindow(with viewController: UIViewController = ShowWindowController()) {
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = viewController
+//        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame: UIScreen.main.bounds, viewController)
+//        window?.rootViewController = viewController
         viewController.view.backgroundColor = .clear
 //        viewController.view.isUserInteractionEnabled = false
         // windowLevel可以调整多个window的显示层级 
         window?.windowLevel = UIWindow.Level.statusBar + 1 //Level.statusBar + 1
-        window?.isHidden = false
-        window?.backgroundColor = .clear
-        window?.alpha = 1 
+//        window?.isHidden = false
+//        window?.backgroundColor = .clear
+//        window?.alpha = 1 
     }
     func removeOnly() {
-        window?.subviews.forEach { $0.removeFromSuperview() }
-        window?.isHidden = true
+        window?.removeFromApplication()
         window = nil
     }
     public func pushViewController(_ viewController: UIViewController, animated: Bool) {
-         let nav = WQUIHelp.topNavigationController()
+        let nav = UIWindow.keyWindow?.topNavigationController
         nav?.pushViewController(viewController, animated: animated)
     }
-    public func dismiss(duration: TimeInterval = 0.25, option: UIView.AnimationOptions = [], completion: (() -> Void)?) {
+    public func dismiss(duration: TimeInterval = 0.25, options: UIView.AnimationOptions = [], completion: (() -> Void)?) {
         guard let _window = window else { return }
-        if option == [] {
+        if options.isEmpty {
             self.removeOnly()
             completion?()
         } else {
-            UIView.transition(with: _window, duration: duration, options: option) {
+            UIView.transition(with: _window, duration: duration, options: options) {
                 _window.alpha = 0.0
             } completion: { _ in
                 self.removeOnly()

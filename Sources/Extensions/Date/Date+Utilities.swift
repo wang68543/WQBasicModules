@@ -355,27 +355,33 @@ public extension Date {
 // MARK: -- -Deprecated
 public extension Date {
     @available(*, deprecated, renamed: "previous(_:in:)")
-    func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+//    @_silgen_name("previous(_:in:)")
+    func beforeDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date
+    {
         let beforeDate = dateStart(unit, with: calendar)
         let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
         return beforeDate - interval
     }
     @available(*, deprecated, renamed: "previous(_:in:)")
-    func previousDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func previousDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date
+    {
         let beforeDate = dateStart(unit, with: calendar)
         let interval = beforeDate.addingTimeInterval(-1).range(unit, with: calendar).length
         return beforeDate - interval
     }
     @available(*, deprecated, renamed: "next(_:in:)")
-    func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func nextDate(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date
+    {
         return dateEnd(unit, with: calendar) + 1
     }
     @available(*, deprecated, renamed: "start(_:in:)")
-    func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func dateStart(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date
+    {
         return range(unit, with: calendar).begin
     }
     @available(*, deprecated, renamed: "end(_:in:)")
-    func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
+    func dateEnd(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date
+    {
         let dateUnit = range(unit, with: calendar)
         return dateUnit.begin + TimeInterval(dateUnit.length - 1)
     }

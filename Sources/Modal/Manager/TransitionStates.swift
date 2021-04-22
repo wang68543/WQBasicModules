@@ -23,9 +23,9 @@ extension ModalPresentation {
         case .autoModal:
             return self.autoAdaptationStyle.snapshotTransitaion
         case .modalInWindow:
-            return WQUIHelp.topNormalWindow()?.snapshotView(afterScreenUpdates: true)
+            return UIWindow.topNormal?.snapshotView(afterScreenUpdates: true)
         case .modalSystem:
-            return WQUIHelp.topNormalWindow()?.snapshotView(afterScreenUpdates: true)
+            return UIWindow.topNormal?.snapshotView(afterScreenUpdates: true)
         case let .modalInParent(controller):
             return controller.view.snapshotView(afterScreenUpdates: true)
         case let .modalNavigation(navgationController):

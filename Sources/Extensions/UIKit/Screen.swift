@@ -32,9 +32,10 @@ public extension Screen {
             let win = UIApplication.shared.windows.last
             #else
             let win = UIApplication.shared.keyWindow
+            let appWindow = UIApplication.shared.delegate?.window
             #endif
             /// 12 Pro Max/12 Pro/12 top: 47, 12 Mini top: 50
-            if let window = UIApplication.shared.delegate?.window ?? win {
+            if let window = appWindow ?? win {
                 instets = window.safeAreaInsets
                 if instets.top == .zero {
                     if instets.bottom > .zero { //刘海屏

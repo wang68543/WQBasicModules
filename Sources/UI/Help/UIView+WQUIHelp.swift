@@ -15,25 +15,19 @@ public extension WQModules where Base: UIView {
     }
 }
 extension UIView {
+    // next Responder
     var viewController: UIViewController? {
-        var topResponser: UIResponder = self
-        while let nextResponser = topResponser.next {
-            if let window = nextResponser as? UIWindow {
-                return window.rootViewController
-            } else if nextResponser is UIView {
-                topResponser = nextResponser
-            } else if let controller = nextResponser as? UIViewController {
-                return controller
-            } else {
-                return nil
-            }
-        }
-        if let window = self as? UIWindow {
-            return window.rootViewController
+        if let win = self as? UIWindow {
+            return win.rootViewController
+        } else if let viewController = self.next as? UIViewController {
+            return viewController
+        } else if let view = self.next as? UIView {
+            return view.window != nil ? view.viewController : nil //要在树形图上才行
         } else {
             return nil
-        } 
+        }
     }
+    
     /// 获取控制器提前设置的keyboardManager
     public var keyboardManager: WQKeyboardManager? {
         return self.viewController?.keyboardManager
