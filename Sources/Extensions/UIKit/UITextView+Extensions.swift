@@ -14,7 +14,7 @@ public extension UITextView {
     /// 当textview一次输入的文字过多的时候 前后跳动问题无法解决
     var maxTextSize: Int? {
         set {
-            if newValue == nil {
+            if newValue == nil || maxTextSize == .zero {
                 self.removeObserver()
             } else {
                 self.addObserver()
@@ -47,14 +47,14 @@ public extension UITextView {
             let string = self.text, string.count > length else {
                 return
         }
-        let preScroll = self.isScrollEnabled
         UIView.performWithoutAnimation {
             let range = self.selectedTextRange
             self.text = String(string.prefix(length))
-            self.isScrollEnabled = false
-            self.selectedTextRange = range
+            if let textRange = range,
+               let end = self.position(from: textRange.start, offset: 1) {
+                self.selectedTextRange = self.textRange(from: textRange.start, to: end)
+            }
         }
-        self.isScrollEnabled = preScroll
     }
 }
 public extension UITextView {

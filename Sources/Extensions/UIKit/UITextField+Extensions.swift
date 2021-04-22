@@ -13,7 +13,7 @@ public extension UITextField {
     /// 限制最大输入长度
     var maxTextSize: Int? {
         set {
-            if newValue == nil {
+            if newValue == nil || maxTextSize == .zero {
                 self.removeObserver()
             } else {
                 self.addObserver()
@@ -48,7 +48,10 @@ public extension UITextField {
         }
         let range = self.selectedTextRange
         self.text = String(string.prefix(length))
-        self.selectedTextRange = range
+        if let textRange = range,
+           let end = self.position(from: textRange.start, offset: 1) {
+            self.selectedTextRange = self.textRange(from: textRange.start, to: end)
+        }
     }
 } 
 public extension UITextField {
