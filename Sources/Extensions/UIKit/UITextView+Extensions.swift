@@ -51,7 +51,7 @@ public extension UITextView {
             let range = self.selectedTextRange
             self.text = String(string.prefix(length))
             if let textRange = range,
-               let end = self.position(from: textRange.start, offset: 1) {
+               let end = self.position(from: textRange.start, offset: 0) { //
                 self.selectedTextRange = self.textRange(from: textRange.start, to: end)
             }
         }

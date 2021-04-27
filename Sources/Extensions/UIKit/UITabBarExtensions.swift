@@ -7,8 +7,6 @@
 #if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UITabBar {
-    
-    
     /// 中心点默认显示在右上角
     /// - Parameters:
     ///   - index: tabBar 按照x坐标排列的下标 从0开始
@@ -18,7 +16,7 @@ public extension UITabBar {
         let badge = BadgeView()
         badge.bounds = CGRect(x: 0, y: 0, width: width, height: width)
         self.showBadgeOnItem(index, bageView: badge, offset: offset)
-        }
+    }
         
     func showBadgeOnItem(_ index: Int, bageView: UIView, offset: UIOffset) {
         self.hideBadgeOnItem(with: index)
@@ -37,9 +35,7 @@ public extension UITabBar {
     }
     
     func hideBadgeOnItem(with index: Int) {
-        guard let subView = bageView(for: index) else {
-            return
-        }
+        guard let subView = bageView(for: index) else { return }
         subView.removeFromSuperview()
     }
 }

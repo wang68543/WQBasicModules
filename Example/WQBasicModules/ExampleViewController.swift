@@ -21,7 +21,8 @@ class ExampleViewController: UITableViewController {
          ["仿系统弹出框": "ExampleAlertViewController"],
          ["半截屏幕上下移动交互": "WQPanViewController"],
          ["页面分栏": "PageScrollViewController"],
-         ["页面分栏2": "PageContentViewController"]]
+         ["页面分栏2": "PageContentViewController"],
+         ["输入框": "TextFieldViewController"]]
     ]
 
 //    let sections2: [String] = ["WQUI", "Transitioning","WQUI", "Transitioning"]

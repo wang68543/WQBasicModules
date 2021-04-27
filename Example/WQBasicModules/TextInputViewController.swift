@@ -18,8 +18,9 @@ class TextFieldViewController: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let textFiled = UITextField(frame: CGRect(x: 10, y: self.view.frame.height - 20, width: 300, height: 40))
+        let textFiled = UITextField(frame: CGRect(x: 10, y: self.view.frame.height - 100, width: 300, height: 40))
         textFiled.backgroundColor = UIColor.red
+        textFiled.maxTextSize = 10
         self.view.addSubview(textFiled)
     }
 

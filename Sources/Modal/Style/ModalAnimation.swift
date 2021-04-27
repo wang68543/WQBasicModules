@@ -7,7 +7,7 @@
 
 import Foundation
 @available(iOS 10.0, *)
-public protocol ModalAnimation: class {
+public protocol ModalAnimation: AnyObject {
     typealias Completion = (() -> Void)
     
     var duration: TimeInterval { get set }

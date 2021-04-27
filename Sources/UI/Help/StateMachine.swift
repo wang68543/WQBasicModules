@@ -10,7 +10,7 @@ public protocol StateMachineDataSource {
     func shouldTransition(from: Self, to: Self) -> Bool
 }
 
-public protocol StateMachineDelegate: class {
+public protocol StateMachineDelegate: AnyObject {
     associatedtype StateType: StateMachineDataSource
     func didTransition(from: StateType, to: StateType)
 }
