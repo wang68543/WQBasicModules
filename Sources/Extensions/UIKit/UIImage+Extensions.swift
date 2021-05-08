@@ -248,6 +248,33 @@ public extension UIImage {
 /// 获取视频
 public extension UIImage {
     
+    /// 获取缩略图
+    /// - Parameters:
+    ///   - imageURL: 图片路径
+    ///   - size: 图片显示尺寸
+    ///   - options: 设置了 options size就失效了 需要自己设置
+    convenience init?(thumbnail imageURL: URL, to size: CGSize, options: CFDictionary? = nil) {
+        let sourceOpt = [kCGImageSourceShouldCache : false] as CFDictionary
+        // 其他场景可以用createwithdata (data并未decode,所占内存没那么大),
+        guard let source = CGImageSourceCreateWithURL(imageURL as CFURL, sourceOpt) else {
+            return nil
+        }
+        let option: CFDictionary
+        if let opt = options {
+            option = opt
+        } else {
+            let maxDimension = max(size.width, size.height) * UIScreen.main.scale
+            option = [kCGImageSourceCreateThumbnailFromImageAlways : true,
+                     kCGImageSourceShouldCacheImmediately : true ,
+                     kCGImageSourceCreateThumbnailWithTransform : true,
+                     kCGImageSourceThumbnailMaxPixelSize : maxDimension] as CFDictionary
+        }
+        guard let img = CGImageSourceCreateThumbnailAtIndex(source, 0, option) else {
+            return nil
+        }
+        self.init(cgImage: img) 
+    }
+    
     /// 获取视频的某一帧的图片
     /// - Parameter videoURL: 视频地址
     /// - Parameter size: 要获取的图片的尺寸

@@ -41,6 +41,7 @@
 		875A87A0235D83D50061B3D1 /* douYin.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 875A879F235D83D50061B3D1 /* douYin.mp4 */; };
 		8761D72D258AFD0C00923764 /* PageContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8761D72C258AFD0C00923764 /* PageContentViewController.swift */; };
 		8761D731258B01FE00923764 /* PageChildViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8761D730258B01FE00923764 /* PageChildViewController.swift */; };
+		8787EC2F2646A62900E2D1FF /* HookClangTrace.m in Sources */ = {isa = PBXBuildFile; fileRef = 8787EC2D2646A62900E2D1FF /* HookClangTrace.m */; };
 		879A55872466830800E5DBE6 /* UITableView+TestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879A55862466830800E5DBE6 /* UITableView+TestExtensions.swift */; };
 		87B939FB243DC23000C5DB8E /* PageScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87B939FA243DC23000C5DB8E /* PageScrollViewController.swift */; };
 		87E19E342582226E00EF232F /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 87E19E362582226E00EF232F /* Localizable.strings */; };
@@ -98,6 +99,10 @@
 		875A879F235D83D50061B3D1 /* douYin.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = douYin.mp4; sourceTree = "<group>"; };
 		8761D72C258AFD0C00923764 /* PageContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageContentViewController.swift; sourceTree = "<group>"; };
 		8761D730258B01FE00923764 /* PageChildViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageChildViewController.swift; sourceTree = "<group>"; };
+		8787EC2226467B4600E2D1FF /* 二进制重排.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "二进制重排.md"; sourceTree = "<group>"; };
+		8787EC2C2646A62800E2D1FF /* WQBasicModules_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "WQBasicModules_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		8787EC2D2646A62900E2D1FF /* HookClangTrace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HookClangTrace.m; sourceTree = "<group>"; };
+		8787EC2E2646A62900E2D1FF /* HookClangTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HookClangTrace.h; sourceTree = "<group>"; };
 		878E074025F89B1700DE18A6 /* ReCodeSign.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ReCodeSign.sh; sourceTree = "<group>"; };
 		878FF90F26326ABA00839834 /* CombineFrameworka.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = CombineFrameworka.sh; sourceTree = "<group>"; };
 		879A55862466830800E5DBE6 /* UITableView+TestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+TestExtensions.swift"; sourceTree = "<group>"; };
@@ -289,8 +294,12 @@
 		878E073F25F89AF600DE18A6 /* shells */ = {
 			isa = PBXGroup;
 			children = (
+				8787EC2E2646A62900E2D1FF /* HookClangTrace.h */,
+				8787EC2D2646A62900E2D1FF /* HookClangTrace.m */,
 				878E074025F89B1700DE18A6 /* ReCodeSign.sh */,
 				878FF90F26326ABA00839834 /* CombineFrameworka.sh */,
+				8787EC2226467B4600E2D1FF /* 二进制重排.md */,
+				8787EC2C2646A62800E2D1FF /* WQBasicModules_Example-Bridging-Header.h */,
 			);
 			path = shells;
 			sourceTree = SOURCE_ROOT;
@@ -361,7 +370,7 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = 7C8QT5TX8A;
-						LastSwiftMigration = 1000;
+						LastSwiftMigration = 1250;
 						ProvisioningStyle = Manual;
 					};
 					607FACE41AFB9204008FA782 = {
@@ -503,6 +512,7 @@
 			files = (
 				06CD9E422244DA0900E67E38 /* WQPanViewController.swift in Sources */,
 				5EBA1B5321995EB800B780FB /* SecondViewController.swift in Sources */,
+				8787EC2F2646A62900E2D1FF /* HookClangTrace.m in Sources */,
 				06CD9E442244DAAF00E67E38 /* PanContainerView.swift in Sources */,
 				06B8B6DB21F962AC002DA1D7 /* ScrollTextInputViewController.swift in Sources */,
 				87B939FB243DC23000C5DB8E /* PageScrollViewController.swift in Sources */,
@@ -724,7 +734,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sgv.HandMetro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "HandMetro-Dev";
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "shells/WQBasicModules_Example-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
@@ -758,7 +768,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.sgv.HandMetro;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = HandMetro_AdHoc;
-				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "shells/WQBasicModules_Example-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

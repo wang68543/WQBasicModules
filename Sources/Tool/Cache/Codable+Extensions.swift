@@ -10,30 +10,14 @@ import Foundation
 @inline(__always) func userDefaultsCacheKey(_ name: String, with ext: String) -> String {
     let namespace = (Bundle.main.infoDictionary?[kCFBundleExecutableKey as String] as? String) ?? ""
     var keys: [String] = []
-    if !namespace.isEmpty {
-        keys.append(namespace)
-    }
-    if name.isEmpty {
-        fatalError("获取名称失败")
-    }
+    if !namespace.isEmpty { keys.append(namespace) }
+    if name.isEmpty { fatalError("获取名称失败") }
     keys.append(name)
-    if !ext.isEmpty {
-        keys.append(ext)
-    }
+    if !ext.isEmpty { keys.append(ext) }
     return keys.joined(separator: ".")
 }
 
 public extension Decodable {
-//    #if canImport(Foundation)
-//    /// SwifterSwift: Parsing the model in Decodable type
-//    /// - Parameters:
-//    ///   - data: Data.
-//    ///   - decoder: JSONDecoder. Initialized by default
-//    init?(from data: Data, using decoder: JSONDecoder = .init(), in key: String? = nil) {
-//        guard let parsed = try? decoder.decode(Self.self, from: data) else { return nil }
-//        self = parsed
-//    }
-//    #endif
     
     /// 从缓存中读取
     static func readValue(_ stand: UserDefaults = .standard,
@@ -124,7 +108,7 @@ public extension Encodable {
         let data = try self.toJSON(encoder)
         return String(data: data, encoding: encoding)
     }
-}
+} 
 // MARK: - handle typeMismatch exceptions in JSONDecoder. You can expand the type of you want.
 public extension KeyedDecodingContainer {
     func decodeIfPresent(_ type: String.Type, forKey key: K) throws -> String? {

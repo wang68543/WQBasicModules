@@ -36,9 +36,9 @@ public extension KeyedDecodingContainer {
     func decode<T>(
         _ type: CodableDefault<T>.Type,
         forKey key: Key
-    ) throws -> CodableDefault<T> where T: CodableDefaultValue {
+    ) throws -> CodableDefault<T> {
         try decodeIfPresent(type, forKey: key) ?? CodableDefault(wrappedValue: T.defaultValue)
-    }
+    } 
 }
 public extension KeyedEncodingContainer {
     mutating func encode<T>(_ value: CodableDefault<T>, forKey key: Key) throws where T: CodableDefaultValue {

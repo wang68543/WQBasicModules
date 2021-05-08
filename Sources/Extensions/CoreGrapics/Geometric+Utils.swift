@@ -21,26 +21,7 @@ public extension CGPoint {
 //    case aspectFill
 //}
 
-public extension CGSize {
-//    func fit(to targetSize: CGSize, contentMode: SizeFitMode = .aspectFit) -> CGSize {
-//        var fixSize: CGSize
-//        switch contentMode {
-//        case .fill:
-//            fixSize = targetSize
-//        case .aspectFill:
-//            let scaleW = targetSize.width/self.width
-//            let scaleH = targetSize.height/self.height
-//            let scale = max(scaleW, scaleH)
-//            fixSize = CGSize(width: self.width * scale, height: self.height * scale)
-//        case .aspectFit:
-//            let scaleW = targetSize.width/self.width
-//            let scaleH = targetSize.height/self.height
-//            let scale = min(scaleW, scaleH)
-//            fixSize = CGSize(width: self.width * scale, height: self.height * scale)
-//            
-//        }
-//        return fixSize
-//    }
+public extension CGSize { 
     /// 根据不同模式适配宽高比
     func aspectRatio(_ aspectRatio: CGSize, contentMode: UIView.ContentMode) -> CGRect {
         guard width*height != 0 && aspectRatio.height*aspectRatio.width != 0 else {
