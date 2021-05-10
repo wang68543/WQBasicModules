@@ -92,9 +92,12 @@ class ExampleViewController: UITableViewController {
         button.totalValue = "60"
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "秒"), color: UIColor.red)
 //        let appName = UIApplication.shared.displayName
-//        self.view.addSubview(button)
+        self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
+        button.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
        self.btn = button
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
 //            debugPrint("数据刷新了")
@@ -102,7 +105,10 @@ class ExampleViewController: UITableViewController {
 //            self.sources = self.sources2
 //            self.tableView.reloadData()
 //        }
-        
+//        button.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+        HookClangTrace.makeOrder()
     }
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()

@@ -21,20 +21,23 @@
 //    });
 //}
 +(void)makeTraceOrder {
-#ifdef DEBUG
     NSMutableArray<NSString *> *symbolNames = [NSMutableArray array];
+    NSString *excludeSEL = [NSString stringWithFormat:@"[%@ ", NSStringFromClass([self class])];
     while (YES) {
         SYNode *node = OSAtomicDequeue(&symbolist, offsetof(SYNode, next));
-        if (node == NULL) { break; }
+        if (node == NULL) {
+            NSAssert(symbolNames.count != 0, @"主工程没有配置Build Settings");
+            break;
+        }
         Dl_info info;
         dladdr(node->pc, &info);
         NSString *name = @(info.dli_sname);
-        BOOL isObjc = [name hasPrefix:@"+["] || [name hasPrefix:@"-["];
-        NSString *symbolName = isObjc ? name : [@"_" stringByAppendingString:name];
-        [symbolNames addObject:symbolName];
-    }
-    // 干掉自己
-    [symbolNames removeObject:[NSString stringWithFormat:@"%s",__FUNCTION__]];
+        if (![name containsString:excludeSEL]) {
+            BOOL isObjc = [name hasPrefix:@"+["] || [name hasPrefix:@"-["];
+            NSString *symbolName = isObjc ? name : [@"_" stringByAppendingString:name];
+            [symbolNames addObject:symbolName];
+        }
+    } 
     NSEnumerator *emt = [symbolNames reverseObjectEnumerator];
     NSString *name;
     NSMutableArray<NSString *> *funcs = [NSMutableArray arrayWithCapacity:symbolNames.count];
@@ -47,8 +50,8 @@
     NSString *funcStr = [funcs componentsJoinedByString:@"\n"];
     NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"hank.order"];
     NSData *fileContents = [funcStr dataUsingEncoding:NSUTF8StringEncoding];
-    [[NSFileManager defaultManager] createFileAtPath:filePath contents:fileContents attributes:nil]; 
-#endif
+    [[NSFileManager defaultManager] createFileAtPath:filePath contents:fileContents attributes:nil];
+    NSLog(@"%@",filePath);
 } 
 //原子队列(线程安全)
 static OSQueueHead symbolist = OS_ATOMIC_QUEUE_INIT;
@@ -59,7 +62,7 @@ typedef struct {
     void *next;
 }SYNode;
 
-void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
+extern void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
                                                     uint32_t *stop) {
   static uint64_t N;  // Counter for the guards.
   if (start == stop || *start) return;  // Initialize only once.
@@ -68,7 +71,7 @@ void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
     *x = (uint32_t)++N;  // Guards should start from 1.
 }
 
-void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
+extern void __sanitizer_cov_trace_pc_guard(uint32_t *guard) {
     // load 方法重名了 重名为0
 //  if (!*guard) return;  // Duplicate the guard check.
   void *PC = __builtin_return_address(0);

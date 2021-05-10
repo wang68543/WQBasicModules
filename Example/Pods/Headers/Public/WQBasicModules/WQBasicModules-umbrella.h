@@ -1,1 +1,0 @@
-../../../Target Support Files/WQBasicModules/WQBasicModules-umbrella.h
