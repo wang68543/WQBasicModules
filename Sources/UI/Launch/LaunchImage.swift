@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-open class LaunchImage: NSObject {
-    
+open class LaunchImage: NSObject { 
     static public var snapshotLaunch: UIImage? {
         guard let info = Bundle.main.infoDictionary else { return nil }
         if info.has(key: "UILaunchStoryboardName") {
@@ -37,19 +36,35 @@ open class LaunchImage: NSObject {
         return nil
     }
     static public var launchScreenImage: UIImage? {
-        guard let launchStoryboardName = Bundle.main.infoDictionary?["UILaunchStoryboardName"] as? String else { return nil }
-        assert(Bundle.main.path(forResource: launchStoryboardName, ofType: "nib") == nil, "启动屏截屏不支持xib格式")
-         
-        guard let launchViewController = UIStoryboard(name: launchStoryboardName, bundle: nil).instantiateInitialViewController(),
-              let view = launchViewController.view else { return nil }
+        let launchView = launchFullScreenView
         // 加入到UIWindow后，LaunchScreenSb.view的safeAreaInsets在刘海屏机型才正常。
         let containerWindow = UIWindow(frame: UIScreen.main.bounds)
-        view.frame = containerWindow.bounds 
-        containerWindow.addSubview(view)
+        launchView.frame = containerWindow.bounds
+        containerWindow.addSubview(launchView)
         containerWindow.layoutIfNeeded()
         containerWindow.isHidden = false
         let image = containerWindow.snapshot()
         containerWindow.isHidden = true
         return image
+    }
+    /// 获取启动的View
+    static public var launchFullScreenView: UIView {
+        guard let launchFileName = Bundle.main.infoDictionary?["UILaunchStoryboardName"] as? String else { fatalError("未获取到正确的启动文件,请确认是否配置了Launch Screen File") }
+        let launchView: UIView
+        if Bundle.main.path(forResource: launchFileName, ofType: "nib") != nil {//xib格式的启动文件
+            let nib = UINib(nibName: launchFileName, bundle: nil)
+            let views = nib.instantiate(withOwner: nil, options: nil)
+            if let view = views.first as? UIView {
+                launchView = view
+            } else {
+                fatalError("未获取到Launch Screen.xib的view")
+            }
+        } else if let launchViewController = UIStoryboard(name: launchFileName, bundle: nil).instantiateInitialViewController(),
+        let view = launchViewController.view {
+            launchView = view
+        } else {
+            fatalError("未获取到Launch Screen.storyboard的View")
+        }
+        return launchView
     }
 }

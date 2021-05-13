@@ -32,9 +32,7 @@ open class LaunchManager: NSObject {
         window?.sendSubviewToBack(imageView)
     }
     public func launchWindow(with viewController: UIViewController = ShowWindowController()) {
-//        window = UIWindow(frame: UIScreen.main.bounds)
-        window = UIWindow(frame: UIScreen.main.bounds, viewController)
-//        window?.rootViewController = viewController
+        window = UIWindow(frame: UIScreen.main.bounds, viewController) 
         viewController.view.backgroundColor = .clear
 //        viewController.view.isUserInteractionEnabled = false
         // windowLevel可以调整多个window的显示层级 

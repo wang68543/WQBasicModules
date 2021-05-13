@@ -8,8 +8,7 @@
 
 import UIKit
 import WQBasicModules
-import CoreLocation
-import SnapKit
+import CoreLocation 
 
 // Swift宏定义
 // https://www.cnblogs.com/sundaysme/p/11933754.html
@@ -38,13 +37,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
-//        testCodable()
-        
+//        testCodable() 
         AppDelegate.date = Date()
         Localize.shared.register() 
         debugPrint("测试".localized)
       
-//        LaunchImage().launchImage
+        LaunchImage.snapshotLaunch
         return true
     }
 

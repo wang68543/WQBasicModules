@@ -53,6 +53,7 @@ Pod::Spec.new do |s|
   
   
   s.subspec 'FunModule' do |ss|
+      #选择图片 适用于直接使用系统API的选择
       ss.subspec 'ImagePicker' do |sss|
           sss.source_files = 'Sources/FunModule/ImagePicker/*.swift'
       end
@@ -61,6 +62,9 @@ Pod::Spec.new do |s|
       end
       ss.subspec 'Bluetooth' do |sss|
           sss.source_files = 'Sources/FunModule/Bluetooth/*.swift'
+      end
+      ss.subspec 'AppOptimize' do |sss|
+          sss.source_files = 'Sources/FunModule/AppOptimize/*.swift'
       end
   end
   
@@ -84,7 +88,7 @@ Pod::Spec.new do |s|
         end
 
     end
-    
+    #自定义各式风格的弹窗
     s.subspec 'Modal' do |ss|
         ss.dependency 'WQBasicModules/UI/Help'
         ss.dependency 'WQBasicModules/Extensions/Foundation'

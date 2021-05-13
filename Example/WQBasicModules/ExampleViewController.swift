@@ -95,9 +95,9 @@ class ExampleViewController: UITableViewController {
         self.view.addSubview(button)
 //        let archivedData = NSKeyedArchiver.archivedData(withRootObject: button)
 //        let copyView = NSKeyedUnarchiver.unarchiveObject(with: archivedData) as? WQCountDownView
-        button.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+//        button.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
        self.btn = button
 //        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 5) {
 //            debugPrint("数据刷新了")
@@ -108,7 +108,7 @@ class ExampleViewController: UITableViewController {
 //        button.snp.makeConstraints { make in
 //            make.edges.equalToSuperview()
 //        }
-        HookClangTrace.makeOrder()
+//        HookClangTrace.makeOrder()
     }
 //    override func viewDidLayoutSubviews() {
 //        super.viewDidLayoutSubviews()
