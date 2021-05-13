@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-open class LaunchImage: NSObject { 
+open class LaunchScreen: NSObject { 
     static public var snapshotLaunch: UIImage? {
         guard let info = Bundle.main.infoDictionary else { return nil }
         if info.has(key: "UILaunchStoryboardName") {

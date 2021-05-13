@@ -24,7 +24,7 @@ open class LaunchManager: NSObject {
     public private(set) var window: UIWindow?
     /// 展示复制启动屏
     public func showLaunchWindow(with viewController: UIViewController = ShowWindowController()) {
-        let image = LaunchImage.snapshotLaunch
+        let image = LaunchScreen.snapshotLaunch
         let imageView = UIImageView(image: image)
         imageView.frame = UIScreen.main.bounds
         launchWindow(with: viewController)

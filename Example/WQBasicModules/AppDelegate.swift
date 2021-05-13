@@ -42,7 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Localize.shared.register() 
         debugPrint("测试".localized)
       
-        LaunchImage.snapshotLaunch
+        LaunchScreen.snapshotLaunch
         return true
     }
 
