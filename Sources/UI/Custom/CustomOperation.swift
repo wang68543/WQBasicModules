@@ -16,7 +16,6 @@ open class CustomOperation: Operation {
     private var _finshed: Bool = false
     open override var isFinished: Bool {
         set {
-            guard _finshed != newValue else { return }
             self.willChangeValue(forKey: "isFinished")
             _finshed = newValue
             self.didChangeValue(forKey: "isFinished")
@@ -29,7 +28,6 @@ open class CustomOperation: Operation {
 //    A Boolean value indicating whether the operation is currently executing.
     open override var isExecuting: Bool {
         set {
-            guard _executing != newValue else { return }
             self.willChangeValue(forKey: "isExecuting")
             _executing = newValue
             self.didChangeValue(forKey: "isExecuting")
@@ -38,4 +36,18 @@ open class CustomOperation: Operation {
             return _executing
         }
     }
+    open override func start() {
+        super.start()
+        guard !self.isCancelled else { return }
+        self.isExecuting = true
+    }
+    open override func cancel() {
+        super.cancel()
+        self.complete()
+    }
+    open func complete(){
+        self.isExecuting = false
+        self.isFinished = true
+    }
+    
 }
