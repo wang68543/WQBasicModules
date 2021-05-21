@@ -31,6 +31,7 @@ public extension UserDefault where T: Codable {
         self.init(getter, setter: setter)
     }
 }
+ 
 public extension UserDefault where T == Date {
     init(_ key: String, default value: T = Date(), standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }

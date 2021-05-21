@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 public extension String {
+    /// 空字符串
+    static let empty = ""
     
     /// 序列化URL的查询参数 (可处理包含=)
     ///
