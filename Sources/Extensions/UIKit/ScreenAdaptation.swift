@@ -18,14 +18,19 @@ import Foundation
  */
 
 public enum iDevice {
+    
     case iPhone4s
+    /// 320
     case iPhone5_5s_5c_SE
+    /// 375
     case iPhone6_6s_7_8
-    
+    /// 414
     case iPhone6p_6sp_7p_8p
-    
+    /// 375
     case iPhoneX_XS_11Pro
+    /// 414
     case iPhoneXR_11
+    /// 414
     case iPhoneXSMax_11ProMax
 }
 public extension CGFloat {
@@ -77,22 +82,6 @@ public extension iDevice {
             return 414
         case .iPhoneXSMax_11ProMax:
             return 414
-        }
-//        switch self {
-//        case .iPhone4s:
-//            return 640
-//        case .iPhone5_5s_5c_SE:
-//            return 640
-//        case .iPhone6_6s_7_8:
-//            return 750
-//        case .iPhone6p_6sp_7p_8p:
-//            return 1242
-//        case .iPhoneX_XS_11Pro:
-//            return 1125
-//        case .iPhoneXR_11:
-//            return 828
-//        case .iPhoneXSMax_11ProMax:
-//            return 1242
-//        }
+        } 
     }
 }
