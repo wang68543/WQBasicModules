@@ -66,6 +66,10 @@ Pod::Spec.new do |s|
       ss.subspec 'AppOptimize' do |sss|
           sss.source_files = 'Sources/FunModule/AppOptimize/*.swift'
       end
+      ss.subspec 'NoteBook' do |sss|
+          sss.resource_bundles = {'NoteBook'=>['Sources/FunModule/AppOptimize/*.html']}
+          sss.source_files = 'Sources/FunModule/NoteBook/*.swift'
+      end
   end
   
 #  s.subspec 'Function' do |ss|
