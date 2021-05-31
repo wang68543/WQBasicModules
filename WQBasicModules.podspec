@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.3.9'
+  s.version          = '0.4.0'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
@@ -65,6 +65,10 @@ Pod::Spec.new do |s|
       end
       ss.subspec 'AppOptimize' do |sss|
           sss.source_files = 'Sources/FunModule/AppOptimize/*.swift'
+      end
+      ss.subspec 'NoteBook' do |sss|
+          sss.resource_bundles = {'NoteBook'=>['Sources/FunModule/AppOptimize/*.html']}
+          sss.source_files = 'Sources/FunModule/NoteBook/*.swift'
       end
   end
   
