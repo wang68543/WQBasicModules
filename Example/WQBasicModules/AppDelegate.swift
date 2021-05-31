@@ -14,6 +14,7 @@ import CoreLocation
 // https://www.cnblogs.com/sundaysme/p/11933754.html
 // https://www.macbed.com/navicat-premium/ 软件地址
 // https://www.jianshu.com/p/3291de46f3ff 终端命令 列表
+ 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
@@ -43,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("测试".localized)
       
         LaunchScreen.snapshotLaunch
+   
+        
         return true
     }
 

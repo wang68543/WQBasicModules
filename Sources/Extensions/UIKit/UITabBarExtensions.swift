@@ -7,6 +7,28 @@
 #if canImport(UIKit) && !os(watchOS)
 import Foundation
 public extension UITabBar {
+    
+    func itemCenter(for index: Int) -> CGPoint {
+        guard let count = self.items?.count,
+             count > 0 && index < count && index >= 0 else {
+            return .zero
+        }
+        func layoutCenter(_ width: CGFloat, index: Int) -> CGPoint {
+            let itemW = width/CGFloat(count)
+            return CGPoint(x: itemW*(CGFloat(index)+0.5), y: 49*0.5)
+        }
+        if self.bounds.width == 0 {
+            return layoutCenter(UIScreen.main.bounds.width, index: index)
+        } else {
+            guard let cls = NSClassFromString("UITabBarButton") else { return .zero }
+            let items = self.subviews.filter({ $0.isKind(of: cls) }).sorted(by: { $0.frame.minX < $1.frame.minX && $0.frame.midX != 0 })
+            if items.count < count {
+                return layoutCenter(self.bounds.width, index: index)
+            } else {
+                return CGPoint(x: items[index].frame.midX, y: items[index].frame.midY)
+            }
+        }
+    }
     /// 中心点默认显示在右上角
     /// - Parameters:
     ///   - index: tabBar 按照x坐标排列的下标 从0开始
@@ -20,14 +42,10 @@ public extension UITabBar {
         
     func showBadgeOnItem(_ index: Int, bageView: UIView, offset: UIOffset) {
         self.hideBadgeOnItem(with: index)
-        guard let cls = NSClassFromString("UITabBarButton") else { return } 
-        let items = self.subviews.filter({ $0.isKind(of: cls) }).sorted(by: { $0.frame.minX < $1.frame.minX })
-        guard items.count > index else { return }
-        
+        let position = self.itemCenter(for: index)
         bageView.tag = 100010 + index
         self.addSubview(bageView)
-        let item = items[index]
-        bageView.center = CGPoint(x: item.frame.midX + offset.horizontal, y: item.frame.midY + offset.vertical)
+        bageView.center = CGPoint(x: position.x + offset.horizontal, y: position.y + offset.vertical)
     }
     
     func bageView(for index: Int) -> UIView? {
