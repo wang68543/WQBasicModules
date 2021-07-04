@@ -41,7 +41,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppDelegate.date = Date()
         Localize.shared.register() 
         debugPrint("测试".localized)
-      
+        var index: Int = 0
+    
+        DispatchQueue.global().async {
+            for _ in 0..<10000 {
+                index = index +  1
+            }
+            debugPrint("===========\(index)")
+        }
+        DispatchQueue.global().async {
+            for _ in 0..<10000 {
+                index = index +  1
+            }
+            debugPrint("=========****\(index)")
+        }
         LaunchScreen.snapshotLaunch
         return true
     }
