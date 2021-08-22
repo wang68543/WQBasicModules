@@ -28,4 +28,31 @@ public extension FileManager {
     static func path(for directory: FileManager.SearchPathDirectory = .cachesDirectory) -> String {
        return  NSSearchPathForDirectoriesInDomains(directory, .userDomainMask, true).last!
     }
+    
+    //监听目录结构更改
+    func addlisten() {
+        let folder = try? FileManager.default.url(for: .documentDirectory,
+                                                  in: .userDomainMask,
+                                                  appropriateFor: nil,
+                                                  create: false)
+        print(folder!.path)
+        let fd = open(folder!.path, O_CREAT, 0o644)
+        let queue = DispatchQueue(label: "m")
+        let source = DispatchSource.makeFileSystemObjectSource(fileDescriptor: fd,
+                                                               eventMask: .all,
+                                                               queue: queue)
+        source.setEventHandler {
+            print("folder changed")
+        }
+        source.resume()
+
+//        let result = FileManager.default.createFile(atPath: folder!.path + "/abc", contents: nil, attributes: nil)
+//        if result {
+//            print(0)
+//        }
+//        else {
+//            print(1)
+//        }
+    }
+   
 }
