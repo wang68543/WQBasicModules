@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwifterSwift
 #if swift(>=5.1)
 @propertyWrapper
 public struct UserDefault<T> {
