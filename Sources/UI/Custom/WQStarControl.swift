@@ -31,8 +31,8 @@ open class WQStarControl: UIControl {
     /// 使用绘制的星星
     public var selectedColor: UIColor = .red
     public var unSelectedColor: UIColor = .clear
-    public var borderWidth: CGFloat = 1.0
-    public var borderColor: UIColor = .red
+    public var starBorderWidth: CGFloat = 1.0
+    public var starBorderColor: UIColor = .red
     
     public var selectedImage: UIImage?
     public var unSelectedImage: UIImage?
@@ -236,8 +236,8 @@ private extension WQStarControl {
         }
         path.close()
         path.addClip()
-        context.setStrokeColor(borderColor.cgColor)
-        context.setLineWidth(borderWidth)
+        context.setStrokeColor(starBorderColor.cgColor)
+        context.setLineWidth(starBorderWidth)
         context.setLineJoin(.round)
         context.setLineCap(.round)
         context.beginPath()

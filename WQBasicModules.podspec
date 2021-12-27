@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.4.0'
+  s.version          = '0.4.1'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
@@ -21,14 +21,15 @@ Pod::Spec.new do |s|
   s.author           = { 'wang68543' => 'wang68543@163.com' }
   s.source           = { :git => 'https://github.com/wang68543/WQBasicModules.git', :tag => s.version.to_s }
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '10.0'
 #  s.source_files  = 'Sources/WQBasicModules.h'
 #  s.swift_version = '4.2'
-  s.swift_versions = ['4.0', '4.2', '5.0', '5.1' ,'5.2', '5.3']
+  s.swift_versions = ['4.0', '4.2', '5.0', '5.1' ,'5.2', '5.3','5.4','5.5']
   s.default_subspec = 'Core'
 #  s.source_files = 'Sources/**/**/*.swift'
   s.requires_arc = true
   
+  s.dependency 'SwifterSwift', '~>5.2.0'
   
   s.subspec 'Core' do |ss|
       ss.dependency 'WQBasicModules/Modal'

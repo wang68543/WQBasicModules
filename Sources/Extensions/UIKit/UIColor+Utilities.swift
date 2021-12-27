@@ -70,8 +70,7 @@ public extension UIColor {
 public extension UIColor {
     
     // swiftlint:enable large_tuple
-
-    /// SwifterSwift: Hexadecimal value string (read-only).
+ 
     var hexString: String {
         let components: [Int] = {
             let comps = cgColor.components!.map { Int($0 * 255.0) }
@@ -79,8 +78,7 @@ public extension UIColor {
             return [comps[0], comps[0], comps[0], comps[1]]
         }()
         return String(format: "#%02X%02X%02X", components[0], components[1], components[2])
-    }
-    /// SwifterSwift: Get UInt representation of a Color (read-only).
+    } 
     var uInt: UInt {
         let components: [CGFloat] = {
             let comps: [CGFloat] = cgColor.components!
@@ -171,8 +169,7 @@ public extension Array where Element: UIColor {
 }
 
 // MARK: - Components
-public extension UIColor {
-    /// SwifterSwift: Random color.
+public extension UIColor { 
     static var random: UIColor {
         let red = Int.random(in: 0...255)
         let green = Int.random(in: 0...255)
