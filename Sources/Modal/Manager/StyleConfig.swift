@@ -15,27 +15,27 @@ public class StyleConfig {
    /// states
     public let showStyle: ModalShowStyle
     /// 动画方式 ModalDefaultAnimation
-    public let animationStyle: ModalAnimationStyle 
+    public let animationStyle: ModalAnimationStyle
     /// 动画之前附加的view
     public var snapShotAttachAnimatorViews: [ModalState: [UIView: [UIView]]] = [:]
-    
+
     /// 动画执行者
     lazy var animator: ModalAnimation = {
         return animationStyle.animator
     }()
-    
+
     public init(_ style: ModalShowStyle, anmation: ModalAnimationStyle = .default) {
         self.showStyle = style
         self.animationStyle = anmation
         var sts: [ModalState: ModalMapItems]
-        
+
         switch style {
         case let .custom(values):
             sts = values
         default:
             sts = [:]
             break
-        } 
+        }
         states = sts
     }
 //    deinit {
@@ -49,10 +49,8 @@ public extension StyleConfig {
         sts.addState(target, values)
         self.states[state] = sts
     }
-    
+
     func addState(_ target: NSObject, value: ModalKeyPath, state: ModalState) {
         self.addState(target, values: [value], state: state)
     }
 }
-
-

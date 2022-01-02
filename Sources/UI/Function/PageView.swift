@@ -7,19 +7,19 @@
 
 import UIKit
 public protocol PageContentController: NSObjectProtocol {
-    var pageIndex: Int { set get }
+    var pageIndex: Int { get set }
 }
 
 open class PageView: UIView {
-    
+
     public let pageController: UIPageViewController
     /// 当前的索引
     public internal(set) var currentIndex: Int = .max
-    
-    public var pageDidChange: ((Int) -> (Void))?
+
+    public var pageDidChange: ((Int) -> Void)?
     /// 重复
 //    public var isLoop: Bool = false
-    
+
     public init(_ pageController: UIPageViewController) {
         self.pageController = pageController
         super.init(frame: .zero)
@@ -34,18 +34,18 @@ open class PageView: UIView {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     open override func layoutSubviews() {
         super.layoutSubviews()
         pageController.view.frame = self.bounds
-    } 
+    }
     /// 移动到指定的页面
     open func move(to index: Int) {
         guard let viewController = self.viewController(with: index) else {
             return
         }
         config(visible: viewController, with: index)
-        pageController.setViewControllers([viewController], direction: .reverse, animated: true) { [weak self] finish in
+        pageController.setViewControllers([viewController], direction: .reverse, animated: true) { [weak self] _ in
             guard let `self` = self else { return }
             // MARK: - 这里 不会回调block 以及不调用 didFinishAnimating
             self.currentIndex = index
@@ -58,7 +58,7 @@ open class PageView: UIView {
         }
         page.pageIndex = index
     }
-    
+
     public func viewController(with index: Int) -> UIViewController? {
        fatalError("子类实现")
     }
@@ -75,7 +75,7 @@ extension PageView: UIPageViewControllerDataSource {
         config(visible: viewController, with: index - 1)
         return viewController
     }
-    
+
     public func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let index = index(of: viewController),
               let viewController = self.viewController(with: index+1) else {
@@ -96,6 +96,6 @@ extension PageView: UIPageViewControllerDelegate {
     }
     // 开始滑动
     public func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
-        
+
     }
 }

@@ -31,7 +31,7 @@ open class WQWebController: UIViewController {
         }
         return img.withRenderingMode(.alwaysTemplate)
     }()
-    
+
     public var backActionItemIcon: UIImage = {
         let frameworkBundle = Bundle(for: WQWebController.self)
         guard let path = frameworkBundle.url(forResource: "WQUIBundle", withExtension: "bundle"),
@@ -43,7 +43,7 @@ open class WQWebController: UIViewController {
         return img.withRenderingMode(.alwaysTemplate)
     }()
     private var originalRequest: URLRequest?
-    
+
     public func loadURLString(_ urlString: String) {
         guard let url = URL(string: urlString) else {
             return
@@ -70,10 +70,10 @@ open class WQWebController: UIViewController {
         self.progressView?.trackTintColor = UIColor.lightGray
         self.progressView?.progressTintColor = color
         self.progressView?.progress = 0
-        
+
     }
     func configObservation() {
-        let keyPath = \WKWebView.title 
+        let keyPath = \WKWebView.title
         titleObservation = self.webView.observe(keyPath, options: .new, changeHandler: { [weak self] _, change in
             guard let weakSelf = self,
                 let newValue = change.newValue else {
@@ -82,11 +82,11 @@ open class WQWebController: UIViewController {
             weakSelf.navigationItem.title = newValue
         })
     }
-    
+
     override open func viewDidLoad() {
         super.viewDidLoad()
         self.view.addSubview(webView)
-        //只能用此方法监听 否则在iOS13 或者iOS9下面都有问题
+        // 只能用此方法监听 否则在iOS13 或者iOS9下面都有问题
 //        webView.addObserver(self, forKeyPath: "title", options: .new, context: nil)
         self.configObservation()
         self.navigationItem.hidesBackButton = true
@@ -123,9 +123,9 @@ open class WQWebController: UIViewController {
             items.append(goBackItem)
         }
         self.navigationItem.leftBarButtonItems = items
-        
+
     }
-    //添加观察者方法
+    // 添加观察者方法
 //    override open func observeValue(forKeyPath keyPath: String?,
 //                                    of object: Any?,
 //                                    change: [NSKeyValueChangeKey: Any]?,

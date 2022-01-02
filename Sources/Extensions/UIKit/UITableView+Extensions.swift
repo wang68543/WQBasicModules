@@ -24,7 +24,7 @@ public extension UITableView {
         }
         return inset
     }
-    
+
     /// 隐藏最后没有数据的分割线
     func hideFooterSeparator() {
         self.tableFooterView = UIView()
@@ -57,7 +57,7 @@ public extension UITableView {
         }
         NSLayoutConstraint.activate(layoutConstraints)
         self.tableFooterView = footerView
-        
+
     }
 }
 #endif

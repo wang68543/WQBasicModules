@@ -100,7 +100,7 @@ public extension UIButton {
                    interval: Double = 1,
                    timeKey: String? = nil,
                    execute: @escaping IntervalExecute,
-                   completion: CountDownCompletion?) { //末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
+                   completion: CountDownCompletion?) { // 末尾连续两个闭包 最后一个不能 默认为nil 会造成Xcode把倒数第二个闭包当做尾随闭包调用从而出现语法错误
         self.countDownCompletion = completion
         self.timeKey = timeKey
         if self.source != nil {
@@ -109,14 +109,14 @@ public extension UIButton {
             if let remindValue = previousRemindTime() {
                 self.totalCount = UInt(remindValue)
             } else {
-               self.totalCount = count - 1 //先减一
+               self.totalCount = count - 1 // 先减一
             }
             self.execute = execute
             self.saveCurrentStatues()
             startTimer(interval)
         }
     }
-    ///取消倒计时
+    /// 取消倒计时
     func cancelCountDown() {
         self.stopCountDown(true, isFinshed: false)
     }
@@ -130,7 +130,7 @@ public extension UIButton {
             var total = weakSelf.totalCount
             if total <= 0 {
                 weakSelf.stopCountDown(true)
-            } else { 
+            } else {
                 weakSelf.execute?(weakSelf, total)
                 total -= 1
                 weakSelf.totalCount = total
@@ -149,7 +149,7 @@ public extension UIButton {
         }
         clearAssociatedObjects()
     }
-    
+
     private func previousRemindTime() -> Int? {
         guard let key = self.timeKey else { return nil }
         let time = UserDefaults.standard.integer(forKey: key)
@@ -168,7 +168,7 @@ private extension UIButton {
     }
    var totalCount: UInt {
         set {
-            //使用copy策略代替assign策略避免在32位机器上没有Tagged Pointer 而造成坏内存访问
+            // 使用copy策略代替assign策略避免在32位机器上没有Tagged Pointer 而造成坏内存访问
             #if arch(arm64) || arch(x86_64)
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
             #else
@@ -179,7 +179,7 @@ private extension UIButton {
                 UserDefaults.standard.synchronize()
             }
         }
-        get { 
+        get {
           objc_getAssociatedObject(self, CountDownKeys.totalCount) as? UInt ?? 0
         }
     }
@@ -262,7 +262,7 @@ fileprivate extension UIButton {
         status.borderColor = self.layer.borderColor
         status.cornerRadius = self.layer.cornerRadius
         self.status = status
-    } 
+    }
     /// 恢复之前的状态
     func recoveryBeforeStatues() {
         if !self.isCanCancel { // 不管怎样 需要先恢复能用
@@ -315,4 +315,4 @@ fileprivate extension UIButton {
         objc_setAssociatedObject(self, CountDownKeys.isCanCancel, nil, .OBJC_ASSOCIATION_ASSIGN)
         objc_setAssociatedObject(self, CountDownKeys.totalCount, nil, .OBJC_ASSOCIATION_ASSIGN)
     }
-}   
+}

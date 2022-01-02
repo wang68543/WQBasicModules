@@ -40,7 +40,7 @@ public extension Double {
 }
 public extension String {
     enum Empty: CodableDefaultValue {
-        public static let defaultValue = "" 
+        public static let defaultValue = ""
     }
 }
 public extension Bool {
@@ -73,7 +73,7 @@ public extension CodableDefault {
     // Bool
     typealias True = CodableDefault<Bool.True>
     typealias False = CodableDefault<Bool.False>
-    
+
     // Int
     typealias IntZero = CodableDefault<Int.Zero>
     typealias IntOne = CodableDefault<Int.One>

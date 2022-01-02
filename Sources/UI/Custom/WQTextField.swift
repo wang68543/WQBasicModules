@@ -10,10 +10,10 @@ import UIKit
 open class WQTextField: UITextField {
     open var leftWidth: CGFloat = CGFloat.nan
     open var leftFrame: CGRect = CGRect.zero
-    
+
     open var rightWidth: CGFloat = CGFloat.nan
     open var rightFrame: CGRect = CGRect.zero
-    
+
     open override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
         if leftFrame != .zero {
             return leftFrame
@@ -23,7 +23,7 @@ open class WQTextField: UITextField {
             return super.leftViewRect(forBounds: bounds)
         }
     }
-    
+
     open override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
         if rightFrame != .zero {
             return rightFrame
@@ -40,13 +40,13 @@ public extension WQTextField {
         let view = UIView()
         left(view, width: padding)
     }
-    
+
     func left(_ icon: UIImage?, width: CGFloat) {
         let imageView = UIImageView(image: icon)
         imageView.contentMode = .center
         self.left(imageView, width: width)
     }
-    
+
     func left(_ view: UIView, width: CGFloat) {
         leftView = view
         leftWidth = width

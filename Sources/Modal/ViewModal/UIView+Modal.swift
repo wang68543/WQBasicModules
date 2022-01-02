@@ -29,7 +29,7 @@ public extension UIView {
     /// 用于modal弹窗 自动布局的时候 弹窗的自适应最大尺寸 默认最大尺寸是全屏
     var layoutFittingMaxmiumSize: CGSize {
         set {
-            //这里内存由外部管理
+            // 这里内存由外部管理
             objc_setAssociatedObject(self, AssociatedKeys.layoutFittingMaxmiumSize, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         get {
@@ -73,7 +73,7 @@ public extension WQModules where Base: UIView {
              base.layoutFittingMaxmiumSize.height
         }
     }
-    
+
     /// 直接指定Modal View最终显示的尺寸
     var constraintBoundSize: CGSize {
         set {
@@ -95,7 +95,7 @@ public extension WQModules where Base: UIView {
         states.setupStates(layout, config: config)
         present(layout, states: states, completion: completion)
     }
-    
+
     func present(_ container: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion? = nil) {
         container.modal(states, comletion: completion)
     }
@@ -105,7 +105,7 @@ public extension WQModules where Base: UIView {
     }
 }
 @available(iOS 10.0, *)
-public extension WQModules where Base: UIView { 
+public extension WQModules where Base: UIView {
     func alert(_ flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let states = StyleConfig(.alert, anmation: .default)
         states.animator.animationEnable = flag
@@ -124,7 +124,7 @@ public extension WQModules where Base: UIView {
         layout.startInteractive(states)
         return layout.context
     }
-} 
+}
 
 @available(iOS 10.0, *)
 public extension WQModules where Base: UIView {
@@ -135,11 +135,11 @@ public extension WQModules where Base: UIView {
     func popDown(from sender: UIView, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let rect: CGRect
         if config.style.inParent {
-            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else { //转换为当前控制器的坐标
+            guard let frame = sender.superview?.convert(sender.frame, to: config.fromViewController?.view) else { // 转换为当前控制器的坐标
                 return
             }
             rect = frame
-        } else {//全局显示
+        } else {// 全局显示
             guard let frame = sender.superview?.convert(sender.frame, to: nil) else {
                 return
             }
@@ -147,7 +147,7 @@ public extension WQModules where Base: UIView {
         }
         self.popDown(to: rect, aliment: aliment, flag: flag, config: config, completion: completion)
     }
-    
+
     /// 向下展开
     /// - Parameters:
     ///   - rect: 在目标容器中显示的区域
@@ -155,7 +155,7 @@ public extension WQModules where Base: UIView {
     ///   - flag: 是否动画
     func popDown(to rect: CGRect, aliment: PopAlignment, flag: Bool, config: ModalConfig = .init(), completion: ModalAnimation.Completion? = nil) {
         let anchorPoint: CGPoint
-        let position: CGPoint 
+        let position: CGPoint
         switch aliment {
         case .leading:
             position = CGPoint(x: rect.minX, y: rect.maxY)

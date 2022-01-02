@@ -31,7 +31,7 @@ class SecondViewController: UIViewController {
     }
     class HeaderFooterView: UICollectionReusableView {
         static let reuseIdentifier: String = "HeaderFooterView"
-    } 
+    }
     class DownButton: UIButton {
 
         deinit {
@@ -40,7 +40,7 @@ class SecondViewController: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         let button = DownButton()
         button.countDown(total: 60, formater: NumberFormatter(countDownFormat: "还剩", suf: "s"), color: UIColor.red) { (_, _) -> Bool in
 
@@ -179,7 +179,7 @@ extension SecondViewController.DownButton {
         set {
             #if arch(arm64) || arch(x86_64)
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_ASSIGN)
-            #else //解决非64位 内存优化问题
+            #else // 解决非64位 内存优化问题
             objc_setAssociatedObject(self, CountDownKeys.totalCount, newValue, .OBJC_ASSOCIATION_COPY)
             #endif
 

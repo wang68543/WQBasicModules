@@ -9,7 +9,7 @@ import Foundation
 /// 输入框类型
 public typealias TextFieldView = UIView & UITextInput
 public extension WQModules where Base: UIView {
- 
+
     var viewController: UIViewController? {
         return self.base.viewController
     }
@@ -22,12 +22,12 @@ extension UIView {
         } else if let viewController = self.next as? UIViewController {
             return viewController
         } else if let view = self.next as? UIView {
-            return view.window != nil ? view.viewController : nil //要在树形图上才行
+            return view.window != nil ? view.viewController : nil // 要在树形图上才行
         } else {
             return nil
         }
     }
-    
+
     /// 获取控制器提前设置的keyboardManager
     public var keyboardManager: WQKeyboardManager? {
         return self.viewController?.keyboardManager

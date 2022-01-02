@@ -11,10 +11,10 @@ public class WQCache {
     public static let didReceiveCacheMemoryWarning = NSNotification.Name("didReceiveCacheMemoryWarning")
     //  "wq.defaultCache.disk.com"
     public static let `default` = WQCache(name: "defaultCache", for: .cachesDirectory)
-    
+
     public let baseDirectory: URL
     public let fileManager: FileManager
-    //读写锁
+    // 读写锁
     private var lock: pthread_rwlock_t
     private let ioQueue: DispatchQueue
     #if DEBUG
@@ -27,7 +27,7 @@ public class WQCache {
     /// - Parameters:
     ///   - url: 存储文件夹(需是app路径下面的二级目录)
     ///   - fileManager: 文件管理器
-    private init(_ directory: URL, fileManager: FileManager = .default) { //后面需新增内存存储
+    private init(_ directory: URL, fileManager: FileManager = .default) { // 后面需新增内存存储
         var path = directory
         path.deleteLastPathComponent()
         let lastComponment = directory.lastPathComponent
@@ -53,11 +53,11 @@ public class WQCache {
                                 autoreleaseFrequency: .inherit,
                                 target: nil )
     }
-    
+
     public func fileExists(_ key: String) -> Bool {
         return fileManager.fileExists(atPath: self.path(for: key).path)
     }
-    
+
     /// 异步存储数据
     ///
     /// - Parameters:
@@ -73,7 +73,7 @@ public class WQCache {
             self.removeMemory(for: key)
         }
         #endif
-        ioQueue.async { 
+        ioQueue.async {
             var err: Error?
             do {
                 try self.cache(object, forKey: key, expire: expire)
@@ -83,7 +83,7 @@ public class WQCache {
             completion?(err)
         }
     }
-    
+
     public func set<T: Encodable>(_ object: T?,
                                   forKey key: String,
                                   encoder: JSONEncoder = JSONEncoder(),
@@ -97,7 +97,7 @@ public class WQCache {
         #endif
         try self.cache(object, forKey: key, encoder: encoder, expire: expire)
     }
-   
+
     public func object<T: Decodable>(forKey key: String, decoder: JSONDecoder = JSONDecoder()) -> T? {
         #if DEBUG
         if let value: T = self.memoryObject(for: key) {
@@ -116,7 +116,7 @@ public class WQCache {
             return nil
         }
     }
-    
+
     deinit {
         pthread_rwlock_destroy(&lock)
     }
@@ -181,7 +181,7 @@ public extension WQCache {
                               encoder: JSONEncoder = JSONEncoder(),
                               expire: WQCacheExpiry = .never) throws {
         guard let obj = object else {
-            try? self.delete(forKey: key)//为空的时候移除
+            try? self.delete(forKey: key)// 为空的时候移除
             return
         }
         do {
@@ -191,7 +191,7 @@ public extension WQCache {
             throw error
         }
     }
-    
+
     func save(_ data: Data,
               forKey key: String,
               options: Data.WritingOptions = .atomic,
@@ -213,7 +213,7 @@ public extension WQCache {
             throw error
         }
     }
-    
+
     func read(for key: String) -> Data? {
         let path = self.path(for: key).path
         pthread_rwlock_rdlock(&lock)
@@ -221,7 +221,7 @@ public extension WQCache {
         pthread_rwlock_unlock(&lock)
         return data
     }
-    
+
     /// 判断文件是否过期 (内部不处理过期文件 外部主动调取)
     ///
     /// - Returns: 读取失败或者没有都为false
@@ -234,7 +234,7 @@ public extension WQCache {
         }
         pthread_rwlock_unlock(&lock)
         if let date = attrs[.modificationDate] as? Date,
-            date.timeIntervalSinceNow < 0 { //是否过期
+            date.timeIntervalSinceNow < 0 { // 是否过期
             return true
         } else {
             return false
@@ -261,7 +261,7 @@ public extension WQCache {
         }
         try fileManager.removeItem(at: path(for: key))
     }
-    
+
     /// 清除数据
     ///
     /// - Parameters:
@@ -302,7 +302,7 @@ public extension WQCache {
                             let resourceValues = try url.resourceValues(forKeys: Set(resourceKeys))
                             if resourceValues.isDirectory == false,
                                 let date = resourceValues.contentModificationDate,
-                                date.timeIntervalSinceNow < 0 {//过期了
+                                date.timeIntervalSinceNow < 0 {// 过期了
                                 try self.fileManager.removeItem(at: url)
                             }
                         }
@@ -324,7 +324,7 @@ public extension CocoaError {
     static let fileEnumeratorFailed = CocoaError.Code(rawValue: -20_100)
 }
 
-public enum WQCacheExpiry { //过期时间可以每个Cache单独维护一个字典
+public enum WQCacheExpiry { // 过期时间可以每个Cache单独维护一个字典
     case never
     case seconds(Double)
     case date(Date)
@@ -332,7 +332,7 @@ public enum WQCacheExpiry { //过期时间可以每个Cache单独维护一个字
 extension WQCacheExpiry {
     /// 4001/1/1 8:0:0 (北京时间)
     static let distantFuture: Double = 64_092_211_200.0
-    
+
     func expiryTime() -> Double {
         switch self {
         case .never:

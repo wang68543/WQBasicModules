@@ -9,7 +9,7 @@ import UIKit
 
 public protocol WQTransitioningAnimatorable: NSObjectProtocol {
     func transition(shouldAnimated animator: WQTransitionAnimator,
-                    presented: UIViewController?, //当以独立window的形式显示的时候 这里为空
+                    presented: UIViewController?, // 当以独立window的形式显示的时候 这里为空
                     presenting: UIViewController?,
                     isShow: Bool,
                     completion: @escaping WQAnimateCompletion)
@@ -22,7 +22,7 @@ open class WQTransitionAnimator: NSObject {
         public var damping: CGFloat
         public var initialVelocity: CGFloat
         public var options: UIView.AnimationOptions
-        
+
         public init(_ duration: TimeInterval = 0.25,
                     delay: TimeInterval = 0.0,
                     damping: CGFloat = 0,
@@ -39,7 +39,7 @@ open class WQTransitionAnimator: NSObject {
         case presentation
         case dismissal
     }
-    
+
     @available(*, deprecated, message: "use Options.duration")
     open var duration: TimeInterval = 0.25
     /// containerView的动画类型
@@ -49,7 +49,7 @@ open class WQTransitionAnimator: NSObject {
     public var presentOptions: Options
     public var dismissOptions: Options
     private var willTransitionStyle: TransitionStyle = .presentation
-    
+
 //    public var isInteractive: Bool = false
 //    
 //    public internal(set) var context: TransitionContext?
@@ -61,18 +61,18 @@ open class WQTransitionAnimator: NSObject {
         self.presentOptions = present
         self.dismissOptions = dismiss ?? present
         super.init()
-    } 
+    }
     public convenience init(_ items: WQAnimatedConfigAble ...,
                             options present: Options = .normalPresent,
                             dismiss: Options? = .normalDismiss) {
         self.init(items: items, options: present, dismiss: dismiss)
     }
-    
+
     public func append(_ config: WQAnimatedConfigAble) {
         self.items.append(config)
     }
 }
- 
+
 // MARK: - --UIViewControllerAnimatedTransitioning
 extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
     public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
@@ -91,17 +91,17 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
         let isPresented = toVC.presentingViewController === fromVC
         let toVCView = transitionContext.view(forKey: .to)
         let transitionView = transitionContext.containerView
-        if let toView = toVCView { 
+        if let toView = toVCView {
             if let able = toVC as? WQTransitionable {
                 toView.frame = able.initialFrame
             } else {
               toView.frame = vcFinalFrame
             }
-            if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
+            if transitionView !== toView {// 解决 多次动画 而把自己放在栈顶的问题
                transitionView.addSubview(toView)
-            } 
+            }
         }
-        let animateCompletion: WQAnimateCompletion = { [weak self] flag -> Void in
+        let animateCompletion: WQAnimateCompletion = { [weak self] _ -> Void in
             guard let weakSelf = self else { return }
             let success = !transitionContext.transitionWasCancelled
             if (isPresented && !success) || (!isPresented && success) {
@@ -109,7 +109,7 @@ extension WQTransitionAnimator: UIViewControllerAnimatedTransitioning {
             }
             if isPresented && success {
                 weakSelf.willTransitionStyle = .dismissal
-            } 
+            }
             transitionContext.completeTransition(success)
         }
         if isPresented {
@@ -156,7 +156,7 @@ public extension WQTransitionAnimator {
                            options: options.options,
                            animations: animateBlock,
                            completion: completion)
-            
+
         } else {
             UIView.animate(withDuration: duration,
                            delay: options.delay,
@@ -176,4 +176,4 @@ extension WQTransitioningAnimatorable {
                     completion: @escaping WQAnimateCompletion) {
         animator.defaultAnimated(presented: presented, presenting: presenting, isShow: isShow, completion: completion)
     }
-} 
+}

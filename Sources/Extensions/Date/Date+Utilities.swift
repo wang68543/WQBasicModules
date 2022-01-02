@@ -64,7 +64,7 @@ public extension Date {
         }
         self = date
     }
-    
+
     /// distance unit counts between two date
     ///
     /// - Parameters:
@@ -107,7 +107,7 @@ public extension Date {
         return value
     }
     typealias DateUnitRange = (begin: Date, length: TimeInterval)
-    
+
     /// Calculate begin date and interval in date unit of self
     ///
     /// - Parameters:
@@ -195,8 +195,7 @@ public extension Date {
     func next(date unit: Calendar.Component, in calendar: Calendar = .current) -> Date {
         return end(unit, in: calendar) + 1
     }
-    
-    
+
     /// smaller unit counts in larger unit
     ///
     /// - Parameters:
@@ -211,7 +210,7 @@ public extension Date {
                 bigUnit = .hour
             case .hour:
                 bigUnit = .day
-            case .day, .weekOfMonth: 
+            case .day, .weekOfMonth:
                 bigUnit = .month
             case .month, .weekOfYear:
                 bigUnit = .year
@@ -221,12 +220,12 @@ public extension Date {
         } else {
             bigUnit = larger
         }
-        
+
         guard let counts = calendar.range(of: unit, in: bigUnit, for: self) else {
             return 0
         }
         return counts.upperBound - counts.lowerBound
-    } 
+    }
     /// Calculate the date in unit(每个日历单元都可相加相减会自动向大一个位的日历单元进1或减1)
     ///
     /// - Parameters:
@@ -287,7 +286,7 @@ public extension Date {// MARK: - Compare
         let nextDate = Date().dateByAdding(-1, unit: .year, with: calendar)
         return calendar.isDate(self, equalTo: nextDate, toGranularity: .month)
     }
-    
+
    private static let commentFlags: Set<Calendar.Component> = [
         .second,
         .minute,
@@ -298,7 +297,7 @@ public extension Date {// MARK: - Compare
         .weekOfYear,
         .weekday,
         .timeZone]
-  
+
 }
 
 // MARK: - --equal
@@ -306,7 +305,7 @@ public extension Date {
     func isSame(_ otherDate: Date, unit: Calendar.Component = .day, calendar: Calendar = Calendar.current) -> Bool {
         let cmps = calendar.dateComponents(in: calendar.timeZone, from: self)
         let otherCmps = calendar.dateComponents(in: calendar.timeZone, from: otherDate)
-        //当前比较的单元相同才往下走
+        // 当前比较的单元相同才往下走
         guard cmps.value(for: unit) == otherCmps.value(for: unit) else { return false }
         let units = self.compareUnits(for: unit)
         for cmp in units {
@@ -333,20 +332,20 @@ public extension Date {
             units = [.year]
         case .year, .era, .timeZone:
             units = []
-        case .weekday: //1~7,1表示周日 若要比较就比较是否在同一天
+        case .weekday: // 1~7,1表示周日 若要比较就比较是否在同一天
             units = []
-        case .weekdayOrdinal: //一个月中的第几周 以7天为单位，范围为1-5 （1-7号为第1个7天，8-14号为第2个7天...） 通常与weekday合用
+        case .weekdayOrdinal: // 一个月中的第几周 以7天为单位，范围为1-5 （1-7号为第1个7天，8-14号为第2个7天...） 通常与weekday合用
              units = [.year, .month]
-        case .quarter: //刻钟单位。范围为1-4 （1刻钟等于15分钟）
+        case .quarter: // 刻钟单位。范围为1-4 （1刻钟等于15分钟）
             units = [.year, .month, .day, .hour]
-        case .weekOfMonth: //月包含的周数。最多为6个周
+        case .weekOfMonth: // 月包含的周数。最多为6个周
              units = []
-        case .weekOfYear: //年包含的周数。最多为53个周
+        case .weekOfYear: // 年包含的周数。最多为53个周
              units = []
         case .yearForWeekOfYear: // let comps = DateComponents(weekday: 6, weekOfYear: 1, yearForWeekOfYear: 2016)
            units = []
         default:
-            units = [] 
+            units = []
         }
         return units
     }

@@ -62,7 +62,7 @@ class ExampleViewController: UITableViewController {
         }
         let dic: [String: Any] = ["key1": "value1", "key2": "value2"]
         if let data = try? JSONSerialization.data(withJSONObject: dic, options: []) {
-            //as12456
+            // as12456
 //            debugPrint(data.DES(decodeWithKey:"ac12456b")?.base64EncodedString())
             if let aesdata = try? data.encodedDES("ac12456b") {
                 debugPrint(aesdata.base64EncodedString())

@@ -18,7 +18,6 @@ class NoteBookViewController: UIViewController {
         self.view.addSubview(notebook)
         notebook.load()
     }
-    
 
     /*
     // MARK: - Navigation

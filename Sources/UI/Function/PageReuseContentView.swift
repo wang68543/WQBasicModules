@@ -12,10 +12,10 @@ open class PageReuseContentView: PageView {
     public let pageContentControllerType: UIViewController.Type
     /// controllers 的数量
     public var numberOfContentReuseControllers: Int = .zero
-    
+
     /// 缓存ViewController
     public private(set) var cacheControllers: [Int: UIViewController] = [:]
- 
+
     public init(_ pageController: UIPageViewController, type: UIViewController.Type) {
         self.pageContentControllerType = type
         super.init(pageController)
@@ -23,7 +23,7 @@ open class PageReuseContentView: PageView {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     public func setup(_ count: Int, to index: Int) {
         self.cacheControllers.removeAll()
         self.numberOfContentReuseControllers = count
@@ -53,6 +53,6 @@ public extension PageReuseContentView {
                      pageStyle style: UIPageViewController.TransitionStyle = .scroll,
                      orientation: UIPageViewController.NavigationOrientation = .horizontal) {
         let controller = UIPageViewController(transitionStyle: style, navigationOrientation: orientation, options: nil)
-        self.init(controller, type: type) 
+        self.init(controller, type: type)
     }
 }

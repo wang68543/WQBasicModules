@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-open class LaunchScreen: NSObject { 
+open class LaunchScreen: NSObject {
     static public var snapshotLaunch: UIImage? {
         guard let info = Bundle.main.infoDictionary else { return nil }
         if info.has(key: "UILaunchStoryboardName") {
@@ -51,7 +51,7 @@ open class LaunchScreen: NSObject {
     static public var launchFullScreenView: UIView {
         guard let launchFileName = Bundle.main.infoDictionary?["UILaunchStoryboardName"] as? String else { fatalError("未获取到正确的启动文件,请确认是否配置了Launch Screen File") }
         let launchView: UIView
-        if Bundle.main.path(forResource: launchFileName, ofType: "nib") != nil {//xib格式的启动文件
+        if Bundle.main.path(forResource: launchFileName, ofType: "nib") != nil {// xib格式的启动文件
             let nib = UINib(nibName: launchFileName, bundle: nil)
             let views = nib.instantiate(withOwner: nil, options: nil)
             if let view = views.first as? UIView {

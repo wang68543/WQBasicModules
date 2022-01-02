@@ -8,7 +8,7 @@
 
 import UIKit
 import WQBasicModules
-//import SnapKit
+// import SnapKit
 class ExampleAlertViewController: BaseExampleViewController {
     let alertView = UIView()
     let imageView: UIImageView = UIImageView(image: UIImage(named: "首页8"))
@@ -109,7 +109,7 @@ class ExampleAlertViewController: BaseExampleViewController {
         alertView.addSubview(button)
         alertView.backgroundColor = UIColor.random
         alertView.frame = CGRect(x: 0, y: 0, width: 100, height: 300)
-        alertView.wm.alert(true)//, config: config, completion: nil
+        alertView.wm.alert(true)// , config: config, completion: nil
     }
     @objc func dismissAlertAction(_ sender: UIButton) {
         guard let view = sender.superview else { return }

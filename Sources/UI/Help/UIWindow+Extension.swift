@@ -11,7 +11,7 @@ import UIKit
 public extension UIWindow {
     final class var topNormal: UIWindow? {
         let app = UIApplication.shared
-        #if targetEnvironment(macCatalyst) //macOS
+        #if targetEnvironment(macCatalyst) // macOS
         var topWindow = app.windows.last
         #else
         var topWindow = app.keyWindow
@@ -19,10 +19,10 @@ public extension UIWindow {
         topWindow = topWindow ?? app.delegate?.window ?? app.windows.last(where: { $0.windowLevel == .normal })
         return topWindow
     }
-    
+
     final class var keyWindow: UIWindow? {
         let app = UIApplication.shared
-        #if targetEnvironment(macCatalyst) //macOS
+        #if targetEnvironment(macCatalyst) // macOS
         return app.windows.last
         #else
         return app.keyWindow
@@ -49,7 +49,6 @@ public extension UIWindow {
         self.isHidden = true
     }
 }
-
 
 public func wm_topNavigationController() -> UINavigationController? {
     return UIWindow.topNormal?.topNavigationController

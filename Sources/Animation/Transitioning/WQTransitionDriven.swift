@@ -8,7 +8,7 @@
 import UIKit
 open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, TransitionContext {
     open var direction: DrivenDirection
-    ///交互的时候  手势完成长度 (用于动画完成百分比计算)
+    /// 交互的时候  手势完成长度 (用于动画完成百分比计算)
     public var completionWidth: CGFloat = 0
     public var isInteractive: Bool = false
     public var panGesture: UIPanGestureRecognizer {
@@ -20,7 +20,7 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, TransitionC
     }
     public var shouldCompletionProgress: CGFloat = 0.5
     public var shouldCompletionSpeed: CGFloat = 100
-    
+
     public init(gesture: UIPanGestureRecognizer, direction: DrivenDirection) {
         self.direction = direction
         self.panGesture = gesture
@@ -44,13 +44,13 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, TransitionC
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
-        case .changed: 
+        case .changed:
             let translate = sender.translation(in: view)
             let percentage = self.progress(for: translate)
             self.update(percentage)
         case .ended, .cancelled, .failed:
             let velocity = sender.velocity(in: view)
-            let translate = sender.translation(in: view) 
+            let translate = sender.translation(in: view)
             let isFinished = self.shouldCompletionInteraction(velocity, translate: translate)
             if isFinished {
                 self.completionSpeed = 1 - self.percentComplete
@@ -62,5 +62,5 @@ open class WQTransitionDriven: UIPercentDrivenInteractiveTransition, TransitionC
         default:
             break
         }
-    } 
+    }
 }

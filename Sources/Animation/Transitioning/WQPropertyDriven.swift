@@ -10,7 +10,7 @@ import UIKit
 public typealias PropertyAnimateCompletion = ((UIViewAnimatingPosition) -> Void)
 @available(iOS 10.0, *)
 public class WQPropertyDriven: NSObject, TransitionContext {
-  
+
     var isShow: Bool = false
     public var panGesture: UIPanGestureRecognizer
     public var direction: DrivenDirection
@@ -18,11 +18,11 @@ public class WQPropertyDriven: NSObject, TransitionContext {
     public private(set) var transitionContext: UIViewControllerContextTransitioning?
     var transitionAnimator: UIViewPropertyAnimator?
     public var isInteractive: Bool = false
-    ///交互的时候  手势完成长度 (用于动画完成百分比计算)
+    /// 交互的时候  手势完成长度 (用于动画完成百分比计算)
     public var completionWidth: CGFloat = 0
     public var shouldCompletionProgress: CGFloat = 0.5
     public var shouldCompletionSpeed: CGFloat = 100
-    
+
     init(_ gesture: UIPanGestureRecognizer,
          items: WQAnimatedConfigItems,
          direction: DrivenDirection,
@@ -33,7 +33,7 @@ public class WQPropertyDriven: NSObject, TransitionContext {
         super.init()
         self.panGesture.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
-    
+
     @objc
     func handlePanGesture(_ sender: UIPanGestureRecognizer) {
         guard let view = sender.view else { return }
@@ -45,7 +45,7 @@ public class WQPropertyDriven: NSObject, TransitionContext {
             case .left, .right:
                 completionWidth = size.width
             }
-        } 
+        }
         switch sender.state {
         case .began:
             sender.setTranslation(.zero, in: view)
@@ -68,7 +68,7 @@ public class WQPropertyDriven: NSObject, TransitionContext {
                 self.transitionContext?.finishInteractiveTransition()
             } else {
                 self.transitionContext?.cancelInteractiveTransition()
-            } 
+            }
             self.isInteractive = false
             self.transitionContext = nil
             self.transitionAnimator = nil
@@ -113,7 +113,7 @@ public class WQPropertyDriven: NSObject, TransitionContext {
                 transitionView.addSubview(toView)
             }
         }
-        self.transitionAnimator?.addCompletion({ position in 
+        self.transitionAnimator?.addCompletion({ position in
             let completed = (position == .end)
             if (self.isShow && !completed) || (!self.isShow && completed) {
                 toVCView?.removeFromSuperview()
@@ -124,7 +124,7 @@ public class WQPropertyDriven: NSObject, TransitionContext {
             self.transitionAnimator?.startAnimation()
         }
     }
-    
+
     public var wantsInteractiveStart: Bool {
         return self.isInteractive
     }

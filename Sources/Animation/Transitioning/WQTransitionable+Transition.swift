@@ -15,9 +15,9 @@ extension WQTransitionable {
         self.modalPresentationStyle = .custom
         self.transitioningDelegate = self
         controller.present(self, animated: flag, completion: completion)
-        
+
     }
-    
+
     /// 让被弹出的控制器与当前控制器成为兄弟控制器(即以当前父控制器的子控制器显示(当当前是根控制器的时候以当前的子控制器形式显示))
     ///
     /// - Parameters:
@@ -41,7 +41,7 @@ extension WQTransitionable {
             topVC = controller.parent ?? controller
             animatedVC = controller.topVisible()
         }
-        //这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
+        // 这里 controller如果当前是根控制器 则关于presented的frame 动画可能会出现异常
         usingTransitionAnimatedController = animatedVC
         let isAppearanceTransition = self.shouldViewWillApperance
         if isAppearanceTransition {
@@ -68,7 +68,7 @@ extension WQTransitionable {
         }
         self.showAnimated(flag, presented: topVC, completion: animateFinshed(_:))
     }
-    
+
     /// 被弹出的控制器以新建keyWindow的根控制器的形式显示
     public func shownInWindow(animated flag: Bool, completion: TransitionCompleted?) {
         self.showMode = .windowRootController
@@ -84,7 +84,7 @@ extension WQTransitionable {
         }
         self.containerWindow?.addVisible(root: self)
         func animateFinshed(_ flag: Bool) {
-            if !flag { 
+            if !flag {
                 self.containerWindow?.remove()
             }
             if isAppearanceTransition {
@@ -93,7 +93,7 @@ extension WQTransitionable {
             completion?()
         }
         self.showAnimated(flag, presented: preRootViewController, completion: animateFinshed(_:))
-    } 
+    }
     /// 直接以当前控制器的子控制器的形式显示(与当前控制器的界面显示同步)
     public func showInController(_ controller: UIViewController, animated flag: Bool, completion: TransitionCompleted?) {
         self.showMode = .childController
@@ -159,7 +159,7 @@ extension WQTransitionable {
         }
         self.hideAnimated(flag, other: other, completion: animateFinshed(_:))
     }
-   
+
     internal func hideFromController(animated flag: Bool, completion: TransitionCompleted?) {
         let other = self.usingTransitionAnimatedController
         let isAppearanceTransition = self.shouldViewWillApperance
@@ -198,7 +198,7 @@ private extension WQTransitionable {
             completion(true)
         }
     }
-    
+
     func showAnimated(_ flag: Bool, presented inVC: UIViewController?, completion: @escaping ((Bool) -> Void)) {
         if flag {
             if #available(iOS 10.0, *),

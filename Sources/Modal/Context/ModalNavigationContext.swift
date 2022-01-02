@@ -9,7 +9,7 @@ import UIKit
 @available(iOS 10.0, *)
 public class ModalNavigationContext: ModalContext {
     private var interactAnimator: UIPercentDrivenInteractiveTransition?
-    
+
     var currentNavigationController: UINavigationController? {
         if let nav = self.config.style.fromViewController as? UINavigationController {
             return nav
@@ -17,10 +17,10 @@ public class ModalNavigationContext: ModalContext {
             return WQUIHelp.topNavigationController()
         }
     }
-    private var previousDelegate: UINavigationControllerDelegate?
+    private weak var previousDelegate: UINavigationControllerDelegate?
     /// 存储的保存的view
 //    private var snapshotView: UIView?
-    
+
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         guard let nav = currentNavigationController else { return }
         guard !controller.isPushing else { return }
@@ -122,7 +122,7 @@ extension ModalNavigationContext: UINavigationControllerDelegate {
 //                snapshotView = view
 //            }
 //        }
-        
+
         return self
     }
 }
@@ -144,7 +144,7 @@ extension ModalNavigationContext: UIViewControllerAnimatedTransitioning {
         let transitionView = transitionContext.containerView
         func completionBlock() {
             let success = !transitionContext.transitionWasCancelled
-            if (isPresented && !success) {
+            if isPresented && !success {
                 toVC.view.removeFromSuperview()
             }
             if self.isShow {
@@ -163,7 +163,7 @@ extension ModalNavigationContext: UIViewControllerAnimatedTransitioning {
         let toVCView = transitionContext.view(forKey: .to)
         if self.isShow {
             if let toView = toVCView {
-                if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
+                if transitionView !== toView {// 解决 多次动画 而把自己放在栈顶的问题
                    transitionView.addSubview(toView)
                 }
             }
@@ -187,6 +187,6 @@ extension ModalNavigationContext: UIViewControllerAnimatedTransitioning {
                 completionBlock()
             }
         }
-        
+
     }
 }

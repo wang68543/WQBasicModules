@@ -8,16 +8,16 @@
 
 import UIKit
 import WQBasicModules
-import CoreLocation 
+import CoreLocation
 
 // Swift宏定义
 // https://www.cnblogs.com/sundaysme/p/11933754.html
 // https://www.macbed.com/navicat-premium/ 软件地址
 // https://www.jianshu.com/p/3291de46f3ff 终端命令 列表
- 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
 //    @UserDefault
     @UserDefault("AppTime", default: Date(timeIntervalSince1970: .zero))
     static var date: Date
@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint("\(Int.max)")
         debugPrint("\(CGFloat.greatestFiniteMagnitude)")
         let example = ExampleViewController()
-        
+
         let nav = UINavigationController(rootViewController: example)
         example.view.backgroundColor = UIColor.white
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -40,27 +40,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
 //        testCodable() 
         AppDelegate.date = Date()
-        Localize.shared.register() 
+        Localize.shared.register()
         debugPrint("测试".localized)
         var index: Int = 0
-    
-        DispatchQueue.global().async {
-            for _ in 0..<10000 {
-                index = index +  1
-            }
-            debugPrint("===========\(index)")
-        }
-        DispatchQueue.global().async {
-            for _ in 0..<10000 {
-                index = index +  1
-            }
-            debugPrint("=========****\(index)")
-        }
         LaunchScreen.snapshotLaunch
-        
-        
+
 //        UIApplication.shared.appIcon
-        
+
         return true
     }
 
@@ -72,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
 
 }
-//struct Video: Codable {
+// struct Video: Codable {
 //    enum State: String, Codable, CodableDefaultValue {
 //        case streaming
 //        case archived
@@ -85,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    @CodableDefault.True var publicVideo: Bool
 //
 //    @CodableDefault<State> var state: State
-//}
-//extension Video {
+// }
+// extension Video {
 //    static let `default` = Video(id: 111, title: "test", commentEnabled: false, publicVideo: false, state: .archived)
-//}
+// }

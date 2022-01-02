@@ -10,10 +10,10 @@ import Foundation
 public enum FlexDirection {
     case row, rowReverse, column, columnReverse
 }
-///默认情况下，项目都排在一条线（又称"轴线"）上。flex-wrap属性定义，如果一条轴线排不下，如何换行。
+/// 默认情况下，项目都排在一条线（又称"轴线"）上。flex-wrap属性定义，如果一条轴线排不下，如何换行。
 public enum FlexWrap {
     case noWrap, wrap, wrapReverse
-} 
+}
 /// 属性定义了项目在主轴上的对齐方式
 public enum FlexJustify {
     case flexStart, flexEnd, center, spaceBetween, spaceAround
@@ -29,5 +29,5 @@ public enum FlexContent {
 
 /// 属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto 表示继承父元素的align-items属性，如果没有父元素，则等同于stretch
 public enum FlexAlignItem {
-    case auto,flexStart,flexEnd,center,baseline,stretch
+    case auto, flexStart, flexEnd, center, baseline, stretch
 }

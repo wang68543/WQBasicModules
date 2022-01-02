@@ -9,9 +9,9 @@ import Foundation
 @available(iOS 10.0, *)
 public class FILOModalQueue: NSObject {
     public static let shared = FILOModalQueue()
-    
+
     internal var items: [FIFOModalItem] = []
-    
+
     public func modal(_ controller: WQLayoutController, states: StyleConfig, comletion: ModalAnimation.Completion?) {
         func showItem() {
             controller.ctxShow(states, comletion: comletion)
@@ -24,14 +24,14 @@ public class FILOModalQueue: NSObject {
             /// 之前的 先暂停
             last.layoutController.ctxHide(animated: false) {
                 showItem()
-            } 
+            }
         }
     }
-    
+
     public func dismiss(_ controller: WQLayoutController, flag: Bool, completion: (() -> Void)?) {
         if items.isEmpty {
             controller.ctxHide(animated: flag, completion: completion)
-        } else  {
+        } else {
             guard let index = items.lastIndex(where: {$0.layoutController === controller }) else {
                 return
             }
@@ -41,7 +41,7 @@ public class FILOModalQueue: NSObject {
                     item.states.animator.animationEnable = false
                     last.layoutController.ctxShow(item.states, comletion: nil)
                 }
-                
+
             }
         }
     }
@@ -52,7 +52,7 @@ internal class FIFOModalItem: NSObject {
     let layoutController: WQLayoutController
     let states: StyleConfig
     let completion: ModalAnimation.Completion?
-    
+
     init(_ controller: WQLayoutController, states: StyleConfig, completion: ModalAnimation.Completion?) {
         self.layoutController = controller
         self.states = states

@@ -11,10 +11,10 @@ public extension CALayer {
     struct AnimationKeys {
         static let rotation = "wq.layer.anmations.rotation"
         static let transition = "wq.layer.anmations.transition"
-        //If `bitPattern` is zero, the result is `nil`.
+        // If `bitPattern` is zero, the result is `nil`.
         static let isAnimating = UnsafeRawPointer(bitPattern: "wq.layer.anmations.isAnimating".hashValue)!
     }
-    
+
     private(set) var isAnimating: Bool {
         set {
             objc_setAssociatedObject(self, AnimationKeys.isAnimating, newValue, .OBJC_ASSOCIATION_ASSIGN)
@@ -23,7 +23,7 @@ public extension CALayer {
              (objc_getAssociatedObject(self, AnimationKeys.isAnimating) as? Bool) ?? false
         }
     }
-    
+
     @discardableResult
     func rotation(_ from: Double = 0,
                   to angle: Double = Double.pi * 2,
@@ -39,11 +39,11 @@ public extension CALayer {
         self._add(animate, forKey: AnimationKeys.rotation)
         return animate
     }
-     
+
     func stopRotation() {
         self._remove(forKey: AnimationKeys.rotation)
     }
-    
+
     @discardableResult
     func transition(timing: CAMediaTimingFunction = CAMediaTimingFunction(name: .easeInEaseOut),
                     type: CATransitionType = .fade,
@@ -55,12 +55,12 @@ public extension CALayer {
         self._add(transtion, forKey: AnimationKeys.transition)
         return transtion
     }
-    
+
     func stopTransition() {
         self._remove(forKey: AnimationKeys.transition)
     }
-    
-    private func _add(_ animate: CAAnimation, forKey key: String) { 
+
+    private func _add(_ animate: CAAnimation, forKey key: String) {
         if self.animation(forKey: key) != nil {
            self.removeAnimation(forKey: key)
         }
@@ -79,4 +79,4 @@ extension CALayer: CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         self.isAnimating = false
     }
-} 
+}

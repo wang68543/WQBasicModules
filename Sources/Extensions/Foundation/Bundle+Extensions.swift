@@ -12,6 +12,6 @@ public extension Bundle {
             return nil
         }
         return UIImage(contentsOfFile: path)
-    } 
+    }
 
 }

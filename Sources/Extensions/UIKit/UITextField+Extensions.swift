@@ -28,7 +28,7 @@ public extension UITextField {
             objc_getAssociatedObject(self, AssociatedKeys.maxTextSizeKey) as? Int
         }
     }
-    
+
     private func addObserver() {
         self.removeObserver()
         NotificationCenter.default.addObserver(self,
@@ -39,7 +39,7 @@ public extension UITextField {
     private func removeObserver() {
         NotificationCenter.default.removeObserver(self, name: UITextField.textDidChangeNotification, object: self)
     }
-    
+
     @objc
     func textDidChange() {
         guard let length = self.maxTextSize,
@@ -53,5 +53,5 @@ public extension UITextField {
             self.selectedTextRange = self.textRange(from: textRange.start, to: end)
         }
     }
-} 
+}
 #endif

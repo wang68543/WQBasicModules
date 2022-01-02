@@ -28,7 +28,7 @@ public extension Date {
     func previousMonth(with calendar: Calendar = .current) -> Date {
         return self.previousUnit(.month, with: calendar)
     }
-    func previousYear(with calendar: Calendar = .current) -> Date { 
+    func previousYear(with calendar: Calendar = .current) -> Date {
         return self.previousUnit(.year, with: calendar)
     }
     private func nextUnit(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
@@ -37,4 +37,4 @@ public extension Date {
     private func previousUnit(_ unit: Calendar.Component, with calendar: Calendar = .current) -> Date {
         return self.dateByAdding(-1, unit: unit, with: calendar)
     }
-} 
+}

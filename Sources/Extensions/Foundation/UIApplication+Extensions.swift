@@ -8,7 +8,7 @@
 import Foundation
 public extension UIApplication {
     /// 获取名称
-    public var appIconNames:[String]? {
+    public var appIconNames: [String]? {
         guard let CFBundleIcons = self.infoDictionary?["CFBundleIcons"] as? [String: Any],
               let CFBundlePrimaryIcon = CFBundleIcons["CFBundlePrimaryIcon"] as? [String: Any],
               let CFBundleIconFiles = CFBundlePrimaryIcon["CFBundleIconFiles"] as? [String] else {
@@ -16,10 +16,10 @@ public extension UIApplication {
               }
         return CFBundleIconFiles
     }
-    ///appIcon的最后一个图片
+    /// appIcon的最后一个图片
     public var appIcon: UIImage? {
         guard let iconName = appIconNames?.last else { nil }
         return UIImage(named: iconName)
     }
-    
+
 }

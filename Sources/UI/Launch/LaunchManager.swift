@@ -20,7 +20,7 @@ open class ShowWindowController: UIViewController {
 }
 open class LaunchManager: NSObject {
     public static let `default` = LaunchManager()
-    
+
     public private(set) var window: UIWindow?
     /// 展示复制启动屏
     public func showLaunchWindow(with viewController: UIViewController = ShowWindowController()) {
@@ -32,11 +32,11 @@ open class LaunchManager: NSObject {
         window?.sendSubviewToBack(imageView)
     }
     public func launchWindow(with viewController: UIViewController = ShowWindowController()) {
-        window = UIWindow(frame: UIScreen.main.bounds, viewController) 
+        window = UIWindow(frame: UIScreen.main.bounds, viewController)
         viewController.view.backgroundColor = .clear
 //        viewController.view.isUserInteractionEnabled = false
         // windowLevel可以调整多个window的显示层级 
-        window?.windowLevel = UIWindow.Level.statusBar + 1 //Level.statusBar + 1
+        window?.windowLevel = UIWindow.Level.statusBar + 1 // Level.statusBar + 1
 //        window?.isHidden = false
 //        window?.backgroundColor = .clear
 //        window?.alpha = 1 
@@ -63,7 +63,7 @@ open class LaunchManager: NSObject {
             }
         }
     }
-    public func dismissLite(_ duration: TimeInterval = 0.25, completion: (() -> Void)?)  {
+    public func dismissLite(_ duration: TimeInterval = 0.25, completion: (() -> Void)?) {
         guard let _window = window else { return }
         UIView.transition(with: _window, duration: duration, options: .curveEaseOut) {
             _window.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
@@ -73,5 +73,5 @@ open class LaunchManager: NSObject {
             completion?()
         }
     }
-    
+
 }

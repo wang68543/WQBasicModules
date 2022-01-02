@@ -22,7 +22,7 @@ public enum CCAlgorithmType {
         }
         return CCHmacAlgorithm(result)
     }
-    
+
     var digestLength: Int {
         var result: Int32 = 0
         switch self {
@@ -37,7 +37,7 @@ public enum CCAlgorithmType {
     }
 }
 
-fileprivate func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, length: Int) -> String {
+private func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, length: Int) -> String {
         var hash = String()
         for i in 0..<length {
          hash = hash.appendingFormat("%02X", bytes[i])
@@ -46,7 +46,7 @@ fileprivate func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, le
         return hash
 }
 public extension String {
-    
+
     var isNotEmpty: Bool { !isEmpty }
     /// 转换拼音
     /// - Parameter stripDiacritics: 是否去除音标
@@ -55,18 +55,18 @@ public extension String {
         guard let contents = CFStringCreateMutableCopy(kCFAllocatorDefault, 0, self as CFString) else {
             return self
         }
-        CFStringTransform(contents, nil, kCFStringTransformMandarinLatin, false) //转化成拼音
+        CFStringTransform(contents, nil, kCFStringTransformMandarinLatin, false) // 转化成拼音
         if stripDiacritics {
-            CFStringTransform(contents, nil, kCFStringTransformStripDiacritics, false) //去除音标
+            CFStringTransform(contents, nil, kCFStringTransformStripDiacritics, false) // 去除音标
         }
         let string = contents as String
         if trimming {
             return string.replacingOccurrences(of: " ", with: "")
         } else {
             return string
-        } 
+        }
     }
-    
+
     /// md5加密 默认小写
     func md5String(lower: Bool = true) -> String {
         guard let utf8 = cString(using: .utf8) else { return String() }
@@ -77,7 +77,7 @@ public extension String {
         return lower ? result.lowercased() : result
     }
     func sha1String(lower: Bool = true) -> String {
-        guard let utf8 = cString(using: .utf8) else { return String() } //cString(using: .utf8) 转换之后 会自带一个\0 就是长度加长了1个
+        guard let utf8 = cString(using: .utf8) else { return String() } // cString(using: .utf8) 转换之后 会自带一个\0 就是长度加长了1个
         let len = Int(CC_SHA1_DIGEST_LENGTH)
         let digest = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: len)
         CC_SHA1(utf8, CC_LONG(strlen(utf8)), digest)

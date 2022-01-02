@@ -15,7 +15,7 @@ public enum PanDirection: Equatable {
     case toRight
 }
 public enum InteractDismissMode: Equatable {
-    
+
     case none
     /// 点击容器以外的背景消失
     case tapOutSide
@@ -24,7 +24,7 @@ public enum InteractDismissMode: Equatable {
     /// 移动消失
     case pan(PanDirection)
 }
- 
+
 extension PanDirection {
     var isHorizontal: Bool {
         return self == .toLeft || self == .toRight
@@ -59,5 +59,5 @@ extension PanDirection {
             return .zero
         }
     }
-    
+
 }

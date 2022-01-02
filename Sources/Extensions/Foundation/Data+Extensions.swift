@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CommonCrypto 
+import CommonCrypto
 public extension Data {
     var isNotEmpty: Bool { !isEmpty }
     var md5: String {
@@ -23,9 +23,9 @@ public extension Data {
 
 // MARK: - -- binary
 public extension Data {
-    
+
     /// hex string to data
-    init?(hex string: String) { 
+    init?(hex string: String) {
         guard let chars = string.cString(using: .utf8),
               !chars.isEmpty else { return nil }
         let length = chars.count / 2
@@ -40,7 +40,7 @@ public extension Data {
          }
          self = data
     }
-    
+
     /// var bytes: [UInt8] = [0xDE, 0xAD, 0xBE, 0xEF, 0x42]
     var bytes: [UInt8] {
         return [UInt8](self)

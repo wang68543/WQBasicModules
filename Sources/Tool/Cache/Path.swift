@@ -16,11 +16,11 @@ public struct Path {
     public init?(url: URL) {
         guard url.scheme == "file" else { return nil }
         self.string = url.path
-        //NOTE: URL cannot be a file-reference url, unlike NSURL, so this always works
+        // NOTE: URL cannot be a file-reference url, unlike NSURL, so this always works
     }
     /// The underlying filesystem path
     public let string: String
-    
+
     /// Returns a `URL` representing this file path.
     public var url: URL {
         return URL(fileURLWithPath: string)
@@ -32,35 +32,35 @@ public extension Path {
     var exists: Bool {
         return FileManager.default.fileExists(atPath: string)
     }
-    
+
     /// Returns true if the path represents an actual filesystem entry that is *not* a directory.
     var isFile: Bool {
         var isDir: ObjCBool = true
         return FileManager.default.fileExists(atPath: string, isDirectory: &isDir) && !isDir.boolValue
     }
-    
+
     /// Returns true if the path represents an actual directory.
     var isDirectory: Bool {
         var isDir: ObjCBool = false
         return FileManager.default.fileExists(atPath: string, isDirectory: &isDir) && isDir.boolValue
     }
-    
+
     /// Returns true if the path represents an actual file that is also readable by the current user.
     var isReadable: Bool {
         return FileManager.default.isReadableFile(atPath: string)
     }
-    
+
     /// Returns true if the path represents an actual file that is also writable by the current user.
     var isWritable: Bool {
         return FileManager.default.isWritableFile(atPath: string)
     }
-    
+
     /// Returns true if the path represents an actual file that is also deletable by the current user.
     var isDeletable: Bool {
         // FileManager.isDeletableFile returns true if there is *not* a file there
-        return exists && FileManager.default.isDeletableFile(atPath: string) 
+        return exists && FileManager.default.isDeletableFile(atPath: string)
     }
-    
+
     /// Returns true if the path represents an actual file that is also executable by the current user.
     var isExecutable: Bool {
         if access(string, X_OK) == 0 {
@@ -71,7 +71,7 @@ public extension Path {
             return false
         }
     }
-    
+
     /// Returns `true` if the file is a symbolic-link (symlink).
     var isSymlink: Bool {
         var sbuf = stat()
@@ -116,9 +116,9 @@ extension Path {
     private static func path(for searchPath: FileManager.SearchPathDirectory) -> Path {
         #if os(Linux)
         // the urls(for:in:) function is not implemented on Linux
-        
+
         let foo = { ProcessInfo.processInfo.environment[$0].flatMap(Path.init) ?? $1 }
-        
+
         switch searchPath {
         case .documentDirectory:
             return Path.home/"Documents"
@@ -136,7 +136,7 @@ extension Path {
         return Path(string: pathString)
         #endif
     }
-    
+
     /**
      The root for user documents.
      - Note: There is no standard location for documents on Linux, thus we return `~/Documents`.
@@ -145,7 +145,7 @@ extension Path {
     public static var documents: Path {
         return path(for: .documentDirectory)
     }
-    
+
     /**
      The root for cache files.
      - Note: On Linux this is `XDG_CACHE_HOME`.
@@ -168,7 +168,7 @@ extension Path {
         // Split the two paths into their components.
         let pathComps = (string as NSString).pathComponents
         let baseComps = (base.string as NSString).pathComponents
-        
+
         // It's common for the base to be an ancestor, so try that first.
         if pathComps.starts(with: baseComps) {
             // Special case, which is a plain path without `..` components.  It
@@ -210,7 +210,7 @@ extension Path {
     public func join<S>(_ addendum: S) -> Path where S: StringProtocol {
         return Path(string: join_(prefix: string, appending: addendum))
     }
-    
+
     /**
      Joins a path and a string to produce a new path.
      
@@ -231,20 +231,20 @@ extension Path {
     public static func / <S>(lhs: Path, rhs: S) -> Path where S: StringProtocol {
         return lhs.join(rhs)
     }
-    
+
     @inline(__always)
     private func join_<S>(prefix: String, appending: S) -> String where S: StringProtocol {
         return join_(prefix: prefix, pathComponents: appending.split(separator: "/"))
     }
-    
+
     private func join_<S>(prefix: String, pathComponents: S) -> String where S: Sequence, S.Element: StringProtocol {
         assert(prefix.first == "/")
         //  swiftlint:disable identifier_name
         var rv = prefix
         for component in pathComponents {
-            
+
             assert(!component.contains("/"))
-            
+
             switch component {
             case "..":
                 let start = rv.indices.startIndex
@@ -298,7 +298,7 @@ public extension Path {
             return nil
         }
     }
-    
+
     /**
      Returns the modification-time of the file.
      - Note: If this returns `nil` and the file exists, something is very wrong.
@@ -351,7 +351,7 @@ extension Path: Codable {
             string = (root / value).string
         }
     }
-    
+
     /// - SeeAlso: `CodingUserInfoKey.relativePath`
     /// :nodoc:
     public func encode(to encoder: Encoder) throws {

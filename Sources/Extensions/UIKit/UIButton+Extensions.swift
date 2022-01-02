@@ -13,7 +13,7 @@ public extension UIButton {
        }
     var clickInterval: TimeInterval {
         set {
-            objc_setAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval, newValue, .OBJC_ASSOCIATION_ASSIGN) 
+            objc_setAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval, newValue, .OBJC_ASSOCIATION_ASSIGN)
         }
         get {
             objc_getAssociatedObject(self, ExtensionsAssociatedKeys.clickInterval) as? TimeInterval ?? 0

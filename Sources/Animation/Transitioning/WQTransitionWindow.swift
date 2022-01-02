@@ -11,16 +11,16 @@ import Foundation
 public class WQTransitionWindow: UIWindow {
     /// 记录的属性 用于消失之后恢复
     var previousKeyWindow: UIWindow?
-    
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = UIColor.clear
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     deinit {
         if let preKey = self.previousKeyWindow,
             UIApplication.shared.keyWindow === self {
@@ -38,7 +38,7 @@ public extension WQTransitionWindow {
     func addVisible(root viewController: UIViewController) {
         self.previousKeyWindow = UIApplication.shared.keyWindow
         self.rootViewController = viewController
-        if !self.isKeyWindow { //重复设置root
+        if !self.isKeyWindow { // 重复设置root
           self.makeKeyAndVisible()
         }
     }

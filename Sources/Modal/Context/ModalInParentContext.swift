@@ -7,7 +7,7 @@
 
 import UIKit
 @available(iOS 10.0, *)
-open class ModalInParentContext:  ModalDrivenContext { 
+open class ModalInParentContext: ModalDrivenContext {
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         let viewController = self.viewController(controller)
         guard !viewController.isMovingToParent else { return }
@@ -32,12 +32,12 @@ open class ModalInParentContext:  ModalDrivenContext {
         guard !viewController.isMovingToParent else { return }
         super.interactive(present: controller, statesConfig: states)
         guard let parent = self.config.fromViewController else { return }
- 
+
         UIView.performWithoutAnimation {
             parent.addChild(viewController)
             viewController.view.frame = self.config.showControllerFrame
             parent.view.addSubview(viewController.view)
-            states.states.setup(forState: .willShow) 
+            states.states.setup(forState: .willShow)
         }
         super.interactive(present: controller, statesConfig: states)
         interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
@@ -98,7 +98,7 @@ open class ModalInParentContext:  ModalDrivenContext {
         })
         super.interactive(finish: velocity)
         self.continueAnimation(velocity)
-        
+
     }
     public override func interactive(cancel velocity: CGPoint) {
         interactiveAnimator?.addCompletion({[weak self] position in
@@ -108,7 +108,7 @@ open class ModalInParentContext:  ModalDrivenContext {
                 if let parent = self.config.fromViewController,
                    let controller = self.interactViewController {
                     controller.willMove(toParent: parent)
-                } 
+                }
             } else { // 取消的话 重新移除
                 if let viewController = self.interactViewController {
                     viewController.view.removeFromSuperview()

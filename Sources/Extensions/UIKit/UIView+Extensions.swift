@@ -33,7 +33,7 @@ public extension UIView {
             if self.bounds.size == .zero {
                 self.layoutIfNeeded()
             }
-            
+
             guard self.bounds.size != .zero else {
                 fatalError("设置不规则圆角必须先有尺寸")
             }
@@ -43,15 +43,15 @@ public extension UIView {
             shapeLayer.frame = bounds
             shapeLayer.path = bezierPath.cgPath
             self.layer.mask = shapeLayer
-        } 
+        }
     }
     @available(iOS 11.0, *)
     func makeShapeCorners(_ cornerSize: CGSize, corners: CACornerMask = []) {
         self.layer.maskedCorners = corners
     }
-    
+
     /// 截屏
-    func snapshot(_ size: CGSize = .zero) -> UIImage? { 
+    func snapshot(_ size: CGSize = .zero) -> UIImage? {
         let drawSize = (size == .zero) ? self.bounds.size : size
         // 这里的截屏起始点 是从(0,0)开始的 只绘制bound的区域 其余区域黑屏
         UIGraphicsBeginImageContextWithOptions(drawSize, false, UIScreen.main.scale)
@@ -68,11 +68,11 @@ public extension UIScrollView {
     struct AssociatedKeys {
         static let isSnapping = UnsafeRawPointer(bitPattern: "wq.view.clip.isSnapping".hashValue)!
     }
-    
+
     var isSnapping: Bool {
         return (objc_getAssociatedObject(self, UIScrollView.AssociatedKeys.isSnapping) as? Bool) ?? false
     }
-    
+
     fileprivate func snapshotScroll(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
         let contentSize = self.contentSize
         let viewSize = self.frame.size
@@ -93,7 +93,7 @@ public extension UIScrollView {
             autoreleasepool(invoking: {
                 self.setContentOffset(CGPoint(x: offsetX, y: offsetY), animated: false)
                 let rect = CGRect(x: offsetX, y: offsetY, width: viewSize.width, height: viewSize.height)
-                //将当前View在屏幕中显示的内容画到rect区域
+                // 将当前View在屏幕中显示的内容画到rect区域
                 self.drawHierarchy(in: rect, afterScreenUpdates: true)
                 offsetX += rect.width
                 if offsetX >= contentSize.width && offsetY <= contentSize.height {
@@ -153,7 +153,7 @@ public extension UIScrollView {
     }
 }
 fileprivate extension UITableView {
-    
+
     func snapshotTable(_ drawSize: CGSize, clipPath: CGPath? = nil) -> UIImage? {
         if self.style == .plain {
             let scale = UIScreen.main.scale
@@ -176,11 +176,11 @@ fileprivate extension UITableView {
                 if offsetY > 0 {
                     let visableRect = CGRect(x: 0, y: offsetY, width: tableViewW, height: tableViewH)
                     sectionHeight = suspendedHeaderHeight(for: visableRect)
-                    offsetY -= sectionHeight //如果有头的
+                    offsetY -= sectionHeight // 如果有头的
                 }
                 self.setContentOffset(CGPoint(x: 0, y: offsetY), animated: false)
 //                context.saveGState()
-                //释放绘图对象
+                // 释放绘图对象
                 autoreleasepool(invoking: {
                     let contentH = tableViewH - sectionHeight
                     UIGraphicsBeginImageContextWithOptions(CGSize(width: tableViewW, height: contentH), false, scale)
@@ -188,7 +188,7 @@ fileprivate extension UITableView {
                     self.drawHierarchy(in: rect, afterScreenUpdates: true)
                     let image = UIGraphicsGetImageFromCurrentImageContext()
                    UIGraphicsEndImageContext()
-                    if let img = image {//图片拼接
+                    if let img = image {// 图片拼接
                         img.draw(in: CGRect(x: 0, y: offsetY + sectionHeight, width: tableViewW, height: contentH))
                     }
                     offsetY += tableViewH

@@ -51,7 +51,7 @@ internal struct WQFlexLineSpace {
     let space: CGFloat
     let leading: CGFloat
     let trailing: CGFloat
-    
+
     init(singleLine space: CGFloat) {
         leading = 0
         trailing = 0
@@ -64,7 +64,7 @@ internal struct WQFlexLineSpace {
          isHorizontal: Bool) {
         let lineCount = CGFloat(items.count)
         let totalWidth = items.totalLength(isHorizontal)
-        let minTotalValue = totalWidth + (lineCount - 1) * minItemsSpace 
+        let minTotalValue = totalWidth + (lineCount - 1) * minItemsSpace
         switch justify {
         case .flexStart:
         space = minItemsSpace
@@ -96,7 +96,7 @@ internal struct WQFlexLineSpace {
             } else {
                space = margin
             }
-            
+
         }
     }
     private init (space: CGFloat, leading: CGFloat, trailing: CGFloat) {
@@ -116,7 +116,7 @@ internal struct WQFlexLineAttributes {
     /// 交叉轴方向items的最大边框
     let maxWidth: CGFloat
     let margin: WQFlexLineSpace
-    
+
     init(_ path: WQFlexLinePath,
          items: [WQFlexItemAttributes],
          margin: WQFlexLineSpace,
@@ -151,7 +151,7 @@ extension WQFlexSectionSpace {
 }
 internal struct WQFlexSectionAttributes {
     let section: Int
-    ///包含 header footer insets
+    /// 包含 header footer insets
     var bounds: CGRect = .zero
     /// 不包含 insets 跟header 和footer
     var edge: WQFlexSectionSpace = .zero
@@ -159,7 +159,7 @@ internal struct WQFlexSectionAttributes {
     let headerSize: CGSize
     let footerSize: CGSize
     let lines: [WQFlexLineAttributes]
-    
+
     init(_ section: Int, header: CGSize, footer: CGSize, insets: UIEdgeInsets, lines: [WQFlexLineAttributes]) {
         self.section = section
         self.insets = insets
@@ -167,7 +167,7 @@ internal struct WQFlexSectionAttributes {
         self.headerSize = header
         self.lines = lines
     }
-    
+
     /// 计算egde和bounds
     ///
     /// - Parameters:
@@ -196,7 +196,7 @@ internal struct WQFlexSectionAttributes {
             } else {
                 lineFooter = 0
             }
-        //下面的属性只有 sections == 0 并且长度小于viewLength才生效
+        // 下面的属性只有 sections == 0 并且长度小于viewLength才生效
         case .flexEnd:
             space = lineSpace
             lineFooter = 0
@@ -221,11 +221,11 @@ internal struct WQFlexSectionAttributes {
             } else {
                 space = (viewWidth - linesTotalWidth) / (lineCount - 1)
             }
-        } 
+        }
         edge = WQFlexSectionSpace(lineSpace: floor(space), lineHeader: lineHeader, lineFooter: lineFooter)
         self.config(linesTotalWidth, isHorizonal: isHorizonal)
     }
-    
+
     private mutating func config(_ realWidth: CGFloat, isHorizonal: Bool) {
 //        let lineCount = CGFloat(lines.count)
 //        let realWidth = self.lines.totalWidth() + self.edge.lineSpace * (lineCount - 1) + self.edge.lineFooter + self.edge.lineHeader

@@ -20,23 +20,23 @@ open class WQStarControl: UIControl {
     public var starSize: CGSize  = .zero
     /// polygon counts
     public var counts: Int = 5
-    
-    ///绘制的图形的角的个数
+
+    /// 绘制的图形的角的个数
     public var shapeCoreners: Int = 5 {
         didSet {
             assert(shapeCoreners >= 3, "不支持小于三个角的图形绘制")
         }
     }
-    
+
     /// 使用绘制的星星
     public var selectedColor: UIColor = .red
     public var unSelectedColor: UIColor = .clear
     public var starBorderWidth: CGFloat = 1.0
     public var starBorderColor: UIColor = .red
-    
+
     public var selectedImage: UIImage?
     public var unSelectedImage: UIImage?
-   
+
     /// 每个星星之间的最小间距
     public var minItemSpacing: CGFloat = 5
     public var contentEdgeInsets: UIEdgeInsets = .zero
@@ -44,16 +44,15 @@ open class WQStarControl: UIControl {
     public var drawStarRotate: CGFloat = 0.0
     /// 不亮的星星是否不显示
     public var hideUnHighlited = false
-    ///是否连续产生事件 为false的时候 只有当结束了才会产生事件
+    /// 是否连续产生事件 为false的时候 只有当结束了才会产生事件
     public var isSendActionContinuous: Bool = true
-    
+
     private var rects: [CGRect] = []
     /// 是否是使用图片绘制
     private var isUsingImage: Bool {
         return self.unSelectedImage != nil && self.selectedImage != nil
     }
-    
-    
+
     open override func layoutSubviews() {
         super.layoutSubviews()
         let contentRect = self.frame.inset(by: self.contentEdgeInsets)
@@ -92,9 +91,9 @@ open class WQStarControl: UIControl {
         }
         guard self.starSize.height <= contentRect.height,
             self.starSize.width <= contentRect.width else {
-                debugPrint("星星的尺寸必须小于控件的尺寸");return 
+                debugPrint("星星的尺寸必须小于控件的尺寸");return
         }
-        //更新绘制方式
+        // 更新绘制方式
 //        shouldUpdateDrawMethod()
     }
     override open func draw(_ rect: CGRect) {
@@ -103,7 +102,7 @@ open class WQStarControl: UIControl {
         context.clear(rect)
         context.setFillColor(self.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
         context.fill(rect)
-        
+
         let top = self.contentEdgeInsets.top
         var items: [CGRect] = []
         for idx in 0 ..< counts {
@@ -121,7 +120,7 @@ open class WQStarControl: UIControl {
         return true
     }
     open override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
-        super.continueTracking(touch, with: event) 
+        super.continueTracking(touch, with: event)
         handleTouch(touch)
         return true
     }
@@ -132,7 +131,7 @@ open class WQStarControl: UIControl {
             handleTouch(touch, isEnd: true)
         }
     }
-    
+
     open override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -173,7 +172,7 @@ private extension WQStarControl {
 }
 /// 画单个
 private extension WQStarControl {
-    
+
     func handleTouch(_ touch: UITouch, isEnd: Bool = false) {
         let point = touch.location(in: self)
         self.value = value(for: point)
@@ -197,7 +196,7 @@ private extension WQStarControl {
   }
     //https://medium.com/%E5%BD%BC%E5%BE%97%E6%BD%98%E7%9A%84-swift-ios-app-%E9%96%8B%E7%99%BC%E5%95%8F%E9%A1%8C%E8%A7%A3%E7%AD%94%E9%9B%86/%E5%88%A9%E7%94%A8-cgaffinetransform-%E6%8E%A7%E5%88%B6%E5%85%83%E4%BB%B6%E7%B8%AE%E6%94%BE-%E4%BD%8D%E7%A7%BB-%E6%97%8B%E8%BD%89%E7%9A%84%E4%B8%89%E7%A8%AE%E6%96%B9%E6%B3%95-dca1abbf9590 可参照这个 
     // 算法参照: https://blog.csdn.net/djh123456021/article/details/78306250
-    //swiftlint:disable function_body_length
+    // swiftlint:disable function_body_length
     func drawStar(_ rect: CGRect, progress: CGFloat, context: CGContext) {
         let count = CGFloat(shapeCoreners)
         let degree = 180 / count // 内角和
@@ -209,7 +208,7 @@ private extension WQStarControl {
         let internalRadius = radius * sin(degree * 0.5 * radian) / cos(splitAngle * 0.5 * radian) // 内角半径
         var pts: [CGPoint] = [] // 外角点集合
         var internalPts: [CGPoint] = []
-        for index in 0 ..< shapeCoreners { //计算 内外点
+        for index in 0 ..< shapeCoreners { // 计算 内外点
             let angle1 = (splitAngle * CGFloat(index) + drawStarRotate) * radian
             let pt1 = CGPoint(x: center.x + sin(angle1) * radius, y: center.y - cos(angle1) * radius)
             pts.append(pt1)
@@ -255,14 +254,14 @@ private extension WQStarControl {
         context.drawPath(using: .fill)
         context.restoreGState()
     }
-    
+
     /// 绘制图片
     func drawImage(_ rect: CGRect, progress: CGFloat, context: CGContext) {
         if !self.hideUnHighlited {
            unSelectedImage?.draw(in: rect)
-        } 
+        }
         if progress > 0.0 {
-            if progress < 1.0  {
+            if progress < 1.0 {
                 context.saveGState()
                 context.beginPath()
                 let ctRect = CGRect(origin: rect.origin, size: CGSize(width: rect.width * progress, height: rect.height))
@@ -276,5 +275,5 @@ private extension WQStarControl {
             }
         }
     }
-    
+
 }

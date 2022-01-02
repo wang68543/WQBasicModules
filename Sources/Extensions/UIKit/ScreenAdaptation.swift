@@ -18,7 +18,7 @@ import Foundation
  */
 
 public enum iDevice {
-    
+
     case iPhone4s
     /// 320
     case iPhone5_5s_5c_SE
@@ -82,6 +82,6 @@ public extension iDevice {
             return 414
         case .iPhoneXSMax_11ProMax:
             return 414
-        } 
+        }
     }
 }

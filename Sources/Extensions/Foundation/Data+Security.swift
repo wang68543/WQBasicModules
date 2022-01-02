@@ -15,7 +15,7 @@ public extension Data {
         }
         let values = self.bytes
         let len = values.count
-        //对于块加密算法：输出的大小<= 输入的大小 +  一个块的大小
+        // 对于块加密算法：输出的大小<= 输入的大小 +  一个块的大小
         let bufferSize = len+kCCBlockSizeAES128
         let buffer = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: bufferSize)
         defer {
@@ -35,12 +35,12 @@ public extension Data {
                                   len,
                                   buffer,
                                   bufferSize,
-                                  &bytesNum);
+                                  &bytesNum)
          if cryptStatus == kCCSuccess {
             return Data(bytes: buffer, count: bytesNum)
          }
         throw NSError(domain: "AES CCCrypt", code: kCCParamError, userInfo: nil)
-    } 
+    }
     func decodedAES256(_ key: String, options: CCOptions = CCOptions(kCCOptionPKCS7Padding | kCCOptionECBMode), ivString: String? = nil) throws -> Data {
         guard let keyPtr = key.cString(using: .utf8)  else { // kCCKeySizeAES128 + 1 = keyPtr.count
             throw NSError(domain: "AES CCCrypt", code: kCCInvalidKey, userInfo: nil)
@@ -66,16 +66,16 @@ public extension Data {
                                   len,
                                   buffer,
                                   bufferSize,
-                                  &bytesNum);
+                                  &bytesNum)
          if cryptStatus == kCCSuccess {
             return Data(bytes: buffer, count: bytesNum)
          }
         throw NSError(domain: "AES CCCrypt", code: kCCDecodeError, userInfo: nil)
     }
-    
+
     func encodedDES(_ key: String) throws -> Data {
         guard let iv = key.cString(using: .utf8),
-            let ASCIIKey = key.cString(using: .ascii) else { //key.count == kCCKeySizeDES,
+            let ASCIIKey = key.cString(using: .ascii) else { // key.count == kCCKeySizeDES,
             throw NSError(domain: "DES CCCrypt", code: kCCInvalidKey, userInfo: nil)
         }
         let bytes = self.bytes
@@ -104,7 +104,7 @@ public extension Data {
     }
     func decodedDES(_ key: String) throws -> Data {
         guard let iv = key.cString(using: .utf8),
-            let ASCIIKey = key.cString(using: .ascii) else { //key.count == kCCKeySizeDES,
+            let ASCIIKey = key.cString(using: .ascii) else { // key.count == kCCKeySizeDES,
             throw NSError(domain: "DES CCCrypt", code: kCCInvalidKey, userInfo: nil)
         }
         let bytes = self.bytes
@@ -130,5 +130,5 @@ public extension Data {
         } else {
             throw NSError(domain: "DES CCCrypt", code: kCCDecodeError, userInfo: nil)
         }
-    } 
+    }
 }

@@ -11,7 +11,7 @@ import WQBasicModules
 import WebKit
 
 class TestWebViewController: UIViewController {
-  
+
     let webView = WQWebView()
 //    let webView = UIWebView()
     override func viewDidLoad() {
@@ -49,12 +49,12 @@ extension TestWebViewController: WKNavigationDelegate {
         debugPrint(#function)
         decisionHandler(.allow)
     }
-    
+
     @available(iOS 8.0, *)
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         debugPrint(#function)
     }
- 
+
     @available(iOS 8.0, *)
     func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
         debugPrint(#function)
@@ -64,7 +64,6 @@ extension TestWebViewController: WKNavigationDelegate {
         debugPrint(#function)
     }
 
-    
     /** @abstract Invoked when content starts arriving for the main frame.
      @param webView The web view invoking the delegate method.
      @param navigation The navigation.
@@ -86,18 +85,18 @@ extension TestWebViewController: WKNavigationDelegate {
         completionHandler(.useCredential, nil)
         debugPrint(#function)
     }
- 
+
     @available(iOS 9.0, *)
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         debugPrint(#function)
     }
- 
+
     @available(iOS 14.0, *)
     func webView(_ webView: WKWebView, authenticationChallenge challenge: URLAuthenticationChallenge, shouldAllowDeprecatedTLS decisionHandler: @escaping (Bool) -> Void) {
         decisionHandler(true)
         debugPrint(#function)
     }
-    
+
 }
 extension TestWebViewController: WKUIDelegate {
     @available(iOS 8.0, *)
@@ -123,7 +122,7 @@ extension TestWebViewController: WKUIDelegate {
     func webViewDidClose(_ webView: WKWebView) {
         debugPrint(#function)
     }
- 
+
     @available(iOS 8.0, *)
     func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
         completionHandler()
@@ -135,7 +134,6 @@ extension TestWebViewController: WKUIDelegate {
         completionHandler(true)
     }
 
-     
     @available(iOS 8.0, *)
     func webView(_ webView: WKWebView,
                  runJavaScriptTextInputPanelWithPrompt prompt: String,
@@ -154,7 +152,7 @@ extension TestWebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, previewingViewControllerForElement elementInfo: WKPreviewElementInfo, defaultActions previewActions: [WKPreviewActionItem]) -> UIViewController? {
         debugPrint(#function)
         return self
-        
+
     }
 //    @available(iOS, introduced: 10.0, deprecated: 13.0)
     func webView(_ webView: WKWebView, commitPreviewingViewController previewingViewController: UIViewController) {
@@ -169,7 +167,7 @@ extension TestWebViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, contextMenuWillPresentForElement elementInfo: WKContextMenuElementInfo) {
         debugPrint(#function)
     }
- 
+
     @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuForElement elementInfo: WKContextMenuElementInfo, willCommitWithAnimator animator: UIContextMenuInteractionCommitAnimating) {
         debugPrint(#function)

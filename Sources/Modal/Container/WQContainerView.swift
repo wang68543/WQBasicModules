@@ -40,9 +40,9 @@ public class WQContainerView: UIView {
         let right = view.rightAnchor.constraint(equalTo: self.rightAnchor)
         let top = view.topAnchor.constraint(equalTo: self.topAnchor)
         let bottom = view.bottomAnchor.constraint(equalTo: self.bottomAnchor)
-        NSLayoutConstraint.activate([left,top,right,bottom])
+        NSLayoutConstraint.activate([left, top, right, bottom])
         self.setNeedsUpdateConstraints()
-    } 
+    }
     public func sizeThatFits(_ view: UIView? = nil) -> CGSize {
         if view == nil && !self.bounds.isEmpty { return self.bounds.size }
         guard let subView = view ?? self.subviews.first else { return .zero }
@@ -61,14 +61,14 @@ public extension WQContainerView {
             return
         }
         reponsd.viewDidAppear(animated)
-        
+
     }
     func viewWillDisappear(_ animated: Bool) {
         guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {
             return
         }
         reponsd.viewWillDisappear(animated)
-        
+
     }
     func viewDidDisappear(_ animated: Bool) {
         guard let reponsd = self.currentView as? ResponseViewRelatatedEvent else {

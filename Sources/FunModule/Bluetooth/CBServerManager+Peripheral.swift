@@ -9,18 +9,17 @@ import Foundation
 import CoreBluetooth
 // scan
 public extension CBServerManager {
-    
-    
+
     func connect(_ peripheral: CBPeripheral, options: [String: Any]? = nil) {
         // TODO: 系统默认没有连接超时 如果自定义实现连接超时 需要手动调用cancelPeripheralConnection
         switch peripheral.state {
         case .connected, .connecting:
             self.peripheral(peripheral, stateDidChange: peripheral.state)
-            //TODO: 需设置代理
+            // TODO: 需设置代理
         default:
             guard self.centralMgr.state == .poweredOff else {
                 self.peripheral(peripheral, stateDidChange: .disconnected)
-                //连接失败
+                // 连接失败
                 return
             }
             objc_sync_enter(self)
@@ -29,7 +28,7 @@ public extension CBServerManager {
             objc_sync_exit(self)
         }
     }
-    
+
     /// 重连设备
     /// - Parameters:
     ///   - peripheral: 设备的唯一标识
@@ -51,11 +50,11 @@ public extension CBServerManager {
         if let dev = device {
             self.connect(dev, options: nil)
         } else {
-            //扫描
+            // 扫描
             discovery(nil, options: nil, peripheral: peripheral)
         }
     }
-    
+
     /// 扫描设备
     /// - Parameters:
     ///   - services: 设备的服务
@@ -80,10 +79,10 @@ public extension CBServerManager {
             NotificationCenter.default.post(name: CBServerManager.peripheralStateDidChange, object: peripheral, userInfo: nil)
         }
     }
-    
+
 }
 extension CBServerManager: CBCentralManagerDelegate {
- 
+
     public func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
@@ -93,7 +92,7 @@ extension CBServerManager: CBCentralManagerDelegate {
             }
         case .poweredOff:
             // TODO: 测试流程
-            
+
             // 查看设备的断开
         break
         case .unauthorized:
@@ -105,11 +104,10 @@ extension CBServerManager: CBCentralManagerDelegate {
         }
     }
 
-    
-    public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String : Any]) {
-        
-    } 
-    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+    public func centralManager(_ central: CBCentralManager, willRestoreState dict: [String: Any]) {
+
+    }
+    public func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String: Any], rssi RSSI: NSNumber) {
         if let identifier = self.waitToConnectPeripheral,
            let uuid = UUID(uuidString: identifier) {
             if peripheral.identifier == uuid {
@@ -141,5 +139,5 @@ extension CBServerManager: CBCentralManagerDelegate {
 }
 // connect
 public extension CBServerManager {
-    
+
 }

@@ -12,11 +12,11 @@ extension PageViewController: UIScrollViewDelegate {
         guard scrollView === controllerScrollView else { return }
         let offsetX = scrollView.contentOffset.x
         let viewW = scrollView.frame.width
-      
+
         if offsetX >= 0.0 && offsetX <= CGFloat(controllerArray.count - 1) * viewW {
             if !didUserSelectedIndexToScroll {
                 if didScrollAlready {
-                    var newScrollDirection : PageScrollDirection = .unknown
+                    var newScrollDirection: PageScrollDirection = .unknown
                     let startDeltX = CGFloat(startingPageForScroll) * viewW - offsetX
                     if startDeltX > 0 {
                         newScrollDirection = .right
@@ -31,16 +31,16 @@ extension PageViewController: UIScrollViewDelegate {
                     }
                     lastScrollDirection = newScrollDirection
                 }
-                
+
                 if !didScrollAlready {
-                    if (lastControllerScrollViewContentOffset > offsetX) {
+                    if lastControllerScrollViewContentOffset > offsetX {
                         if currentPageIndex != controllerArray.count - 1 {
                             // Add page to the left of current page
                             let index = currentPageIndex - 1
                             addPageAtIndex(index)
                             lastScrollDirection = .right
                         }
-                    } else if (lastControllerScrollViewContentOffset < offsetX) {
+                    } else if lastControllerScrollViewContentOffset < offsetX {
                         if currentPageIndex != 0 {
                             // Add page to the right of current page
                             let index = currentPageIndex + 1
@@ -48,28 +48,27 @@ extension PageViewController: UIScrollViewDelegate {
                             lastScrollDirection = .left
                         }
                     }
-                    
+
                     didScrollAlready = true
                 }
-                
+
                 lastControllerScrollViewContentOffset = offsetX
             }
-            
+
 //                        var ratio : CGFloat = 1.0
-            
-            
+
             // Calculate ratio between scroll views
 //                        ratio = (menuScrollView.contentSize.width - self.view.frame.width) / (controllerScrollView.contentSize.width - self.view.frame.width)
-            
+
 //                        if menuScrollView.contentSize.width > self.view.frame.width {
 //                            var offset : CGPoint = menuScrollView.contentOffset
 //                            offset.x = controllerScrollView.contentOffset.x * ratio
 //                            menuScrollView.setContentOffset(offset, animated: false)
 //                        }
-            
+
             // Calculate current page
             let page = Int((offsetX + 0.5 * viewW) / viewW)
-            
+
             // Update page if changed
             if page != currentPageIndex {
                 lastPageIndex = currentPageIndex
@@ -113,7 +112,7 @@ extension PageViewController: UIScrollViewDelegate {
         didScrollAlready = false
         startingPageForScroll = currentPageIndex
     }
-    
+
 //    @objc func scrollViewDidEndTapScrollingAnimation() {
 //        // Call didMoveToPage delegate function
 //        let currentController = controllerArray[currentPageIndex]

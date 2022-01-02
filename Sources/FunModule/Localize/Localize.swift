@@ -23,19 +23,19 @@ open class Localize {
     }
     /// 当多个区域使用类似的语言的时候 若当前App 需要使用的语言  App bundle 中午对应的 就找相似的 (例如 如果当前App 支持中文简体 但是App设置里面是繁体 当前属性为true 就会返回简体 否则返回默认)
     public var isFuzzyMatchLanguage: Bool = true
-    
+
     init() {
         UserDefaults.standard.register(defaults: [Localize.trackSystemLanguageKey: true])
         setCurrentBundle()
-        
+
     }
     /// 注册bundle
     open func register(_ bundleCls: AnyClass = LocalizeBundle.self) {
         object_setClass(Bundle.main, bundleCls)
     }
-    
+
     public private(set) var currentBundle: Bundle?
-   
+
     /// App 当前需要使用的语言
     public var currentLanguage: String {
         let availables = availableLanguages(true)
@@ -45,7 +45,7 @@ open class Localize {
             return availables.first ?? "en"
         }
         guard !availables.contains(language) else {
-            return language //可用的语言中包含当前语言
+            return language // 可用的语言中包含当前语言
         }
         if self.isFuzzyMatchLanguage { // 模糊查找
             if let index = availables.firstIndex(where: {$0.hasPrefix(language)}) {
@@ -68,7 +68,7 @@ open class Localize {
             UserDefaults.standard.string(forKey: Localize.userLanguageKey)
         }
     }
-    
+
     /// 缺省语言 App内没有适配对应的语言的时候 取用
     public var defaultLanguage: String? {
         set {
@@ -84,14 +84,14 @@ open class Localize {
     public var systemLanguage: String? {
         return Bundle.main.preferredLocalizations.first
     }
-   
+
     private func setCurrentBundle() {
-        guard let path = Bundle.main.path(forResource: currentLanguage, ofType: "lproj") else{
+        guard let path = Bundle.main.path(forResource: currentLanguage, ofType: "lproj") else {
             return
         }
         currentBundle = Bundle(path: path)
     }
-    
+
     /**
      List available languages
      - Returns: Array of available languages.
@@ -99,14 +99,14 @@ open class Localize {
     open func availableLanguages(_ excludeBase: Bool = false) -> [String] {
         var availableLanguages = Bundle.main.localizations
         // If excludeBase = true, don't include "Base" in available languages
-        if let indexOfBase = availableLanguages.firstIndex(of: "Base") , excludeBase == true {
+        if let indexOfBase = availableLanguages.firstIndex(of: "Base"), excludeBase == true {
             availableLanguages.remove(at: indexOfBase)
         }
         return availableLanguages
     }
     /// 语言在不同语言下显示的名字
     open func displayNameForLanguage(_ language: String) -> String {
-        let locale : NSLocale = NSLocale(localeIdentifier: currentLanguage)
+        let locale: NSLocale = NSLocale(localeIdentifier: currentLanguage)
         if let displayName = locale.displayName(forKey: NSLocale.Key.identifier, value: language) {
             return displayName
         }
@@ -114,7 +114,7 @@ open class Localize {
     }
 }
 public extension Localize {
-    
+
     /// 查询当前是否是某个语言
     /// - Parameters:
     ///   - lan: 语言

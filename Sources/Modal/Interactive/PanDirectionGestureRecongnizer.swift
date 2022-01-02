@@ -9,7 +9,7 @@ import UIKit
 
 open class PanDirectionGestureRecongnizer: UIPanGestureRecognizer {
     var lockDirection: PanDirection!
-    
+
     public var progress: CGFloat {
         let width = translationLength
         guard let gestureView = self.view,

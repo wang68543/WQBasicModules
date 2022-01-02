@@ -8,7 +8,7 @@
 import Foundation
 public extension Array {
     var isNotEmpty: Bool { !isEmpty }
-    
+
     mutating func sort<T: Comparable>(
       by keyPath: KeyPath<Element, T>,
       criteria: (T, T) -> Bool = { $0 < $1 }) {

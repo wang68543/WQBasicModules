@@ -8,52 +8,52 @@
 import UIKit
 
 open class WQAutoIncreaseTextView: WQTextView {
-    
+
     open var maxLimit = CGFloat.nan
     open var minLimit = CGFloat.nan
-    
+
     /// 是否支持自增长
     open var isIncreaseHeight: Bool = false
-    
+
     open var preferredValue = CGFloat.nan {
         didSet {
             cacheValue = preferredValue
         }
     }
     public private(set) var cacheValue: CGFloat = CGFloat.nan
-    
+
     public override func commonInit() {
         super.commonInit()
         self.isScrollEnabled = false
     }
-    
+
     public override func textViewTextDidChange(_ note: Notification) {
         super.textViewTextDidChange(note)
         let size = self.sizeThatFits(CGSize(width: self.maxContentWidth, height: CGFloat.greatestFiniteMagnitude))
         let height = fixTextHeight(size.height)
         guard height != cacheValue else { return }
         cacheValue = height
-        
+
         scrollEnabled(height)
-        
+
         NotificationCenter.default.post(name: WQAutoIncreaseTextView.heightDidChangeNotification, object: self)
     }
-    
+
     override open var intrinsicContentSize: CGSize {
         if cacheValue.isNaN {
             return .zero
         } else {
             return CGSize(width: self.frame.width, height: cacheValue)
-        } 
+        }
     }
-    
+
     override public func layoutSubviews() {
         super.layoutSubviews()
         if self.preferredValue.isNaN {
             self.preferredValue = self.bounds.height
         }
     }
-    
+
 }
 
 public extension WQAutoIncreaseTextView {
@@ -64,7 +64,7 @@ private extension WQAutoIncreaseTextView {
     var maxContentWidth: CGFloat {
         return self.frame.width - self.contentInset.left - self.contentInset.right
     }
-    
+
     @inline(__always)
     func fixTextHeight(_ height: CGFloat) -> CGFloat {
         var value = height
@@ -93,9 +93,9 @@ private extension WQAutoIncreaseTextView {
             }
         }
     }
-    
+
     func scrollBottom() {
-        UIView.performWithoutAnimation { 
+        UIView.performWithoutAnimation {
             self.contentOffset = CGPoint(x: self.contentOffset.x, y: self.contentSize.height - self.maxLimit)
         }
     }

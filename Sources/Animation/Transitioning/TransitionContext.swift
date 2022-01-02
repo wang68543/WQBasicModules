@@ -15,7 +15,7 @@ public enum DrivenDirection {
 }
 
 public protocol TransitionContext: UIViewControllerInteractiveTransitioning {
- 
+
     var completionWidth: CGFloat { get set }
     var panGesture: UIPanGestureRecognizer { get set }
     var isInteractive: Bool { get set }
@@ -37,11 +37,11 @@ public extension TransitionContext {
         }
         return panGR.isSameDirection(self.direction)
     }
-    
+
     func progress(for translate: CGPoint) -> CGFloat {
         var percentage: CGFloat
         switch self.direction {
-        case .down: //向下为正
+        case .down: // 向下为正
             if translate.y <= 0 {
                 percentage = 0.0
             } else {
@@ -68,7 +68,7 @@ public extension TransitionContext {
         }
         return percentage
     }
-    
+
     func shouldCompletionInteraction(_ velocity: CGPoint, translate: CGPoint ) -> Bool {
         var isFinished: Bool = false
         let progress = self.progress(for: translate)

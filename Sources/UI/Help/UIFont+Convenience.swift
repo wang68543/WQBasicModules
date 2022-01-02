@@ -25,5 +25,5 @@ public extension UIFont {
     }
     class func semiboldPingFangSC(ofSize fontSize: CGFloat) -> UIFont? {
         return UIFont(name: "PingFangSC-Semibold", size: fontSize)
-    } 
+    }
 }

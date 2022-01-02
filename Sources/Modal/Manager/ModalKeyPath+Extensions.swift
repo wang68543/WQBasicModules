@@ -29,17 +29,17 @@ public extension ModalMapItems {
             self.append(item)
         }
     }
-    
+
     mutating func addState(_ target: AnyObject, _ value: ModalKeyPath) {
         self.addState(target, [value])
     }
-    
+
     mutating func merge(_ refrence: ModalMapItems) {
         for value in refrence {
             self.addState(value.target, value.refrences)
         }
     }
-    
+
     func setup(for state: ModalState) {
         self.forEach { value in
             value.setup(for: state)
@@ -48,7 +48,7 @@ public extension ModalMapItems {
 }
 
 extension Dictionary where Key == ModalState, Value == [ModalKeyPath] {
-    
+
     mutating func combine(_ values: [ModalState: ModalKeyPath]) {
         for state in ModalState.allCases {
             var value = self[state] ?? []

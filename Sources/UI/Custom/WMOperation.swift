@@ -12,7 +12,7 @@ open class WMOperation: Operation {
     open override var isAsynchronous: Bool {
         return true
     }
-    
+
     private var _finshed: Bool = false
     open override var isFinished: Bool {
         set {
@@ -45,9 +45,9 @@ open class WMOperation: Operation {
         super.cancel()
         self.complete()
     }
-    open func complete(){
+    open func complete() {
         self.isExecuting = false
         self.isFinished = true
     }
-    
+
 }

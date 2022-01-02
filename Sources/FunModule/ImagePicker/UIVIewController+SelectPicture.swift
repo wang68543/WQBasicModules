@@ -22,10 +22,10 @@ public extension UIViewController {
     }
     static let imagePickerDidCancelCode: Int = -1000
     static let imagePickerAuthorizationDeniedCode: Int = -2000
-     
+
     typealias PickerResult = Result<[AnyHashable: Any], Error>
     typealias PickerCompletion = ((PickerResult) -> Void)
-    
+
     /// 申请权限
     private func requestImagePickerAuthorization(_ completion: @escaping ((PHAuthorizationStatus) -> Void)) {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -47,8 +47,8 @@ public extension UIViewController {
             completion(status)
         }
     }
-    
-    func showSheetSelectImage(_ config: ((UIImagePickerController)->Void)? = nil, completion: @escaping PickerCompletion) {
+
+    func showSheetSelectImage(_ config: ((UIImagePickerController) -> Void)? = nil, completion: @escaping PickerCompletion) {
          self.requestImagePickerAuthorization { [weak self] status  in
             guard let `self` = self else { return }
             if status.isAvailable {
@@ -59,13 +59,13 @@ public extension UIViewController {
             }
         }
     }
-    
-    private func presentImageSelector(config: ((UIImagePickerController)->Void)?, completion: @escaping PickerCompletion) {
+
+    private func presentImageSelector(config: ((UIImagePickerController) -> Void)?, completion: @escaping PickerCompletion) {
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let action1 = UIAlertAction(title: "相机", style: .default) { action in
+        let action1 = UIAlertAction(title: "相机", style: .default) { _ in
             self.showImagePicker(.camera, config: config, completion: completion)
         }
-        let action2 = UIAlertAction(title: "相册", style: .default) { action in
+        let action2 = UIAlertAction(title: "相册", style: .default) { _ in
             self.showImagePicker(.photoLibrary, config: config, completion: completion)
         }
         let action3 = UIAlertAction(title: "取消", style: .cancel, handler: nil)
@@ -74,8 +74,8 @@ public extension UIViewController {
         actionSheet.addAction(action3)
         self.present(actionSheet, animated: true, completion: nil)
     }
-    
-    func showImagePicker(_ type: UIImagePickerController.SourceType, config: ((UIImagePickerController)->Void)? = nil, completion: @escaping PickerCompletion) {
+
+    func showImagePicker(_ type: UIImagePickerController.SourceType, config: ((UIImagePickerController) -> Void)? = nil, completion: @escaping PickerCompletion) {
         guard UIImagePickerController.isSourceTypeAvailable(type) else {
             let fail = PickerResult.failure(NSError(domain: "selectImage", code: -2000, userInfo: ["type": type, NSLocalizedDescriptionKey: "当前设备不支持此功能"]))
             completion(fail)
@@ -87,7 +87,7 @@ public extension UIViewController {
                 let imagePicker = UIImagePickerController()
                 imagePicker.sourceType = type
                 config?(imagePicker)
-                imagePicker.delegate = self 
+                imagePicker.delegate = self
                 self.present(imagePicker, animated: true, completion: nil)
                 objc_setAssociatedObject(self, AssociatedKeys.imageInfoKey, completion, .OBJC_ASSOCIATION_COPY_NONATOMIC)
             } else {
@@ -96,7 +96,7 @@ public extension UIViewController {
             }
         }
     }
-    
+
 }
 extension UIViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -106,18 +106,18 @@ extension UIViewController: UIImagePickerControllerDelegate, UINavigationControl
             objc_setAssociatedObject(self, AssociatedKeys.imageInfoKey, nil, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true, completion: nil)
         if let completion = objc_getAssociatedObject(self, AssociatedKeys.imageInfoKey) as? PickerCompletion {
             completion(PickerResult.success(info))
             objc_setAssociatedObject(self, AssociatedKeys.imageInfoKey, nil, .OBJC_ASSOCIATION_COPY_NONATOMIC)
         }
     }
-    
+
     public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
           if #available(iOS 11.0, *),
               let cls = NSClassFromString("PUPhotoPickerHostViewController"),
-              viewController.isKind(of: cls){
+              viewController.isKind(of: cls) {
               for subView in viewController.view.subviews {
                   if subView.frame.width < 42 {
                       viewController.view.sendSubviewToBack(subView)

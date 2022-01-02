@@ -8,25 +8,24 @@
 import Foundation
 @available(iOS 10.0, *)
 public class ModalDefaultAnimation: ModalAnimation {
- 
-    
+
     public var animationEnable: Bool = true
 
     /// .zero 取context 里面默认的
     public var duration: TimeInterval = .zero
-    
+
     public var isInteractive: Bool = false
-    
+
     /// 这里只会调过来 两种ModalState
     public func preprocessor(_ state: ModalState, layoutController: WQLayoutController, states: StyleConfig, completion: ModalDefaultAnimation.Completion?) {
-        let time = self.duration 
+        let time = self.duration
         func layoutIfNeeded() {
             layoutController.container.layoutIfNeeded()
-            layoutController.view.layoutIfNeeded() 
+            layoutController.view.layoutIfNeeded()
             layoutController.view.updateConstraintsIfNeeded()
             layoutController.container.updateConstraintsIfNeeded()
         }
-        //无动画状态更新
+        // 无动画状态更新
         func prepareStatesWithoutAnimation(_ modalState: ModalState) {
             let areAnimationsEnabled =  UIView.areAnimationsEnabled
             UIView.setAnimationsEnabled(false)
@@ -39,17 +38,17 @@ public class ModalDefaultAnimation: ModalAnimation {
             layoutIfNeeded()
             UIView.setAnimationsEnabled(areAnimationsEnabled)
         }
-        //以默认的动画更新
+        // 以默认的动画更新
         func updateWithDefaultAnimation(_ modalState: ModalState) {
             UIView.animate(withDuration: time, delay: 0, options: [.beginFromCurrentState, .layoutSubviews, .curveEaseOut]) {
                 states.states.setup(forState: modalState)
                 layoutIfNeeded()
-            } completion: { flag in
+            } completion: { _ in
                 // 移除动画的View
                 UIView.performWithoutAnimation {
                     if let preState = modalState.preNode,
                        let views = states.snapShotAttachAnimatorViews[preState] {
-                        views.forEach { view, subViews in
+                        views.forEach { _, subViews in
                             subViews.forEach { $0.removeFromSuperview() }
                         }
                     }
@@ -57,9 +56,9 @@ public class ModalDefaultAnimation: ModalAnimation {
                 completion?()
             }
         }
-        
+
         if state == .show {
-            if !self.animationEnable { //不动画
+            if !self.animationEnable { // 不动画
                 UIView.performWithoutAnimation {
                     states.states.setup(forState: .willShow)
                     if states.states.has(key: .didShow) {
@@ -90,7 +89,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                                     layoutIfNeeded()
                                 }
                             }
-                        } completion: { flag in
+                        } completion: { _ in
                             completion?()
                         }
                     } else {
@@ -98,7 +97,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                     }
                 }
             }
-        } else {//隐藏
+        } else {// 隐藏
             if !self.animationEnable {
                 UIView.performWithoutAnimation {
                     states.states.setup(forState: .hide)
@@ -123,7 +122,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                                     layoutIfNeeded()
                                 }
                             }
-                        } completion: { flag in
+                        } completion: { _ in
                             completion?()
                         }
                     } else {
@@ -131,8 +130,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                     }
                 }
             }
-            
+
         }
     }
 }
-

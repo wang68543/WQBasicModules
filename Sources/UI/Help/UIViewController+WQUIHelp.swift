@@ -30,7 +30,7 @@ extension UIViewController {
     var isViewVisible: Bool {
         return self.isViewLoaded && !self.view.isHidden && self.view.alpha > 0.01 && self.view.window != nil
     }
-    
+
     @discardableResult
     public func enableKeyboardManager(_ enable: Bool) -> WQKeyboardManager? {
         if enable {
@@ -47,7 +47,7 @@ extension UIViewController {
         }
         return self.keyboardManager
     }
-    
+
     func topVisible() -> UIViewController? {
         if let presented = self.presentedViewController,
         presented.isViewVisible {
@@ -63,7 +63,7 @@ extension UIViewController {
         }
         return self.isViewVisible ? self : nil
     }
-    
+
     func topNavigationController() -> UINavigationController? {
         if let presented = self.presentedViewController,
         presented.isViewVisible {
@@ -79,5 +79,5 @@ extension UIViewController {
         }
         return nil
     }
-    
+
 }

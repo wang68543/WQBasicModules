@@ -36,14 +36,14 @@ public final class WQKeyboardManager: NSObject {
     private var _keyboardShowing: Bool = false
     private var _kbShowNotification: Notification?
     private var _kbFrame: CGRect = .zero
-    private weak var textFieldDelegate: UITextFieldDelegate? //用于拦截当前响应者的代理 处理下一个
+    private weak var textFieldDelegate: UITextFieldDelegate? // 用于拦截当前响应者的代理 处理下一个
     private lazy var safeAreaInsets: UIEdgeInsets = { // 保存初始的safeAreaInsets
         if #available(iOS 11.0, *) { return view.safeAreaInsets } else { return .zero }
     }()
-    
+
     public init(_ view: UIView) {
         self.view = view
-        super.init() 
+        super.init()
         self.registerAllNotifications()
     }
     deinit {
@@ -74,10 +74,10 @@ public extension WQKeyboardManager {
     }
     func canGoNext() -> Bool {
         guard let index = self.textFieldViews.firstIndex(of: _textFieldView) else { return false }
-        if index == self.textFieldViews.count - 1 { return false } //最后一个
+        if index == self.textFieldViews.count - 1 { return false } // 最后一个
         return true
     }
-    
+
     /// 移动到下一个输入框
     ///
     /// - Returns: 是否跳转成功
@@ -119,13 +119,13 @@ private extension WQKeyboardManager {
         if let textView = view as? UITextView {
             canBecome = textView.isEditable
         } else if let textField = view as? UITextField {
-            //canBecomeFirstResponder 会调用代理textFieldShouldBeginEditing
+            // canBecomeFirstResponder 会调用代理textFieldShouldBeginEditing
             canBecome = textField.isEnabled
         }
         canBecome = canBecome && !view.isHidden && view.alpha > 0.01 && view.isUserInteractionEnabled
         if canBecome {
             var superView = view.superview
-            //主要解决tableView的复用问题
+            // 主要解决tableView的复用问题
             while let faterView = superView,
                 faterView != self.view, canBecome {
                     canBecome = !faterView.isHidden && faterView.alpha > 0.01 && faterView.isUserInteractionEnabled
@@ -164,7 +164,7 @@ private extension WQKeyboardManager {
         center.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         center.addObserver(self, selector: #selector(keyboardDidHide(_:)), name: UIResponder.keyboardDidHideNotification, object: nil)
     }
-    
+
     func registertextFieldViewNotification() {
         let center = NotificationCenter.default
         center.addObserver(self,
@@ -184,19 +184,19 @@ private extension WQKeyboardManager {
                            name: UITextView.textDidEndEditingNotification,
                            object: nil)
     }
-    
+
     func unregisterAllNotification() {
         let center = NotificationCenter.default
         center.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardDidShowNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         center.removeObserver(self, name: UIResponder.keyboardDidHideNotification, object: nil)
-        
+
         center.removeObserver(self, name: UITextField.textDidBeginEditingNotification, object: nil)
         center.removeObserver(self, name: UITextField.textDidEndEditingNotification, object: nil)
         center.removeObserver(self, name: UITextView.textDidBeginEditingNotification, object: nil)
         center.removeObserver(self, name: UITextView.textDidEndEditingNotification, object: nil)
-        
+
         center.removeObserver(self, name: UIApplication.willChangeStatusBarOrientationNotification, object: nil)
     }
 }
@@ -218,7 +218,7 @@ private extension WQKeyboardManager {
             _textFieldView = nil
             return
         }
-        if self.textFieldViews.firstIndex(of: inputView) == nil { //刷新新增的textFiled
+        if self.textFieldViews.firstIndex(of: inputView) == nil { // 刷新新增的textFiled
             self.reloadTextFieldViews()
         }
         guard textFieldViews.contains(where: { $0 == inputView }) else { return }
@@ -231,7 +231,7 @@ private extension WQKeyboardManager {
     }
     func textFieldViewDidEndEditing(_ note: Notification) {
         if let textField = _textFieldView as? UITextField {
-            textField.delegate = textFieldDelegate //还原
+            textField.delegate = textFieldDelegate // 还原
         }
         _textFieldView = nil
         textFieldDelegate = nil
@@ -259,8 +259,8 @@ private extension WQKeyboardManager {
     }
     func keyboardDidShow(_ note: Notification) {
         guard self.isEnabled else { return }
-        //If _textFieldView viewController is presented as formSheet,
-        //then adjustPosition again because iOS internally update formSheet frame on keyboardShown.
+        // If _textFieldView viewController is presented as formSheet,
+        // then adjustPosition again because iOS internally update formSheet frame on keyboardShown.
         if _keyboardShowing == true,
             _textFieldView != nil,
             let controller = self.view.viewController,
@@ -290,7 +290,7 @@ extension WQKeyboardManager {
     var keyWindow: UIWindow? {
         return self.view.window ?? UIApplication.shared.keyWindow
     }
-     //swiftlint:disable function_body_length
+     // swiftlint:disable function_body_length
     func optimizedAdjustPosition() {
         guard let inputView = _textFieldView,
             let superView = inputView.superview,
@@ -314,7 +314,7 @@ extension WQKeyboardManager {
             let minOffsetY = -self.safeAreaInsets.top
             var poistion = scrollView.layer.position
             var offset = scrollView.contentOffset
-            //notaTODO: view移动遵循原则: 上移底部边界不能大于键盘顶部边界 下移不能低于原始的位置
+            // notaTODO: view移动遵循原则: 上移底部边界不能大于键盘顶部边界 下移不能低于原始的位置
             if move < 0 { // 需要向上移
                 // 当上移的时候
                 let moveViewFrameInWindow = self.view.superview?.convert(self.view.frame, to: keyWindow) ?? CGRect.zero
@@ -369,7 +369,7 @@ extension WQKeyboardManager: UITextFieldDelegate {
         if let shouldBegin = textFieldDelegate?.textFieldShouldBeginEditing?(textField) {
             return shouldBegin
         } else {
-            //canBecomeFirstResponder 会调用textFieldShouldBeginEditing 会造成死循环
+            // canBecomeFirstResponder 会调用textFieldShouldBeginEditing 会造成死循环
             return textField.alpha > 0.01 && !textField.isHidden &&
                 textField.isUserInteractionEnabled && textField.isEnabled
         }
@@ -395,7 +395,7 @@ extension WQKeyboardManager: UITextFieldDelegate {
     }
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let shouldReturn = textFieldDelegate?.textFieldShouldReturn?(textField) {
-            if !shouldReturn { //不能换行
+            if !shouldReturn { // 不能换行
                return goNext()
             }
             return shouldReturn
@@ -441,7 +441,7 @@ extension Array where Element: TextFieldView {
         return self.sorted(by: { input0, input1 in
             guard  let frame0 = input0.superview?.convert(input0.frame, to: nil),
                 let frame1 = input1.superview?.convert(input1.frame, to: nil) else {
-                    return true //转换为window坐标系
+                    return true // 转换为window坐标系
             }
             return isVertical ? frame0.minY < frame1.minY : frame0.minX < frame1.minX
         })

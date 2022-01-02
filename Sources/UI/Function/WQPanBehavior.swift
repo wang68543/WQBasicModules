@@ -74,13 +74,13 @@ public extension WQPanState {
         return value
     }
 }
-//protocol WQPanViewable {
+// protocol WQPanViewable {
 //    var animator: UIDynamicAnimator { get }
 //    func panViewDidScroll(_ panView: UIScrollView)
 //    func panViewWillBeginDragging(_ panView: UIScrollView)
 //    func panViewWillEndDragging(_ panView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: CGPoint)
-//}
-//extension WQPanViewable {
+// }
+// extension WQPanViewable {
 //    func panViewDidScroll(_ panView: UIView) {
 //        
 //    }
@@ -93,13 +93,13 @@ public extension WQPanState {
 //        panBehavior.velocity = velocity
 //        self.animator.addBehavior(panBehavior)
 //    }
-//}
+// }
 public class WQPanBehavior: UIDynamicBehavior {
-    
+
     public let item: UIDynamicItem
     public let attachmentBehavior: UIAttachmentBehavior
     public let itemBehavior: UIDynamicItemBehavior
-    
+
     public var targetPoint: CGPoint = .zero {
         didSet {
             self.attachmentBehavior.anchorPoint = targetPoint
@@ -110,10 +110,10 @@ public class WQPanBehavior: UIDynamicBehavior {
             let currentVelocity = self.itemBehavior.linearVelocity(for: self.item)
             // 与当前速度的差速
             let velocityDelta = CGPoint(x: velocity.x - currentVelocity.x, y: velocity.y - currentVelocity.y)
-            self.itemBehavior.addLinearVelocity(velocityDelta, for: self.item) //保持移动速度跟手势放开的速度一样
+            self.itemBehavior.addLinearVelocity(velocityDelta, for: self.item) // 保持移动速度跟手势放开的速度一样
         }
     }
-    
+
     public init(with item: UIDynamicItem) {
         self.item = item
         /// 弹簧动画
@@ -121,17 +121,17 @@ public class WQPanBehavior: UIDynamicBehavior {
         attachmentBehavior.frequency = 3.5
         attachmentBehavior.damping = 0.4
         attachmentBehavior.length = 0
-        
-        //阻力动画
+
+        // 阻力动画
         itemBehavior = UIDynamicItemBehavior(items: [item])
         itemBehavior.density = 100
         itemBehavior.resistance = 10
         super.init()
-        
+
         self.addChildBehavior(attachmentBehavior)
         self.addChildBehavior(itemBehavior)
     }
-     
+
     /*- (void)animatePaneWithInitialVelocity:(CGPoint)initialVelocity
     {
     if (!self.paneBehavior) {

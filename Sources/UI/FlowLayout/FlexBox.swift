@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 @objc public protocol FlexBoxDelegate: UICollectionViewDelegateFlowLayout {
 //    @objc optional func collectionView(_ collectionView: UICollectionView, layout flexBox: FlexBox, itemAlignSelf indexPath: NSIndexPath) -> FlexAlignItem
 }
@@ -20,5 +19,5 @@ open class FlexBox: UICollectionViewFlowLayout {
     open var flexJustify: FlexJustify = .flexStart
     open var flexItem: FlexItem = .flexStart
     open var flexContent: FlexContent = .flexStart
-    
+
 }

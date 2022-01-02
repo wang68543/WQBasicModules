@@ -18,10 +18,10 @@ public protocol StateMachineDelegate: AnyObject {
 public class StateMachine<P: StateMachineDelegate> {
     private var _state: P.StateType {
         didSet {
-            delegate.didTransition(from: oldValue, to: _state)
+            delegate?.didTransition(from: oldValue, to: _state)
         }
     }
-    
+
     public var state: P.StateType {
         get {
             return _state
@@ -33,15 +33,14 @@ public class StateMachine<P: StateMachineDelegate> {
             _state = newValue
         }
     }
-    
-    public var delegate: P
-    
+
+    public weak var delegate: P?
+
     public init(initialState: P.StateType, delegate: P) {
         _state = initialState
         self.delegate = delegate
     }
 }
-
 
 /**
  示例

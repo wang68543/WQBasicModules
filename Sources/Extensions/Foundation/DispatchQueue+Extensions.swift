@@ -21,5 +21,5 @@ public extension DispatchQueue {
     func after(_ interval: TimeInterval, execute: @escaping (() -> Void)) {
         self.asyncAfter(deadline: DispatchTime.now() + interval, execute: execute)
     }
-} 
+}
 #endif

@@ -22,7 +22,7 @@ public class JSONModel {
         }
         #endif
     }
-    
+
     public func jsonToModel<T>(_ data: Any, type: T.Type = T.self, inKey key: String?, decoder: JSONDecoder = JSONDecoder()) throws -> T where T: Decodable {
         var value: Any
         if let valKey = key {
@@ -44,7 +44,7 @@ public class JSONModel {
             throw error
         }
     }
-    
+
     public func dataToModel<T>(_ data: Data, type: T.Type = T.self, decoder: JSONDecoder = JSONDecoder()) throws -> T where T: Decodable {
         #if !DEBUG
         return try decoder.decode(type, from: data)
@@ -68,16 +68,15 @@ public class JSONModel {
     }
 }
 
-//public extension Decodable {
+// public extension Decodable {
 //    static func model(_ data: Data?, decoder: JSONDecoder = JSONDecoder()) throws -> Self? {
 //        guard let value = data else { return nil}
 //        return try? decoder.decode(type(of: Self), from: value)
 //    }
-//}
-
+// }
 
 // MARK: - --解决php从内存读取的时候 数字变为字符串类型
-//extension KeyedDecodingContainer {
+// extension KeyedDecodingContainer {
 //
 //    public func decode<T: Decodable>(_ key: Key, as type: T.Type = T.self) throws -> T {
 //        return try self.decode(type, forKey: key)
@@ -103,4 +102,4 @@ public class JSONModel {
 //            return nil
 //        }
 //    }
-//}
+// }

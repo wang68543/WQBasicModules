@@ -13,7 +13,7 @@ open class CoreDataStore {
     public init(_ manager: CoreDataManager) {
         self.manager = manager
     }
-    
+
     public func numberOfItems<T>(object type: T, predicate: NSPredicate? = nil) -> Int where T: NSManagedObject {
         let request = NSFetchRequest<T>()
         request.predicate = predicate
@@ -27,7 +27,7 @@ open class CoreDataStore {
             return .zero
         }
     }
-     
+
     /// Inside `CoreDataBasedContentStore`
     public func load<T>(
       by predicate: NSPredicate? = nil,
@@ -45,11 +45,10 @@ open class CoreDataStore {
         }
         fetchRequest.sortDescriptors = descriptors
         return try context.fetch(fetchRequest)
-      }
-      catch {
+      } catch {
         return []
       }
-    } 
+    }
     public func fetchObjects<T: NSManagedObject>(_ request: NSFetchRequest<T>, context: NSManagedObjectContext? = nil) -> [T] {
         let moc = context ?? self.manager.mainManageContext
         do {
@@ -59,7 +58,7 @@ open class CoreDataStore {
             return []
         }
     }
-    public func has<T>(of type: T) -> Bool where T: NSManagedObject { 
+    public func has<T>(of type: T) -> Bool where T: NSManagedObject {
         let request = NSFetchRequest<T>()
         let moc = self.manager.mainManageContext
         request.entity = NSEntityDescription.entity(forEntityName: entityName(for: T.self), in: moc)
@@ -71,7 +70,7 @@ open class CoreDataStore {
             return false
         }
     }
-    public func entityName<T>(for type: T) -> String  {
+    public func entityName<T>(for type: T) -> String {
         return String(describing: T.self)
     }
 }

@@ -14,7 +14,7 @@ protocol WQPanViewable: NSObjectProtocol {
     func panViewWillEndDragging(_ panView: UIView, withVelocity velocity: CGPoint, targetContentOffset: CGPoint)
 }
 class PanContainerView: UIView {
-    //顶部点的位置
+    // 顶部点的位置
     var targetFrameMinY: [CGFloat] = []
     var panView: PanView = PanView()
     var panBehavior: WQPanBehavior?

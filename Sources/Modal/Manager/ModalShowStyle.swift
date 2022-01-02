@@ -61,7 +61,7 @@ public enum ModalShowStyle {
    case popup(CGPoint, CGPoint, PopDirection)
    /// 自定义显示位置
    case custom([ModalState: ModalMapItems])
-} 
+}
 public enum PanHorizontal {
     case center, leading, trailing
 }
@@ -90,7 +90,7 @@ public extension PanPosition {
                 origin.x = 0
             }
         case .center:
-            origin.x = (container.width - size.width) * 0.5;
+            origin.x = (container.width - size.width) * 0.5
         case .trailing:
             if isOutSide {
                 origin.x = container.width
@@ -128,7 +128,7 @@ public extension PanPosition {
                 centerX = size.width*0.5
             }
         case .center:
-            centerX = container.width * 0.5;
+            centerX = container.width * 0.5
         case .trailing:
             if isOutSide {
                 centerX = container.width + size.width * 0.5
@@ -156,7 +156,7 @@ public extension PanPosition {
     }
 }
 public extension PanPosition {
-    
+
     static func fromLeftIn(_ autoReverse: Bool) -> [ModalState: PanPosition] {
         var states: [ModalState: PanPosition] = [:]
         states[.willShow] = PanPosition(.leading, vertical: .center)

@@ -29,7 +29,7 @@ public extension WQModalWindow {
     func addVisible(root viewController: UIViewController) {
         self.previousKeyWindow = UIWindow.topNormal
         self.rootViewController = viewController
-        if !self.isKeyWindow { //重复设置root
+        if !self.isKeyWindow { // 重复设置root
           self.makeKeyAndVisible()
         }
     }
@@ -67,7 +67,7 @@ public class ModalInWindowContext: ModalDrivenContext {
         }
         return keyWindow
     }
- 
+
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         guard !controller.isMovingToWindow else { return }
         controller.isMovingToWindow = true

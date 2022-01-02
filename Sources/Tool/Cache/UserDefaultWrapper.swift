@@ -6,16 +6,16 @@
 //
 
 import Foundation
-//import SwifterSwift
+// import SwifterSwift
 #if swift(>=5.1)
 @propertyWrapper
 public struct UserDefault<T> {
     private typealias FunGetter = () -> T
-    private typealias FunSetter = (T) -> (Void)
+    private typealias FunSetter = (T) -> Void
 
     private let getter: FunGetter
     private let setter: FunSetter
-    
+
     private init(_ getter: @escaping FunGetter, setter: @escaping FunSetter) {
         self.getter = getter
         self.setter = setter
@@ -23,7 +23,7 @@ public struct UserDefault<T> {
     public var wrappedValue: T {
         get { return self.getter() }
         set { self.setter(newValue) }
-    } 
+    }
 }
 public extension UserDefault where T: Codable {
     init(_ key: String, default value: T, standard: UserDefaults = .standard) {
@@ -32,7 +32,7 @@ public extension UserDefault where T: Codable {
         self.init(getter, setter: setter)
     }
 }
- 
+
 public extension UserDefault where T == Date {
     init(_ key: String, default value: T = Date(), standard: UserDefaults = .standard) {
         let setter: FunSetter = { standard.set($0, forKey: key) }

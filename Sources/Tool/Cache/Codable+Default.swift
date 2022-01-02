@@ -12,8 +12,8 @@ import Foundation
 public protocol CodableDefaultValue {
     associatedtype Value: Codable
     static var defaultValue: Value { get }
-} 
- 
+}
+
 @propertyWrapper
 public struct CodableDefault<T: CodableDefaultValue> {
     public var wrappedValue: T.Value
@@ -38,7 +38,7 @@ public extension KeyedDecodingContainer {
         forKey key: Key
     ) throws -> CodableDefault<T> {
         try decodeIfPresent(type, forKey: key) ?? CodableDefault(wrappedValue: T.defaultValue)
-    } 
+    }
 }
 public extension KeyedEncodingContainer {
     mutating func encode<T>(_ value: CodableDefault<T>, forKey key: Key) throws where T: CodableDefaultValue {

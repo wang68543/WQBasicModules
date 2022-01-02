@@ -22,7 +22,7 @@ class URLExtensionsTest: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     func testQueryParameters() {
-        //"https://www.google.com?q=swifter%20swift&steve=jobs&empty"
+        // "https://www.google.com?q=swifter%20swift&steve=jobs&empty"
 //        let url = URL(string: " ")!
 //        guard let parameters = url.queryParameters else {
 //            XCTAssert(false)

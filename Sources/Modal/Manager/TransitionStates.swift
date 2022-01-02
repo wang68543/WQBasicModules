@@ -30,7 +30,7 @@ extension ModalPresentation {
             return controller.view.snapshotView(afterScreenUpdates: true)
         case let .modalNavigation(navgationController):
             if let nav = navgationController ?? WQUIHelp.topNavigationController() {
-                return nav.view.snapshotView(afterScreenUpdates: true)//.topViewController?
+                return nav.view.snapshotView(afterScreenUpdates: true)// .topViewController?
             }
             return nil
         }
@@ -54,7 +54,7 @@ public extension ModalPresentation {
         case let .modalInParent(viewController):
             return viewController
         case let .modalNavigation(navgationController):
-            return navgationController ?? WQUIHelp.topNavigationController() 
+            return navgationController ?? WQUIHelp.topNavigationController()
         case .autoModal:
             return self.autoAdaptationStyle.fromViewController
         default:
@@ -65,7 +65,7 @@ public extension ModalPresentation {
     var autoAdaptationStyle: ModalPresentation {
         switch self {
         case .autoModal:
-            //,!topVisible.isBeingDismissed 
+            // ,!topVisible.isBeingDismissed 
             if let topVisible = WQUIHelp.topVisibleViewController(),
                !topVisible.isBeingDismissed {
                 if topVisible.presentedViewController == nil {
@@ -94,7 +94,7 @@ public enum ModalAnimationStyle {
 
 @available(iOS 10.0, *)
 public extension ModalAnimationStyle {
-    
+
     var animator: ModalAnimation {
         switch self {
         case .default:

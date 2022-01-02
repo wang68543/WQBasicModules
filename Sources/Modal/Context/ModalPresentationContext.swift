@@ -10,10 +10,10 @@ import UIKit
 @available(iOS 10.0, *)
 open class ModalPresentationContext: ModalContext {
     private var interactAnimator: UIPercentDrivenInteractiveTransition?
-     
+
     public override func show(_ controller: WQLayoutController, statesConfig: StyleConfig, completion: (() -> Void)?) {
         let flag = self.animator.animationEnable
-        let parent = self.config.fromViewController 
+        let parent = self.config.fromViewController
         let viewController = self.viewController(controller)
         guard !viewController.isBeingPresented else { return }
         super.show(controller, statesConfig: statesConfig, completion: completion)
@@ -60,7 +60,7 @@ open class ModalPresentationContext: ModalContext {
             }
         }
     }
-    
+
     public override func interactive(present controller: WQLayoutController, statesConfig states: StyleConfig) {
         let viewController = self.viewController(controller)
         guard !viewController.isBeingPresented else { return }
@@ -70,7 +70,7 @@ open class ModalPresentationContext: ModalContext {
         interactAnimator = UIPercentDrivenInteractiveTransition()
         self.config.fromViewController?.present(viewController, animated: true, completion: nil)
     }
-    
+
     public override func interactive(dismiss controller: WQLayoutController) {
         let viewController = self.viewController(controller)
         guard !viewController.isBeingDismissed else { return }
@@ -94,7 +94,7 @@ open class ModalPresentationContext: ModalContext {
         self.interactAnimator?.timingCurve = provider
         self.interactAnimator?.cancel()
     }
-    
+
 }
 @available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
@@ -106,14 +106,13 @@ extension ModalPresentationContext: UIViewControllerTransitioningDelegate {
         return self
     }
 
-      
     public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return self.isInteractive ? self.interactAnimator : nil
     }
-    
+
     public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
         return self.isInteractive ? self.interactAnimator : nil
-    } 
+    }
 }
 @available(iOS 10.0, *)
 extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
@@ -130,16 +129,16 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         let isPresented = toVC.presentingViewController === fromVC
         func completionBlock() {
             let success = !transitionContext.transitionWasCancelled
-            if (isPresented && !success) {
+            if isPresented && !success {
                 toVC.view.removeFromSuperview()
             }
-            transitionContext.completeTransition(success) 
+            transitionContext.completeTransition(success)
         }
         let toVCView = transitionContext.view(forKey: .to)
         let transitionView = transitionContext.containerView
-        
+
         if let toView = toVCView {
-            if transitionView !== toView {//解决 多次动画 而把自己放在栈顶的问题
+            if transitionView !== toView {// 解决 多次动画 而把自己放在栈顶的问题
                transitionView.addSubview(toView)
             }
         }
@@ -149,7 +148,7 @@ extension ModalPresentationContext: UIViewControllerAnimatedTransitioning {
         } else {
             self.hide(fromVC: fromVC, toVC: toVC, completion: completionBlock)
         }
-        
+
     }
 }
 

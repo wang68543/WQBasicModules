@@ -22,7 +22,7 @@ class WQStarViewController: BaseExampleViewController {
         star.backgroundColor = .white
         star.frame = CGRect(x: 30, y: 400, width: 300, height: 80)
         self.view.addSubview(star)
-        let gesture = OneFingerRotationGestureRecognizer(target: self, action: #selector(gestureAction(_:))) 
+        let gesture = OneFingerRotationGestureRecognizer(target: self, action: #selector(gestureAction(_:)))
         gesture.delegate = self
         self.view.addGestureRecognizer(gesture)
     }

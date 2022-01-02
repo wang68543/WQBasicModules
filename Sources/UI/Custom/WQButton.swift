@@ -14,7 +14,7 @@ open class WQButton: UIButton {
     public enum TitleAlignment {
         case left, right, bottom, top
     }
-    //以下计算都是基于当前button有尺寸之后的调整
+    // 以下计算都是基于当前button有尺寸之后的调整
     public var imgSize: CGSize = .zero {
         didSet {
             setNeedsLayout()
@@ -32,10 +32,10 @@ open class WQButton: UIButton {
              setNeedsLayout()
         }
     }
-    
+
     private var titleFont = UIFont.systemFont(ofSize: 15) // 系统按钮默认字体字体
     private var titleFontObservation: NSKeyValueObservation?
-    //AutoLayout时候 默认尺寸
+    // AutoLayout时候 默认尺寸
     open override var intrinsicContentSize: CGSize {
         var contentSize: CGSize = .zero
         let imageSize = self.currentImageSize
@@ -52,11 +52,11 @@ open class WQButton: UIButton {
         } else {
             contentSize.height = imageEdgeH + titleEdgeH + imageSize.height + titleSize.height
             contentSize.width = max(imageSize.width + imageEdgeW, titleSize.width + titleEdgeW)
-        } 
+        }
         return CGSize(width: contentSize.width + contentEdgeW, height: contentSize.height + contentEdgeH)
     }
-    
-       //swiftlint:disable function_body_length
+
+       // swiftlint:disable function_body_length
     open override func contentRect(forBounds bounds: CGRect) -> CGRect {
         guard bounds.size != .zero else { return .zero }
         let rect = bounds.inset(by: self.contentEdgeInsets)
@@ -72,7 +72,7 @@ open class WQButton: UIButton {
         } else {
             contentH = titleEdgeH + imageEdgeH + titleSize.height + imageSize.height
             contentW = max(titleSize.width + titleEdgeW, imageSize.width + imageEdgeW)
-        } 
+        }
         var contentX: CGFloat
         switch self.contentHorizontalAlignment {
         case .left :
@@ -105,7 +105,7 @@ open class WQButton: UIButton {
         }
         return CGRect(x: contentX, y: contentY, width: contentW, height: contentH)
     }
-    
+
     open override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var imgX, imgY: CGFloat
         let imageSize = self.currentImageSize
@@ -148,9 +148,9 @@ open class WQButton: UIButton {
         }
         return CGRect(origin: CGPoint(x: imgX + contentRect.minX, y: imgY + contentRect.minY), size: imageSize)
     }
-    
+
     open override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        var titleX, titleY: CGFloat 
+        var titleX, titleY: CGFloat
         let titleSize = self.currentTitleSize
         let titleEdgeW = self.titleEdgeInsets.left + self.titleEdgeInsets.right
         let titleEdgeH = self.titleEdgeInsets.top + self.titleEdgeInsets.bottom
@@ -191,7 +191,7 @@ open class WQButton: UIButton {
         }
         return CGRect(origin: CGPoint(x: titleX + contentRect.minX, y: titleY + contentRect.minY), size: titleSize)
     }
-    
+
     open override func awakeFromNib() {
         super.awakeFromNib()
         if self.hasTitle {
@@ -259,10 +259,10 @@ private extension WQButton {
         } else if let title = self.currentTitle {
             let text = NSString(string: title)
             // 这里 如果计算有偏差的话  稍微调大下button的尺寸
-            //notaTODO: 如果当maxSize不够的时候 就会缩减多余的字符以..代替并返回缩减之后的尺寸
+            // notaTODO: 如果当maxSize不够的时候 就会缩减多余的字符以..代替并返回缩减之后的尺寸
             size = text.boundingRect(with: maxSize, options: options, attributes: [.font: titleFont], context: nil).size
         }
-        //向上取整 解决达不到最大值的问题
+        // 向上取整 解决达不到最大值的问题
         return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
     // 修正尺寸过大的图片
@@ -320,22 +320,22 @@ private extension WQButton {
 
     }
 }
- 
+
 public extension WQModules where Base: WQButton {
-    
+
     func setImageMasks(_ radius: CGFloat) {
         guard let imgView = self.base.imageView else { return }
         imgView.layer.cornerRadius = radius
         imgView.layer.masksToBounds = true
     }
-    
+
     func setImageCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let imgView = self.base.imageView else {
             return
         }
         self.setImageBorder(width, color: color, radius: imgView.frame.height * 0.5)
     }
-    
+
     func setImageBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         guard let imgView = self.base.imageView else { return }
         imgView.layer.borderWidth = width
@@ -343,14 +343,14 @@ public extension WQModules where Base: WQButton {
         imgView.layer.borderColor = color
         imgView.layer.masksToBounds = true
     }
-    
+
     func setTitleCircularBorder(_ width: CGFloat, color: CGColor) {
         guard let label = self.base.titleLabel else {
             return
         }
         self.setTitleBorder(width, color: color, radius: label.frame.height * 0.5)
     }
-    
+
     func setTitleBorder(_ width: CGFloat, color: CGColor, radius: CGFloat = 0) {
         guard let label = self.base.titleLabel else { return }
         label.layer.borderWidth = width

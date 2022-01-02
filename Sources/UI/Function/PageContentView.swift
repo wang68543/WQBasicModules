@@ -10,7 +10,7 @@ import UIKit
 
 open class PageContentView: PageView {
     public private(set) var viewControllers: [UIViewController] = []
- 
+
     open func setup(_ controllers: [UIViewController], with index: Int) {
         viewControllers = controllers
         move(to: index)
@@ -18,12 +18,12 @@ open class PageContentView: PageView {
     public override func isValidate(_ index: Int) -> Bool {
         return index >= 0 && index < viewControllers.count
     }
-    
+
     public override func viewController(with index: Int) -> UIViewController? {
         guard isValidate(index) else { return nil }
         return viewControllers[index]
     }
-    
+
     public override func index(of viewController: UIViewController) -> Int? {
         return self.viewControllers.firstIndex(of: viewController)
     }

@@ -13,17 +13,17 @@ public class WQFileCache: NSObject {
        url.appendPathComponent("FileSharedCaches")
        return WQFileCache(url)
     }()
-    
+
     lazy var ioQueue: DispatchQueue = {
         let attrs = DispatchQueue.Attributes.concurrent
         let queue = DispatchQueue(label: "rwOptions", qos: DispatchQoS.background, attributes: attrs)
         return queue
     }()
-    //读写锁
+    // 读写锁
 //    private lazy var lock: pthread_rwlock_t = pthread_rwlock_t()
-    
+
     public let directory: URL
-    
+
     public init(_ directory: URL) {
         self.directory = directory
         super.init()
@@ -66,7 +66,7 @@ public extension WQFileCache {
     }
 }
 public extension WQFileCache {
-    
+
     func archiver(_ value: NSCoding, for name: String, synchronize: Bool) throws {
         if !synchronize {
             if #available(iOS 11.0, *) {
@@ -89,7 +89,7 @@ public extension WQFileCache {
             }
         }
     }
-    
+
     func unarchiver(ofClasses classes: Set<AnyHashable>, for name: String) -> Any? {
         guard let data = self.read(for: name) else { return nil }
         if #available(iOS 11.0, *) {

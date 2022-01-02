@@ -28,7 +28,7 @@ public extension StyleConfig {
                 for (key, items) in references {
                     values[key] = [ModalMapItem(layout, refrences: items)]
                 }
-            case .actionSheet: 
+            case .actionSheet:
                 let containerFrame = CGRect(x: (controllerSize.width - size.width)*0.5, y: controllerSize.height - size.height, width: size.width, height: size.height)
                 let willShowFrame = ModalRect(container: containerFrame)
                 let tranforms = self.actionSheetTransform(size, container: controllerSize)
@@ -64,9 +64,9 @@ public extension StyleConfig {
                 }
                }
             case let .popup(position, anchorPoint, direction):
-                
+
                 let origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
-                
+
                 func horizontalExpend(_ anchorPtX: CGFloat) -> CGRect {
                     if anchorPtX < 0.5 { // 向右展开
                         return CGRect(x: origin.x, y: origin.y, width: .zero, height: size.height)
@@ -85,7 +85,7 @@ public extension StyleConfig {
                         return CGRect(x: origin.x, y: origin.y+size.height*0.5, width: size.width, height: .zero)
                     }
                 }
-                
+
                 let willShowFrame: CGRect
                 switch direction {
                 case .left:
@@ -105,15 +105,15 @@ public extension StyleConfig {
                 case .verticalAuto:
                     willShowFrame = verticalExpend(anchorPoint.y)
                 }
-                
+
                 let didShowFrame = CGRect(origin: origin, size: size)
                 let scale: CGFloat = 1.03
                 let showFrame = CGRect(x: origin.x - (size.width * (scale - 1.0))*0.5, y: origin.y - (size.height * (scale - 1.0))*0.5, width: size.width*scale, height: size.height*scale)
-                
+
                 let willShow = ModalRect(container: willShowFrame)
                 let show = ModalRect(container: showFrame)
                 let didShow = ModalRect(container: didShowFrame)
-                
+
                 var references: [ModalState: [ModalKeyPath]] = [:]
                 references.combine([.willShow: willShow, .show: show, .didShow: didShow, .hide: willShow])
                 if config.dimming {
@@ -181,9 +181,8 @@ public extension StyleConfig {
     }
 }
 
-
 extension Dictionary where Key == ModalState, Value == ModalMapItems {
-    //TODO: - 这里要考虑 在设置didShow的时候 有的属性没有didShow状态只有show状态
+    // TODO: - 这里要考虑 在设置didShow的时候 有的属性没有didShow状态只有show状态
     func setup(forState state: ModalState) {
         self[state]?.setup(for: state)
     }

@@ -10,7 +10,7 @@ import AVFoundation.AVAssetImageGenerator
 
 // MARK: - -- convenience init
 public extension UIImage {
-    
+
     /// 根据颜色创建图片
     ///
     /// - Parameters:
@@ -22,13 +22,13 @@ public extension UIImage {
             UIGraphicsEndImageContext()
         }
         color.setFill()
-        UIRectFill(CGRect(origin: .zero, size: size)) 
+        UIRectFill(CGRect(origin: .zero, size: size))
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
             return nil
         }
         self.init(cgImage: aCgImage)
     }
-    
+
     /// 创建线性渐变的图片
     ///
     /// - Parameters:
@@ -64,10 +64,10 @@ public extension UIImage {
         context.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: .drawsBeforeStartLocation)
         guard let aCgImage = UIGraphicsGetImageFromCurrentImageContext()?.cgImage else {
             return nil
-        } 
+        }
         self.init(cgImage: aCgImage)
     }
-    
+
     /// 绘制线性渐变  https://www.jianshu.com/p/cd2d1f374a39
     ///
     /// - Parameters:
@@ -149,7 +149,7 @@ public extension UIImage {
         self.init(cgImage: scaleImage)
     }
 }
-public extension UIImage {  
+public extension UIImage {
     /**
      拉伸两端，保留中间
      
@@ -165,37 +165,37 @@ public extension UIImage {
         var imageSize = self.size
         var desSize = destSize
         guard abs(desSize.width - imageSize.width) > 4 else { return self }
-        
+
         imageSize.width = floor(imageSize.width)
-        
+
         desSize.width = floor(desSize.width)
         let desSizeThan = desSize.width > imageSize.width
-        
-        //各需要拉伸的宽度
+
+        // 各需要拉伸的宽度
         let needWidth = (desSize.width - imageSize.width) / 2.0
-        
-        //先拉取左边
+
+        // 先拉取左边
         var left = leading
         var right = desSizeThan ? (imageSize.width - left - 1) : (imageSize.width - abs(needWidth) - left)
-        
-        //画图， 生成拉伸的左边后的图片
+
+        // 画图， 生成拉伸的左边后的图片
         var tempStrecthWith = imageSize.width + needWidth
-        
-        //生成拉伸后的图片-》左
+
+        // 生成拉伸后的图片-》左
         let height = imageSize.height
         var strectedImage = self.resizableImage(withCapInsets: UIEdgeInsets(top: 0, left: left, bottom: 0, right: right))
         UIGraphicsBeginImageContextWithOptions(CGSize(width: tempStrecthWith, height: height), false, self.scale)
         strectedImage.draw(in: CGRect(x: 0, y: 0, width: tempStrecthWith, height: height))
-        
+
         defer {
             UIGraphicsEndImageContext()
         }
         guard let getImg = UIGraphicsGetImageFromCurrentImageContext() else { return nil }
         strectedImage = getImg
-        //拉伸右边
+        // 拉伸右边
         right = leading
         left = desSizeThan ? (strectedImage.size.width - right - 1) : (strectedImage.size.width - right - abs(needWidth))
-        //生成拉伸后的图片-》右
+        // 生成拉伸后的图片-》右
         tempStrecthWith = desSize.width
         strectedImage = strectedImage.resizableImage(withCapInsets: UIEdgeInsets(top: 0, left: left, bottom: 0, right: right))
          UIGraphicsBeginImageContextWithOptions(CGSize(width: tempStrecthWith, height: height), false, self.scale)
@@ -204,7 +204,7 @@ public extension UIImage {
         strectedImage = getRightImg
         return strectedImage.resizableImage(withCapInsets: UIEdgeInsets(top: top, left: 0, bottom: bottom, right: 0))
     }
-    
+
      /**
       根据坐标获取图片中的像素颜色值
       */
@@ -224,14 +224,14 @@ public extension UIImage {
 
 /// 获取视频
 public extension UIImage {
-    
+
     /// 获取缩略图
     /// - Parameters:
     ///   - imageURL: 图片路径
     ///   - size: 图片显示尺寸
     ///   - options: 设置了 options size就失效了 需要自己设置
     convenience init?(thumbnail imageURL: URL, to size: CGSize, options: CFDictionary? = nil) {
-        let sourceOpt = [kCGImageSourceShouldCache : false] as CFDictionary
+        let sourceOpt = [kCGImageSourceShouldCache: false] as CFDictionary
         // 其他场景可以用createwithdata (data并未decode,所占内存没那么大),
         guard let source = CGImageSourceCreateWithURL(imageURL as CFURL, sourceOpt) else {
             return nil
@@ -241,17 +241,17 @@ public extension UIImage {
             option = opt
         } else {
             let maxDimension = max(size.width, size.height) * UIScreen.main.scale
-            option = [kCGImageSourceCreateThumbnailFromImageAlways : true,
-                     kCGImageSourceShouldCacheImmediately : true ,
-                     kCGImageSourceCreateThumbnailWithTransform : true,
-                     kCGImageSourceThumbnailMaxPixelSize : maxDimension] as CFDictionary
+            option = [kCGImageSourceCreateThumbnailFromImageAlways: true,
+                     kCGImageSourceShouldCacheImmediately: true ,
+                     kCGImageSourceCreateThumbnailWithTransform: true,
+                     kCGImageSourceThumbnailMaxPixelSize: maxDimension] as CFDictionary
         }
         guard let img = CGImageSourceCreateThumbnailAtIndex(source, 0, option) else {
             return nil
         }
-        self.init(cgImage: img) 
+        self.init(cgImage: img)
     }
-    
+
     /// 获取视频的某一帧的图片
     /// - Parameter videoURL: 视频地址
     /// - Parameter size: 要获取的图片的尺寸
@@ -268,7 +268,7 @@ public extension UIImage {
         }
         self.init(fromAsset: asset, size: size, time: time)
     }
-    
+
     convenience init?(fromAsset asset: AVURLAsset, size: CGSize, time: CMTime = CMTime.zero) {
         let generator = AVAssetImageGenerator(asset: asset)
         /// 按正确方向对视频进行截图,关键点是将AVAssetImageGrnerator对象的appliesPreferredTrackTransform属性设置为YES。
@@ -278,9 +278,9 @@ public extension UIImage {
         generator.requestedTimeToleranceBefore = .zero
         generator.maximumSize = size
         do {
-            //actualTime: 实际的截图的时间
+            // actualTime: 实际的截图的时间
             var actualTime: CMTime = .invalid
-            let ref = try generator.copyCGImage(at: time, actualTime: &actualTime) 
+            let ref = try generator.copyCGImage(at: time, actualTime: &actualTime)
             self.init(cgImage: ref)
         } catch let error {
             debugPrint("=======\(error)")
@@ -303,9 +303,9 @@ public extension UIImage {
                 contentMode: UIView.ContentMode = .scaleToFill,
                 clipPath: UIBezierPath? = nil,
                 clipRule: CGPathFillRule = .evenOdd) -> UIImage? {
-        
+
         let rect = self.size.aspectRatio(size, contentMode: contentMode)
-        
+
         func drawContext(_ context: CGContext?) {
             guard let ctx = context else { return }
             if let path = clipPath?.cgPath {
@@ -320,7 +320,7 @@ public extension UIImage {
             let format = UIGraphicsImageRendererFormat()
             format.opaque = opaque
             format.scale = UIScreen.main.scale
-            let renderer = UIGraphicsImageRenderer(size: size,format: format)
+            let renderer = UIGraphicsImageRenderer(size: size, format: format)
             return renderer.image { context in
                 drawContext(context.cgContext)
             }
@@ -331,7 +331,7 @@ public extension UIImage {
             UIGraphicsEndImageContext()
             return image
         }
-    } 
+    }
 }
 
 public extension UIImage {
@@ -342,7 +342,7 @@ public extension UIImage {
         let scaleX: CGFloat
         let scaleY: CGFloat
         let rect: CGRect
-        switch (orientation) {
+        switch orientation {
         case .left:
             rect = CGRect(x: 0, y: 0, width: self.size.height, height: self.size.width)
             rotate = CGFloat.pi/2.0
@@ -363,23 +363,23 @@ public extension UIImage {
             translateX = -rect.size.width
             translateY = -rect.size.height
             scaleX = 1.0
-            scaleY = 1.0 
+            scaleY = 1.0
         default:
             rect = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height)
-            rotate = 0.0;
-            translateX = 0;
+            rotate = 0.0
+            translateX = 0
             translateY = 0
             scaleX = 1.0
             scaleY = 1.0
         }
-        
-       UIGraphicsBeginImageContext(rect.size);
+
+       UIGraphicsBeginImageContext(rect.size)
         guard let cgImg = self.cgImage,
               let context = UIGraphicsGetCurrentContext() else {
             UIGraphicsEndImageContext()
             return nil
         }
-       //做CTM变换
+       // 做CTM变换
         context.translateBy(x: 0.0, y: rect.size.height)
         context.scaleBy(x: 1.0, y: -1.0)
         context.rotate(by: rotate)

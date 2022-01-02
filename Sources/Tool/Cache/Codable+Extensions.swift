@@ -6,7 +6,7 @@
 //
 
 import Foundation
-  
+
 @inline(__always) func userDefaultsCacheKey(_ name: String, with ext: String) -> String {
     let namespace = (Bundle.main.infoDictionary?[kCFBundleExecutableKey as String] as? String) ?? ""
     var keys: [String] = []
@@ -18,7 +18,7 @@ import Foundation
 }
 
 public extension Decodable {
-    
+
     /// 从缓存中读取
     static func readValue(_ stand: UserDefaults = .standard,
                           decoder: JSONDecoder = .init(),
@@ -28,7 +28,7 @@ public extension Decodable {
         guard let data = stand.value(forKey: key) as? Data else { return nil }
         return try decoder.decode(self, from: data)
     }
-    
+
     /// 转为模型或者转为
     static func model(from data: Data, decoder: JSONDecoder = .init(), in key: String? = nil) throws -> Self {
         if let kStr = key {
@@ -89,7 +89,7 @@ public extension Encodable {
         let key = userDefaultsCacheKey(name, with: ext)
         stand.set(data, forKey: key)
     }
-    
+
     /// 当前模型转为Data
     func toJSON(_ encoder: JSONEncoder = .init()) throws -> Data {
         #if !DEBUG
@@ -108,7 +108,7 @@ public extension Encodable {
         let data = try self.toJSON(encoder)
         return String(data: data, encoding: encoding)
     }
-} 
+}
 // MARK: - handle typeMismatch exceptions in JSONDecoder. You can expand the type of you want.
 public extension KeyedDecodingContainer {
     func decodeIfPresent(_ type: String.Type, forKey key: K) throws -> String? {
@@ -123,7 +123,7 @@ public extension KeyedDecodingContainer {
         }
         return nil
     }
-    
+
     func decodeIfPresent(_ type: Int.Type, forKey key: K) throws -> Int? {
         if let value = try? decode(type, forKey: key) {
             return value
@@ -133,7 +133,7 @@ public extension KeyedDecodingContainer {
         }
         return nil
     }
-    
+
     func decodeIfPresent(_ type: Float.Type, forKey key: K) throws -> Float? {
         if let value = try? decode(type, forKey: key) {
             return value
@@ -143,7 +143,7 @@ public extension KeyedDecodingContainer {
         }
         return nil
     }
-    
+
     func decodeIfPresent(_ type: Bool.Type, forKey key: K) throws -> Bool? {
         if let value = try? decode(type, forKey: key) {
             return value
@@ -159,7 +159,7 @@ public extension KeyedDecodingContainer {
         }
         return nil
     }
-    
+
     func decodeIfPresent(_ type: Double.Type, forKey key: K) throws -> Double? {
         if let value = try? decode(type, forKey: key) {
             return value
@@ -169,7 +169,7 @@ public extension KeyedDecodingContainer {
         }
         return nil
     }
-    
+
 //    func decodeIfPresent<T>(_ type: T.Type, forKey key: K) throws -> T? where T : Decodable {
 //        return try? decode(type, forKey: key)
 //    }

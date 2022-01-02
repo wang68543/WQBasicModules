@@ -8,7 +8,7 @@
 import UIKit
 
 open class LocalizeBundle: Bundle {
-    
+
     open override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
         guard let bundle = Localize.shared.currentBundle else {
             return super.localizedString(forKey: key, value: value, table: tableName)

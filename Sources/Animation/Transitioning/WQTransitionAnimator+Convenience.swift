@@ -7,16 +7,16 @@
 
 import Foundation
 public extension WQTransitionAnimator {
-    
+
 }
 
 public extension WQTransitionAnimator.Options {
     static let normalPresent = WQTransitionAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
     static let normalDismiss = WQTransitionAnimator.Options(options: [.layoutSubviews, .beginFromCurrentState, .curveEaseInOut])
-    
+
     static let actionSheetPresent = WQTransitionAnimator.Options(0.25, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseOut])
     static let actionSheetDismiss = WQTransitionAnimator.Options(0.15, options: [.layoutSubviews, .beginFromCurrentState, .curveEaseIn])
-    
+
     static let alertPresent = WQTransitionAnimator.Options(0.15,
                                                            delay: 0,
                                                            damping: 3,

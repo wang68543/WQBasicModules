@@ -14,7 +14,7 @@ public class WQVectorView: UIView {
         guard let subView = self.subviews.first else { return }
         subView.bounds = self.bounds
         let anchorPoint = subView.layer.anchorPoint
-        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height) 
+        subView.center = CGPoint(x: anchorPoint.x * self.bounds.width, y: anchorPoint.y * self.bounds.height)
     }
 }
 open class WQTransitionable: UIViewController {
@@ -48,15 +48,15 @@ open class WQTransitionable: UIViewController {
     open var enableKeyboardObserver: Bool = false {
         didSet {
             if enableKeyboardObserver {
-                self.keyboardManager = WQKeyboardManager(self.containerView) 
+                self.keyboardManager = WQKeyboardManager(self.containerView)
             } else {
                 self.keyboardManager = nil
             }
         }
     }
     /// 是否是Modal出来的
-    public internal(set) var showMode: WQShowMode = .present 
-    ///containerView上的子View 用于转场动画切换
+    public internal(set) var showMode: WQShowMode = .present
+    /// containerView上的子View 用于转场动画切换
     public internal(set) var childViews: [UIView] = []
     /// 主要用于搜索containerView上当前正在显示的View包含的输入框
     internal var contentViewInputs: [TextFieldView] = []
@@ -67,15 +67,15 @@ open class WQTransitionable: UIViewController {
         view.backgroundColor = .clear
         return view
     }()
-    //用于容纳当前控制器的window窗口
+    // 用于容纳当前控制器的window窗口
     public internal(set) var containerWindow: WQTransitionWindow?
-    
+
     /// 非present的时候 用于动画管理器里面的转场动画
     internal weak var usingTransitionAnimatedController: UIViewController?
-    
+
     /// 是否要对presentedVC 进行生命周期(调用viewWillApperace...)
     public var shouldViewWillApperance: Bool = false
- 
+
     /// 控制器初始frame
     internal let initialFrame: CGRect
     /// 初始化
@@ -100,13 +100,13 @@ open class WQTransitionable: UIViewController {
             self.view.frame = viewFrame
         }
     }
-    
+
     override open func viewDidLoad() {
         super.viewDidLoad()
-        //延迟加载View
-        UIView.performWithoutAnimation {  
+        // 延迟加载View
+        UIView.performWithoutAnimation {
             self.animator.items.initial(nil, presenting: self)
-            self.view.addSubview(containerView) 
+            self.view.addSubview(containerView)
             containerView.setNeedsLayout()
             containerView.layoutIfNeeded() // 提前刷新 用于动画准备
         }
@@ -135,10 +135,10 @@ open class WQTransitionable: UIViewController {
                 } else {
                     if parentController.isBeingPresented { fixFlag = false }
                 }
-                //TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
+                // TODOs:这里不管显示那个控制器 最后都是有当前window的根控制器来控制显示 转场的动画也是根控制器参与动画
                 self.presentSelf(in: parentController, animated: fixFlag, completion: completion)
             }
-        } else { 
+        } else {
            self.shownInWindow(animated: flag, completion: completion)
         }
     }
@@ -178,7 +178,7 @@ open class WQTransitionable: UIViewController {
 //    }
 //    #endif
     deinit {
-        //手动置空关联值 防止坏内存引用
+        // 手动置空关联值 防止坏内存引用
         childViews.forEach { $0.presentation = nil }
         self.containerWindow = nil
         debugPrint("\(self):" + #function + "♻️")

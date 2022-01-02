@@ -16,7 +16,7 @@ public extension WQAnimatedItem where Element == UIColor? {
     }
 }
 public extension WQAnimatedItem where Element == CGRect {
-    
+
     /// VC view的背景动画
     class func defaultViewShowFrame(_ show: CGRect = UIScreen.main.bounds,
                                     initial: CGRect = UIScreen.main.bounds) -> WQAnimatedItem {
@@ -81,7 +81,7 @@ public extension Array where Element == WQAnimatedConfigAble {
                 if let viewController = presented {
                    item.config(viewController, present: state)
                 }
-            } 
+            }
         }
     }
     /// 创建一个包含 View frame 跟 view 默认Color 动画

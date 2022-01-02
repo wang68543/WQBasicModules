@@ -7,7 +7,7 @@
 
 import UIKit
 public extension UIImage {
-    
+
 //    /// 指定区域重绘图片
 //    func reDraw(_ rect: CGRect, opaque: Bool = false, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
 //        UIGraphicsBeginImageContextWithOptions(rect.size, opaque, scale)
@@ -16,7 +16,7 @@ public extension UIImage {
 //        UIGraphicsEndImageContext()
 //        return image
 //    }
-    
+
     /// 根据路径裁剪图片
     ///
     /// - Parameters:
@@ -39,7 +39,7 @@ public extension UIImage {
 //        UIGraphicsEndImageContext()
 //        return image
 //    }
-    
+
     /// 裁剪图片(解决textView里面的文字用cgimage 无法截取)
 //    @available(*, deprecated, message: "use UIImage.render")
 //    func clip(toRect cropRect: CGRect, viewSize: CGSize? = nil) -> UIImage? {
@@ -72,7 +72,7 @@ public extension UIImage {
 //        let path = UIBezierPath(ovalIn: rect)
 //       return clip(rect, path: path.cgPath, mode: .winding)
 //    }
-    
+
 //    /// 指定宽或高缩放到适当的大小
 //    ///
 //    /// - Parameters:
@@ -100,7 +100,7 @@ public extension UIImage {
     func crop(with path: UIBezierPath) -> UIImage? {
         return self.render(to: self.size, opaque: false, contentMode: .center, clipPath: path, clipRule: .evenOdd)
     }
-    
+
 }
 public extension Array where Element: UIImage {
     ///
@@ -120,7 +120,7 @@ public extension Array where Element: UIImage {
             context.drawPath(using: .fill)
         }
         if let path = clipPath,
-            let context = UIGraphicsGetCurrentContext() { //裁剪
+            let context = UIGraphicsGetCurrentContext() { // 裁剪
             context.addPath(path)
             context.clip()
             self.drawImages(drawSize, direction: direction)
@@ -136,7 +136,7 @@ public extension Array where Element: UIImage {
     private func drawImages(_ contentSize: CGSize, direction: Int) {
         var offsetY: CGFloat = 0
         var offsetX: CGFloat = 0
-        if direction == 0 { //0先从上到下 从左到右
+        if direction == 0 { // 0先从上到下 从左到右
             self.forEach { img  in
                 let frame = CGRect(origin: CGPoint(x: offsetX, y: offsetY), size: img.size)
                 img.draw(in: frame)
@@ -157,6 +157,6 @@ public extension Array where Element: UIImage {
                 }
             }
         }
-       
+
     }
 }

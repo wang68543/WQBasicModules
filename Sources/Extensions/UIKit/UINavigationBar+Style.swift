@@ -5,22 +5,22 @@
 //  Created by iMacHuaSheng on 2020/12/8.
 //
 #if canImport(UIKit) && !os(watchOS)
-import Foundation 
+import Foundation
 
 public struct UINavigationBarStyle: RawRepresentable, Equatable {
     public typealias RawValue = String
     public var rawValue: String
-    
+
     public init(rawValue: String) {
         self.rawValue = rawValue
-    } 
+    }
 }
 
 public extension UINavigationBarStyle {
     static let none = UINavigationBarStyle(rawValue: "none")
     /// 透明
     static let translucent = UINavigationBarStyle(rawValue: "translucent")
-    
+
     /// 白色
     static let white = UINavigationBarStyle(rawValue: "white")
 }
@@ -40,7 +40,7 @@ public extension UINavigationBar {
             return (self.value(forKey: "hidesShadow") as? Bool) ?? false
         }
     }
-    
+
     /// 用于 保存当前UINavigationBar 的自定义风格 便于比较
     var style: UINavigationBarStyle {
         set {
@@ -52,7 +52,7 @@ public extension UINavigationBar {
             objc_getAssociatedObject(self, AssociatedKeys.styleRawValue) as? UINavigationBarStyle ?? .none
         }
     }
-    
+
     /// 导航栏透明
     func setElementsAlpha(_ alpha: CGFloat) {
         if let leftViews = self.value(forKey: "_leftViews") as? [UIView] {

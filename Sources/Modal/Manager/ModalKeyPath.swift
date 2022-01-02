@@ -6,12 +6,12 @@
 //
 
 import Foundation
- 
+
 public protocol ModalKeyPath {
     func setup(_ target: Any, state: ModalState)
 }
-public class ModalReference<Root, Value>: ModalKeyPath { 
-    
+public class ModalReference<Root, Value>: ModalKeyPath {
+
     public let value: Value
     public let keyPath: ReferenceWritableKeyPath<Root, Value>
     public init(_ value: Value, keyPath: ReferenceWritableKeyPath<Root, Value>) {
@@ -21,7 +21,7 @@ public class ModalReference<Root, Value>: ModalKeyPath {
     public func setup(_ target: Any, state: ModalState) {
      guard let item = target as? Root else { return }
      item[keyPath: keyPath] = value
-   } 
+   }
 }
 
 @available(iOS 10.0, *)
@@ -36,7 +36,6 @@ public class ModalPosition: ModalReference<WQLayoutController, CGPoint> { }
 public class ModalBool: ModalReference<WQLayoutController, Bool> { }
 @available(iOS 10.0, *)
 public class ModalFloat: ModalReference<WQLayoutController, CGFloat> { }
-
 
 @available(iOS 10.0, *)
 public extension ModalTransform {

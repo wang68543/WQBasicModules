@@ -14,14 +14,14 @@ open class CBServerManager: NSObject {
         let mgr = CBCentralManager(delegate: nil, queue: nil)
         return mgr
     }()
-     
+
     open var connectedPeripherals: [CBPeripheral] = []
-    
+
     /// 等待自动连接的设备 (这个设备必定是之前自动连接过的)
     internal var waitToConnectPeripheral: String?
     /// 等待
     internal var waitBLePoweredOnToScan: Bool = false
-    
+
 }
 public extension CBServerManager {
     /// 设备的连接状态改变

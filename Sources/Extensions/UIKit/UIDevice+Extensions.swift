@@ -12,16 +12,16 @@ public extension UIDevice {
     var modelName: String {
         var systemInfo = utsname()
         uname(&systemInfo)
-        let machineMirror = Mirror(reflecting: systemInfo.machine) 
+        let machineMirror = Mirror(reflecting: systemInfo.machine)
         return machineMirror.children.reduce("") { identifier, element in
             guard let value = element.value as? Int8,
                 value != 0 else {
                     return identifier
             }
             return identifier + String(UnicodeScalar(UInt8(value)))
-        } 
+        }
     }
-    
+
     /// 判断是否是模拟器
     static let isEmulator: Bool = {
         #if arch(i386) || arch(x86_64)
@@ -31,7 +31,6 @@ public extension UIDevice {
         #endif
     }()
 }
-
 
 // https://juejin.im/post/6844904184588795911
 public extension UIDevice {
@@ -44,10 +43,10 @@ public extension UIDevice {
         var size = mach_msg_type_number_t(MemoryLayout<vm_statistics_data_t>.size/MemoryLayout<integer_t>.size)
         var pagesize = vm_size_t()
         var vmstat = vm_statistics_data_t()
-         host_page_size(host, &pagesize);
+         host_page_size(host, &pagesize)
         let kerr: kern_return_t = withUnsafeMutablePointer(to: &vmstat) {
             $0.withMemoryRebound(to: integer_t.self, capacity: 1) {
-                host_statistics(host, host_flavor_t(HOST_VM_INFO), host_info_t($0), &size);
+                host_statistics(host, host_flavor_t(HOST_VM_INFO), host_info_t($0), &size)
             }
         }
         if kerr == KERN_SUCCESS {
@@ -76,7 +75,7 @@ public extension UIDevice {
             debugPrint(error)
         }
         return .zero
-         
+
     }()
     /// 已使用的磁盘空间
     var usedDiskStorage: Int64 {

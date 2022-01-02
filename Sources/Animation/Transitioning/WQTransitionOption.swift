@@ -18,7 +18,7 @@ public enum WQShowMode {
 }
 // 预处理
 public enum WQTransitionOption {
-    ///到时候需要区分屏幕内外
+    /// 到时候需要区分屏幕内外
     public enum Position {
         case none
         case left
@@ -30,11 +30,11 @@ public enum WQTransitionOption {
     /// 锚点定位动画
     public enum Bounce {
         case bounceCenter // 从0开始从中间弹开
-        case verticalMiddle //横向摊开
-        case horizontalMiddle //纵向摊开
+        case verticalMiddle // 横向摊开
+        case horizontalMiddle // 纵向摊开
         case verticalAuto // 基于position 自动计算剩余空间 哪边够显示哪边 默认向右
         case horizontalAuto // 基于position 默认向下
-        case bounceUp //向上弹
+        case bounceUp // 向上弹
         case bounceLeft // 左
         case bounceRight // 右
         case bounceDown // 向下弹 
@@ -73,7 +73,7 @@ public extension WQTransitionOption.Position {
         }
         return CGRect(origin: origin, size: size)
     }
-    
+
     func mapInteractionDirection() -> DrivenDirection {
         var direction: DrivenDirection
         switch self {
@@ -96,7 +96,7 @@ public extension WQTransitionOption.Position {
                        viewFrame: CGRect) -> CGPoint {
         var position: CGPoint
         let viewW = viewFrame.width
-        let viewH = viewFrame.height 
+        let viewH = viewFrame.height
         let insetW = anchorPoint.x * size.width
         let insetH = anchorPoint.y * size.height
         switch self {
@@ -125,9 +125,9 @@ public extension WQTransitionOption.Bounce {
         var origin: CGPoint
         var estSize: CGSize
         switch self {
-        case .verticalAuto: //这两个暂时不起作用 要配合showFrame 一起使用
+        case .verticalAuto: // 这两个暂时不起作用 要配合showFrame 一起使用
             estSize = CGSize(width: 0, height: size.height)
-            if size.width + positionPt.x > presentedFrame.width { //向左
+            if size.width + positionPt.x > presentedFrame.width { // 向左
                 origin = CGPoint(x: position.x + anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
             } else {
                 origin = CGPoint(x: position.x - anchorPoint.x * size.width, y: position.y - anchorPoint.y * size.height)
