@@ -42,7 +42,7 @@ open class ModalInParentContext: ModalDrivenContext {
         super.interactive(present: controller, statesConfig: states)
         interactiveAnimator = UIViewPropertyAnimator(duration: self.animator.duration, curve: .easeOut, animations: { [weak self] in
             guard let `self` = self else { return }
-            if self.styleConfig.states.has(key: .didShow) {
+            if self.styleConfig.states.keys.contains(.didShow) {
                 self.styleConfig.states.setup(forState: .didShow)
             } else {
                 self.styleConfig.states.setup(forState: .show)

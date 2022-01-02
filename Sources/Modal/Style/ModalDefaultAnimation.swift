@@ -61,7 +61,7 @@ public class ModalDefaultAnimation: ModalAnimation {
             if !self.animationEnable { // 不动画
                 UIView.performWithoutAnimation {
                     states.states.setup(forState: .willShow)
-                    if states.states.has(key: .didShow) {
+                    if states.states.keys.contains(.didShow) {
                         states.states.setup(forState: .didShow)
                     } else {
                         states.states.setup(forState: .show)
@@ -72,13 +72,13 @@ public class ModalDefaultAnimation: ModalAnimation {
             } else {
                 prepareStatesWithoutAnimation(.willShow)
                 if self.isInteractive { // 交互显示(拖拽)
-                    if states.states.has(key: .didShow) {
+                    if states.states.keys.contains(.didShow) {
                         updateWithDefaultAnimation(.didShow)
                     } else {
                         updateWithDefaultAnimation(.show)
                     }
                 } else {
-                    if states.states.has(key: .didShow) {
+                    if states.states.keys.contains(.didShow) {
                         let keys: [ModalState] = [.show, .didShow]
                         UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
                             let unit = time/TimeInterval(keys.count)
@@ -111,7 +111,7 @@ public class ModalDefaultAnimation: ModalAnimation {
                 if self.isInteractive { // 交互显示(拖拽)
                     updateWithDefaultAnimation(.hide)
                 } else {
-                    if states.states.has(key: .willHide) {
+                    if states.states.keys.contains(.willHide) {
                         let keys: [ModalState] = [.willHide, .hide]
                         UIView.animateKeyframes(withDuration: time, delay: 0, options: .calculationModeLinear) {
                             let unit = time/TimeInterval(keys.count)

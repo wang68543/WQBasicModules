@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'WQBasicModules'
-  s.version          = '0.4.1'
+  s.version          = '0.4.2'
   s.summary          = 'Swift 常用的一些分类以及工具集合'
  
 
@@ -121,9 +121,9 @@ Pod::Spec.new do |s|
             sss.dependency 'WQBasicModules/Extensions/Foundation'
             sss.source_files = 'Sources/Extensions/Date/*.swift'
         end
-        ss.subspec 'String' do |sss|
-            sss.source_files = 'Sources/Extensions/String/*.{swift,h,m}'
-        end
+#        ss.subspec 'String' do |sss|
+#            sss.source_files = 'Sources/Extensions/String/*.{swift,h,m}'
+#        end
     end
     
      s.subspec 'Tool' do |ss|

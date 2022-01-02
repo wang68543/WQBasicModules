@@ -6,7 +6,6 @@
 //
 
 import Foundation
-
 public let oneMinuteSeconds: TimeInterval = 60
 public let oneHourSeconds: TimeInterval = 60 * oneMinuteSeconds
 public let oneDaySeconds: TimeInterval = 24 * oneHourSeconds
@@ -146,7 +145,7 @@ public extension Date {
             components.month = 1; endComponents.month = 12
             fallthrough
         case .month:
-            let days = calendar.numberOfDaysInMonth(for: self)
+            let days = calendar.range(of: .day, in: .month, for: self)!.count
             components.day = 1; endComponents.day = days
             fallthrough
         case .day, .weekday:

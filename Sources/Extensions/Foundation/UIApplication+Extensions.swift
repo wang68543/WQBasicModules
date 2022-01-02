@@ -8,17 +8,17 @@
 import Foundation
 public extension UIApplication {
     /// 获取名称
-    public var appIconNames: [String]? {
-        guard let CFBundleIcons = self.infoDictionary?["CFBundleIcons"] as? [String: Any],
-              let CFBundlePrimaryIcon = CFBundleIcons["CFBundlePrimaryIcon"] as? [String: Any],
-              let CFBundleIconFiles = CFBundlePrimaryIcon["CFBundleIconFiles"] as? [String] else {
+    var appIconNames: [String]? {
+        guard let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+              let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+              let files = primaryIcon["CFBundleIconFiles"] as? [String] else {
                   return nil
               }
-        return CFBundleIconFiles
+        return files
     }
     /// appIcon的最后一个图片
-    public var appIcon: UIImage? {
-        guard let iconName = appIconNames?.last else { nil }
+    var appIcon: UIImage? {
+        guard let iconName = appIconNames?.last else { return nil }
         return UIImage(named: iconName)
     }
 

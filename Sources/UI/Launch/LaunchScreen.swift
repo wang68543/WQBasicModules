@@ -12,9 +12,9 @@ import UIKit
 open class LaunchScreen: NSObject {
     static public var snapshotLaunch: UIImage? {
         guard let info = Bundle.main.infoDictionary else { return nil }
-        if info.has(key: "UILaunchStoryboardName") {
+        if info.keys.contains("UILaunchStoryboardName") {
             return launchScreenImage
-        } else if info.has(key: "UILaunchImages") {
+        } else if info.keys.contains("UILaunchImages") {
             return launchImage
         }
         return nil

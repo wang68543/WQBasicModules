@@ -43,10 +43,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Localize.shared.register()
         debugPrint("测试".localized)
         var index: Int = 0
-        LaunchScreen.snapshotLaunch
+//        LaunchScreen.snapshotLaunch
 
 //        UIApplication.shared.appIcon
-
+      
         return true
     }
 
