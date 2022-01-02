@@ -57,7 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             debugPrint("=========****\(index)")
         }
         LaunchScreen.snapshotLaunch
-   
+        
+        
+//        UIApplication.shared.appIcon
         
         return true
     }

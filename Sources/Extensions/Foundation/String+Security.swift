@@ -46,6 +46,8 @@ fileprivate func string(fromBytes bytes: UnsafeMutablePointer<CUnsignedChar>, le
         return hash
 }
 public extension String {
+    
+    var isNotEmpty: Bool { !isEmpty }
     /// 转换拼音
     /// - Parameter stripDiacritics: 是否去除音标
     ///   - trimming: 是否去除拼音间的间隔

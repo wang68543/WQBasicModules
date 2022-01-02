@@ -8,6 +8,7 @@
 import Foundation
 import CommonCrypto 
 public extension Data {
+    var isNotEmpty: Bool { !isEmpty }
     var md5: String {
         let len = Int(CC_MD5_DIGEST_LENGTH)
         let bytes = self.bytes

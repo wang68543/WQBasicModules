@@ -6,10 +6,7 @@
 //
 
 import Foundation
-public extension Calendar {
-    func numberOfDaysInMonth(for date: Date) -> Int {
-        return range(of: .day, in: .month, for: date)!.count
-    }
+public extension Calendar { 
     func numberOfDaysInYear(for date: Date) -> Int {
         return range(of: .day, in: .year, for: date)!.count
     }
